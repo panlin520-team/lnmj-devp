@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productPromotion">
+<!--    <resultMap id="BaseResultMap" type="com.lnmj.product.entity.ProductPromotionType">
+        <id column="ProductPromotionId" property="productPromotionTpyeId" jdbcType="BIGINT"/>
+        <result column="PromotionName" property="promotionName" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>-->
+
+
+    <sql id="Base_Column_List">
+        ProductPromotionId, PromotionTypeId,PromotionProductId,PromotionNumber,PromotionPrict,PromotionDate, Status, CreateOperator, CreateTime, ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+
+    <select id="selectProductPromotionList" resultType="productPromotion" parameterType="com.lnmj.product.entity.ProductPromotion">
+        SELECT
+        p2.ProductName,
+        p2.ProductSpecification,
+        p1.PromotionNumber,
+        p1.PromotionPrict,
+        p1.PromotionDate
+        FROM
+        p_productpromotion p1,
+        p_product p2
+        WHERE
+        p1.ProductPromotionId = p2.ProductId
+    </select>
+
+<!--    <select id="checkPromotionName" resultType="int" parameterType="java.lang.String">
+        SELECT
+        count(1)
+        FROM
+        p_productpromotion
+        WHERE
+        PromotionName = #{promotionName}
+    </select>-->
+
+    <select id="selectProductPromotionByKeyWord" resultType="ProductPromotionVO" parameterType="java.lang.String">
+        SELECT
+            p2.ProductName,
+            p2.ProductSpecification,
+            p1.PromotionNumber,
+            p1.PromotionPrict,
+            p1.PromotionDate
+        FROM
+            p_productpromotion p1,
+            p_product p2
+        WHERE
+            p1.ProductPromotionId = p2.ProductId
+          AND
+            p2.ProductName  like CONCAT('%','${keyWord}','%')
+    </select>
+
+    <!--<select id="selectProductPromotionById" resultType="ProductPromotionType" parameterType="java.lang.Long" >-->
+    <!--select-->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from p_productpromotiontype-->
+    <!--where ProductPromotionId = #{productPromotionTpyeId}-->
+    <!--</select>-->
+
+    <!--根据Id查询商品促销-->
+<!--    <select id="selectProductPromotionById" parameterType="Long" resultType="Integer">
+        select count(1) from p_productpromotiontype where ProductPromotionId=#{productPromotionTpyeId}
+    </select>-->
+
+<!--    <update id="deleteProductPromotion" parameterType="java.lang.Long">
+        UPDATE
+        p_productpromotiontype SET STATUS = 0,DataChange_LastTime=now()
+        where ProductPromotionId = #{productPromotionTpyeId,jdbcType=BIGINT}
+    </update>-->
+
+
+<!--    <insert id="insertProductPromotion" parameterType="com.lnmj.product.entity.ProductPromotionType">
+        insert into p_productpromotiontype
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productPromotionId != null">
+                ProductPromotionId,
+            </if>
+            <if test="promotionName != null">
+                PromotionName,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productPromotionTpyeId != null">
+                #{productPromotionTpyeId,jdbcType=BIGINT},
+            </if>
+            <if test="promotionName != null">
+                #{promotionName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateProductPromotionById" parameterType="com.lnmj.product.entity.ProductPromotionType">
+        update p_productpromotiontype
+        <set>
+            <if test="promotionName != null">
+                PromotionName = #{promotionName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where ProductPromotionId = #{productPromotionTpyeId,jdbcType=BIGINT}
+    </update>-->
+
+</mapper>

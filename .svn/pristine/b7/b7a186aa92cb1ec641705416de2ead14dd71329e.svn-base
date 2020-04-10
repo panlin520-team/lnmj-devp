@@ -1,0 +1,13 @@
+package com.lnmj.data.repository;
+
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface BackupsDao {
+    void saveData(List productList);
+
+    void saveSupplierData(List list);
+
+    void saveServiceProdcutData(List list);
+}

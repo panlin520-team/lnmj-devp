@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="recipientAddress">
+
+    <sql id="Base_Column_List">
+        RecipientAddressId,MemberNum,Name,Mobile,ProvinceId,CityId,CountyId,StreetAddress,AddressDetail,IsDefault,Status,CreateOperator,
+        CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+    <insert id="insertAddress" parameterType="RecipientAddress" useGeneratedKeys="true"
+            keyProperty="recipientAddressId">
+        insert into u_recipient_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberNum != null">
+                MemberNum,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="mobile != null">
+                Mobile,
+            </if>
+            <if test="provinceId != null">
+                ProvinceId,
+            </if>
+            <if test="cityId != null">
+                CityId,
+            </if>
+            <if test="countyId != null">
+                CountyId,
+            </if>
+            <if test="streetAddress != null">
+                StreetAddress,
+            </if>
+            <if test="addressDetail != null">
+                AddressDetail,
+            </if>
+            <if test="isDefault != null">
+                IsDefault,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberNum != null">
+                #{memberNum},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="mobile != null">
+                #{mobile},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId},
+            </if>
+            <if test="cityId != null">
+                #{cityId},
+            </if>
+            <if test="countyId != null">
+                #{countyId},
+            </if>
+            <if test="streetAddress != null">
+                #{streetAddress},
+            </if>
+            <if test="addressDetail != null">
+                #{addressDetail},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="checkDefault" resultType="int" parameterType="String">
+        select
+        count(1)
+        from u_recipient_address
+        where Status=1
+        and MemberNum = #{memberNum}
+        and IsDefault = 1
+    </select>
+
+    <update id="deleteByAddressIdUserId" parameterType="RecipientAddress">
+        update u_recipient_address
+        set Status = 0
+        where MemberNum = #{memberNum}
+        and RecipientAddressId = #{recipientAddressId}
+    </update>
+
+    <select id="selectIsDefaultById" resultType="int" parameterType="Long">
+        select
+        count(1)
+        from u_recipient_address
+        where Status =1
+        and RecipientAddressId = #{recipientAddressId}
+        and IsDefault = 1
+    </select>
+
+
+    <update id="updateByAddress" parameterType="RecipientAddress">
+        update u_recipient_address
+        <set>
+            <if test="memberNum != null">
+                MemberNum = #{memberNum},
+            </if>
+            <if test="name != null">
+                Name = #{name},
+            </if>
+            <if test="mobile != null">
+                Mobile = #{mobile},
+            </if>
+            <if test="provinceId != null">
+                ProvinceId = #{provinceId},
+            </if>
+            <if test="cityId != null">
+                CityId = #{cityId},
+            </if>
+            <if test="countyId != null">
+                CountyId = #{countyId},
+            </if>
+            <if test="streetAddress != null">
+                StreetAddress = #{streetAddress},
+            </if>
+            <if test="addressDetail != null">
+                AddressDetail = #{addressDetail},
+            </if>
+            <if test="isDefault != null">
+                IsDefault = #{isDefault},
+            </if>
+            DataChange_LastTime = now(),
+        </set>
+        where RecipientAddressId = #{recipientAddressId}
+        and MemberNum = #{memberNum}
+    </update>
+
+    <select id="selectByAddressIdUserId" resultType="RecipientAddress" parameterType="RecipientAddress">
+        select
+        <include refid="Base_Column_List"/>
+        from u_recipient_address
+        where Status = 1
+        and MemberNum=#{memberNum}
+        and RecipientAddressId = #{recipientAddressId}
+    </select>
+
+    <select id="selectByMemberNum" resultType="RecipientAddress" parameterType="String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from u_recipient_address
+        where Status = 1
+        <if test="_parameter != null">
+            and MemberNum = #{memberNum}
+        </if>
+    </select>
+
+    <select id="selectByDefalut" resultType="RecipientAddress">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from u_recipient_address
+        where Status = 1
+        and IsDefault = 1
+        and MemberNum = #{memberNum}
+    </select>
+</mapper>

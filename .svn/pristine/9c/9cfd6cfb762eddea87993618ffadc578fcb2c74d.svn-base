@@ -1,0 +1,126 @@
+package com.lnmj.common.generator.transfer;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class Transfer {
+    private Long id;
+
+    private Long capitalPoolId;
+
+    private Integer transferToStoreId;
+
+    private Integer transferFromStoreId;
+
+    private BigDecimal amount;
+
+    private Integer transferType;
+
+    private String remarks;
+
+    private Integer status;
+
+    private String createOperator;
+
+    private Date createTime;
+
+    private String modifyOperator;
+
+    private Date dataChange_LastTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getCapitalPoolId() {
+        return capitalPoolId;
+    }
+
+    public void setCapitalPoolId(Long capitalPoolId) {
+        this.capitalPoolId = capitalPoolId;
+    }
+
+    public Integer getTransferToStoreId() {
+        return transferToStoreId;
+    }
+
+    public void setTransferToStoreId(Integer transferToStoreId) {
+        this.transferToStoreId = transferToStoreId;
+    }
+
+    public Integer getTransferFromStoreId() {
+        return transferFromStoreId;
+    }
+
+    public void setTransferFromStoreId(Integer transferFromStoreId) {
+        this.transferFromStoreId = transferFromStoreId;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public Integer getTransferType() {
+        return transferType;
+    }
+
+    public void setTransferType(Integer transferType) {
+        this.transferType = transferType;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks == null ? null : remarks.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getCreateOperator() {
+        return createOperator;
+    }
+
+    public void setCreateOperator(String createOperator) {
+        this.createOperator = createOperator == null ? null : createOperator.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getModifyOperator() {
+        return modifyOperator;
+    }
+
+    public void setModifyOperator(String modifyOperator) {
+        this.modifyOperator = modifyOperator == null ? null : modifyOperator.trim();
+    }
+
+    public Date getDataChange_LastTime() {
+        return dataChange_LastTime;
+    }
+
+    public void setDataChange_LastTime(Date dataChange_LastTime) {
+        this.dataChange_LastTime = dataChange_LastTime;
+    }
+}

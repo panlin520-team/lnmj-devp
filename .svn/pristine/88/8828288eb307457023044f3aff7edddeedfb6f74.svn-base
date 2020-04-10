@@ -1,0 +1,55 @@
+package com.lnmj.store.repository.impl;
+
+
+import com.lnmj.common.baseDao.impl.BaseDao;
+import com.lnmj.store.entity.Customer;
+import com.lnmj.store.entity.Department;
+import com.lnmj.store.repository.ICustomerDao;
+import com.lnmj.store.repository.IDepartmentDao;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
+
+
+@Repository
+public class CustomerDaoImpl extends BaseDao implements ICustomerDao {
+
+
+    @Override
+    public List<Customer> selectCustomerList(Map map) {
+        return super.selectList("customer.selectCustomerList",map);
+    }
+
+    @Override
+    public int insertCustomer(Customer customer) {
+        return super.insert("customer.insertCustomer",customer);
+    }
+
+    @Override
+    public int deleteCustomer(Customer customer) {
+        return super.delete("customer.deleteCustomer",customer);
+    }
+
+    @Override
+    public int updateCustomer(Customer customer) {
+        return super.update("customer.updateCustomer",customer);
+    }
+
+    @Override
+    public int checkDefault(Customer customer) {
+        return super.select("customer.checkDefault",customer);
+    }
+
+    @Override
+    public String selectLastCustomerCode() {
+        return super.select("customer.selectLastCustomerCode");
+    }
+
+    @Override
+    public Customer selectDefaultCust(Customer customer) {
+        return super.select("customer.selectDefaultCust",customer);
+    }
+
+
+}

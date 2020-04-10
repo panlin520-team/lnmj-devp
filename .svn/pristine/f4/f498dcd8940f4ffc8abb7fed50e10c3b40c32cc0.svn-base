@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Label">
+
+    <sql id="Base_Column_List" >
+        LabelId, LabelName, LabelDescribe, Industry, UpgradeStandardStorage, UpgradeStandardConsumption,
+        ParentId, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+    </sql>
+
+    <select id="selectAll" resultType="Label" parameterType="Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        u_label
+        where Status = 1
+        <if test="labelCategoryId != null" >
+            and ParentId = #{labelCategoryId}
+        </if>
+    </select>
+
+    <select id="selectLabelList" resultType="Label" >
+        SELECT
+            LabelName
+        FROM
+            u_label
+        WHERE
+            STATUS = 1
+    </select>
+
+    <select id="checkLabelName" resultType="int" parameterType="string">
+        select
+        count(1)
+        from u_label
+        where LabelName = #{labelName}
+    </select>
+
+
+    <select id="selectByPrimaryKey" resultType="Label" parameterType="String">
+        select
+        <include refid="Base_Column_List"/>
+        from u_label
+        where LabelId = #{labelId}
+    </select>
+
+    <insert id="insert" parameterType="Label" >
+        insert into u_user_label_info
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                UserId,
+            </if>
+            <if test="labelId != null" >
+                LabelId,
+            </if>
+            <if test="isHairdressingOldUser != null" >
+                IsHairdressingOldUser,
+            </if>
+            <if test="isCosmetologyOldUser != null" >
+                IsCosmetologyOldUser,
+            </if>
+            <if test="isLoseUser != null" >
+                IsLoseUser,
+            </if>
+            <if test="status != null" >
+                Status,
+            </if>
+            <if test="createOperator != null" >
+                CreateOperator,
+            </if>
+            <if test="createTime != null" >
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null" >
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null" >
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="labelId != null" >
+                #{labelId,jdbcType=BIGINT},
+            </if>
+            <if test="isHairdressingOldUser != null" >
+                #{isHairdressingOldUser,jdbcType=TINYINT},
+            </if>
+            <if test="isCosmetologyOldUser != null" >
+                #{isCosmetologyOldUser,jdbcType=TINYINT},
+            </if>
+            <if test="isLoseUser != null" >
+                #{isLoseUser,jdbcType=TINYINT},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null" >
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null" >
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null" >
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="Label" >
+        update u_user_label_info
+        <set >
+            <if test="isHairdressingOldUser != null" >
+                IsHairdressingOldUser = #{isHairdressingOldUser,jdbcType=TINYINT},
+            </if>
+            <if test="isCosmetologyOldUser != null" >
+                IsCosmetologyOldUser = #{isCosmetologyOldUser,jdbcType=TINYINT},
+            </if>
+            <if test="isLoseUser != null" >
+                IsLoseUser = #{isLoseUser,jdbcType=TINYINT},
+            </if>
+            <if test="status != null" >
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null" >
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null" >
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null" >
+                DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where LabelId = #{labelId,jdbcType=BIGINT}
+    </update>
+    <update id="deleteByPrimaryKey" parameterType="Label">
+        update u_label
+        <set>
+            Status =0,
+        <if test="modifyOperator != null">
+            ModifyOperator =#{modifyOperator},
+        </if>
+        </set>
+        where LabelId = #{labelId}
+    </update>
+
+</mapper>

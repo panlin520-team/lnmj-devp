@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lnmj.common.generator.transfer.TransferMapper" >
+  <resultMap id="BaseResultMap" type="com.lnmj.common.generator.transfer.Transfer" >
+    <id column="Id" property="id" jdbcType="BIGINT" />
+    <result column="CapitalPoolId" property="capitalPoolId" jdbcType="BIGINT" />
+    <result column="TransferToStoreId" property="transferToStoreId" jdbcType="INTEGER" />
+    <result column="TransferFromStoreId" property="transferFromStoreId" jdbcType="INTEGER" />
+    <result column="Amount" property="amount" jdbcType="DECIMAL" />
+    <result column="TransferType" property="transferType" jdbcType="INTEGER" />
+    <result column="Remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChange_LastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, CapitalPoolId, TransferToStoreId, TransferFromStoreId, Amount, TransferType, 
+    Remarks, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lnmj.common.generator.transfer.TransferExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from transfer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from transfer
+    where Id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from transfer
+    where Id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lnmj.common.generator.transfer.TransferExample" >
+    delete from transfer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lnmj.common.generator.transfer.Transfer" >
+    insert into transfer (Id, CapitalPoolId, TransferToStoreId, 
+      TransferFromStoreId, Amount, TransferType, 
+      Remarks, Status, CreateOperator, 
+      CreateTime, ModifyOperator, DataChange_LastTime
+      )
+    values (#{id,jdbcType=BIGINT}, #{capitalPoolId,jdbcType=BIGINT}, #{transferToStoreId,jdbcType=INTEGER}, 
+      #{transferFromStoreId,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{transferType,jdbcType=INTEGER}, 
+      #{remarks,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createOperator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyOperator,jdbcType=VARCHAR}, #{dataChange_LastTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lnmj.common.generator.transfer.Transfer" >
+    insert into transfer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="capitalPoolId != null" >
+        CapitalPoolId,
+      </if>
+      <if test="transferToStoreId != null" >
+        TransferToStoreId,
+      </if>
+      <if test="transferFromStoreId != null" >
+        TransferFromStoreId,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="transferType != null" >
+        TransferType,
+      </if>
+      <if test="remarks != null" >
+        Remarks,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="capitalPoolId != null" >
+        #{capitalPoolId,jdbcType=BIGINT},
+      </if>
+      <if test="transferToStoreId != null" >
+        #{transferToStoreId,jdbcType=INTEGER},
+      </if>
+      <if test="transferFromStoreId != null" >
+        #{transferFromStoreId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="transferType != null" >
+        #{transferType,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChange_LastTime != null" >
+        #{dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lnmj.common.generator.transfer.TransferExample" resultType="java.lang.Integer" >
+    select count(*) from transfer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update transfer
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.capitalPoolId != null" >
+        CapitalPoolId = #{record.capitalPoolId,jdbcType=BIGINT},
+      </if>
+      <if test="record.transferToStoreId != null" >
+        TransferToStoreId = #{record.transferToStoreId,jdbcType=INTEGER},
+      </if>
+      <if test="record.transferFromStoreId != null" >
+        TransferFromStoreId = #{record.transferFromStoreId,jdbcType=INTEGER},
+      </if>
+      <if test="record.amount != null" >
+        Amount = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.transferType != null" >
+        TransferType = #{record.transferType,jdbcType=INTEGER},
+      </if>
+      <if test="record.remarks != null" >
+        Remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.createOperator != null" >
+        CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyOperator != null" >
+        ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataChange_LastTime != null" >
+        DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update transfer
+    set Id = #{record.id,jdbcType=BIGINT},
+      CapitalPoolId = #{record.capitalPoolId,jdbcType=BIGINT},
+      TransferToStoreId = #{record.transferToStoreId,jdbcType=INTEGER},
+      TransferFromStoreId = #{record.transferFromStoreId,jdbcType=INTEGER},
+      Amount = #{record.amount,jdbcType=DECIMAL},
+      TransferType = #{record.transferType,jdbcType=INTEGER},
+      Remarks = #{record.remarks,jdbcType=VARCHAR},
+      Status = #{record.status,jdbcType=INTEGER},
+      CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+      DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lnmj.common.generator.transfer.Transfer" >
+    update transfer
+    <set >
+      <if test="capitalPoolId != null" >
+        CapitalPoolId = #{capitalPoolId,jdbcType=BIGINT},
+      </if>
+      <if test="transferToStoreId != null" >
+        TransferToStoreId = #{transferToStoreId,jdbcType=INTEGER},
+      </if>
+      <if test="transferFromStoreId != null" >
+        TransferFromStoreId = #{transferFromStoreId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        Amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="transferType != null" >
+        TransferType = #{transferType,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        Remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime = #{dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lnmj.common.generator.transfer.Transfer" >
+    update transfer
+    set CapitalPoolId = #{capitalPoolId,jdbcType=BIGINT},
+      TransferToStoreId = #{transferToStoreId,jdbcType=INTEGER},
+      TransferFromStoreId = #{transferFromStoreId,jdbcType=INTEGER},
+      Amount = #{amount,jdbcType=DECIMAL},
+      TransferType = #{transferType,jdbcType=INTEGER},
+      Remarks = #{remarks,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      DataChange_LastTime = #{dataChange_LastTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

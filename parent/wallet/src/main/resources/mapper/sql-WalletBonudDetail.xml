@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="walletBonudDetail">
+  <resultMap id="BaseResultMap" type="WalletBonudDetail" >
+    <result column="CashRecordId" property="cashRecordId" jdbcType="BIGINT" />
+    <result column="WalletId" property="walletId" jdbcType="BIGINT" />
+    <result column="BonusTypeId" property="bonusTypeId" jdbcType="BIGINT" />
+    <result column="OrderNumber" property="orderNumber" jdbcType="INTEGER" />
+    <result column="OrderPrice" property="orderPrice" jdbcType="DECIMAL" />
+    <result column="OrderTime" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="Amount" property="amount" jdbcType="DECIMAL" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="MembershipLevel" property="membershipLevel" jdbcType="VARCHAR" />
+    <result column="BonusStatus" property="bonusStatus" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CashRecordId, WalletId, BonusTypeId, OrderNumber, OrderPrice, OrderTime, Amount, 
+    Name, MembershipLevel, BonusStatus, Status, CreateOperator, CreateTime, ModifyOperator, 
+    DataChange_LastTime
+  </sql>
+  <!--提现详情分页-->
+  <select id="selectCashRecordDetailList" resultType="WalletBonudDetail" parameterType="Map">
+    select
+    <include refid="Base_Column_List" />
+    from w_wallet_cashdetail
+    WHERE Status = 1
+    <if test = "bonusTypeId!= null" >
+      AND BonusTypeId = #{bonusTypeId}
+    </if >
+    <if test = "cashRecordId!= null" >
+      AND CashRecordId = #{cashRecordId}
+    </if >
+  </select>
+  <delete id="deleteByExample" parameterType="WalletBonudDetail" >
+    delete from w_wallet_cashdetail from CashRecordId = #{cashRecordId}
+  </delete>
+  <!--添加提现详情-->
+  <insert id="addCashDetail" parameterType="WalletCashRecordDetail">
+    insert into w_wallet_cashdetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="CashRecordId != null" >
+        CashRecordId,
+      </if>
+      <if test="cashRecordId != null" >
+        cashRecordId,
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber,
+      </if>
+      <if test="orderTime != null" >
+        OrderTime,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="nickName != null" >
+        NickName,
+      </if>
+      <if test="membershipLevel != null" >
+        MembershipLevel,
+      </if>
+      <if test="orderAmount != null" >
+        OrderAmount,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="cashStatus != null" >
+        CashStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cashRecordDetailId != null" >
+        #{cashRecordDetailIdLong},
+      </if>
+      <if test="cashRecordId != null" >
+        #{cashRecordIdLong},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumberLong},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTimeLong},
+      </if>
+      <if test="name != null" >
+        #{nameLong},
+      </if>
+      <if test="nickName != null" >
+        #{nickNameLong},
+      </if>
+      <if test="membershipLevel != null" >
+        #{membershipLevelLong},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmountLong},
+      </if>
+      <if test="amount != null" >
+        #{amountLong},
+      </if>
+      <if test="cashStatus != null" >
+        #{cashStatusLong},
+      </if>
+      <if test="status != null" >
+        #{statusLong},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperatorLong},
+      </if>
+      <if test="createTime != null" >
+        #{createTimeLong},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperatorLong},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTimeLong},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertSelective" parameterType="WalletBonudDetail" >
+    insert into w_wallet_cashdetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cashRecordId != null" >
+        CashRecordId,
+      </if>
+      <if test="walletId != null" >
+        WalletId,
+      </if>
+      <if test="bonusTypeId != null" >
+        BonusTypeId,
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber,
+      </if>
+      <if test="orderPrice != null" >
+        OrderPrice,
+      </if>
+      <if test="orderTime != null" >
+        OrderTime,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="membershipLevel != null" >
+        MembershipLevel,
+      </if>
+      <if test="bonusStatus != null" >
+        BonusStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cashRecordId != null" >
+        #{cashRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="walletId != null" >
+        #{walletId,jdbcType=BIGINT},
+      </if>
+      <if test="bonusTypeId != null" >
+        #{bonusTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null" >
+        #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="membershipLevel != null" >
+        #{membershipLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="bonusStatus != null" >
+        #{bonusStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChange_LastTime != null" >
+        #{dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateCashDetail" parameterType="WalletCashRecordDetail" >
+    update w_wallet_cashdetail
+    <set >
+      <if test="walletId != null" >
+        WalletId = #{walletId,jdbcType=BIGINT},
+      </if>
+      <if test="bonusTypeId != null" >
+        BonusTypeId = #{bonusTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber = #{orderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null" >
+        OrderPrice = #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderTime != null" >
+        OrderTime = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        Amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="membershipLevel != null" >
+        MembershipLevel = #{membershipLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="bonusStatus != null" >
+        BonusStatus = #{bonusStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+      where CashRecordId = #{cashRecordId,jdbcType=BIGINT}
+  </update>
+</mapper>

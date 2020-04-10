@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="account">
+
+    <sql id="Base_Column_List">
+        UserId,Account,Password,UserType,Mobile,Email,Name,Sex,NickName,IDType,IDNumber,OpenId,ProvinceId,CityId,CountyId,StreetAddress,
+        AddressDetail,CardNumber,MembershipLevelId,MembershipLevelName,RegistrationChannel,RegistrationTime,EmailAuthentication,
+        MobileAuthentication,ParentId,UserIdentityKey,StoreId,IsEnable,IsLogin,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+
+    <select id="selectList" resultType="UserStatisticsVO" parameterType="Map" >
+        SELECT
+            a. NAME,
+            a.NickName,
+            b. NAME,
+            a.Mobile,
+            a.CardNumber,
+            a.MembershipLevelName,
+            c.amount,
+            c.accountBalance
+        FROM
+            lnmj_account.u_user a,
+            (SELECT
+                 NAME
+             FROM
+                 lnmj_account.u_user
+             WHERE
+                     UserId IN (
+                     SELECT
+                         ParentId
+                     FROM
+                         lnmj_account.u_user)) b,
+            (SELECT
+                 u1.userId,
+                 sum(u1.Amount) AS amount,
+                 u2.AccountBalance AS accountBalance
+             FROM
+                 lnmj_wallet.u_walletconsumerecord u1,
+                 (SELECT
+                      AccountBalance,
+                      userId
+                  FROM
+                      lnmj_wallet.u_walletconsumerecord
+                  WHERE
+                          ConsumeRecordId IN (
+                          SELECT
+                              MAX(ConsumeRecordId)
+                          FROM
+                              lnmj_wallet.u_walletconsumerecord)) u2
+             WHERE
+                 u1.UserId = u2.UserId) c
+    </select>
+
+
+</mapper>

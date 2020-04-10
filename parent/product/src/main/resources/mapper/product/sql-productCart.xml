@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cart">
+    <sql id="Base_Column_List">
+        Id,UserId,ProductId,Quantity,Checked,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+    <select id="selectCartByUserId" resultType="Cart" parameterType="Long">
+        select
+        <include refid="Base_Column_List"/>
+        from p_cart
+        where Status=1 and
+        UserId=#{userId}
+    </select>
+
+
+    <insert id="insert" parameterType="Cart">
+        insert into p_cart (UserId, ProductId,Quantity, Checked, CreateTime,DataChange_LastTime)
+        values (#{userId}, #{productId},#{quantity}, #{checked}, now(),now())
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="Cart">
+        update p_cart
+        <set>
+            <if test="userId != null">
+                UserId = #{userId},
+            </if>
+            <if test="productId != null">
+                ProductId = #{productId},
+            </if>
+            <if test="quantity != null">
+                Quantity = #{quantity},
+            </if>
+            <if test="checked != null">
+                Checked = #{checked},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where Id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="Cart">
+        update p_cart
+        set UserId = #{userId},
+        ProductId = #{productId},
+        Quantity = #{quantity},
+        Checked = #{checked},
+        CreateTime = #{createTime},
+        DataChange_LastTime = now()
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteByUserIdProductIds" parameterType="Cart">
+        delete from p_cart
+        where UserId = #{userId}
+        <if test="productIdList != null">
+            and ProductId in
+            <foreach collection="productIdList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <update id="checkedOrUncheckedProduct" parameterType="Cart">
+        UPDATE p_cart
+        set Checked = #{checked},
+        DataChange_LastTime = now()
+        where UserId = #{userId}
+        <if test="productId != null">
+            and ProductId = #{productId}
+        </if>
+    </update>
+
+    <select id="selectCartProductCount" parameterType="Long" resultType="int">
+        select IFNULL(sum(quantity),0) as count from p_cart where UserId = #{userId}
+    </select>
+
+
+    <select id="selectCartProductCheckedStatusByUserId" resultType="int" parameterType="Long">
+        SELECT count(1) from p_cart where Checked = 0 and UserId = #{userId}
+    </select>
+
+    <select id="selectCartByUserIdProductId" resultType="Cart" parameterType="Cart">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from p_cart
+        where userId = #{userId}
+        and productId = #{productId}
+        and Status = 1
+    </select>
+
+
+</mapper>

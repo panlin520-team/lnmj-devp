@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Outstorage" >
+  <resultMap id="OutstorageMap" type="com.lnmj.product.entity.Outstorage" >
+    <id column="OutStorageId" property="outStorageId" jdbcType="BIGINT" />
+    <result column="OutStorageType" property="outStorageType" jdbcType="VARCHAR" />
+    <result column="InvoicesType" property="invoicesType" jdbcType="VARCHAR" />
+    <result column="OutStorageNumber" property="outStorageNumber" jdbcType="VARCHAR" />
+    <result column="BatchNumber" property="batchNumber" jdbcType="VARCHAR" />
+    <result column="OutStorageDate" property="outStorageDate" jdbcType="TIMESTAMP" />
+    <result column="InventoryGroup" property="inventoryGroup" jdbcType="VARCHAR" />
+    <result column="ReceiveGroup" property="receiveGroup" jdbcType="VARCHAR" />
+    <result column="InventoryWay" property="inventoryWay" jdbcType="VARCHAR" />
+    <result column="SettlementCurrency" property="settlementCurrency" jdbcType="VARCHAR" />
+    <result column="MarketGroup" property="marketGroup" jdbcType="VARCHAR" />
+    <result column="Client" property="client" jdbcType="VARCHAR" />
+    <result column="ReceiveBranch" property="receiveBranch" jdbcType="VARCHAR" />
+    <result column="Receive" property="receive" jdbcType="VARCHAR" />
+    <result column="DeliveryAddress" property="deliveryAddress" jdbcType="VARCHAR" />
+    <result column="Carrier" property="carrier" jdbcType="VARCHAR" />
+    <result column="TransportNumber" property="transportNumber" jdbcType="VARCHAR" />
+    <result column="ShipmentGroup" property="shipmentGroup" jdbcType="VARCHAR" />
+    <result column="ShipmentBranch" property="shipmentBranch" jdbcType="VARCHAR" />
+    <result column="StockGroup" property="stockGroup" jdbcType="VARCHAR" />
+    <result column="StockPerson" property="stockPerson" jdbcType="VARCHAR" />
+    <result column="BusinessType" property="businessType" jdbcType="VARCHAR" />
+    <result column="ShipperType" property="shipperType" jdbcType="VARCHAR" />
+    <result column="Shipper" property="shipper" jdbcType="VARCHAR" />
+    <result column="OutStorageStatus" property="outStorageStatus" jdbcType="VARCHAR" />
+    <result column="Auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="AuditorTime" property="auditorTime" jdbcType="TIMESTAMP" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+    <result column="K3Id" property="k3Id" jdbcType="VARCHAR" />
+    <result column="K3Code" property="k3Code" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="base_outstorage_cloumn" >
+    OutStorageId, OutStorageType, InvoicesType, OutStorageNumber, BatchNumber, OutStorageDate,
+    InventoryGroup, ReceiveGroup, InventoryWay, SettlementCurrency, MarketGroup, Client,
+    ReceiveBranch, Receive, DeliveryAddress, Carrier, TransportNumber, ShipmentGroup,
+    ShipmentBranch, StockGroup, StockPerson, BusinessType, ShipperType, Shipper, OutStorageStatus,
+    Auditor, AuditorTime, Remark, Status, CreateOperator, CreateTime, ModifyOperator,
+    DataChange_LastTime,K3Id,K3Code,StockId
+  </sql>
+
+  <select id="selectOutstorageListByStorageNumber" resultMap="OutstorageMap" parameterType="map">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_outstorage_cloumn" />
+    from s_outstorage where Status=1
+    <if test="storageNumber != null" >
+      and OutStorageNumber = #{storageNumber,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="selectOutstorageList" resultMap="OutstorageMap">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_outstorage_cloumn" />
+    from s_outstorage where Status=1
+  </select>
+
+  <select id="selectOutstorageListByCust" parameterType="String" resultType="Outstorage">
+    select
+    <include refid="base_outstorage_cloumn" />
+    from s_outstorage
+    where Status=1
+    and Client = #{custK3Number}
+  </select>
+
+  <select id="selectOutstorageByID" resultMap="OutstorageMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_outstorage_cloumn" />
+    from s_outstorage
+    where OutStorageId = #{outStorageId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectOutstorageByTypeAndDate" resultMap="OutstorageMap" parameterType="Map" >
+    select
+    <include refid="base_outstorage_cloumn" />
+    from s_outstorage
+    where Status=1
+    <if test="outStorageType != null" >
+      and OutStorageType = #{outStorageType,jdbcType=VARCHAR}
+    </if>
+    <if test="stockGroup != null" >
+      and StockGroup = #{stockGroup,jdbcType=VARCHAR}
+    </if>
+    <if test="inventoryGroup != null" >
+      and InventoryGroup = #{inventoryGroup,jdbcType=VARCHAR}
+    </if>
+    <if test="outStorageDate != null" >
+      and TO_DAYS(OutStorageDate) = TO_DAYS(CONCAT('',#{outStorageDate,jdbcType=TIMESTAMP},''))
+    </if>
+  </select>
+
+  <update id="deleteOutstorageByID" parameterType="Outstorage" >
+    update s_outstorage set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    where OutStorageId = #{outStorageId,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertOutstorage" parameterType="com.lnmj.product.entity.Outstorage" useGeneratedKeys="true" keyProperty="outStorageId" >
+    insert into s_outstorage
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="outStorageId != null" >
+        OutStorageId,
+      </if>
+      <if test="outStorageType != null" >
+        OutStorageType,
+      </if>
+      <if test="invoicesType != null" >
+        InvoicesType,
+      </if>
+      <if test="outStorageNumber != null" >
+        OutStorageNumber,
+      </if>
+      <if test="batchNumber != null" >
+        BatchNumber,
+      </if>
+      <if test="outStorageDate != null" >
+        OutStorageDate,
+      </if>
+      <if test="inventoryGroup != null" >
+        InventoryGroup,
+      </if>
+      <if test="receiveGroup != null" >
+        ReceiveGroup,
+      </if>
+      <if test="inventoryWay != null" >
+        InventoryWay,
+      </if>
+      <if test="settlementCurrency != null" >
+        SettlementCurrency,
+      </if>
+      <if test="marketGroup != null" >
+        MarketGroup,
+      </if>
+      <if test="client != null" >
+        Client,
+      </if>
+      <if test="receiveBranch != null" >
+        ReceiveBranch,
+      </if>
+      <if test="receive != null" >
+        Receive,
+      </if>
+      <if test="deliveryAddress != null" >
+        DeliveryAddress,
+      </if>
+      <if test="carrier != null" >
+        Carrier,
+      </if>
+      <if test="transportNumber != null" >
+        TransportNumber,
+      </if>
+      <if test="shipmentGroup != null" >
+        ShipmentGroup,
+      </if>
+      <if test="shipmentBranch != null" >
+        ShipmentBranch,
+      </if>
+      <if test="stockGroup != null" >
+        StockGroup,
+      </if>
+      <if test="stockPerson != null" >
+        StockPerson,
+      </if>
+      <if test="businessType != null" >
+        BusinessType,
+      </if>
+      <if test="shipperType != null" >
+        ShipperType,
+      </if>
+      <if test="shipper != null" >
+        Shipper,
+      </if>
+      <if test="outStorageStatus != null" >
+        OutStorageStatus,
+      </if>
+      <if test="auditor != null" >
+        Auditor,
+      </if>
+      <if test="auditorTime != null" >
+        AuditorTime,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="stockId != null" >
+        StockId,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+      <if test="k3Id != null" >
+        K3Id,
+      </if>
+      <if test="k3Code != null" >
+        K3Code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="outStorageId != null" >
+        #{outStorageId,jdbcType=BIGINT},
+      </if>
+      <if test="outStorageType != null" >
+        #{outStorageType,jdbcType=VARCHAR},
+      </if>
+      <if test="invoicesType != null" >
+        #{invoicesType,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageNumber != null" >
+        #{outStorageNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageDate != null" >
+        #{outStorageDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inventoryGroup != null" >
+        #{inventoryGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveGroup != null" >
+        #{receiveGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="inventoryWay != null" >
+        #{inventoryWay,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementCurrency != null" >
+        #{settlementCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="marketGroup != null" >
+        #{marketGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="client != null" >
+        #{client,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBranch != null" >
+        #{receiveBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="receive != null" >
+        #{receive,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryAddress != null" >
+        #{deliveryAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="carrier != null" >
+        #{carrier,jdbcType=VARCHAR},
+      </if>
+      <if test="transportNumber != null" >
+        #{transportNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentGroup != null" >
+        #{shipmentGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentBranch != null" >
+        #{shipmentBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="stockGroup != null" >
+        #{stockGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="stockPerson != null" >
+        #{stockPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperType != null" >
+        #{shipperType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipper != null" >
+        #{shipper,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageStatus != null" >
+        #{outStorageStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorTime != null" >
+        #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="stockId != null" >
+        #{stockId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="k3Id != null" >
+        #{k3Id,jdbcType=VARCHAR},
+      </if>
+      <if test="k3Code != null" >
+        #{k3Code,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateOutstorageByID" parameterType="com.lnmj.product.entity.Outstorage" >
+    update s_outstorage
+    <set >
+      <if test="outStorageType != null" >
+        OutStorageType = #{outStorageType,jdbcType=VARCHAR},
+      </if>
+      <if test="invoicesType != null" >
+        InvoicesType = #{invoicesType,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageNumber != null" >
+        OutStorageNumber = #{outStorageNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        BatchNumber = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageDate != null" >
+        OutStorageDate = #{outStorageDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inventoryGroup != null" >
+        InventoryGroup = #{inventoryGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveGroup != null" >
+        ReceiveGroup = #{receiveGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="inventoryWay != null" >
+        InventoryWay = #{inventoryWay,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementCurrency != null" >
+        SettlementCurrency = #{settlementCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="marketGroup != null" >
+        MarketGroup = #{marketGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="client != null" >
+        Client = #{client,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveBranch != null" >
+        ReceiveBranch = #{receiveBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="receive != null" >
+        Receive = #{receive,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryAddress != null" >
+        DeliveryAddress = #{deliveryAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="carrier != null" >
+        Carrier = #{carrier,jdbcType=VARCHAR},
+      </if>
+      <if test="transportNumber != null" >
+        TransportNumber = #{transportNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentGroup != null" >
+        ShipmentGroup = #{shipmentGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentBranch != null" >
+        ShipmentBranch = #{shipmentBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="stockGroup != null" >
+        StockGroup = #{stockGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="stockPerson != null" >
+        StockPerson = #{stockPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        BusinessType = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperType != null" >
+        ShipperType = #{shipperType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipper != null" >
+        Shipper = #{shipper,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageStatus != null" >
+        OutStorageStatus = #{outStorageStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        Auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorTime != null" >
+        AuditorTime = #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="k3Id != null" >
+        K3Id = #{k3Id,jdbcType=VARCHAR},
+      </if>
+      <if test="k3Code != null" >
+        K3Code = #{k3Code,jdbcType=VARCHAR},
+      </if>
+      <if test="stockId != null" >
+        StockId = #{stockId,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where OutStorageId = #{outStorageId,jdbcType=BIGINT}
+  </update>
+</mapper>

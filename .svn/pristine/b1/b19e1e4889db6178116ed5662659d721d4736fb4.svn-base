@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="beauticianGrade">
+    <!--美容师等级-->
+    <!--美容师等级基本字段-->
+    <sql id="beauticianGrade_base_column" >
+        BeauticianGradeId,BeauticianGrade,MemberShipLevel,
+        Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <!--插入美容师等级表字段-->
+    <sql id="sql_insert_beauticianGrade_column" >
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="beauticianGrade != null" >BeauticianGrade,</if>
+            <if test="memberShipLevel != null" >MemberShipLevel,</if>
+            <if test="status != null" >Status,</if>
+            <if test="createOperator != null" >CreateOperator,</if>
+            <if test="modifyOperator != null" >ModifyOperator,</if>
+        </trim>
+    </sql>
+    <!--插入美容师等级表值-->
+    <sql id="sql_insert_beauticianGrade_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="beauticianGrade != null" >#{beauticianGrade},</if>
+            <if test="memberShipLevel != null" >#{memberShipLevel},</if>
+            <if test="status != null" >#{status},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <!--修改美容师等级-->
+    <sql id="sql_set_beauticianGrade_column" >
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="beauticianGrade != null" >,BeauticianGrade=#{beauticianGrade}</if>
+                <if test="memberShipLevel != null" >,MemberShipLevel=#{memberShipLevel}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}</if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+    <!--美容师等级查询条件-->
+    <sql id="sql_where_beauticianGrade_column" >
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="beauticianGradeId != null">AND BeauticianGradeId=#{beauticianGradeId}</if>
+                <if test="beauticianGrade != null">AND BeauticianGrade=#{beauticianGrade}</if>
+                <if test="memberShipLevel != null">AND MemberShipLevel like CONCAT('%',#{memberShipLevel},'%')</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <if test="createTime != null">AND CreateTime=#{createTime}</if>
+                <if test="modifyOperator != null">AND ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">AND DataChange_LastTime=#{dataChangeLastTime}</if>
+            </trim>
+        </where>
+    </sql>
+
+    <!--美容师等级分页显示-->
+    <select id="selectBeauticianGradeList" resultType="com.lnmj.system.entity.BeauticianGrade">
+        select <include refid="beauticianGrade_base_column" /> from s_beauticianGrade
+        where Status = 1
+    </select>
+    <!--查询美容师等级-->
+    <select id="selectBeauticianGradeByWhere" parameterType="BeauticianGrade" resultType="com.lnmj.system.entity.BeauticianGrade" >
+        select <include refid="beauticianGrade_base_column"/> from  s_beauticianGrade
+        <include refid="sql_where_beauticianGrade_column"/>
+    </select>
+    <!--新增美容师等级-->
+    <insert id="insertBeauticianGrade" parameterType="BeauticianGrade" keyProperty="beauticianGradeId" useGeneratedKeys="true" >
+        insert into s_beauticianGrade
+        <include refid="sql_insert_beauticianGrade_column"/>
+        <include refid="sql_insert_beauticianGrade_values"/>
+    </insert>
+    <!--修改美容师等级-->
+    <update id="updateBeauticianGrade" parameterType="BeauticianGrade" >
+        update s_beauticianGrade
+        <include refid="sql_set_beauticianGrade_column"/>
+        where BeauticianGradeId = #{beauticianGradeId}
+    </update>
+    <!--删除美容师等级-->
+    <update id="deleteBeauticianGrade" parameterType="BeauticianGrade" >
+        update s_beauticianGrade
+        set  Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        where BeauticianGradeId = #{beauticianGradeId}
+    </update>
+</mapper>
+

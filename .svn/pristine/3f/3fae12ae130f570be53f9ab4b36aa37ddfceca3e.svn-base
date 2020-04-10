@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pay">
+    <sql id="pay_type_base_column">
+        PayTypeId,
+        PayTypeCategory,
+        PayTypeName,
+        AccountType,
+        Subclass,
+        Industry,
+        PaymentRatioOriginal,
+        Discount,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <select id="selectPayTypeList" resultType="PayType">
+        select
+        <include refid="pay_type_base_column"/>
+        from p_pay_type where Status = 1
+    </select>
+
+
+    <select id="selectPayTypeListBySubClass" resultType="PayType">
+        select
+        <include refid="pay_type_base_column"/>
+        from p_pay_type where 1=1
+    </select>
+
+    <select id="selectPayTypeById" parameterType="Long" resultType="PayType">
+        select
+        <include refid="pay_type_base_column"/>
+        from p_pay_type where Status = 1 and PayTypeId = #{payTypeId}
+    </select>
+
+    <delete id="deletePayType" parameterType="Long">
+        delete from p_pay_type where PayTypeId=#{payTypeId}
+    </delete>
+
+    <insert id="insertPayType" parameterType="PayType" keyProperty="payTypeId" useGeneratedKeys="true">
+        insert into p_pay_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="payTypeId != null">
+                PayTypeId,
+            </if>
+            <if test="payTypeCategory != null">
+                PayTypeCategory,
+            </if>
+            <if test="accountType != null">
+                AccountType,
+            </if>
+            <if test="payTypeName != null">
+                PayTypeName,
+            </if>
+            <if test="subclass != null">
+                Subclass,
+            </if>
+            <if test="industry != null">
+                Industry,
+            </if>
+            <if test="paymentRatioOriginal != null">
+                PaymentRatioOriginal,
+            </if>
+            <if test="discount != null">
+                Discount,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="payTypeId != null">
+                #{payTypeId},
+            </if>
+            <if test="payTypeCategory != null">
+                #{payTypeCategory},
+            </if>
+            <if test="accountType != null">
+                #{accountType},
+            </if>
+            <if test="payTypeName != null">
+                #{payTypeName},
+            </if>
+            <if test="subclass != null">
+                #{subclass},
+            </if>
+            <if test="industry != null">
+                #{industry},
+            </if>
+            <if test="paymentRatioOriginal != null">
+                #{paymentRatioOriginal},
+            </if>
+            <if test="discount != null">
+                #{discount},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            now(),
+        </trim>
+    </insert>
+
+    <update id="updatePayType" parameterType="PayType">
+        update p_pay_type
+        <set >
+            <trim prefix="" prefixOverrides=",">
+                <if test="payTypeCategory != null" >
+                    PayTypeCategory = #{payTypeCategory},
+                </if>
+                <if test="payTypeName != null" >
+                    PayTypeName = #{payTypeName,jdbcType=VARCHAR},
+                </if>
+                <if test="subclass != null" >
+                    Subclass = #{subclass},
+                </if>
+                <if test="industry != null" >
+                    Industry = #{industry},
+                </if>
+                <if test="accountType != null" >
+                    AccountType = #{accountType},
+                </if>
+                <if test="paymentRatioOriginal != null" >
+                    PaymentRatioOriginal = #{paymentRatioOriginal,jdbcType=VARCHAR},
+                </if>
+                <if test="discount != null" >
+                    Discount = #{discount},
+                </if>
+                <if test="status != null" >
+                    Status = #{status,jdbcType=INTEGER},
+                </if>
+                <if test="createOperator != null" >
+                    CreateOperator = #{createOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null" >
+                    CreateTime = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="modifyOperator != null" >
+                    ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="dataChangeLastTime != null" >
+                    DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+                </if>
+            </trim>
+        </set>
+        where PayTypeId = #{payTypeId,jdbcType=BIGINT}
+    </update>
+</mapper>

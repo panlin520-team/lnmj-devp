@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OrderTicheng" >
+  <resultMap id="BaseResultMap" type="com.lnmj.data.entity.OrderTicheng" >
+    <id column="ID" property="ID" jdbcType="BIGINT" />
+    <result column="OrderNumber" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="Product" property="product" jdbcType="VARCHAR" />
+    <result column="Number" property="number" jdbcType="INTEGER" />
+    <result column="ProductCommission" property="productCommission" jdbcType="DECIMAL" />
+    <result column="StatisticDate" property="statisticDate" jdbcType="TIMESTAMP" />
+    <result column="StoreId" property="storeId" jdbcType="BIGINT" />
+    <result column="SalesmanID" property="salesmanID" jdbcType="BIGINT" />
+    <result column="TakePercentage" property="takePercentage" jdbcType="DECIMAL" />
+    <result column="SalesmanConfirm" property="salesmanConfirm" jdbcType="TINYINT" />
+    <result column="ManagementConfirm" property="managementConfirm" jdbcType="TINYINT" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OrderNumber, Product, Number, ProductCommission, StatisticDate, StoreId, SalesmanID, 
+    TakePercentage, SalesmanConfirm, ManagementConfirm, Status, CreateOperator, CreateTime,
+    ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <!--查询订单提成列表-->
+  <select id="selectOrderTichengList" resultMap="BaseResultMap" parameterType="com.lnmj.data.entity.OrderTicheng" >
+    select
+    <include refid="Base_Column_List" />
+    from a_orderticheng where Status = 1
+  </select>
+  <!--条件查询订单提成-->
+  <select id="selectOrderTichengByCondition" resultMap="BaseResultMap" parameterType="com.lnmj.data.entity.OrderTicheng">
+    select
+    <include refid="Base_Column_List"/>
+    from a_orderticheng
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="ID != null">
+          AND ID = #{ID,jdbcType=BIGINT}
+        </if>
+        <if test="orderNumber != null and orderNumber != ''">
+          AND OrderNumber = #{orderNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="product != null and product!=''">
+          AND Product = #{product,jdbcType=VARCHAR}
+        </if>
+        <if test="number != null and number != ''">
+          AND Number = #{number,jdbcType=INTEGER}
+        </if>
+        <if test="productCommission != null and productCommission != ''">
+          AND ProductCommission = #{productCommission,jdbcType=DECIMAL}
+        </if>
+        <if test="statisticDate != null and statisticDate != ''">
+          AND StatisticDate = #{statisticDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="storeId != null and storeId != ''">
+          AND StoreId = #{storeId,jdbcType=BIGINT}
+        </if>
+        <if test="salesmanID != null and salesmanID != ''">
+          AND SalesmanID = #{salesmanID,jdbcType=BIGINT}
+        </if>
+        <if test="takePercentage != null and takePercentage != ''">
+          AND TakePercentage = #{takePercentage,jdbcType=DECIMAL}
+        </if>
+        <if test="salesmanConfirm != null and salesmanConfirm != ''">
+          AND SalesmanConfirm = #{salesmanConfirm,jdbcType=TINYINT}
+        </if>
+        <if test="managementConfirm != null and managementConfirm != ''">
+          AND ManagementConfirm = #{managementConfirm,jdbcType=TINYINT}
+        </if>
+        <if test="status != null">
+          AND Status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null">
+          AND Status = 1
+        </if>
+        <if test="createOperator != null">
+          AND CreateOperator = #{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+          AND CreateTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="modifyOperator != null">
+          AND ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="dataChangeLastTime != null">
+          AND DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+        </if>
+      </trim>
+    </where>
+  </select>
+  <!--按id查询订单提成-->
+  <select id="selectOrderTichengByID" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from a_orderticheng
+    where ID = #{ID,jdbcType=BIGINT} and Status = 1
+  </select>
+  <!--按id删除订单提成-->
+  <update id="deleteOrderTichengByID" parameterType="com.lnmj.data.entity.OrderTicheng" >
+    update a_orderticheng
+    set Status = 0, ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+    where ID = #{ID,jdbcType=BIGINT}
+  </update>
+  <!--插入订单提成-->
+  <insert id="insertOrderTicheng" parameterType="com.lnmj.data.entity.OrderTicheng" keyProperty="ID" useGeneratedKeys="true" >
+    insert into a_orderticheng
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ID != null" >
+        ID,
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber,
+      </if>
+      <if test="product != null" >
+        Product,
+      </if>
+      <if test="number != null" >
+        Number,
+      </if>
+      <if test="productCommission != null" >
+        ProductCommission,
+      </if>
+      <if test="statisticDate != null" >
+        StatisticDate,
+      </if>
+      <if test="storeId != null" >
+        StoreId,
+      </if>
+      <if test="salesmanID != null" >
+        SalesmanID,
+      </if>
+      <if test="takePercentage != null" >
+        TakePercentage,
+      </if>
+      <if test="salesmanConfirm != null" >
+        SalesmanConfirm,
+      </if>
+      <if test="managementConfirm != null" >
+        ManagementConfirm,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ID != null" >
+        #{ID,jdbcType=BIGINT},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="product != null" >
+        #{product,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="productCommission != null" >
+        #{productCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="statisticDate != null" >
+        #{statisticDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="salesmanID != null" >
+        #{salesmanID,jdbcType=BIGINT},
+      </if>
+      <if test="takePercentage != null" >
+        #{takePercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="salesmanConfirm != null" >
+        #{salesmanConfirm,jdbcType=TINYINT},
+      </if>
+      <if test="managementConfirm != null" >
+        #{managementConfirm,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <!--更新订单提成-->
+  <update id="updateOrderTichengByID" parameterType="com.lnmj.data.entity.OrderTicheng" >
+    update a_orderticheng
+    <set >
+      <if test="orderNumber != null" >
+        OrderNumber = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="product != null" >
+        Product = #{product,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        Number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="productCommission != null" >
+        ProductCommission = #{productCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="statisticDate != null" >
+        StatisticDate = #{statisticDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="storeId != null" >
+        StoreId = #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="salesmanID != null" >
+        SalesmanID = #{salesmanID,jdbcType=BIGINT},
+      </if>
+      <if test="takePercentage != null" >
+        TakePercentage = #{takePercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="salesmanConfirm != null" >
+        SalesmanConfirm = #{salesmanConfirm,jdbcType=TINYINT},
+      </if>
+      <if test="managementConfirm != null" >
+        ManagementConfirm = #{managementConfirm,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{ID,jdbcType=BIGINT}
+  </update>
+</mapper>

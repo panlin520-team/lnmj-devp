@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="customMadeOrder" >
+  <sql id="Base_Column_List" >
+    OrderNumber, OrderType, OrderLink, Mobile, CardNumber, TotalPrice,
+    PayPrice, OrderSource, OrderTime, PayType, OrderStatus, Status, CreateOperator, CreateTime, 
+    ModifyOperator, DataChange_LastTime
+  </sql>
+  <!--查询订单-->
+  <select id="selectCustomMadeOrderList" resultType="CustomMadeOrder" parameterType="Map" >
+    select
+    <include refid="Base_Column_List" />
+    from s_custommadeorder
+    <!--<if test=" != null" >-->
+      <!---->
+    <!--</if>-->
+
+  </select>
+
+  <select id="selectCustomMadeOrderById" resultType="CustomMadeOrder" parameterType="Long" >
+    select
+    <include refid="Base_Column_List" />
+    from s_custommadeorder
+    where 1=1
+    <if test="orderNumber != null" >
+        and OrderNumber = #{orderNumber}
+    </if>
+
+  </select>
+
+  <!--删除订单-->
+  <!--<delete id="deleteByExample" parameterType="CustomMadeOrder" >-->
+    <!--delete from s_custommadeorder-->
+  <!--</delete>-->
+
+  <!--新增定制订单-->
+  <insert id="insertOrder" parameterType="CustomMadeOrder" >
+    insert into s_custommadeorder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNumber != null" >
+        OrderNumber,
+      </if>
+      <if test="orderType != null" >
+        OrderType,
+      </if>
+      <if test="orderLink != null" >
+        OrderLink,
+      </if>
+      <if test="mobile != null" >
+        Mobile,
+      </if>
+      <if test="cardNumber != null" >
+        CardNumber,
+      </if>
+      <if test="totalPrice != null" >
+        TotalPrice,
+      </if>
+      <if test="payPrice != null" >
+        PayPrice,
+      </if>
+      <if test="orderSource != null" >
+        OrderSource,
+      </if>
+      <if test="orderTime != null" >
+        OrderTime,
+      </if>
+      <if test="payType != null" >
+        PayType,
+      </if>
+      <if test="orderStatus != null" >
+        OrderStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNumber != null" >
+        #{orderNumber},
+      </if>
+      <if test="orderType != null" >
+        #{orderType},
+      </if>
+      <if test="orderLink != null" >
+        #{orderLink},
+      </if>
+      <if test="mobile != null" >
+        #{mobile},
+      </if>
+      <if test="cardNumber != null" >
+        #{cardNumber},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice},
+      </if>
+      <if test="payPrice != null" >
+        #{payPrice},
+      </if>
+      <if test="orderSource != null" >
+        #{orderSource},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime},
+      </if>
+      <if test="payType != null" >
+        #{payType},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByExampleSelective" parameterType="map" >
+    update s_custommadeorder
+    <set >
+      <if test="orderNumber != null" >
+        OrderNumber = #{orderNumber},
+      </if>
+      <if test="orderType != null" >
+        OrderType = #{orderType},
+      </if>
+      <if test="orderLink != null" >
+        OrderLink = #{orderLink},
+      </if>
+      <if test="mobile != null" >
+        Mobile = #{mobile},
+      </if>
+      <if test="cardNumber != null" >
+        CardNumber = #{cardNumber},
+      </if>
+      <if test="totalPrice != null" >
+        TotalPrice = #{totalPrice},
+      </if>
+      <if test="payPrice != null" >
+        PayPrice = #{payPrice},
+      </if>
+      <if test="orderSource != null" >
+        OrderSource = #{orderSource},
+      </if>
+      <if test="orderTime != null" >
+        OrderTime = #{orderTime},
+      </if>
+      <if test="payType != null" >
+        PayType = #{payType},
+      </if>
+      <if test="orderStatus != null" >
+        OrderStatus = #{orderStatus},
+      </if>
+      <if test="status != null" >
+        Status = #{status},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator},
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime = #{dataChange_LastTime},
+      </if>
+    </set>
+  </update>
+</mapper>

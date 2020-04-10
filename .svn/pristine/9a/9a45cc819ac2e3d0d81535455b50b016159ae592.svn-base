@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="userEvaluating">
+    <resultMap id="userEvaluating" type="com.lnmj.data.entity.UserEvaluating">
+        <id column="UserId" property="UserId" jdbcType="BIGINT"/>
+        <result column="EvaluatingID" property="evaluatingID" jdbcType="BIGINT"/>
+        <result column="EvaluatingName" property="evaluatingName" jdbcType="VARCHAR"/>
+        <result column="EvaluatingLevelID" property="evaluatingLevelID" jdbcType="BIGINT"/>
+        <result column="EvaluatingLevelName" property="evaluatingLevelName" jdbcType="VARCHAR"/>
+        <result column="EvaluatingAmount" property="evaluatingAmount" jdbcType="DECIMAL"/>
+        <result column="EvaluatingNumber" property="evaluatingNumber" jdbcType="DECIMAL"/>
+        <result column="EvaluatingDateStart" property="evaluatingDateStart" jdbcType="TIMESTAMP"/>
+        <result column="EvaluatingDateEnd" property="evaluatingDateEnd" jdbcType="TIMESTAMP"/>
+        <result column="EvaluatingDetailed" property="evaluatingDetailed" jdbcType="VARCHAR"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        UserId
+        ,
+        EvaluatingID,
+        EvaluatingName,
+        EvaluatingLevelID,
+        EvaluatingLevelName,
+        EvaluatingAmount,
+        EvaluatingNumber,
+        EvaluatingDateStart,
+        EvaluatingDateEnd,
+        EvaluatingDetailed,
+        Remark,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <select id="selectUserEvaluatingList" resultType="UserEvaluating" parameterType="UserEvaluating">
+        select
+        <include refid="Base_Column_List"/>
+        from e_userevaluating
+        where Status = 1
+        <if test="evaluatingLevelID != null and evaluatingLevelID!=''">
+            and EvaluatingLevelID = #{evaluatingLevelID}
+        </if>
+        <if test="evaluatingID != null and evaluatingID!=''">
+            and EvaluatingID = #{evaluatingID}
+        </if>
+    </select>
+
+    <select id="selectUserEvaluatingByUser" resultType="userEvaluating" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from e_userevaluating
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="userId != null">
+                    and UserId = #{userId}
+                </if>
+                <if test="evaluatingID != null">
+                    and EvaluatingID = #{evaluatingID}
+                </if>
+                <if test="start != null">
+                    and EvaluatingDateStart &gt;= #{start}
+                </if>
+                <if test="end != null">
+                    and EvaluatingDateEnd &lt;= #{end}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+
+    <insert id="addUserEvaluating" parameterType="UserEvaluating">
+        insert into e_userevaluating
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                UserId,
+            </if>
+            <if test="evaluatingID != null">
+                EvaluatingID,
+            </if>
+            <if test="evaluatingName != null">
+                EvaluatingName,
+            </if>
+            <if test="evaluatingLevelID != null">
+                EvaluatingLevelID,
+            </if>
+            <if test="evaluatingLevelName != null">
+                EvaluatingLevelName,
+            </if>
+            <if test="evaluatingAmount != null">
+                EvaluatingAmount,
+            </if>
+            <if test="evaluatingNumber != null">
+                EvaluatingNumber,
+            </if>
+            <if test="evaluatingDateStart != null">
+                EvaluatingDateStart,
+            </if>
+            <if test="evaluatingDateEnd != null">
+                EvaluatingDateEnd,
+            </if>
+            <if test="evaluatingDetailed != null">
+                EvaluatingDetailed,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="evaluatingID != null">
+                #{evaluatingID,jdbcType=BIGINT},
+            </if>
+            <if test="evaluatingName != null">
+                #{evaluatingName,jdbcType=VARCHAR},
+            </if>
+            <if test="evaluatingLevelID != null">
+                #{evaluatingLevelID,jdbcType=BIGINT},
+            </if>
+            <if test="evaluatingLevelName != null">
+                #{evaluatingLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="evaluatingAmount != null">
+                #{evaluatingAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="evaluatingNumber != null">
+                #{evaluatingNumber,jdbcType=DECIMAL},
+            </if>
+            <if test="evaluatingDateStart != null">
+                #{evaluatingDateStart,jdbcType=TIMESTAMP},
+            </if>
+            <if test="evaluatingDateEnd != null">
+                #{evaluatingDateEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="evaluatingDetailed != null">
+                #{evaluatingDetailed,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserEvaluating" parameterType="UserEvaluating">
+        update e_userevaluating
+        <set>
+            <if test="userId != null">
+                UserId = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="evaluatingID != null">
+                EvaluatingID = #{evaluatingID,jdbcType=BIGINT},
+            </if>
+            <if test="evaluatingName != null">
+                EvaluatingName = #{evaluatingName,jdbcType=VARCHAR},
+            </if>
+            <if test="evaluatingLevelID != null">
+                EvaluatingLevelID = #{evaluatingLevelID,jdbcType=BIGINT},
+            </if>
+            <if test="evaluatingLevelName != null">
+                EvaluatingLevelName = #{evaluatingLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="evaluatingAmount != null">
+                EvaluatingAmount = #{evaluatingAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="evaluatingNumber != null">
+                EvaluatingNumber = #{evaluatingNumber,jdbcType=DECIMAL},
+            </if>
+            <if test="evaluatingDateStart != null">
+                EvaluatingDateStart = #{evaluatingDateStart,jdbcType=TIMESTAMP},
+            </if>
+            <if test="evaluatingDateEnd != null">
+                EvaluatingDateEnd = #{evaluatingDateEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="evaluatingDetailed != null">
+                EvaluatingDetailed = #{evaluatingDetailed,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+    </update>
+
+</mapper>

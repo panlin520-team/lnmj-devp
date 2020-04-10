@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="InStorageProduct" >
+  <resultMap id="InStorageProductMap" type="com.lnmj.product.entity.InStorageProduct" >
+    <id column="InStorageProductID" property="inStorageProductID" jdbcType="BIGINT" />
+    <result column="InStorageId" property="inStorageId" jdbcType="BIGINT" />
+    <result column="InStorageNumber" property="inStorageNumber" jdbcType="VARCHAR" />
+    <result column="ProductType" property="productType" jdbcType="VARCHAR" />
+    <result column="ProductCode" property="productCode" jdbcType="VARCHAR" />
+    <result column="ProductName" property="productName" jdbcType="VARCHAR" />
+    <result column="BarCode" property="barCode" jdbcType="VARCHAR" />
+    <result column="Specification" property="specification" jdbcType="VARCHAR" />
+    <result column="SecondaryAttribute" property="secondaryAttribute" jdbcType="VARCHAR" />
+    <result column="BatchNumber" property="batchNumber" jdbcType="VARCHAR" />
+    <result column="ProviderBatchNumber" property="providerBatchNumber" jdbcType="VARCHAR" />
+    <result column="ProductionDate" property="productionDate" jdbcType="TIMESTAMP" />
+    <result column="Expiration" property="expiration" jdbcType="VARCHAR" />
+    <result column="ExpirationUnit" property="expirationUnit" jdbcType="VARCHAR" />
+    <result column="EndDate" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="InShelfDate" property="inShelfDate" jdbcType="TIMESTAMP" />
+    <result column="ReceivableNumber" property="receivableNumber" jdbcType="INTEGER" />
+    <result column="ReceivedNumber" property="receivedNumber" jdbcType="INTEGER" />
+    <result column="Unit" property="unit" jdbcType="VARCHAR" />
+    <result column="UnitPrice" property="unitPrice" jdbcType="DECIMAL" />
+    <result column="DiscountPrice" property="discountPrice" jdbcType="DECIMAL" />
+    <result column="TotalPrice" property="totalPrice" jdbcType="DECIMAL" />
+    <result column="Stock" property="stock" jdbcType="VARCHAR" />
+    <result column="StockPlace" property="stockPlace" jdbcType="VARCHAR" />
+    <result column="StockStatus" property="stockStatus" jdbcType="VARCHAR" />
+    <result column="KeeperType" property="keeperType" jdbcType="VARCHAR" />
+    <result column="Keeper" property="keeper" jdbcType="VARCHAR" />
+    <result column="IsSend" property="isSend" jdbcType="TINYINT" />
+    <result column="DiscountPercent" property="discountPercent" jdbcType="DECIMAL" />
+    <result column="AssistUnit" property="assistUnit" jdbcType="VARCHAR" />
+    <result column="ReceivedNumberAssistUnit" property="receivedNumberAssistUnit" jdbcType="INTEGER" />
+    <result column="DemandTrackingNumber" property="demandTrackingNumber" jdbcType="VARCHAR" />
+    <result column="PlanTrackingNumber" property="planTrackingNumber" jdbcType="VARCHAR" />
+    <result column="SourceInvoicesType" property="sourceInvoicesType" jdbcType="VARCHAR" />
+    <result column="SourceInvoices" property="sourceInvoices" jdbcType="VARCHAR" />
+    <result column="OrderNumber" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="ReturnNumber" property="returnNumber" jdbcType="INTEGER" />
+    <result column="DemageNumber" property="demageNumber" jdbcType="INTEGER" />
+    <result column="BusinessProcess" property="businessProcess" jdbcType="VARCHAR" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_instorageproduct_column" >
+    InStorageProductID, InStorageId, InStorageNumber, ProductType, ProductCode, ProductName, 
+    BarCode, Specification, SecondaryAttribute, BatchNumber, ProviderBatchNumber, ProductionDate, 
+    Expiration, ExpirationUnit, EndDate, InShelfDate, ReceivableNumber, ReceivedNumber, 
+    Unit, UnitPrice, DiscountPrice, TotalPrice, Stock, StockPlace, StockStatus, KeeperType, 
+    Keeper, IsSend, DiscountPercent, AssistUnit, ReceivedNumberAssistUnit, DemandTrackingNumber, 
+    PlanTrackingNumber, SourceInvoicesType, SourceInvoices, OrderNumber, ReturnNumber, 
+    DemageNumber, BusinessProcess, Remark, Status, CreateOperator, CreateTime, ModifyOperator, 
+    DataChange_LastTime
+  </sql>
+
+  <select id="selectInStorageProductList" resultMap="InStorageProductMap">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_instorageproduct_column" />
+    from s_instorageproduct where Status=1
+  </select>
+
+  <select id="selectInStorageProductListByStockIDAndProductID" resultMap="InStorageProductMap" parameterType="map">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_instorageproduct_column" />
+    from s_instorageproduct where Status=1
+    <if test="productCode != null" >
+      and ProductCode = #{productCode,jdbcType=VARCHAR}
+    </if>
+    <if test="stock != null" >
+      and Stock = #{stock,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="selectInStorageProductByID" resultMap="InStorageProductMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_instorageproduct_column" />
+    from s_instorageproduct
+    where InStorageProductID = #{inStorageProductID,jdbcType=BIGINT} and Status = 1
+  </select>
+
+  <select id="selectInStorageProductByInStorageID" resultMap="InStorageProductMap" parameterType="java.lang.Long" >
+    select
+    <include refid="base_instorageproduct_column" />
+    from s_instorageproduct
+    where InStorageId = #{inStorageId,jdbcType=BIGINT} and Status = 1
+  </select>
+
+  <update id="deleteInStorageProductByID" parameterType="InStorageProduct" >
+    update s_instorageproduct set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    where InStorageProductID = #{inStorageProductID,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteInStorageProductByInStorageID" parameterType="InStorageProduct" >
+    update s_instorageproduct set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    where InStorageId = #{inStorageId,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertInStorageProduct" parameterType="InStorageProduct" useGeneratedKeys="true" keyProperty="inStorageProductID" >
+    insert into s_instorageproduct
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="inStorageProductID != null" >
+        InStorageProductID,
+      </if>
+      <if test="inStorageId != null" >
+        InStorageId,
+      </if>
+      <if test="inStorageNumber != null" >
+        InStorageNumber,
+      </if>
+      <if test="productType != null" >
+        ProductType,
+      </if>
+      <if test="productCode != null" >
+        ProductCode,
+      </if>
+      <if test="productName != null" >
+        ProductName,
+      </if>
+      <if test="barCode != null" >
+        BarCode,
+      </if>
+      <if test="specification != null" >
+        Specification,
+      </if>
+      <if test="secondaryAttribute != null" >
+        SecondaryAttribute,
+      </if>
+      <if test="batchNumber != null" >
+        BatchNumber,
+      </if>
+      <if test="providerBatchNumber != null" >
+        ProviderBatchNumber,
+      </if>
+      <if test="productionDate != null" >
+        ProductionDate,
+      </if>
+      <if test="expiration != null" >
+        Expiration,
+      </if>
+      <if test="expirationUnit != null" >
+        ExpirationUnit,
+      </if>
+      <if test="endDate != null" >
+        EndDate,
+      </if>
+      <if test="inShelfDate != null" >
+        InShelfDate,
+      </if>
+      <if test="receivableNumber != null" >
+        ReceivableNumber,
+      </if>
+      <if test="receivedNumber != null" >
+        ReceivedNumber,
+      </if>
+      <if test="unit != null" >
+        Unit,
+      </if>
+      <if test="unitPrice != null" >
+        UnitPrice,
+      </if>
+      <if test="discountPrice != null" >
+        DiscountPrice,
+      </if>
+      <if test="totalPrice != null" >
+        TotalPrice,
+      </if>
+      <if test="stock != null" >
+        Stock,
+      </if>
+      <if test="stockPlace != null" >
+        StockPlace,
+      </if>
+      <if test="stockStatus != null" >
+        StockStatus,
+      </if>
+      <if test="keeperType != null" >
+        KeeperType,
+      </if>
+      <if test="keeper != null" >
+        Keeper,
+      </if>
+      <if test="isSend != null" >
+        IsSend,
+      </if>
+      <if test="discountPercent != null" >
+        DiscountPercent,
+      </if>
+      <if test="assistUnit != null" >
+        AssistUnit,
+      </if>
+      <if test="receivedNumberAssistUnit != null" >
+        ReceivedNumberAssistUnit,
+      </if>
+      <if test="demandTrackingNumber != null" >
+        DemandTrackingNumber,
+      </if>
+      <if test="planTrackingNumber != null" >
+        PlanTrackingNumber,
+      </if>
+      <if test="sourceInvoicesType != null" >
+        SourceInvoicesType,
+      </if>
+      <if test="sourceInvoices != null" >
+        SourceInvoices,
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber,
+      </if>
+      <if test="returnNumber != null" >
+        ReturnNumber,
+      </if>
+      <if test="demageNumber != null" >
+        DemageNumber,
+      </if>
+      <if test="businessProcess != null" >
+        BusinessProcess,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="inStorageProductID != null" >
+        #{inStorageProductID,jdbcType=BIGINT},
+      </if>
+      <if test="inStorageId != null" >
+        #{inStorageId,jdbcType=BIGINT},
+      </if>
+      <if test="inStorageNumber != null" >
+        #{inStorageNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null" >
+        #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="specification != null" >
+        #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="secondaryAttribute != null" >
+        #{secondaryAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="providerBatchNumber != null" >
+        #{providerBatchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productionDate != null" >
+        #{productionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expiration != null" >
+        #{expiration,jdbcType=VARCHAR},
+      </if>
+      <if test="expirationUnit != null" >
+        #{expirationUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inShelfDate != null" >
+        #{inShelfDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receivableNumber != null" >
+        #{receivableNumber,jdbcType=INTEGER},
+      </if>
+      <if test="receivedNumber != null" >
+        #{receivedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discountPrice != null" >
+        #{discountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null" >
+        #{stock,jdbcType=VARCHAR},
+      </if>
+      <if test="stockPlace != null" >
+        #{stockPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="stockStatus != null" >
+        #{stockStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="keeperType != null" >
+        #{keeperType,jdbcType=VARCHAR},
+      </if>
+      <if test="keeper != null" >
+        #{keeper,jdbcType=VARCHAR},
+      </if>
+      <if test="isSend != null" >
+        #{isSend,jdbcType=TINYINT},
+      </if>
+      <if test="discountPercent != null" >
+        #{discountPercent,jdbcType=DECIMAL},
+      </if>
+      <if test="assistUnit != null" >
+        #{assistUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="receivedNumberAssistUnit != null" >
+        #{receivedNumberAssistUnit,jdbcType=INTEGER},
+      </if>
+      <if test="demandTrackingNumber != null" >
+        #{demandTrackingNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="planTrackingNumber != null" >
+        #{planTrackingNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceInvoicesType != null" >
+        #{sourceInvoicesType,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceInvoices != null" >
+        #{sourceInvoices,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="returnNumber != null" >
+        #{returnNumber,jdbcType=INTEGER},
+      </if>
+      <if test="demageNumber != null" >
+        #{demageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="businessProcess != null" >
+        #{businessProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateInStorageProductByID" parameterType="InStorageProduct" >
+    update s_instorageproduct
+    <set >
+      <if test="inStorageId != null" >
+        InStorageId = #{inStorageId,jdbcType=BIGINT},
+      </if>
+      <if test="inStorageNumber != null" >
+        InStorageNumber = #{inStorageNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        ProductType = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        ProductCode = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        ProductName = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null" >
+        BarCode = #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="specification != null" >
+        Specification = #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="secondaryAttribute != null" >
+        SecondaryAttribute = #{secondaryAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        BatchNumber = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="providerBatchNumber != null" >
+        ProviderBatchNumber = #{providerBatchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productionDate != null" >
+        ProductionDate = #{productionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expiration != null" >
+        Expiration = #{expiration,jdbcType=VARCHAR},
+      </if>
+      <if test="expirationUnit != null" >
+        ExpirationUnit = #{expirationUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        EndDate = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inShelfDate != null" >
+        InShelfDate = #{inShelfDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receivableNumber != null" >
+        ReceivableNumber = #{receivableNumber,jdbcType=INTEGER},
+      </if>
+      <if test="receivedNumber != null" >
+        ReceivedNumber = #{receivedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null" >
+        Unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        UnitPrice = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discountPrice != null" >
+        DiscountPrice = #{discountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null" >
+        TotalPrice = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null" >
+        Stock = #{stock,jdbcType=VARCHAR},
+      </if>
+      <if test="stockPlace != null" >
+        StockPlace = #{stockPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="stockStatus != null" >
+        StockStatus = #{stockStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="keeperType != null" >
+        KeeperType = #{keeperType,jdbcType=VARCHAR},
+      </if>
+      <if test="keeper != null" >
+        Keeper = #{keeper,jdbcType=VARCHAR},
+      </if>
+      <if test="isSend != null" >
+        IsSend = #{isSend,jdbcType=TINYINT},
+      </if>
+      <if test="discountPercent != null" >
+        DiscountPercent = #{discountPercent,jdbcType=DECIMAL},
+      </if>
+      <if test="assistUnit != null" >
+        AssistUnit = #{assistUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="receivedNumberAssistUnit != null" >
+        ReceivedNumberAssistUnit = #{receivedNumberAssistUnit,jdbcType=INTEGER},
+      </if>
+      <if test="demandTrackingNumber != null" >
+        DemandTrackingNumber = #{demandTrackingNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="planTrackingNumber != null" >
+        PlanTrackingNumber = #{planTrackingNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceInvoicesType != null" >
+        SourceInvoicesType = #{sourceInvoicesType,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceInvoices != null" >
+        SourceInvoices = #{sourceInvoices,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="returnNumber != null" >
+        ReturnNumber = #{returnNumber,jdbcType=INTEGER},
+      </if>
+      <if test="demageNumber != null" >
+        DemageNumber = #{demageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="businessProcess != null" >
+        BusinessProcess = #{businessProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where InStorageProductID = #{inStorageProductID,jdbcType=BIGINT}
+  </update>
+</mapper>

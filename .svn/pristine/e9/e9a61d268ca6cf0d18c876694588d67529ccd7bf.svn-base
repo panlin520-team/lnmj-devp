@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProductNumber">
+    <resultMap id="ProductNumberMap" type="com.lnmj.product.entity.ProductNumber">
+        <id column="Id" jdbcType="BIGINT" property="id"/>
+        <result column="Stock" jdbcType="BIGINT" property="stock"/>
+        <result column="Type" jdbcType="VARCHAR" property="type"/>
+        <result column="StorageNumber" jdbcType="VARCHAR" property="storageNumber"/>
+        <result column="BatchNumber" jdbcType="VARCHAR" property="batchNumber"/>
+        <result column="ProductType" jdbcType="VARCHAR" property="productType"/>
+        <result column="ProductCode" jdbcType="VARCHAR" property="productCode"/>
+        <result column="ProductName" jdbcType="VARCHAR" property="productName"/>
+        <result column="Unit" jdbcType="INTEGER" property="unit"/>
+        <result column="Number" jdbcType="INTEGER" property="number"/>
+        <result column="AveailableNumber" jdbcType="INTEGER" property="aveailableNumber"/>
+        <result column="OldNumber" jdbcType="INTEGER" property="oldNumber"/>
+        <result column="TotalNumber" jdbcType="INTEGER" property="totalNumber"/>
+        <result column="Remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="Status" jdbcType="INTEGER" property="status"/>
+        <result column="CreateOperator" jdbcType="VARCHAR" property="createOperator"/>
+        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="ModifyOperator" jdbcType="VARCHAR" property="modifyOperator"/>
+        <result column="DataChange_LastTime" jdbcType="TIMESTAMP" property="dataChangeLastTime"/>
+    </resultMap>
+
+    <sql id="base_product_number_column">
+        Id,Stock,Type,StorageNumber,BatchNumber,ProductType,ProductCode,ProductName,
+        Unit,Number,AveailableNumber,OldNumber,TotalNumber,
+        Remark,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+    <select id="selectProductNumberList" resultMap="ProductNumberMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="base_product_number_column"/>
+        from s_productnumber where Status = 1
+    </select>
+    <select id="selectProductNumberListByProduct" resultMap="ProductNumberMap" parameterType="map">
+        select t.*
+        from
+        (SELECT ProductCode,max(CreateTime) as CreateTime FROM s_productnumber
+        where Status = 1
+        <if test="stock != null">
+            and Stock = #{stock,jdbcType=VARCHAR}
+        </if>
+        GROUP BY ProductCode ) a
+        LEFT JOIN s_productnumber t ON t.ProductCode=a.ProductCode and t.CreateTime=a.CreateTime
+    </select>
+
+    <select id="selectProductNumberByCondition" parameterType="ProductNumber" resultMap="ProductNumberMap">
+        select
+        <include refid="base_product_number_column"/>
+        from s_productnumber
+        where Status = 1
+        <if test="id != null">
+            and Id = #{id,jdbcType=BIGINT}
+        </if>
+        <if test="stock != null">
+            and Stock = #{stock,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            and Type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="storageNumber != null">
+            and StorageNumber = #{storageNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="batchNumber != null">
+            and BatchNumber = #{batchNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="productType != null">
+            and ProductType = #{productType,jdbcType=VARCHAR}
+        </if>
+        <if test="productCode != null">
+            and ProductCode = #{productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="productName != null">
+            and ProductName like CONCAT('%',#{productName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="unit != null">
+            and Unit = #{unit,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <update id="deleteProductNumberByID" parameterType="ProductNumber" >
+        update s_productnumber set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        where Id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <insert id="insertProductNumber" parameterType="ProductNumber" useGeneratedKeys="true" keyProperty="id">
+        insert into s_productnumber
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="stock != null">
+                Stock,
+            </if>
+            <if test="type != null">
+                Type,
+            </if>
+            <if test="storageNumber != null">
+                StorageNumber,
+            </if>
+            <if test="batchNumber != null">
+                BatchNumber,
+            </if>
+            <if test="productType != null">
+                ProductType,
+            </if>
+            <if test="productCode != null">
+                ProductCode,
+            </if>
+            <if test="productName != null">
+                ProductName,
+            </if>
+            <if test="unit != null">
+                Unit,
+            </if>
+            <if test="number != null">
+                Number,
+            </if>
+            <if test="aveailableNumber != null">
+                AveailableNumber,
+            </if>
+            <if test="oldNumber != null">
+                OldNumber,
+            </if>
+            <if test="totalNumber != null">
+                TotalNumber,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="stock != null">
+                #{stock,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="storageNumber != null">
+                #{storageNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="batchNumber != null">
+                #{batchNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="productType != null">
+                #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="unit != null">
+                #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+            <if test="aveailableNumber != null">
+                #{aveailableNumber,jdbcType=INTEGER},
+            </if>
+            <if test="oldNumber != null">
+                #{oldNumber,jdbcType=INTEGER},
+            </if>
+            <if test="totalNumber != null">
+                #{totalNumber,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateProductNumberByID" parameterType="ProductNumber">
+        update s_productnumber
+        <set>
+            <if test="stock != null">
+                Stock = #{stock,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                Type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="storageNumber != null">
+                StorageNumber = #{storageNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="batchNumber != null">
+                BatchNumber = #{batchNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="productType != null">
+                ProductType = #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                ProductCode = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                productName = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="unit != null">
+                Unit = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                Number = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="aveailableNumber != null">
+                AveailableNumber = #{aveailableNumber,jdbcType=INTEGER},
+            </if>
+            <if test="oldNumber != null">
+                OldNumber = #{oldNumber,jdbcType=INTEGER},
+            </if>
+            <if test="totalNumber != null">
+                TotalNumber = #{totalNumber,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where Id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

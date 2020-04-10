@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productBrand" >
+    <!--商品品牌-->
+    <!--商品品牌基本字段-->
+    <sql id="product_brand_base_column" >
+        ProductBrandId,ProductBrandName,ProductKindId,
+        ProductBrandOrder,ProductTypeDisplayId,ImageType,ImageUrl,ImageHeight,ImageWidth,
+        IntegralratioService,IntegralratioUnion,RetailpriceVIP1,RetailpriceVIP2,RetailpriceVIP3,
+        RetailpriceVIP4,RetailpriceVIP5,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <!--插入商品品牌表字段-->
+    <sql id="sql_insert_product_brand_column" >
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="productBrandName != null" >ProductBrandName,</if>
+            <if test="productKindId != null" >ProductKindId,</if>
+            <if test="productBrandOrder != null" >ProductBrandOrder,</if>
+            <if test="productTypeDisplayId != null" >ProductTypeDisplayId,</if>
+            <if test="imageType != null" >ImageType,</if>
+            <if test="imageUrl != null" >ImageUrl,</if>
+            <if test="imageHeight != null" >ImageHeight,</if>
+            <if test="imageWidth != null" >ImageWidth,</if>
+            <if test="integralratioService != null" >IntegralratioService,</if>
+            <if test="integralratioUnion != null" >IntegralratioUnion,</if>
+            <if test="retailpriceVIP1 != null" >RetailpriceVIP1,</if>
+            <if test="retailpriceVIP2 != null" >RetailpriceVIP2,</if>
+            <if test="retailpriceVIP3 != null" >RetailpriceVIP3,</if>
+            <if test="retailpriceVIP4 != null" >RetailpriceVIP4,</if>
+            <if test="retailpriceVIP5 != null" >RetailpriceVIP5,</if>
+            <if test="createOperator != null" >CreateOperator,</if>
+            <if test="modifyOperator != null" >ModifyOperator,</if>
+        </trim>
+    </sql>
+    <!--插入商品品牌表值-->
+    <sql id="sql_insert_product_brand_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="productBrandName != null" >#{productBrandName},</if>
+            <if test="productKindId != null" >#{productKindId},</if>
+            <if test="productBrandOrder != null" >#{productBrandOrder},</if>
+            <if test="productTypeDisplayId != null" >#{productTypeDisplayId},</if>
+            <if test="imageType != null" >#{imageType},</if>
+            <if test="imageUrl != null" >#{imageUrl},</if>
+            <if test="imageHeight != null" >#{imageHeight},</if>
+            <if test="imageWidth != null" >#{imageWidth},</if>
+            <if test="integralratioService != null" >#{integralratioService},</if>
+            <if test="integralratioUnion != null" >#{integralratioUnion},</if>
+            <if test="retailpriceVIP1 != null" >#{retailpriceVIP1},</if>
+            <if test="retailpriceVIP2 != null" >#{retailpriceVIP2},</if>
+            <if test="retailpriceVIP3 != null" >#{retailpriceVIP3},</if>
+            <if test="retailpriceVIP4 != null" >#{retailpriceVIP4},</if>
+            <if test="retailpriceVIP5 != null" >#{retailpriceVIP5},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <!--修改商品品牌-->
+    <sql id="sql_set_product_brand_column" >
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="productBrandName != null" >,ProductBrandName=#{productBrandName}</if>
+                <if test="productKindId != null" >,ProductKindId=#{productKindId}</if>
+                <if test="productBrandOrder != null" >,ProductBrandOrder=#{productBrandOrder}</if>
+                <if test="productTypeDisplayId != null" >,ProductTypeDisplayId=#{productTypeDisplayId}</if>
+                <if test="imageType != null" >,ImageType=#{imageType}</if>
+                <if test="imageUrl != null" >,ImageUrl=#{imageUrl}</if>
+                <if test="imageHeight != null" >,ImageHeight=#{imageHeight}</if>
+                <if test="imageWidth != null" >,ImageWidth=#{imageWidth}</if>
+                <if test="integralratioService != null" >,IntegralratioService=#{integralratioService}</if>
+                <if test="integralratioUnion != null" >,IntegralratioUnion=#{integralratioUnion}</if>
+                <if test="retailpriceVIP1 != null" >,RetailpriceVIP1=#{retailpriceVIP1}</if>
+                <if test="retailpriceVIP2 != null" >,RetailpriceVIP1=#{retailpriceVIP2}</if>
+                <if test="retailpriceVIP3 != null" >,RetailpriceVIP1=#{retailpriceVIP3}</if>
+                <if test="retailpriceVIP4 != null" >,RetailpriceVIP1=#{retailpriceVIP4}</if>
+                <if test="retailpriceVIP5 != null" >,RetailpriceVIP1=#{retailpriceVIP5}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}></if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+
+    <!--商品品牌分页显示-->
+    <select id="selectProductBrandList" resultType="com.lnmj.product.entity.ProductBrand">
+        select <include refid="product_brand_base_column" /> from p_productbrand
+        where Status = 1
+    </select>
+
+    <!--商品品牌关键字查询-->
+    <select id="selectProductBrandByKeyWord" parameterType="String" resultType="com.lnmj.product.entity.ProductBrand">
+        select <include refid="product_brand_base_column" /> from p_productbrand
+        <where>
+            <if test="_parameter != null">ProductBrandName like CONCAT('%',#{keyWord},'%')</if>
+        </where>
+    </select>
+    <!--新增商品品牌-->
+    <insert id="insertProductBrand" parameterType="ProductBrand" keyProperty="productBrandId" useGeneratedKeys="true" >
+      insert into p_productbrand
+      <include refid="sql_insert_product_brand_column"/>
+      <include refid="sql_insert_product_brand_values"/>
+    </insert>
+    <!--删除商品品牌-->
+    <delete id="deleteProductBrand" parameterType="Long" >
+        delete from p_productbrand where ProductBrandId=#{productBrandId}
+    </delete>
+    <!--根据商品品牌id查询商品品牌-->
+    <select id="selectProductBrandByProductBrandId" parameterType="Long" resultType="com.lnmj.product.entity.ProductBrand" >
+        select <include refid="product_brand_base_column" />
+        from p_productbrand where ProductBrandId=#{productBrandId} and Status = 1
+    </select>
+    <!--修改商品品牌-->
+    <update id="updateProductBrand" parameterType="com.lnmj.product.entity.ProductBrand">
+        update p_productbrand
+        <include refid="sql_set_product_brand_column"/>
+        where ProductBrandId=#{productBrandId}
+    </update>
+    <!--根据商品品牌Id查询商品-->
+    <select id="selectProductByProductBrandId" parameterType="Long" resultType="Product">
+        select <include refid="product.Base_Column_List"/>
+        from p_product where ProductBrand=#{productBrandId} and Status = 1
+    </select>
+    <!--根据商品品牌Id查询服务-->
+    <select id="selectServiceByProductBrandId" parameterType="Long" resultType="ServiceProduct">
+        select <include refid="serviceProduct.Base_Column_List"/>
+        from p_productservice where ProductBrand=#{productBrandId} and Status = 1
+    </select>
+
+    <!--根据商品品牌Id查询品牌-->
+    <select id="selectBrandById" parameterType="Long" resultType="ProductBrand">
+        select <include refid="product_brand_base_column"/>
+        from p_productbrand where ProductBrandId=#{productBrandId} and Status = 1
+    </select>
+
+
+</mapper>

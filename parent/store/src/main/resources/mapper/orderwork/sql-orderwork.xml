@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="orderwork">
+
+    <sql id="Base_Column_List">
+        OrderworkId
+        ,
+        BeauticianId,
+        OrderworkDate,
+        LeisureTimeNodes,
+        BusyTimeNodes,
+        RestTimeNodes,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <insert id="addOrderwork" parameterType="Orderwork">
+        insert into s_orderwork
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderworkId != null">
+                OrderworkId,
+            </if>
+            <if test="beauticianId != null">
+                BeauticianId,
+            </if>
+            <if test="orderworkDate != null">
+                OrderworkDate,
+            </if>
+            <if test="leisureTimeNodes != null">
+                LeisureTimeNodes,
+            </if>
+            <if test="busyTimeNodes != null">
+                BusyTimeNodes,
+            </if>
+            <if test="restTimeNodes != null">
+                RestTimeNodes,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderworkId != null">
+                #{orderworkId},
+            </if>
+            <if test="beauticianId != null">
+                #{beauticianId},
+            </if>
+            <if test="orderworkDate != null">
+                #{orderworkDate},
+            </if>
+            <if test="leisureTimeNodes != null">
+                #{leisureTimeNodes},
+            </if>
+            <if test="busyTimeNodes != null">
+                #{busyTimeNodes},
+            </if>
+            <if test="restTimeNodes != null">
+                #{restTimeNodes},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            now(),
+        </trim>
+    </insert>
+
+    <select id="selectOrderwork" resultType="Orderwork" parameterType="Orderwork">
+        select
+        <include refid="Base_Column_List"/>
+        from s_orderwork
+        where BeauticianId = #{beauticianId}
+        and OrderworkDate = #{orderworkDate}
+    </select>
+
+    <select id="checkOrderwork" resultType="int" parameterType="Orderwork">
+        select
+            count(1)
+        from s_orderwork
+        where BeauticianId = #{beauticianId}
+          and OrderworkDate = #{orderworkDate}
+    </select>
+
+    <delete id="deleteOrderwork" parameterType="Orderwork">
+        delete
+        from s_orderwork
+        where BeauticianId = #{beauticianId}
+          and OrderworkDate = #{orderworkDate}
+    </delete>
+
+    <select id="selectOrderworkAll" resultType="Orderwork">
+        select
+        <include refid="Base_Column_List"/>
+        from s_orderwork
+        where Status =1
+        and  BeauticianId in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>
+

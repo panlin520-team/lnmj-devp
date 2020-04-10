@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MemberAmountRecord" >
+  <resultMap id="MemberAmountRecordMap" type="com.lnmj.account.entity.MMemberamountrecord" >
+    <result column="MemberAmountRecordID" property="memberAmountRecordID" jdbcType="BIGINT" />
+    <result column="UserId" property="userId" jdbcType="BIGINT" />
+    <result column="CardNumber" property="cardNumber" jdbcType="VARCHAR" />
+    <result column="MemberLevelID" property="memberLevelID" jdbcType="BIGINT" />
+    <result column="MemberAmountType" property="memberAmountType" jdbcType="VARCHAR" />
+    <result column="MemberAmountSource" property="memberAmountSource" jdbcType="BIGINT" />
+    <result column="TotalAmount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="Banlance" property="banlance" jdbcType="DECIMAL" />
+    <result column="Amount" property="amount" jdbcType="DECIMAL" />
+    <result column="AmountTime" property="amountTime" jdbcType="TIMESTAMP" />
+    <result column="AmountEndTime" property="amountEndTime" jdbcType="TIMESTAMP" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="base_member_amount_record_column" >
+    MemberAmountRecordID, UserId, CardNumber, MemberLevelID, MemberAmountType, MemberAmountSource, 
+    TotalAmount, Banlance, Amount, AmountTime, AmountEndTime,Remark, Status, CreateOperator,
+    CreateTime
+  </sql>
+
+  <select id="selectMemberAmountRecordList" resultMap="MemberAmountRecordMap">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_member_amount_record_column" />
+    from m_memberamountrecord where Status = 1
+  </select>
+
+  <select id="selectMemberAmountRecordByCondition" resultMap="MemberAmountRecordMap" parameterType="MMemberamountrecord" >
+    select
+    <include refid="base_member_amount_record_column" />
+    from m_memberamountrecord
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="memberAmountRecordID != null">AND MemberAmountRecordID=#{memberAmountRecordID}
+        </if>
+        <if test="userId != null">AND UserId=#{userId}</if>
+        <if test="cardNumber != null">AND CardNumber=#{cardNumber}</if>
+        <if test="memberLevelID != null">AND MemberLevelID=#{memberLevelID}</if>
+        <if test="memberAmountType != null">AND MemberAmountType=#{memberAmountType}</if>
+        <if test="memberAmountSource != null">AND MemberAmountSource=#{memberAmountSource}</if>
+        <if test="totalAmount != null">AND TotalAmount=#{totalAmount}</if>
+        <if test="banlance != null">AND Banlance=#{banlance}</if>
+        <if test="amount != null">AND Amount=#{amount}</if>
+        <if test="amountTime != null">AND TODAYS(AmountTime)=TODAYS(CONCAT('',#{amountTime},''))</if>
+        <if test="amountEndTime != null">AND TODAYS(AmountEndTime)=TODAYS(CONCAT('',#{amountEndTime},''))</if>
+        <if test="remark != null">AND Remark=#{remark}</if>
+        <if test="status != null">AND Status=#{status}</if>
+        <if test="status == null">AND Status=1</if>
+        <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+        <if test="createTime != null">AND CreateTime =#{createTime}></if>
+      </trim>
+    </where>
+  </select>
+
+  <insert id="insertMemberAmountRecord" parameterType="MMemberamountrecord" keyProperty="memberAmountRecordID" useGeneratedKeys="true">
+    insert into m_memberamountrecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberAmountRecordID != null" >
+        MemberAmountRecordID,
+      </if>
+      <if test="userId != null" >
+        UserId,
+      </if>
+      <if test="cardNumber != null" >
+        CardNumber,
+      </if>
+      <if test="memberLevelID != null" >
+        MemberLevelID,
+      </if>
+      <if test="memberAmountType != null" >
+        MemberAmountType,
+      </if>
+      <if test="memberAmountSource != null" >
+        MemberAmountSource,
+      </if>
+      <if test="totalAmount != null" >
+        TotalAmount,
+      </if>
+      <if test="banlance != null" >
+        Banlance,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="amountTime != null" >
+        AmountTime,
+      </if>
+      <if test="amountEndTime != null" >
+        AmountEndTime,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberAmountRecordID != null" >
+        #{memberAmountRecordID,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="cardNumber != null" >
+        #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="memberLevelID != null" >
+        #{memberLevelID,jdbcType=BIGINT},
+      </if>
+      <if test="memberAmountType != null" >
+        #{memberAmountType,jdbcType=VARCHAR},
+      </if>
+      <if test="memberAmountSource != null" >
+        #{memberAmountSource,jdbcType=BIGINT},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="banlance != null" >
+        #{banlance,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="amountTime != null" >
+        #{amountTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amountEndTime != null" >
+        #{amountEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

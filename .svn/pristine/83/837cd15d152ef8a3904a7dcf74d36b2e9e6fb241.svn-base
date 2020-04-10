@@ -1,0 +1,191 @@
+package com.lnmj.k3cloud.business.impl;
+
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.lnmj.common.response.ResponseResult;
+import com.lnmj.k3cloud.business.IEmployeesService;
+import com.lnmj.k3cloud.entity.base.BaseAuditBean;
+import com.lnmj.k3cloud.entity.base.BaseDeleteBean;
+import com.lnmj.k3cloud.entity.base.BaseSubmitBean;
+import com.lnmj.k3cloud.entity.base.BaseViewBean;
+import com.lnmj.k3cloud.entity.employees.Fworkorgid;
+import com.lnmj.k3cloud.entity.employees.employees.addSendParam.*;
+import com.lnmj.k3cloud.util.InvokeHelper;
+import com.lnmj.k3cloud.util.K3cloudConfig;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @Author: panlin
+ * @Date: 2019-11-08 15:09
+ * @Description: 金蝶service
+ */
+@Service("employeesServiceImpl")
+public class EmployeesServiceImpl implements IEmployeesService {
+    @Override
+    public ResponseResult employeesSave(String acctId,String dataCentreUserName,String dataCentrePassword,String FName, String FCreateOrgId, String FUseOrgId, String FStaffNumber, String FPostEntityListStr) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                EmployeeSaveRootBean employeeSaveRootBean = new EmployeeSaveRootBean();
+                EmployeeModel employeeModel = new EmployeeModel();
+
+                employeeModel.setFname(FName);
+                Fcreateorgid fcreateorgid = new Fcreateorgid(FCreateOrgId);
+                employeeModel.setFcreateorgid(fcreateorgid);
+
+                employeeModel.setFuseorgid(new Fuseorgid(FUseOrgId));
+
+                employeeModel.setFstaffnumber(FStaffNumber);
+
+
+                JSONArray fpostentityListArray = JSON.parseArray(FPostEntityListStr);
+                List<Fpostentity> fpostentityList = new ArrayList<>();
+                for (int i = 0; i < fpostentityListArray.size(); i++) {
+                    String a = fpostentityListArray.getJSONObject(i).getString("FWorkOrgId");
+                    String b = fpostentityListArray.getJSONObject(i).getString("FPostDept");
+                    String c = fpostentityListArray.getJSONObject(i).getString("FPost");
+                    String d = fpostentityListArray.getJSONObject(i).getString("FStaffStartDate");
+                    Fpostentity fpostentity = new Fpostentity();
+                    fpostentity.setFworkorgid(new Fworkorgid(a));
+                    fpostentity.setFpostdept(new Fpostdept(b));
+                    fpostentity.setFpost(new Fpost(c));
+                    fpostentity.setFstaffstartdate(d);
+                    fpostentityList.add(fpostentity);
+                }
+                employeeModel.setFpostentity(fpostentityList);
+
+                employeeSaveRootBean.setModel(employeeModel);
+
+                String employee = JSON.toJSONString(employeeSaveRootBean, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+                JSONObject jsonObject = InvokeHelper.Save("BD_Empinfo", employee);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult employeesDelete(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setNumbers(resultList);
+                baseDeleteBean.setIds(ids);
+                String deleteEmp = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Delete("BD_Empinfo", deleteEmp);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+
+    }
+
+    @Override
+    public ResponseResult employeesView(String acctId,String dataCentreUserName,String dataCentrePassword,String number, String id) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseViewBean baseViewBean = new BaseViewBean();
+                baseViewBean.setNumber(number);
+                baseViewBean.setId(id);
+                String a = JSON.toJSONString(baseViewBean);
+                JSONObject jsonObject = InvokeHelper.View("BD_Empinfo", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult employeesSubimt(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> numberList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseSubmitBean baseSubmitBean = new BaseSubmitBean();
+                baseSubmitBean.setNumbers(numberList);
+                baseSubmitBean.setIds(ids);
+                String submitEmp = JSON.toJSONString(baseSubmitBean);
+                JSONObject jsonObject = InvokeHelper.Submit("BD_Empinfo", submitEmp);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+
+    }
+
+    @Override
+    public ResponseResult employeesAudit(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseAuditBean baseAuditBean = new BaseAuditBean();
+                baseAuditBean.setNumbers(resultList);
+                baseAuditBean.setIds(ids);
+                String a = JSON.toJSONString(baseAuditBean);
+                JSONObject jsonObject = InvokeHelper.Audit("BD_Empinfo", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+
+    }
+
+    @Override
+    public ResponseResult employeesUnAudit(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseAuditBean baseAuditBean = new BaseAuditBean();
+                baseAuditBean.setNumbers(resultList);
+                baseAuditBean.setIds(ids);
+                String a = JSON.toJSONString(baseAuditBean);
+                JSONObject jsonObject = InvokeHelper.UnAudit("BD_Empinfo", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+
+    }
+
+
+}

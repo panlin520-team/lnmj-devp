@@ -1,0 +1,125 @@
+package com.lnmj.common.generator.department;
+
+import java.util.Date;
+
+public class Department {
+    private Long id;
+
+    private String name;
+
+    private String k3Id;
+
+    private String k3Number;
+
+    private String companyType;
+
+    private String companyId;
+
+    private String k3OrgNumber;
+
+    private Integer status;
+
+    private String createOperator;
+
+    private Date createTime;
+
+    private String modifyOperator;
+
+    private Date dataChange_LastTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getK3Id() {
+        return k3Id;
+    }
+
+    public void setK3Id(String k3Id) {
+        this.k3Id = k3Id == null ? null : k3Id.trim();
+    }
+
+    public String getK3Number() {
+        return k3Number;
+    }
+
+    public void setK3Number(String k3Number) {
+        this.k3Number = k3Number == null ? null : k3Number.trim();
+    }
+
+    public String getCompanyType() {
+        return companyType;
+    }
+
+    public void setCompanyType(String companyType) {
+        this.companyType = companyType == null ? null : companyType.trim();
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId == null ? null : companyId.trim();
+    }
+
+    public String getK3OrgNumber() {
+        return k3OrgNumber;
+    }
+
+    public void setK3OrgNumber(String k3OrgNumber) {
+        this.k3OrgNumber = k3OrgNumber == null ? null : k3OrgNumber.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getCreateOperator() {
+        return createOperator;
+    }
+
+    public void setCreateOperator(String createOperator) {
+        this.createOperator = createOperator == null ? null : createOperator.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getModifyOperator() {
+        return modifyOperator;
+    }
+
+    public void setModifyOperator(String modifyOperator) {
+        this.modifyOperator = modifyOperator == null ? null : modifyOperator.trim();
+    }
+
+    public Date getDataChange_LastTime() {
+        return dataChange_LastTime;
+    }
+
+    public void setDataChange_LastTime(Date dataChange_LastTime) {
+        this.dataChange_LastTime = dataChange_LastTime;
+    }
+}

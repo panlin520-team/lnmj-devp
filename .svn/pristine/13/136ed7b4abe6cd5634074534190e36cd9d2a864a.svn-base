@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stock">
+  <resultMap id="StockMap" type="com.lnmj.product.entity.Stock">
+    <id column="StockId" jdbcType="BIGINT" property="stockId" />
+    <result column="StockCode" jdbcType="VARCHAR" property="stockCode" />
+    <result column="CompanyType" jdbcType="BIGINT" property="companyType" />
+    <result column="CompanyId" jdbcType="BIGINT" property="companyId" />
+    <result column="Company" jdbcType="VARCHAR" property="company" />
+    <result column="ResponsiblePerson" jdbcType="VARCHAR" property="responsiblePerson" />
+    <result column="StockType" jdbcType="VARCHAR" property="stockType" />
+    <result column="AllowableNegativeInventory" jdbcType="TINYINT" property="allowableNegativeInventory" />
+    <result column="IsUse" jdbcType="TINYINT" property="isUse" />
+    <result column="IsStockPlace" jdbcType="TINYINT" property="isStockPlace" />
+    <result column="IntegralPercent" jdbcType="DECIMAL" property="integralPercent" />
+    <result column="ProvinceId" jdbcType="VARCHAR" property="provinceId" />
+    <result column="CityId" jdbcType="VARCHAR" property="cityId" />
+    <result column="CountyId" jdbcType="VARCHAR" property="countyId" />
+    <result column="StockAddress" jdbcType="VARCHAR" property="stockAddress" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="DataStatus" jdbcType="VARCHAR" property="dataStatus" />
+    <result column="Auditor" jdbcType="VARCHAR" property="auditor" />
+    <result column="AuditorTime" jdbcType="TIMESTAMP" property="auditorTime" />
+    <result column="Remark" jdbcType="VARCHAR" property="remark" />
+    <result column="Status" jdbcType="INTEGER" property="status" />
+    <result column="CreateOperator" jdbcType="VARCHAR" property="createOperator" />
+    <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ModifyOperator" jdbcType="VARCHAR" property="modifyOperator" />
+    <result column="DataChange_LastTime" jdbcType="TIMESTAMP" property="dataChangeLastTime" />
+  </resultMap>
+  
+  <sql id="base_stock_column">
+    StockId, StockCode, CompanyType, CompanyId, Company, ResponsiblePerson, StockType, 
+    AllowableNegativeInventory, IsUse, IsStockPlace, IntegralPercent, ProvinceId, CityId, 
+    CountyId, StockAddress, Phone, DataStatus, Auditor, AuditorTime, Remark, Status, 
+    CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectLastStockCode" resultType="String">
+    select StockCode from s_stock where Status = 1 order by StockCode desc limit 1
+  </select>
+
+  <select id="selectStockList" resultMap="StockMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="base_stock_column" />
+    from s_stock where Status = 1
+  </select>
+
+  <select id="selectStockByID" parameterType="Stock" resultMap="StockMap">
+    select 
+    <include refid="base_stock_column" />
+    from s_stock
+    where Status = 1
+      <if test="stockId != null">
+        and StockId = #{stockId,jdbcType=BIGINT}
+      </if>
+      <if test="stockCode != null">
+        and StockCode = #{stockCode,jdbcType=VARCHAR}
+      </if>
+      <if test="companyType != null">
+        and CompanyType = #{companyType,jdbcType=BIGINT}
+      </if>
+      <if test="companyId != null">
+        and CompanyId = #{companyId,jdbcType=BIGINT}
+      </if>
+  </select>
+  
+  <insert id="insertStock" parameterType="Stock" useGeneratedKeys="true" keyProperty="stockId">
+    insert into s_stock
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stockId != null">
+        StockId,
+      </if>
+      <if test="stockCode != null">
+        StockCode,
+      </if>
+      <if test="companyType != null">
+        CompanyType,
+      </if>
+      <if test="companyId != null">
+        CompanyId,
+      </if>
+      <if test="company != null">
+        Company,
+      </if>
+      <if test="responsiblePerson != null">
+        ResponsiblePerson,
+      </if>
+      <if test="stockType != null">
+        StockType,
+      </if>
+      <if test="allowableNegativeInventory != null">
+        AllowableNegativeInventory,
+      </if>
+      <if test="isUse != null">
+        IsUse,
+      </if>
+      <if test="isStockPlace != null">
+        IsStockPlace,
+      </if>
+      <if test="integralPercent != null">
+        IntegralPercent,
+      </if>
+      <if test="provinceId != null">
+        ProvinceId,
+      </if>
+      <if test="cityId != null">
+        CityId,
+      </if>
+      <if test="countyId != null">
+        CountyId,
+      </if>
+      <if test="stockAddress != null">
+        StockAddress,
+      </if>
+      <if test="phone != null">
+        Phone,
+      </if>
+      <if test="dataStatus != null">
+        DataStatus,
+      </if>
+      <if test="auditor != null">
+        Auditor,
+      </if>
+      <if test="auditorTime != null">
+        AuditorTime,
+      </if>
+      <if test="remark != null">
+        Remark,
+      </if>
+      <if test="status != null">
+        Status,
+      </if>
+      <if test="createOperator != null">
+        CreateOperator,
+      </if>
+      <if test="createTime != null">
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null">
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null">
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stockId != null">
+        #{stockId,jdbcType=BIGINT},
+      </if>
+      <if test="stockCode != null">
+        #{stockCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyType != null">
+        #{companyType,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="responsiblePerson != null">
+        #{responsiblePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="stockType != null">
+        #{stockType,jdbcType=VARCHAR},
+      </if>
+      <if test="allowableNegativeInventory != null">
+        #{allowableNegativeInventory,jdbcType=TINYINT},
+      </if>
+      <if test="isUse != null">
+        #{isUse,jdbcType=TINYINT},
+      </if>
+      <if test="isStockPlace != null">
+        #{isStockPlace,jdbcType=TINYINT},
+      </if>
+      <if test="integralPercent != null">
+        #{integralPercent,jdbcType=DECIMAL},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+        #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddress != null">
+        #{stockAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="dataStatus != null">
+        #{dataStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null">
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorTime != null">
+        #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null">
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null">
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null">
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateStockByID" parameterType="Stock">
+    update s_stock
+    <set>
+      <!--<if test="stockCode != null">-->
+        <!--StockCode = #{stockCode,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <if test="companyType != null">
+        CompanyType = #{companyType,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null">
+        CompanyId = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="company != null">
+        Company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="responsiblePerson != null">
+        ResponsiblePerson = #{responsiblePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="stockType != null">
+        StockType = #{stockType,jdbcType=VARCHAR},
+      </if>
+      <if test="allowableNegativeInventory != null">
+        AllowableNegativeInventory = #{allowableNegativeInventory,jdbcType=TINYINT},
+      </if>
+      <if test="isUse != null">
+        IsUse = #{isUse,jdbcType=TINYINT},
+      </if>
+      <if test="isStockPlace != null">
+        IsStockPlace = #{isStockPlace,jdbcType=TINYINT},
+      </if>
+      <if test="integralPercent != null">
+        IntegralPercent = #{integralPercent,jdbcType=DECIMAL},
+      </if>
+      <if test="provinceId != null">
+        ProvinceId = #{provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        CityId = #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+        CountyId = #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddress != null">
+        StockAddress = #{stockAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="dataStatus != null">
+        DataStatus = #{dataStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null">
+        Auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorTime != null">
+        AuditorTime = #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null">
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null">
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null">
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where StockId = #{stockId,jdbcType=BIGINT}
+  </update>
+</mapper>

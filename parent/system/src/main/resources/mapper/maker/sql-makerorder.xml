@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="makerOrder" >
+<!-- 创客订单使用 -->
+  <resultMap id="MakerOrderUseMap" type="com.lnmj.system.entity.MakerOrderUse" >
+    <id column="MakerProductUseId" property="makerProductUseId" jdbcType="BIGINT" />
+    <result column="MakerOrderCode" property="makerOrderCode" jdbcType="VARCHAR" />
+    <result column="MakerUserId" property="makerUserId" jdbcType="BIGINT" />
+    <result column="Mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="Product" property="product" jdbcType="BIGINT" />
+    <result column="ProductCode" property="productCode" jdbcType="VARCHAR" />
+    <result column="ReceiverAddress" property="receiverAddress" jdbcType="VARCHAR" />
+    <result column="DeliveryWay" property="deliveryWay" jdbcType="INTEGER" />
+    <result column="DeliveryNumber" property="deliveryNumber" jdbcType="VARCHAR" />
+    <result column="DeliveryOrganization" property="deliveryOrganization" jdbcType="VARCHAR" />
+    <result column="BookingTime" property="bookingTime" jdbcType="TIMESTAMP" />
+    <result column="BookingBeauticianIds" property="bookingBeauticianIds" jdbcType="VARCHAR" />
+    <result column="BookingBeauticianName" property="bookingBeauticianName" jdbcType="VARCHAR" />
+    <result column="StoreId" property="storeId" jdbcType="BIGINT" />
+    <result column="StoreName" property="storeName" jdbcType="VARCHAR" />
+    <result column="PerformanceRatio" property="performanceRatio" jdbcType="VARCHAR" />
+    <result column="ProductUseStatus" property="productUseStatus" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_maker_order_use_column" >
+    MakerProductUseId, MakerOrderCode, MakerUserId, Mobile, Product, ProductCode, ReceiverAddress,
+    DeliveryWay, DeliveryNumber, DeliveryOrganization, BookingTime, BookingBeauticianIds,
+    BookingBeauticianName, StoreId, StoreName, PerformanceRatio, ProductUseStatus, Status,
+    CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectMakerOrderUseList" resultMap="MakerOrderUseMap">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_maker_order_use_column" />
+    from m_makerorderuse where  Status = 1
+      order by MakerProductUseId
+  </select>
+
+  <select id="selectMakerOrderUseByCondition" resultMap="MakerOrderUseMap" parameterType="MakerOrderUse" >
+    select
+    <include refid="base_maker_order_use_column" />
+    from m_makerorderuse
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="makerProductUseId != null" >
+          AND MakerProductUseId = #{makerProductUseId,jdbcType=VARCHAR}
+        </if>
+        <if test="makerOrderCode != null" >
+          AND MakerOrderCode = #{makerOrderCode,jdbcType=VARCHAR}
+        </if>
+        <if test="makerUserId != null" >
+          AND MakerUserId = #{makerUserId,jdbcType=BIGINT}
+        </if>
+        <if test="mobile != null" >
+          AND Mobile = #{mobile,jdbcType=VARCHAR}
+        </if>
+        <if test="product != null" >
+          AND Product = #{product,jdbcType=BIGINT}
+        </if>
+        <if test="productCode != null" >
+          AND ProductCode = #{productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="receiverAddress != null" >
+          AND ReceiverAddress = #{receiverAddress,jdbcType=VARCHAR}
+        </if>
+        <if test="deliveryWay != null" >
+          AND  DeliveryWay = #{deliveryWay,jdbcType=INTEGER}
+        </if>
+        <if test="deliveryNumber != null" >
+          AND DeliveryNumber = #{deliveryNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="deliveryOrganization != null" >
+          AND  DeliveryOrganization = #{deliveryOrganization,jdbcType=VARCHAR}
+        </if>
+        <if test="bookingTime != null" >
+          AND BookingTime = #{bookingTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="bookingBeauticianIds != null" >
+          AND BookingBeauticianIds = #{bookingBeauticianIds,jdbcType=VARCHAR}
+        </if>
+        <if test="bookingBeauticianName != null" >
+          AND BookingBeauticianName = #{bookingBeauticianName,jdbcType=VARCHAR}
+        </if>
+        <if test="storeId != null" >
+          AND StoreId = #{storeId,jdbcType=BIGINT}
+        </if>
+        <if test="storeName != null" >
+          AND StoreName = #{storeName,jdbcType=VARCHAR}
+        </if>
+        <if test="performanceRatio != null" >
+          AND  PerformanceRatio = #{performanceRatio,jdbcType=VARCHAR}
+        </if>
+        <if test="productUseStatus != null" >
+          AND ProductUseStatus = #{productUseStatus,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+          AND Status=#{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null">
+          AND Status=1
+        </if>
+        <if test="createOperator != null">
+          AND CreateOperator=#{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+          AND CreateTime=#{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="modifyOperator != null">
+          AND ModifyOperator=#{modifyOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="dataChangeLastTime != null">
+          AND DataChange_LastTime=#{dataChangeLastTime,jdbcType=TIMESTAMP}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+  <insert id="insertMakerOrderUse" parameterType="MakerOrderUse" keyProperty="makerProductUseId" useGeneratedKeys="true">
+    insert into m_makerorderuse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="makerProductUseId != null" >
+        MakerProductUseId,
+      </if>
+      <if test="makerOrderCode != null" >
+        MakerOrderCode,
+      </if>
+      <if test="makerUserId != null" >
+        MakerUserId,
+      </if>
+      <if test="mobile != null" >
+        Mobile,
+      </if>
+      <if test="product != null" >
+        Product,
+      </if>
+      <if test="productCode != null" >
+        ProductCode,
+      </if>
+      <if test="receiverAddress != null" >
+        ReceiverAddress,
+      </if>
+      <if test="deliveryWay != null" >
+        DeliveryWay,
+      </if>
+      <if test="deliveryNumber != null" >
+        DeliveryNumber,
+      </if>
+      <if test="deliveryOrganization != null" >
+        DeliveryOrganization,
+      </if>
+      <if test="bookingTime != null" >
+        BookingTime,
+      </if>
+      <if test="bookingBeauticianIds != null" >
+        BookingBeauticianIds,
+      </if>
+      <if test="bookingBeauticianName != null" >
+        BookingBeauticianName,
+      </if>
+      <if test="storeId != null" >
+        StoreId,
+      </if>
+      <if test="storeName != null" >
+        StoreName,
+      </if>
+      <if test="performanceRatio != null" >
+        PerformanceRatio,
+      </if>
+      <if test="productUseStatus != null" >
+        ProductUseStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="makerProductUseId != null" >
+        #{makerProductUseId,jdbcType=BIGINT},
+      </if>
+      <if test="makerOrderCode != null" >
+        #{makerOrderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="makerUserId != null" >
+        #{makerUserId,jdbcType=BIGINT},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="product != null" >
+        #{product,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverAddress != null" >
+        #{receiverAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryWay != null" >
+        #{deliveryWay,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryNumber != null" >
+        #{deliveryNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryOrganization != null" >
+        #{deliveryOrganization,jdbcType=VARCHAR},
+      </if>
+      <if test="bookingTime != null" >
+        #{bookingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingBeauticianIds != null" >
+        #{bookingBeauticianIds,jdbcType=VARCHAR},
+      </if>
+      <if test="bookingBeauticianName != null" >
+        #{bookingBeauticianName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="performanceRatio != null" >
+        #{performanceRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="productUseStatus != null" >
+        #{productUseStatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateMakerOrderUse" parameterType="MakerOrderUse" >
+    update m_makerorderuse
+    <set >
+      <trim prefix="" prefixOverrides=",">
+        <if test="makerOrderCode != null" >
+          MakerOrderCode = #{makerOrderCode,jdbcType=VARCHAR},
+        </if>
+        <if test="makerUserId != null" >
+          MakerUserId = #{makerUserId,jdbcType=BIGINT},
+        </if>
+        <if test="mobile != null" >
+          Mobile = #{mobile,jdbcType=VARCHAR},
+        </if>
+        <if test="product != null" >
+          Product = #{product,jdbcType=BIGINT},
+        </if>
+        <if test="productCode != null" >
+          ProductCode = #{productCode,jdbcType=VARCHAR},
+        </if>
+        <if test="receiverAddress != null" >
+          ReceiverAddress = #{receiverAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="deliveryWay != null" >
+          DeliveryWay = #{deliveryWay,jdbcType=INTEGER},
+        </if>
+        <if test="deliveryNumber != null" >
+          DeliveryNumber = #{deliveryNumber,jdbcType=VARCHAR},
+        </if>
+        <if test="deliveryOrganization != null" >
+          DeliveryOrganization = #{deliveryOrganization,jdbcType=VARCHAR},
+        </if>
+        <if test="bookingTime != null" >
+          BookingTime = #{bookingTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="bookingBeauticianIds != null" >
+          BookingBeauticianIds = #{bookingBeauticianIds,jdbcType=VARCHAR},
+        </if>
+        <if test="bookingBeauticianName != null" >
+          BookingBeauticianName = #{bookingBeauticianName,jdbcType=VARCHAR},
+        </if>
+        <if test="storeId != null" >
+          StoreId = #{storeId,jdbcType=BIGINT},
+        </if>
+        <if test="storeName != null" >
+          StoreName = #{storeName,jdbcType=VARCHAR},
+        </if>
+        <if test="performanceRatio != null" >
+          PerformanceRatio = #{performanceRatio,jdbcType=VARCHAR},
+        </if>
+        <if test="productUseStatus != null" >
+          ProductUseStatus = #{productUseStatus,jdbcType=INTEGER},
+        </if>
+        <if test="status != null" >
+          Status = #{status,jdbcType=INTEGER},
+        </if>
+        <if test="createOperator != null" >
+          CreateOperator = #{createOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="createTime != null" >
+          CreateTime = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="modifyOperator != null" >
+          ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="dataChangeLastTime != null" >
+          DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </set>
+    where MakerProductUseId = #{makerProductUseId,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteMakerOrderUse" parameterType="MakerOrderUse" >
+    update m_makerorderuse
+    set Status = 0,
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+    where MakerProductUseId = #{makerProductUseId,jdbcType=BIGINT}
+  </update>
+
+
+
+  <!-- 创客订单 -->
+  <resultMap id="MakerOrderMap" type="com.lnmj.system.entity.MakerOrder" >
+    <id column="MakerOrderId" property="makerOrderId" jdbcType="BIGINT" />
+    <result column="OrderType" property="orderType" jdbcType="INTEGER" />
+    <result column="MakerOrderCode" property="makerOrderCode" jdbcType="VARCHAR" />
+    <result column="MakerUserId" property="makerUserId" jdbcType="INTEGER" />
+    <result column="PurchaserName" property="purchaserName" jdbcType="VARCHAR" />
+    <result column="Mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="MakerProduct" property="makerProduct" jdbcType="BIGINT" />
+    <result column="ProductCode" property="productCode" jdbcType="VARCHAR" />
+    <result column="Num" property="num" jdbcType="INTEGER" />
+    <result column="TotalAmount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="PayType" property="payType" jdbcType="INTEGER" />
+    <result column="DeliveryWay" property="deliveryWay" jdbcType="INTEGER" />
+    <result column="ReceiverAddress" property="receiverAddress" jdbcType="VARCHAR" />
+    <result column="OrderSource" property="orderSource" jdbcType="VARCHAR" />
+    <result column="OrderStatus" property="orderStatus" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="base_maker_order_column" >
+    MakerOrderId,OrderType, MakerOrderCode, MakerUserId, PurchaserName, Mobile, MakerProduct, ProductCode,
+    Num, TotalAmount, PayType, DeliveryWay, ReceiverAddress, OrderSource, OrderStatus, 
+    Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectMakerOrderList" resultMap="MakerOrderMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_maker_order_column" />
+    from m_makerorder where Status = 1
+    order by MakerOrderId
+  </select>
+
+  <select id="selectMakerOrderByCondition" resultMap="MakerOrderMap" parameterType="MakerOrder" >
+    select
+    <include refid="base_maker_order_column" />
+    from m_makerorder
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="makerOrderId != null" >
+          AND  MakerOrderId = #{makerOrderId,jdbcType=BIGINT}
+        </if>
+        <if test="orderType != null" >
+          AND  OrderType = #{orderType,jdbcType=INTEGER}
+        </if>
+        <if test="makerOrderCode != null" >
+          AND  MakerOrderCode = #{makerOrderCode,jdbcType=VARCHAR}
+        </if>
+        <if test="makerUserId != null" >
+          AND  MakerUserId = #{makerUserId,jdbcType=BIGINT}
+        </if>
+        <if test="purchaserName != null" >
+          AND PurchaserName = #{purchaserName,jdbcType=VARCHAR}
+        </if>
+        <if test="mobile != null" >
+          AND Mobile = #{mobile,jdbcType=VARCHAR}
+        </if>
+        <if test="makerProduct != null" >
+          AND MakerProduct = #{makerProduct,jdbcType=BIGINT}
+        </if>
+        <if test="productCode != null" >
+          AND ProductCode = #{productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="num != null" >
+          AND Num = #{num,jdbcType=INTEGER}
+        </if>
+        <if test="totalAmount != null" >
+          AND TotalAmount = #{totalAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="payType != null" >
+         AND PayType = #{payType,jdbcType=INTEGER}
+        </if>
+        <if test="deliveryWay != null" >
+         AND DeliveryWay = #{deliveryWay,jdbcType=INTEGER}
+        </if>
+        <if test="receiverAddress != null" >
+         AND ReceiverAddress = #{receiverAddress,jdbcType=VARCHAR}
+        </if>
+        <if test="orderSource != null" >
+         AND OrderSource = #{orderSource,jdbcType=VARCHAR}
+        </if>
+        <if test="orderStatus != null" >
+         AND OrderStatus = #{orderStatus,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+          AND Status=#{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null">
+          AND Status=1
+        </if>
+        <if test="createOperator != null">
+          AND CreateOperator=#{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+          AND CreateTime=#{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="modifyOperator != null">
+          AND ModifyOperator=#{modifyOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="dataChangeLastTime != null">
+          AND DataChange_LastTime=#{dataChangeLastTime,jdbcType=TIMESTAMP}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+  <insert id="insertMakerOrder" parameterType="MakerOrder" keyProperty="makerOrderId" useGeneratedKeys="true" >
+    insert into m_makerorder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="makerOrderId != null" >
+        MakerOrderId,
+      </if>
+      <if test="orderType != null" >
+        OrderType,
+      </if>
+      <if test="makerOrderCode != null" >
+        MakerOrderCode,
+      </if>
+      <if test="makerUserId != null" >
+        MakerUserId,
+      </if>
+      <if test="purchaserName != null" >
+        PurchaserName,
+      </if>
+      <if test="mobile != null" >
+        Mobile,
+      </if>
+      <if test="makerProduct != null" >
+        MakerProduct,
+      </if>
+      <if test="productCode != null" >
+        ProductCode,
+      </if>
+      <if test="num != null" >
+        Num,
+      </if>
+      <if test="totalAmount != null" >
+        TotalAmount,
+      </if>
+      <if test="payType != null" >
+        PayType,
+      </if>
+      <if test="deliveryWay != null" >
+        DeliveryWay,
+      </if>
+      <if test="receiverAddress != null" >
+        ReceiverAddress,
+      </if>
+      <if test="orderSource != null" >
+        OrderSource,
+      </if>
+      <if test="orderStatus != null" >
+        OrderStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="makerOrderId != null" >
+        #{makerOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="makerOrderCode != null" >
+        #{makerOrderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="makerUserId != null" >
+        #{makerUserId,jdbcType=BIGINT},
+      </if>
+      <if test="purchaserName != null" >
+        #{purchaserName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="makerProduct != null" >
+        #{makerProduct,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryWay != null" >
+        #{deliveryWay,jdbcType=INTEGER},
+      </if>
+      <if test="receiverAddress != null" >
+        #{receiverAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSource != null" >
+        #{orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateMakerOrder" parameterType="MakerOrder" >
+    update m_makerorder
+    <set >
+      <trim prefix="" prefixOverrides=",">
+        <if test="orderType != null" >
+        OrderType = #{orderType,jdbcType=INTEGER},
+        </if>
+        <if test="makerOrderCode != null" >
+          MakerOrderCode = #{makerOrderCode,jdbcType=VARCHAR},
+        </if>
+        <if test="makerUserId != null" >
+          MakerUserId = #{makerUserId,jdbcType=BIGINT},
+        </if>
+        <if test="purchaserName != null" >
+          PurchaserName = #{purchaserName,jdbcType=VARCHAR},
+        </if>
+        <if test="mobile != null" >
+          Mobile = #{mobile,jdbcType=VARCHAR},
+        </if>
+        <if test="makerProduct != null" >
+          MakerProduct = #{makerProduct,jdbcType=BIGINT},
+        </if>
+        <if test="productCode != null" >
+          ProductCode = #{productCode,jdbcType=VARCHAR},
+        </if>
+        <if test="num != null" >
+          Num = #{num,jdbcType=INTEGER},
+        </if>
+        <if test="totalAmount != null" >
+          TotalAmount = #{totalAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="payType != null" >
+          PayType = #{payType,jdbcType=INTEGER},
+        </if>
+        <if test="deliveryWay != null" >
+          DeliveryWay = #{deliveryWay,jdbcType=INTEGER},
+        </if>
+        <if test="receiverAddress != null" >
+          ReceiverAddress = #{receiverAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="orderSource != null" >
+          OrderSource = #{orderSource,jdbcType=VARCHAR},
+        </if>
+        <if test="orderStatus != null" >
+          OrderStatus = #{orderStatus,jdbcType=INTEGER},
+        </if>
+        <if test="status != null" >
+          Status = #{status,jdbcType=INTEGER},
+        </if>
+        <if test="createOperator != null" >
+          CreateOperator = #{createOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="createTime != null" >
+          CreateTime = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="modifyOperator != null" >
+          ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="dataChangeLastTime != null" >
+          DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </set>
+    where MakerOrderId = #{makerOrderId,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteMakerOrder" parameterType="MakerOrder" >
+    update m_makerorder
+    set Status = 0,
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        where MakerOrderId = #{makerOrderId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

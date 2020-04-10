@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="supplier">
+    <sql id="Base_Column_List">
+        SupplierId, SupplierCode, SupplierName, ShortName, SupplierCategoryId, BankDeposit,
+        CreditCardNum, LinkMan, LinkPhone, Address, DataCentre,K3Id,K3Number,DataCentreUserName,DataCentrePassword,Status, CreateOperator, CreateTime, ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Category">
+        SupplierCategoryId, SupplierCategoryName, CompanyType,CompanyId, CreateOperator, CreateTime, ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Supplier_SubCompany">
+        SupplierId, SubCompanyId, Status, CreateOperator, CreateTime, ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Supplier_Store">
+        SupplierId, StoreId, Status, CreateOperator, CreateTime, ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <select id="selectSupplierList" resultType="Supplier" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from c_supplier
+        where Status = 1
+        <if test="keyWordName != null and keyWordName!=''">
+            and SupplierName like CONCAT('%',#{keyWordName},'%')
+        </if>
+        <if test="keyWordPhone != null and keyWordPhone!=''">
+            and LinkPhone = #{keyWordPhone}
+        </if>
+        <if test="supplierCategoryId != null and supplierCategoryId != ''">
+            and SupplierCategoryId = #{supplierCategoryId}
+        </if>
+    </select>
+
+    <select id="selectSupplierById" resultType="Supplier" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from c_supplier
+        where Status = 1 and SupplierId = #{supplierId}
+
+    </select>
+
+    <update id="updateSupplier" parameterType="Supplier">
+        update c_supplier
+        <set>
+            <if test="supplierCode != null">
+                SupplierCode = #{supplierCode,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierName != null">
+                SupplierName = #{supplierName,jdbcType=VARCHAR},
+            </if>
+            <if test="shortName != null">
+                ShortName = #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierCategoryId != null">
+                SupplierCategoryId = #{supplierCategoryId,jdbcType=BIGINT},
+            </if>
+            <if test="bankDeposit != null">
+                BankDeposit = #{bankDeposit,jdbcType=VARCHAR},
+            </if>
+            <if test="creditCardNum != null">
+                CreditCardNum = #{creditCardNum,jdbcType=VARCHAR},
+            </if>
+            <if test="linkMan != null">
+                LinkMan = #{linkMan,jdbcType=VARCHAR},
+            </if>
+            <if test="linkPhone != null">
+                LinkPhone = #{linkPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                Address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentre != null">
+                DataCentre = #{dataCentre,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Id != null">
+                K3Id = #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Number != null">
+                K3Number = #{k3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentreUserName != null">
+                DataCentreUserName = #{dataCentreUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentrePassword != null">
+                DataCentrePassword = #{dataCentrePassword,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where SupplierId = #{supplierId,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteSupplier" parameterType="Map">
+        delete from c_supplier
+        where SupplierId = #{supplierId,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="addSupplier" parameterType="Supplier">
+        insert into c_supplier
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="supplierId != null">
+                SupplierId,
+            </if>
+            <if test="supplierCode != null">
+                SupplierCode,
+            </if>
+            <if test="supplierName != null">
+                SupplierName,
+            </if>
+            <if test="shortName != null">
+                ShortName,
+            </if>
+            <if test="supplierCategoryId != null">
+                SupplierCategoryId,
+            </if>
+            <if test="linkMan != null">
+                LinkMan,
+            </if>
+            <if test="linkPhone != null">
+                LinkPhone,
+            </if>
+            <if test="address != null">
+                Address,
+            </if>
+            <if test="dataCentre != null">
+                DataCentre,
+            </if>
+            <if test="k3Id != null">
+                K3Id,
+            </if>
+            <if test="k3Number != null">
+                K3Number,
+            </if>
+            <if test="dataCentreUserName != null">
+                DataCentreUserName,
+            </if>
+            <if test="dataCentrePassword != null">
+                DataCentrePassword,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="supplierId != null">
+                #{supplierId,jdbcType=BIGINT},
+            </if>
+            <if test="supplierCode != null">
+                #{supplierCode,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierName != null">
+                #{supplierName,jdbcType=VARCHAR},
+            </if>
+            <if test="shortName != null">
+                #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierCategoryId != null">
+                #{supplierCategoryId,jdbcType=BIGINT},
+            </if>
+            <if test="linkMan != null">
+                #{linkMan},
+            </if>
+            <if test="linkPhone != null">
+                #{linkPhone},
+            </if>
+            <if test="address != null">
+                #{address},
+            </if>
+            <if test="dataCentre != null">
+                #{dataCentre},
+            </if>
+            <if test="k3Id != null">
+                #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Number != null">
+                #{k3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentreUserName != null">
+                #{dataCentreUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentrePassword != null">
+                #{dataCentrePassword,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+
+    <select id="selectSupplierCategoryList" resultType="SupplierCategory" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Category"/>
+        from c_supplier_category
+        where Status = 1
+        <if test="keyWordName != null and keyWordName!=''">
+            and SupplierCategoryName like CONCAT('%',#{keyWordName},'%')
+        </if>
+        <if test="companyType != null and companyType!=''">
+            and CompanyType = #{companyType}
+        </if>
+        <if test="companyId != null and companyId!=''">
+            and CompanyId = #{companyId}
+        </if>
+    </select>
+
+    <update id="updateSupplierCategory" parameterType="SupplierCategory">
+        update c_supplier_category
+        <set>
+            <if test="supplierCategoryName != null">
+                SupplierCategoryName = #{supplierCategoryName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyType != null">
+                CompanyType = #{companyType,jdbcType=VARCHAR},
+            </if>
+            <if test="companyId != null">
+                CompanyId = #{companyId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where SupplierCategoryId = #{supplierCategoryId,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteSupplierCategory" parameterType="SupplierCategory">
+        update c_supplier_category set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        where SupplierCategoryId = #{supplierCategoryId,jdbcType=BIGINT}
+    </update>
+
+    <insert id="addSupplierCategory" parameterType="SupplierCategory">
+        insert into c_supplier_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="supplierCategoryId != null">
+                SupplierCategoryId,
+            </if>
+            <if test="supplierCategoryName != null">
+                SupplierCategoryName,
+            </if>
+            <if test="companyType != null">
+                CompanyType,
+            </if>
+            <if test="companyId != null">
+                CompanyId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="supplierCategoryId != null">
+                #{supplierCategoryId,jdbcType=BIGINT},
+            </if>
+            <if test="supplierCategoryName != null">
+                #{supplierCategoryName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyType != null">
+                #{companyType,jdbcType=VARCHAR},
+            </if>
+            <if test="companyId != null">
+                #{companyId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <select id="selectSupplierByCode" resultType="Supplier" parameterType="String">
+        select
+        <include refid="Base_Column_List"/>
+        from c_supplier
+        where Status = 1
+        and SupplierCode = #{supplierCode}
+    </select>
+
+    <select id="checkSupplierSubCompany" resultType="SupplierSubCompany" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Supplier_SubCompany"/>
+        from c_supplier_subcompany
+        where Status = 1
+        <if test="supplierId != null">
+            and SupplierId = #{supplierId}
+        </if>
+        <if test="subCompanyId != null">
+            and SubCompanyId = #{subCompanyId}
+        </if>
+    </select>
+
+    <select id="checkSupplierStore" resultType="SupplierStore" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Supplier_Store"/>
+        from c_supplier_store
+        where Status = 1
+        <if test="supplierId != null">
+            and SupplierId = #{supplierId}
+        </if>
+        <if test="storeId != null">
+            and StoreId = #{storeId}
+        </if>
+    </select>
+
+
+    <insert id="addSupplierSubCompany" parameterType="Map">
+        insert into c_supplier_subcompany
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].supplierId != null">
+                SupplierId,
+            </if>
+            <if test="list[0].subCompanyId != null">
+                SubCompanyId,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.supplierId != null">
+                    #{item.supplierId},
+                </if>
+                <if test="item.subCompanyId != null">
+                    #{item.subCompanyId},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+    <insert id="addSupplierStore" parameterType="Map">
+        insert into c_supplier_store
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].supplierId != null">
+                SupplierId,
+            </if>
+            <if test="list[0].storeId != null">
+                StoreId,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.supplierId != null">
+                    #{item.supplierId},
+                </if>
+                <if test="item.storeId != null">
+                    #{item.storeId},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+    <delete id="deleteSupplierSubcompany" parameterType="Map">
+        delete from c_supplier_subcompany
+        where 1=1
+        <if test="supplierId != null">
+            and SupplierId = #{supplierId}
+        </if>
+        <if test="subCompanyId != null">
+            and SubCompanyId=#{subCompanyId}
+        </if>
+    </delete>
+
+    <delete id="deleteSupplierStore" parameterType="Map">
+        delete from c_supplier_store
+        where 1=1
+        <if test="supplierId != null">
+            and SupplierId = #{supplierId}
+        </if>
+        <if test="storeId != null">
+            and StoreId=#{storeId}
+        </if>
+    </delete>
+</mapper>
+

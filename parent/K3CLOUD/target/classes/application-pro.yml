@@ -1,0 +1,105 @@
+spring:
+  mail:
+    host: smtp.qq.com
+    username: 345744621@qq.com
+    #注意:需要邮箱开通授权码服务填入下面
+    password: twahybfscytucagc
+    default-encoding: UTF-8
+  main:
+    allow-bean-definition-overriding: true
+#  servlet:
+#    multipart:
+#      # Single file max size  即单个文件大小
+#      maxFileSize: 15Mb
+#      # All files max size      即总上传的数据大小
+#      maxRequestSize: 150Mb
+  messages: #国际化语言
+    basename: classpath:./msg/msg
+    encoding: UTF-8
+    cache-duration: 3600
+  application:
+    name: lnmj-k3cloud
+  redis:
+    host: 222.211.86.214
+    port: 6379
+    password: panlin123456
+    database: 5
+    timeout: 10000
+    charset: GBK
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      first:
+      url: jdbc:mysql://222.211.86.214:1086/lnmj_k3cloud?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
+      username: root
+      password: root
+#    second:
+#      url: jdbc:mysql://222.211.86.214:1086/lnmj_account?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
+#      username: root
+#      password: root
+      # 下面为连接池的补充设置，应用到上面所有数据源中
+      initialSize: 5
+      minIdle: 5
+      maxActive: 500
+      # 配置获取连接等待超时的时间
+      maxWait: 6000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,log4j
+      filter:
+        stat:
+          logSlowSql: true
+      #开启游标检查  mysql不适用
+      poolPreparedStatements: false
+      #poolPreparedStatements 为true 生效
+      maxPoolPreparedStatementPerConnectionSize: 20
+#mybatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*/*.xml
+  # mybatis的model所在的包
+  type-aliases-package: com.lnmj.core.bean,com.lnmj.k3cloud.entity
+  #开启驼峰转换
+  configuration:
+    map-underscore-to-camel-case: true
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #打印mybatiesSql语句
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  page-size-zero: true
+logging:
+  config: classpath:log4j2.yml
+AOP_POINTCUT_EXPRESSION: 'execution(* *..*.service..*.*(..))'
+#eureka:
+#  client:
+#    register-with-eureka: false #暂时停止注册服务
+#    fetch-registry: false #暂时停止注册服务
+#    service-url:
+#      defaultZone: http://192.168.0.13:81/eureka/ #需要将服务注册到那个注册中心（地址）去
+eureka:
+  instance:
+    ip-address: 222.211.86.214
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true #暂时停止注册服务
+    fetch-registry: true #暂时停止注册服务
+    service-url:
+      defaultZone: http://222.211.86.214:93/eureka/ #需要将服务注册到那个注册中心（地址）去
+server:
+  port: 94  #自身服务端口
+
+oauth2:
+  storeType: jwt
+  key:
+    priKeyPath: classpath:pri.key
+    pubKeyPath: classpath:pub.key

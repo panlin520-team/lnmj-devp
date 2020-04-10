@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="presentation" >
+    <!--门店赠送-->
+    <!--赠送基本字段-->
+    <sql id="presentation_base_column" >
+        PresentationId,OrderType,OrderNumber,OrderLink,Mobile,CartNumber,
+        ProductId,ProductName,Contacts,Phone,PresentationTime,PresentationEndTime,PayPrice,StoreId,
+        NurseStore,Beautician,BeauticianId,NurseTime,AchievementProportion,PresentationStatus,
+        Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <!--插入赠送表字段-->
+    <sql id="sql_insert_presentation_column" >
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="orderType != null" >OrderType,</if>
+            <if test="orderNumber != null" >OrderNumber,</if>
+            <if test="orderLink != null" >OrderLink,</if>
+            <if test="mobile != null" >Mobile,</if>
+            <if test="cartNumber != null" >CartNumber,</if>
+            <if test="productId != null" >ProductId,</if>
+            <if test="productName != null" >ProductName,</if>
+            <if test="contacts != null" >Contacts,</if>
+            <if test="phone != null" >Phone,</if>
+            <if test="presentationTime != null" >PresentationTime,</if>
+            <if test="presentationEndTime != null" >PresentationEndTime,</if>
+            <if test="payPrice != null" >PayPrice,</if>
+            <if test="storeId != null" >StoreId,</if>
+            <if test="nurseStore != null" >NurseStore,</if>
+            <if test="beautician != null" >Beautician,</if>
+            <if test="beauticianId != null" >BeauticianId,</if>
+            <if test="nurseTime != null" >NurseTime,</if>
+            <if test="achievementProportion != null" >AchievementProportion,</if>
+            <if test="presentationStatus != null" >PresentationStatus,</if>
+            <if test="status != null" >Status,</if>
+            <if test="createOperator != null" >CreateOperator,</if>
+            <if test="modifyOperator != null" >ModifyOperator,</if>
+        </trim>
+    </sql>
+    <!--插入赠送表值-->
+    <sql id="sql_insert_presentation_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="orderType != null" >#{orderType},</if>
+            <if test="orderNumber != null" >#{orderNumber},</if>
+            <if test="orderLink != null" >#{orderLink},</if>
+            <if test="mobile != null" >#{mobile},</if>
+            <if test="cartNumber != null" >#{cartNumber},</if>
+            <if test="productId != null" >#{productId},</if>
+            <if test="productName != null" >#{productName},</if>
+            <if test="contacts != null" >#{contacts},</if>
+            <if test="phone != null" >#{phone},</if>
+            <if test="presentationTime != null" >#{presentationTime},</if>
+            <if test="presentationEndTime != null" >#{presentationEndTime},</if>
+            <if test="payPrice != null" >#{payPrice},</if>
+            <if test="storeId != null" >#{storeId},</if>
+            <if test="nurseStore != null" >#{nurseStore},</if>
+            <if test="beautician != null" >#{beautician},</if>
+            <if test="beauticianId != null" >#{beauticianId},</if>
+            <if test="nurseTime != null" >#{nurseTime},</if>
+            <if test="achievementProportion != null" >#{achievementProportion},</if>
+            <if test="presentationStatus != null" >#{presentationStatus},</if>
+            <if test="status != null" >#{status},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <!--修改赠送-->
+    <sql id="sql_set_presentation_column" >
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="orderType != null" >,OrderType=#{orderType}</if>
+                <if test="orderNumber != null" >,OrderNumber=#{orderNumber}</if>
+                <if test="orderLink != null" >,OrderLink=#{orderLink}</if>
+                <if test="mobile != null" >,Mobile=#{mobile}</if>
+                <if test="cartNumber != null" >,CartNumber=#{cartNumber}</if>
+                <if test="productId != null" >,ProductId=#{productId}</if>
+                <if test="productName != null" >,ProductName=#{productName}</if>
+                <if test="contacts != null" >,Contacts=#{contacts}</if>
+                <if test="phone != null" >,Phone=#{phone}</if>
+                <if test="presentationTime != null" >,PresentationTime=#{presentationTime}</if>
+                <if test="presentationEndTime != null" >,PresentationEndTime=#{presentationEndTime}</if>
+                <if test="payPrice != null" >,PayPrice=#{payPrice}</if>
+                <if test="storeId != null" >,StoreId=#{storeId}</if>
+                <if test="nurseStore != null" >,NurseStore=#{nurseStore}</if>
+                <if test="beautician != null" >,Beautician=#{beautician}</if>
+                <if test="beauticianId != null" >,BeauticianId=#{beauticianId}</if>
+                <if test="nurseTime != null" >,NurseTime=#{nurseTime}</if>
+                <if test="achievementProportion != null" >,AchievementProportion=#{achievementProportion}</if>
+                <if test="presentationStatus != null" >,PresentationStatus=#{presentationStatus}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}</if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+    <!--赠送查询条件-->
+    <sql id="sql_where_presentation_column" >
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="presentationId != null">AND PresentationId=#{presentationId}</if>
+                <if test="orderType != null">AND OrderType=#{orderType}</if>
+                <if test="orderNumber != null">AND OrderNumber=#{orderNumber}</if>
+                <if test="orderLink != null">AND OrderLink=#{orderLink}</if>
+                <if test="mobile != null">AND Mobile=#{mobile}</if>
+                <if test="cartNumber != null">AND CartNumber=#{cartNumber}</if>
+                <if test="productId != null">AND ProductId=#{productId}</if>
+                <if test="productName != null">AND ProductName=#{productName}</if>
+                <if test="contacts != null">AND Contacts=#{contacts}</if>
+                <if test="phone != null">AND Phone=#{phone}</if>
+                <if test="presentationTime != null">AND PresentationTime=#{presentationTime}</if>
+                <if test="presentationEndTime != null">AND PresentationEndTime=#{presentationEndTime}</if>
+                <if test="payPrice != null">AND PayPrice=#{payPrice}</if>
+                <if test="storeId != null">AND StoreId=#{storeId}</if>
+                <if test="nurseStore != null">AND NurseStore=#{nurseStore}</if>
+                <if test="beautician != null">AND Beautician=#{beautician} </if>
+                <if test="beauticianId != null" >and BeauticianId LIKE concat('%',#{beauticianId},'%')</if>
+                <if test="nurseTime != null">AND to_days(NurseTime) = to_days(#{nurseTime})</if>
+                <if test="achievementProportion != null">AND AchievementProportion=#{achievementProportion}</if>
+                <if test="presentationStatus != null">AND PresentationStatus=#{presentationStatus}</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <if test="createTime != null">AND CreateTime=#{createTime}</if>
+                <if test="modifyOperator != null">AND ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">AND DataChange_LastTime=#{dataChangeLastTime}</if>
+            </trim>
+        </where>
+    </sql>
+
+    <!--赠送分页显示-->
+    <select id="selectPresentationList" resultType="com.lnmj.store.entity.Presentation">
+        select <include refid="presentation_base_column" /> from s_presentation
+        where Status = 1
+    </select>
+    <!--查询赠送-->
+    <select id="selectPresentationByWhere" parameterType="Presentation" resultType="com.lnmj.store.entity.Presentation" >
+        select <include refid="presentation_base_column"/> from  s_presentation
+        <include refid="sql_where_presentation_column"/>
+    </select>
+    <!--新增赠送-->
+    <insert id="insertPresentation" parameterType="Presentation" keyProperty="presentationId" useGeneratedKeys="true" >
+      insert into s_presentation
+      <include refid="sql_insert_presentation_column"/>
+      <include refid="sql_insert_presentation_values"/>
+    </insert>
+    <!--修改赠送（预约赠送/退货/确认/取消）-->
+    <update id="updatePresentation" parameterType="Presentation" >
+        update s_presentation
+        <include refid="sql_set_presentation_column"/>
+        where PresentationId = #{presentationId}
+    </update>
+    <!--退货-->
+    <update id="returnPresentation" parameterType="Presentation">
+        update s_presentation
+        set Beautician=null,BeauticianId=null,NurseTime=null,AchievementProportion=null,PresentationStatus=#{presentationStatus},
+        ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        where PresentationId = #{presentationId}
+    </update>
+    <!--删除赠送-->
+    <update id="deletePresentation" parameterType="Presentation" >
+        update s_presentation
+        set  Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        where PresentationId = #{presentationId}
+    </update>
+</mapper>

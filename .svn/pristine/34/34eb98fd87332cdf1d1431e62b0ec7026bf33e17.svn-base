@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ServiceStore" >
+  <resultMap id="ServiceStoreMap" type="com.lnmj.account.entity.ServiceStore" >
+    <id column="ServiceStoreID" property="serviceStoreID" jdbcType="BIGINT" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="IndustryID" property="industryID" jdbcType="BIGINT" />
+    <result column="StoreID" property="storeID" jdbcType="BIGINT" />
+    <result column="NumberToShop" property="numberToShop" jdbcType="INTEGER" />
+    <result column="SameStaffNumber" property="sameStaffNumber" jdbcType="INTEGER" />
+    <result column="SameStaffContinueNumber" property="sameStaffContinueNumber" jdbcType="INTEGER" />
+    <result column="FirstServiceStore" property="firstServiceStore" jdbcType="VARCHAR" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_ServiceStore_column" >
+    ServiceStoreID, Name, IndustryID, StoreID, NumberToShop, SameStaffNumber, SameStaffContinueNumber, 
+    FirstServiceStore, Remark, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectServiceStoreList" resultMap="ServiceStoreMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_ServiceStore_column" />
+    from u_servicestore where Status =1
+  </select>
+
+  <select id="selectServiceStoreByID" resultMap="ServiceStoreMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_ServiceStore_column" />
+    from u_servicestore
+    where ServiceStoreID = #{serviceStoreID,jdbcType=BIGINT} and Status = 1
+  </select>
+
+  <update id="deleteServiceStoreByID" parameterType="ServiceStore" >
+    update u_servicestore set Status = 0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    where ServiceStoreID = #{serviceStoreID,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertServiceStore" parameterType="ServiceStore" useGeneratedKeys="true" keyProperty="serviceStoreID">
+    insert into u_servicestore
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serviceStoreID != null" >
+        ServiceStoreID,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="industryID != null" >
+        IndustryID,
+      </if>
+      <if test="storeID != null" >
+        StoreID,
+      </if>
+      <if test="numberToShop != null" >
+        NumberToShop,
+      </if>
+      <if test="sameStaffNumber != null" >
+        SameStaffNumber,
+      </if>
+      <if test="sameStaffContinueNumber != null" >
+        SameStaffContinueNumber,
+      </if>
+      <if test="firstServiceStore != null" >
+        FirstServiceStore,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serviceStoreID != null" >
+        #{serviceStoreID,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="industryID != null" >
+        #{industryID,jdbcType=BIGINT},
+      </if>
+      <if test="storeID != null" >
+        #{storeID,jdbcType=BIGINT},
+      </if>
+      <if test="numberToShop != null" >
+        #{numberToShop,jdbcType=INTEGER},
+      </if>
+      <if test="sameStaffNumber != null" >
+        #{sameStaffNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sameStaffContinueNumber != null" >
+        #{sameStaffContinueNumber,jdbcType=INTEGER},
+      </if>
+      <if test="firstServiceStore != null" >
+        #{firstServiceStore,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateServiceStoreByID" parameterType="ServiceStore" >
+    update u_servicestore
+    <set >
+      <if test="name != null" >
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="industryID != null" >
+        IndustryID = #{industryID,jdbcType=BIGINT},
+      </if>
+      <if test="storeID != null" >
+        StoreID = #{storeID,jdbcType=BIGINT},
+      </if>
+      <if test="numberToShop != null" >
+        NumberToShop = #{numberToShop,jdbcType=INTEGER},
+      </if>
+      <if test="sameStaffNumber != null" >
+        SameStaffNumber = #{sameStaffNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sameStaffContinueNumber != null" >
+        SameStaffContinueNumber = #{sameStaffContinueNumber,jdbcType=INTEGER},
+      </if>
+      <if test="firstServiceStore != null" >
+        FirstServiceStore = #{firstServiceStore,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ServiceStoreID = #{serviceStoreID,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

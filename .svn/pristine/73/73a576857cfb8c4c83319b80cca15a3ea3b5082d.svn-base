@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productNursing" >
+
+  <sql id="Base_Column_List" >
+    ProductNursingId, ServiceProductId, NursingName, Frequency, Discount, Status, CreateOperator,
+    CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectByPrimaryKey" resultType="ProductNursing" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from p_productnursing
+    where ProductNursingId = #{productNursingId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from p_productnursing
+    where ProductNursingId = #{productNursingId}
+  </delete>
+
+  <insert id="insertProductNursing" parameterType="ProductNursing" useGeneratedKeys="true" keyProperty="productNursingId">
+    insert into p_productnursing
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productNursingId != null" >
+        ProductNursingId,
+      </if>
+      <if test="serviceProductId != null" >
+        ServiceProductId,
+      </if>
+      <if test="nursingName != null" >
+        NursingName,
+      </if>
+      <if test="frequency != null" >
+        Frequency,
+      </if>
+      <if test="discount != null" >
+        Discount,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productNursingId != null" >
+        #{productNursingId},
+      </if>
+      <if test="serviceProductId != null" >
+        #{serviceProductId},
+      </if>
+      <if test="nursingName != null" >
+        #{nursingName},
+      </if>
+      <if test="frequency != null" >
+        #{frequency},
+      </if>
+      <if test="discount != null" >
+        #{discount},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="ProductNursing" resultType="java.lang.Integer" >
+    select count(*) from p_productnursing
+  </select>
+  <update id="deleteProductNursing" parameterType="Long">
+    update p_productnursing set Status = 0,DataChange_LastTime=now() where ProductNursingId = #{productNursingId}
+  </update>
+
+</mapper>

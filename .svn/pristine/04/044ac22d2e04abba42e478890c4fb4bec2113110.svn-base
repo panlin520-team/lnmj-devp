@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="score">
+    <sql id="Base_Column_List">
+        ScoreID,
+        scoreName,
+        ScoreMode,
+        ScoreAchievementID,
+        ScorePostID,
+        ScoreHigh,
+        ScoreLow,
+        ScoreDefault,
+        ScoreBase,
+        ScoreProportion,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <select id="selectScoreById" resultType="Score" parameterType="Long">
+        select
+        <include refid="Base_Column_List"/>
+        from a_score
+        where Status = 1
+        <if test="scoreID != null">
+            and ScoreID = #{scoreID}
+        </if>
+    </select>
+
+    <select id="selectList" resultType="Score">
+        select
+        <include refid="Base_Column_List"/>
+        from a_score
+        where Status = 1
+    </select>
+
+    <select id="selectScoreByPostId" resultType="Score" parameterType="Long">
+        select
+        <include refid="Base_Column_List"/>
+        from a_score
+        where Status = 1
+        <if test="scorePostID != null">
+            and ScorePostID = #{scorePostID}
+        </if>
+    </select>
+
+    <!--<select id="selectByPostId" resultType="Score" parameterType="Long">-->
+        <!--select-->
+        <!--<include refid="Base_Column_List"/>-->
+        <!--from a_score where ScorePostID = #{scorePostID}-->
+    <!--</select>-->
+
+    <insert id="addScore" parameterType="Score">
+        insert into a_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="scoreID != null">
+                ScoreID,
+            </if>
+            <if test="scoreName != null">
+                scoreName,
+            </if>
+            <if test="scoreMode != null">
+                ScoreMode,
+            </if>
+            <if test="scoreAchievementID != null">
+                ScoreAchievementID,
+            </if>
+            <if test="scorePostID != null">
+                ScorePostID,
+            </if>
+            <if test="scoreHigh != null">
+                ScoreHigh,
+            </if>
+            <if test="scoreLow != null">
+                ScoreLow,
+            </if>
+            <if test="scoreDefault != null">
+                ScoreDefault,
+            </if>
+            <if test="scoreBase != null">
+                ScoreBase,
+            </if>
+            <if test="scoreProportion != null">
+                ScoreProportion,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="scoreID != null">
+                #{scoreID},
+            </if>
+            <if test="scoreName != null">
+                #{scoreName},
+            </if>
+            <if test="scoreMode != null">
+                #{scoreMode},
+            </if>
+            <if test="scoreAchievementID != null">
+                #{scoreAchievementID},
+            </if>
+            <if test="scorePostID != null">
+                #{scorePostID},
+            </if>
+            <if test="scoreHigh != null">
+                #{scoreHigh},
+            </if>
+            <if test="scoreLow != null">
+                #{scoreLow},
+            </if>
+            <if test="scoreDefault != null">
+                #{scoreDefault},
+            </if>
+            <if test="scoreBase != null">
+                #{scoreBase},
+            </if>
+            <if test="scoreProportion != null">
+                #{scoreProportion},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateScore" parameterType="Score">
+        update a_score
+        <set>
+            <if test="scoreName != null">
+                scoreName = #{scoreName},
+            </if>
+            <if test="scoreMode != null">
+                ScoreMode = #{scoreMode},
+            </if>
+            <if test="scoreAchievementID != null">
+                ScoreAchievementID = #{scoreAchievementID},
+            </if>
+            <if test="scorePostID != null">
+                ScorePostID = #{scorePostID},
+            </if>
+            <if test="scoreHigh != null">
+                ScoreHigh = #{scoreHigh},
+            </if>
+            <if test="scoreLow != null">
+                ScoreLow = #{scoreLow},
+            </if>
+            <if test="scoreDefault != null">
+                ScoreDefault = #{scoreDefault},
+            </if>
+            <if test="scoreBase != null">
+                ScoreBase = #{scoreBase},
+            </if>
+            <if test="scoreProportion != null">
+                ScoreProportion = #{scoreProportion},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where ScoreID = #{scoreID}
+    </update>
+
+    <update id="deleteScore" parameterType="Score">
+        update a_score
+        <set>
+            Status = 0,
+            DataChange_LastTime = now(),
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator}
+            </if>
+        </set>
+        where ScoreID = #{scoreID}
+    </update>
+
+</mapper>

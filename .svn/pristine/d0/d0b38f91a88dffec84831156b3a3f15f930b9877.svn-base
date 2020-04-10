@@ -1,0 +1,10 @@
+package com.lnmj.data.entity.VO;
+
+/**
+ * 〈〉
+ *
+ * @Author renqingyun
+ * @create 2020/3/17
+ */
+public class BackServiceProductVO {
+}

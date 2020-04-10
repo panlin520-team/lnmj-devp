@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="storeMember">
+    <sql id="Base_Column_List">
+        Id
+        ,
+        Sex,
+        StoreId,
+        Mobile,
+        MemberNum,
+        Name,
+        WxOpenId,
+        IdCard,
+        LableId,
+        LastArriveDate,
+        ArriveTimes,
+        TotalConsumption,
+        EnterChannel,
+        Remark,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <sql id="Base_Column_List_Account">
+        MemberNum
+        ,
+        AccountTypeId,
+        Amount,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_Store_Member_Info" >
+        Id, MemberNum, NewOldStatus, BeauticianId, StoreId, LastConsumeDate, FirstConsumeDate,
+        IsLost, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+    </sql>
+    <select id="selectStoreMember" resultType="StoreMemberVo" parameterType="Map">
+        select
+        a.Id
+        ,
+        a.Sex,
+        a.StoreId,
+        a.Mobile,
+        a.MemberNum,
+        a.Name,
+        a.WxOpenId,
+        a.IdCard,
+        a.LableId,
+        a.LastArriveDate,
+        a.ArriveTimes,
+        a.TotalConsumption,
+        a.EnterChannel,
+        a.Remark,
+        a.Status,
+        a.CreateOperator,
+        a.CreateTime,
+        a.ModifyOperator,
+        a.DataChange_LastTime,
+        b.NewOldStatus, b.BeauticianId, b.LastConsumeDate, b.FirstConsumeDate,
+        b.IsLost
+        from s_store_member a,s_store_member_info b
+        where a.memberNum=b.memberNum
+        <if test="name != null and name!=''">
+            and a.Name = #{name}
+        </if>
+        <if test="mobile != null and mobile!=''">
+            and a.Mobile = #{mobile}
+        </if>
+        <if test="storeId != null and storeId!=''">
+            and a.StoreId = #{storeId}
+        </if>
+        <if test="newOldStatus != null and newOldStatus!=''">
+            and b.NewOldStatus = #{newOldStatus}
+        </if>
+        <if test="isLost != null and isLost!=''">
+            and b.IsLost = #{isLost}
+        </if>
+    </select>
+
+    <insert id="addStoreMember" parameterType="StoreMember">
+        insert into s_store_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="storeId != null">
+                StoreId,
+            </if>
+            <if test="sex != null">
+                Sex,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="memberNum != null">
+                MemberNum,
+            </if>
+            <if test="mobile != null">
+                Mobile,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="wxOpenId != null">
+                WxOpenId,
+            </if>
+            <if test="idCard != null">
+                IdCard,
+            </if>
+            <if test="lableId != null">
+                LableId,
+            </if>
+            <if test="lastArriveDate != null">
+                LastArriveDate,
+            </if>
+            <if test="arriveTimes != null">
+                ArriveTimes,
+            </if>
+            <if test="totalConsumption != null">
+                TotalConsumption,
+            </if>
+            <if test="enterChannel != null">
+                EnterChannel,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="storeId != null">
+                #{storeId},
+            </if>
+            <if test="sex != null">
+                #{sex},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="memberNum != null">
+                #{memberNum},
+            </if>
+            <if test="mobile != null">
+                #{mobile},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="wxOpenId != null">
+                #{wxOpenId},
+            </if>
+            <if test="idCard != null">
+                #{idCard},
+            </if>
+            <if test="lableId != null">
+                #{lableId},
+            </if>
+            <if test="lastArriveDate != null">
+                #{lastArriveDate},
+            </if>
+            <if test="arriveTimes != null">
+                #{arriveTimes},
+            </if>
+            <if test="totalConsumption != null">
+                #{totalConsumption},
+            </if>
+            <if test="enterChannel != null">
+                #{enterChannel},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <insert id="addStoreMemberInfo">
+        insert into s_store_member_info
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                Id,
+            </if>
+            <if test="memberNum != null" >
+                MemberNum,
+            </if>
+            <if test="newOldStatus != null" >
+                NewOldStatus,
+            </if>
+            <if test="beauticianId != null" >
+                BeauticianId,
+            </if>
+            <if test="storeId != null" >
+                StoreId,
+            </if>
+            <if test="lastConsumeDate != null" >
+                LastConsumeDate,
+            </if>
+            <if test="firstConsumeDate != null" >
+                FirstConsumeDate,
+            </if>
+            <if test="isLost != null" >
+                IsLost,
+            </if>
+            <if test="status != null" >
+                Status,
+            </if>
+            <if test="createOperator != null" >
+                CreateOperator,
+            </if>
+                CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="memberNum != null" >
+                #{memberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="newOldStatus != null" >
+                #{newOldStatus,jdbcType=INTEGER},
+            </if>
+            <if test="beauticianId != null" >
+                #{beauticianId,jdbcType=BIGINT},
+            </if>
+            <if test="storeId != null" >
+                #{storeId,jdbcType=BIGINT},
+            </if>
+            <if test="lastConsumeDate != null" >
+                #{lastConsumeDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstConsumeDate != null" >
+                #{firstConsumeDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isLost != null" >
+                #{isLost,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null" >
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+                now()
+        </trim>
+    </insert>
+
+
+
+
+    <select id="selectStoreMemberInfoList" resultType="StoreMemberInfo">
+        select
+        <include refid="Base_Column_Store_Member_Info" />
+        from s_store_member_info
+    </select>
+
+
+
+    <select id="CountStoreMemberByDay" resultType="int" parameterType="Date" >
+        SELECT
+            count(1)
+        FROM
+            s_store_member
+        where Status=1
+            and TO_DAYS(CreateTime) =  TO_DAYS(#{time})
+    </select>
+
+    <update id="updateStoreMemberToOld" parameterType="StoreMemberInfo">
+        update s_store_member_info set
+                NewOldStatus = 2,
+            <if test="modifyOperator != null" >
+                ModifyOperator = #{modifyOperator},
+            </if>
+                DataChange_LastTime = now()
+        where MemberNum
+        in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.memberNum}
+        </foreach>
+    </update>
+
+    <update id="updateStoreMemberToLost" parameterType="StoreMemberInfo">
+        update s_store_member_info set
+        IsLost = 2,
+        <if test="modifyOperator != null" >
+            ModifyOperator = #{modifyOperator},
+        </if>
+        DataChange_LastTime = now()
+        where MemberNum
+        in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.memberNum}
+        </foreach>
+    </update>
+
+    <update id="updateStoreMember" parameterType="StoreMember">
+        update s_store_member
+        <set >
+            <if test="sex != null" >
+                Sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="mobile != null" >
+                Mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                Name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="wxOpenId != null" >
+                WxOpenId = #{wxOpenId,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null" >
+                IdCard = #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="lableId != null" >
+                LableId = #{lableId,jdbcType=VARCHAR},
+            </if>
+            <if test="lastArriveDate != null" >
+                LastArriveDate = #{lastArriveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="arriveTimes != null" >
+                ArriveTimes = #{arriveTimes,jdbcType=INTEGER},
+            </if>
+            <if test="totalConsumption != null" >
+                TotalConsumption = #{totalConsumption,jdbcType=DECIMAL},
+            </if>
+            <if test="enterChannel != null" >
+                EnterChannel = #{enterChannel,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null" >
+                Remark = #{remark,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="modifyOperator != null" >
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+                DataChange_LastTime = now()
+        </set>
+        where 1=1
+        <if test="id != null" >
+           and Id = #{id}
+        </if>
+        <if test="memberNum != null" >
+           and MemberNum = #{memberNum}
+        </if>
+    </update>
+
+</mapper>

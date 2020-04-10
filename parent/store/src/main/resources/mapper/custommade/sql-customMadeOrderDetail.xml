@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="customMadeorderDetail" >
+  <sql id="Base_Column_List" >
+    ConsumeCustomMadeId,CustomMadeOrderDetailId, OrderNumber, ServiceProductId, ProjectName, CustomMadeCount, UserCount,
+    Price, OriginalPrice, Integral, ManualCost, Validitytime, RoyaltyAmount, Attribute, 
+    CustomMadeStatus, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectCustomMadeList" resultType="CustomMadeorderDetail" >
+    select
+    <include refid="Base_Column_List" />
+    from s_custommadeorder_detail
+  </select>
+
+
+  <select id="selectOrderDetailByCondition" resultType="CustomMadeOrderVO" parameterType="Long">
+    SELECT
+    o1.OrderLink,
+    o1.Mobile,
+    o1.OrderTime,
+    o2.*
+    FROM
+      s_custommadeorder o1,
+      s_custommadeorder_detail o2
+    WHERE
+       o1.OrderNumber = #{orderNumber}
+      AND
+        o2.OrderNumber = #{orderNumber}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from s_custommadeorder_detail
+    where CustomMadeOrderDetailId = #{customMadeOrderDetailId}
+  </delete>
+
+
+  <!--新增定制订单详情-->
+  <insert id="insertCustomMadeOrderDetail" parameterType="CustomMadeOrderDetail" useGeneratedKeys="true" keyProperty="CustomMadeOrderDetailId">
+    insert into s_custommadeorder_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customMadeOrderDetailId != null" >
+        CustomMadeOrderDetailId,
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber,
+      </if>
+      <if test="serviceProductId != null" >
+        ServiceProductId,
+      </if>
+      <if test="projectName != null" >
+        ProjectName,
+      </if>
+      <if test="customMadeCount != null" >
+        CustomMadeCount,
+      </if>
+      <if test="userCount != null" >
+        UserCount,
+      </if>
+      <if test="price != null" >
+        Price,
+      </if>
+      <if test="originalPrice != null" >
+        OriginalPrice,
+      </if>
+      <if test="integral != null" >
+        Integral,
+      </if>
+      <if test="manualCost != null" >
+        ManualCost,
+      </if>
+      <if test="validitytime != null" >
+        Validitytime,
+      </if>
+      <if test="royaltyAmount != null" >
+        RoyaltyAmount,
+      </if>
+      <if test="attribute != null" >
+        Attribute,
+      </if>
+      <if test="customMadeStatus != null" >
+        CustomMadeStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChangeLastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customMadeOrderDetailId != null" >
+        #{customMadeOrderDetailId},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber},
+      </if>
+      <if test="serviceProductId != null" >
+        #{serviceProductId},
+      </if>
+      <if test="projectName != null" >
+        #{projectName},
+      </if>
+      <if test="customMadeCount != null" >
+        #{customMadeCount},
+      </if>
+      <if test="userCount != null" >
+        #{userCount},
+      </if>
+      <if test="price != null" >
+        #{price},
+      </if>
+      <if test="originalPrice != null" >
+        #{originalPrice},
+      </if>
+      <if test="integral != null" >
+        #{integral},
+      </if>
+      <if test="manualCost != null" >
+        #{manualCost},
+      </if>
+      <if test="validitytime != null" >
+        #{validitytime},
+      </if>
+      <if test="royaltyAmount != null" >
+        #{royaltyAmount},
+      </if>
+      <if test="attribute != null" >
+        #{attribute},
+      </if>
+      <if test="customMadeStatus != null" >
+        #{customMadeStatus},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime},
+      </if>
+    </trim>
+  </insert>
+
+<!--  <update id="update" parameterType="Map" >
+    update s_custommadeorder_detail
+    <set >
+      <if test="customMadeOrderDetailId != null" >
+        CustomMadeOrderDetailId = #{customMadeOrderDetailId},
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber = #{orderNumber},
+      </if>
+      <if test="serviceProductId != null" >
+        ServiceProductId = #{serviceProductId},
+      </if>
+      <if test="projectName != null" >
+        ProjectName = #{projectName},
+      </if>
+      <if test="customMadeCount != null" >
+        CustomMadeCount = #{customMadeCount},
+      </if>
+      <if test="userCount != null" >
+        UserCount = #{userCount},
+      </if>
+      <if test="price != null" >
+        Price = #{price},
+      </if>
+      <if test="originalPrice != null" >
+        OriginalPrice = #{originalPrice},
+      </if>
+      <if test="integral != null" >
+        Integral = #{integral},
+      </if>
+      <if test="manualCost != null" >
+        ManualCost = #{manualCost},
+      </if>
+      <if test="validitytime != null" >
+        Validitytime = #{validitytime},
+      </if>
+      <if test="royaltyAmount != null" >
+        RoyaltyAmount = #{royaltyAmount},
+      </if>
+      <if test="attribute != null" >
+        Attribute = #{attribute},
+      </if>
+      <if test="customMadeStatus != null" >
+        CustomMadeStatus = #{customMadeStatus},
+      </if>
+      <if test="status != null" >
+        Status = #{status},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChangeLastTime = #{dataChangeLastTime},
+      </if>
+    </set>
+  </update>-->
+  <update id="updateCustomMadeOrder" parameterType="Long" >
+    update s_custommadeorder_detail set UserCount = UserCount+1
+    WHERE CustomMadeOrderDetailId =#{customMadeOrderDetailId}
+
+  </update>
+</mapper>

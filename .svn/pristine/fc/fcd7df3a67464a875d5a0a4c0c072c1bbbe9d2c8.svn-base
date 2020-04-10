@@ -1,0 +1,1584 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="product">
+
+    <sql id="Base_Column_List">
+        ProductId,
+        CommodityTypeID,
+        SubClassID,
+        K3Id,
+        K3Number,
+        Bonus,
+        ProductCode,
+        ProductName,
+        StoreIds,
+        ProductSubordinate,
+        StockQuantity,
+        UnitId,
+        ForwardedDescribe,
+        ProductPromotionType,
+        DeliveryMethod,
+        StoreName,
+        BarredBuying,
+        BarredPayMethod,
+        CodeBuy,
+        IsExpansionGuest,
+        ImageList,
+        ActivityImageList,
+        IsCreateGuest,
+        IsPurchase,
+        PurchaseQuantity,
+        IsDiscount,
+        IsHomePage,
+        IsOpenRoyalty,
+        OneLevelRoyalty,
+        TwoLevelRoyalty,
+        ThreeLevelRoyalty,
+        GiveAmount,
+        SuperRoyalty,
+        IsGiveProduct,
+        IsPhotographCashProduct,
+        IsOverseasBuy,
+        IsVirtualProduct,
+        BuyRemind,
+        ProvinceId,
+        CityId,
+        CountyId,
+        ProductKind,
+        ProductEffect,
+        ProductBrand,
+        ProductCategory,
+        MerchantSource,
+        ProductSpecification,
+        CommissionSettlement,
+        ProductOriginalPrice,
+        RetailPrice,
+        ActivityRetailPrice,
+        IsSeIntegralByProduct,
+        FacilitatorPrice,
+        FacilitatorProportionIntegral,
+        UnionPrice,
+        UnionProportionIntegral,
+        RetailPriceVip1,
+        ProportionIntegralVip1,
+        RetailPriceVip2,
+        ProportionIntegralVip2,
+        RetailPriceVip3,
+        ProportionIntegralVip3,
+        RetailPriceVip4,
+        ProportionIntegralVip4,
+        RetailPriceVip5,
+        ProportionIntegralVip5,
+        RetailPriceVip6,
+        ProportionIntegralVip6,
+        StockDiscount,
+        ActivityStockDiscount,
+        IndustryId,
+        AchievementPostId,
+        NetContent,
+        ProductSales,
+        ProductIntroduce,
+        ProductDetails,
+        MoreContent,
+        ProductStatus,
+        InstoragePrice,
+        OutstoragePrice,
+        OutstorageProfit,
+        CompanyId,
+        SubsidiaryId,
+        StoreIds,
+        NewCreateCompanyId,
+        NewCreateCompanyType,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <sql id="Base_Column_List_a">
+        a
+        .
+        ProductId
+        ,
+        a
+        .
+        CommodityTypeID,
+        a
+        .
+        SubClassID,
+        a
+        .
+        K3Id,
+        a
+        .
+        K3Number,
+        a
+        .
+        Bonus,
+        a
+        .
+        ProductCode,
+        a
+        .
+        ProductName,
+        a
+        .
+        StoreIds,
+        a
+        .
+        ProductSubordinate,
+        a
+        .
+        StockQuantity,
+        a
+        .
+        UnitId,
+        a
+        .
+        ForwardedDescribe,
+        a
+        .
+        ProductPromotionType,
+        a
+        .
+        DeliveryMethod,
+        a
+        .
+        StoreName,
+        a
+        .
+        BarredBuying,
+        a
+        .
+        BarredPayMethod,
+        a
+        .
+        CodeBuy,
+        a
+        .
+        IsExpansionGuest,
+        a
+        .
+        ImageList,
+        a
+        .
+        ActivityImageList,
+        a
+        .
+        IsCreateGuest,
+        a
+        .
+        IsPurchase,
+        a
+        .
+        PurchaseQuantity,
+        a
+        .
+        IsDiscount,
+        a
+        .
+        IsHomePage,
+        a
+        .
+        IsOpenRoyalty,
+        a
+        .
+        OneLevelRoyalty,
+        a
+        .
+        TwoLevelRoyalty,
+        a
+        .
+        ThreeLevelRoyalty,
+        a
+        .
+        GiveAmount,
+        a
+        .
+        SuperRoyalty,
+        a
+        .
+        IsGiveProduct,
+        a
+        .
+        IsPhotographCashProduct,
+        a
+        .
+        IsOverseasBuy,
+        a
+        .
+        IsVirtualProduct,
+        a
+        .
+        BuyRemind,
+        a
+        .
+        ProvinceId,
+        a
+        .
+        CityId,
+        a
+        .
+        CountyId,
+        a
+        .
+        ProductKind,
+        a
+        .
+        ProductEffect,
+        a
+        .
+        ProductBrand,
+        a
+        .
+        ProductCategory,
+        a
+        .
+        MerchantSource,
+        a
+        .
+        ProductSpecification,
+        a
+        .
+        CommissionSettlement,
+        a
+        .
+        ProductOriginalPrice,
+        a
+        .
+        RetailPrice,
+        a
+        .
+        ActivityRetailPrice,
+        a
+        .
+        IsSeIntegralByProduct,
+        a
+        .
+        FacilitatorPrice,
+        a
+        .
+        FacilitatorProportionIntegral,
+        a
+        .
+        UnionPrice,
+        a
+        .
+        UnionProportionIntegral,
+        a
+        .
+        RetailPriceVip1,
+        a
+        .
+        ProportionIntegralVip1,
+        a
+        .
+        RetailPriceVip2,
+        a
+        .
+        ProportionIntegralVip2,
+        a
+        .
+        RetailPriceVip3,
+        a
+        .
+        ProportionIntegralVip3,
+        a
+        .
+        RetailPriceVip4,
+        a
+        .
+        ProportionIntegralVip4,
+        a
+        .
+        RetailPriceVip5,
+        a
+        .
+        ProportionIntegralVip5,
+        a
+        .
+        RetailPriceVip6,
+        a
+        .
+        ProportionIntegralVip6,
+        a
+        .
+        StockDiscount,
+        a
+        .
+        ActivityStockDiscount,
+        a
+        .
+        IndustryId,
+        a
+        .
+        AchievementPostId,
+        a
+        .
+        NetContent,
+        a
+        .
+        ProductSales,
+        a
+        .
+        ProductIntroduce,
+        a
+        .
+        ProductDetails,
+        a
+        .
+        MoreContent,
+        a
+        .
+        ProductStatus,
+        a
+        .
+        InstoragePrice,
+        a
+        .
+        OutstoragePrice,
+        a
+        .
+        OutstorageProfit,
+        a
+        .
+        CompanyId,
+        a
+        .
+        SubsidiaryId,
+        a
+        .
+        Status,
+        a
+        .
+        CreateOperator,
+        a
+        .
+        CreateTime,
+        a
+        .
+        ModifyOperator,
+        a
+        .
+        DataChange_LastTime
+    </sql>
+    <select id="selectProductList" resultType="Product" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from p_product
+        where 1 = 1
+
+        <if test="companyType != null">
+            and ProductName like CONCAT('%',#{keyWord},'%')
+        </if>
+        <if test="keyWord != null">
+            and ProductName like CONCAT('%',#{keyWord},'%')
+        </if>
+        <if test="productStatus != null">
+            and ProductStatus = #{productStatus}
+        </if>
+        <if test="status != null">
+            and Status = #{status}
+        </if>
+        <if test="onOffSale != null">
+            and OnOffSale = #{onOffSale}
+        </if>
+        <if test="kindId != null">
+            and ProductKind = #{kindId}
+        </if>
+        <if test="brandId != null">
+            and ProductBrand = #{brandId}
+        </if>
+        <if test="effectId != null">
+            and ProductEffect = #{effectId}
+        </if>
+        <if test="subClassID != null">
+            and SubClassID = #{subClassID}
+        </if>
+        <if test="storeIds != null and storeIds!=''">
+            and StoreIds = #{storeIds}
+        </if>
+        <if test="companyId != null and companyId!=''">
+            and CompanyId = #{companyId}
+        </if>
+        <if test="subsidiaryId != null and subsidiaryId!=''">
+            and SubsidiaryId LIKE CONCAT('%',#{subsidiaryId},'%')
+        </if>
+        <if test="keyWordProductName != null and keyWordProductName!=''">
+            and ProductName LIKE CONCAT('%',#{keyWordProductName},'%')
+        </if>
+    </select>
+
+    <select id="selectProductBySubClass" resultType="Product" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from p_product
+        where Status = 1
+        <if test="subClassID != null">
+            and SubClassID = #{subClassID}
+        </if>
+    </select>
+
+    <select id="selectProductListByExport" resultType="ExportVO" parameterType="Map">
+        SELECT
+        p1.ProductCode,
+        p1.ProductName,
+        p2.ProductKindName,
+        p1.ProductSpecification,
+        p1.NetContent,
+        p1.ProductOriginalPrice,
+        p1.RetailPrice,
+        p1.ProductDetails
+        FROM
+        p_product p1,
+        p_ProductKind p2
+        WHERE
+        p1.ProductKind = p2.ProductKindId
+        <if test="status != null">
+            and p1.Status = #{status}
+        </if>
+        <if test="productStatus != null">
+            and p1.ProductStatus = #{productStatus}
+        </if>
+    </select>
+
+    <select id="selectServiceListByExport" resultType="ExportVO" parameterType="Map">
+        SELECT
+        p1.ProductCode,
+        p1.ProductName,
+        p2.ProductKindName,
+        p1.ProductOriginalPrice,
+        p1.RetailPrice,
+        p1.ProductDetails
+        FROM
+        p_productservice p1,
+        p_ProductKind p2
+        WHERE
+        p1.ProductKind = p2.ProductKindId
+        <if test="status != null">
+            and p1.Status = #{status}
+        </if>
+        <if test="onOffSale != null">
+            and p1.OnOffSale = #{onOffSale}
+        </if>
+    </select>
+
+    <select id="selectById" resultType="Product" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from p_product
+        where
+        ProductId = #{productId}
+    </select>
+
+
+    <select id="selectProductByCode" resultType="Product" parameterType="String">
+        select
+        <include refid="Base_Column_List"/>
+        from p_product
+        where
+        ProductCode = #{productCode}
+    </select>
+
+    <select id="checkByCondition" parameterType="Map" resultType="Product">
+        select
+        <include refid="Base_Column_List"/>
+        from p_product
+        where Status = 1
+        <if test="productCode != null">
+            and ProductCode = #{productCode}
+        </if>
+        <if test="productName != null">
+            and ProductName = #{productName}
+        </if>
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="String">
+        delete
+        from p_product
+        where ProductCode = #{productCode}
+    </delete>
+
+    <insert id="insertProduct" parameterType="com.lnmj.product.entity.Product" useGeneratedKeys="true"
+            keyProperty="productId">
+        insert into p_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                ProductId,
+            </if>
+            <if test="CommodityTypeID != null">
+                CommodityTypeID,
+            </if>
+            <if test="subClassID != null">
+                SubClassID,
+            </if>
+            <if test="k3Id != null">
+                K3Id,
+            </if>
+            <if test="k3Number != null">
+                K3Number,
+            </if>
+            <if test="bonus != null">
+                Bonus,
+            </if>
+            <if test="productCode != null">
+                ProductCode,
+            </if>
+            <if test="productName != null">
+                ProductName,
+            </if>
+            <if test="productSubordinate != null">
+                ProductSubordinate,
+            </if>
+            <if test="stockQuantity != null">
+                StockQuantity,
+            </if>
+            <if test="unitId != null">
+                UnitId,
+            </if>
+            <!--<if test="unitName != null">-->
+            <!--UnitName,-->
+            <!--</if>-->
+            <if test="forwardedDescribe != null">
+                ForwardedDescribe,
+            </if>
+            <if test="giveAmount != null">
+                GiveAmount,
+            </if>
+            <if test="productPromotionType != null">
+                ProductPromotionType,
+            </if>
+            <if test="deliveryMethod != null">
+                DeliveryMethod,
+            </if>
+            <if test="storeName != null">
+                StoreName,
+            </if>
+            <if test="barredBuying != null">
+                BarredBuying,
+            </if>
+            <if test="barredPayMethod != null">
+                BarredPayMethod,
+            </if>
+            <if test="codeBuy != null">
+                CodeBuy,
+            </if>
+            <if test="isExpansionGuest != null">
+                IsExpansionGuest,
+            </if>
+            <if test="imageList != null">
+                ImageList,
+            </if>
+            <if test="activityImageList != null">
+                ActivityImageList,
+            </if>
+            <if test="isCreateGuest != null">
+                IsCreateGuest,
+            </if>
+            <if test="isPurchase != null">
+                IsPurchase,
+            </if>
+            <if test="purchaseQuantity != null">
+                PurchaseQuantity,
+            </if>
+            <if test="isDiscount != null">
+                IsDiscount,
+            </if>
+            <if test="isHomePage != null">
+                IsHomePage,
+            </if>
+            <if test="isOpenRoyalty != null">
+                IsOpenRoyalty,
+            </if>
+            <if test="oneLevelRoyalty != null">
+                OneLevelRoyalty,
+            </if>
+            <if test="twoLevelRoyalty != null">
+                TwoLevelRoyalty,
+            </if>
+            <if test="threeLevelRoyalty != null">
+                ThreeLevelRoyalty,
+            </if>
+            <if test="superRoyalty != null">
+                SuperRoyalty,
+            </if>
+            <if test="isGiveProduct != null">
+                IsGiveProduct,
+            </if>
+            <if test="isPhotographCashProduct != null">
+                IsPhotographCashProduct,
+            </if>
+            <if test="isOverseasBuy != null">
+                IsOverseasBuy,
+            </if>
+            <if test="isVirtualProduct != null">
+                IsVirtualProduct,
+            </if>
+            <if test="buyRemind != null">
+                BuyRemind,
+            </if>
+            <if test="provinceId != null">
+                ProvinceId,
+            </if>
+            <if test="cityId != null">
+                CityId,
+            </if>
+            <if test="countyId != null">
+                CountyId,
+            </if>
+            <if test="productKind != null">
+                ProductKind,
+            </if>
+            <if test="productEffect != null">
+                ProductEffect,
+            </if>
+            <if test="productBrand != null">
+                ProductBrand,
+            </if>
+            <if test="productCategory != null">
+                ProductCategory,
+            </if>
+            <if test="merchantSource != null">
+                MerchantSource,
+            </if>
+            <if test="productSpecification != null">
+                ProductSpecification,
+            </if>
+            <if test="commissionSettlement != null">
+                CommissionSettlement,
+            </if>
+            <if test="productOriginalPrice != null">
+                ProductOriginalPrice,
+            </if>
+            <if test="retailPrice != null">
+                RetailPrice,
+            </if>
+            <if test="activityRetailPrice != null">
+                ActivityRetailPrice,
+            </if>
+            <if test="isSeIntegralByProduct != null">
+                IsSeIntegralByProduct,
+            </if>
+            <if test="facilitatorPrice != null">
+                FacilitatorPrice,
+            </if>
+            <if test="facilitatorProportionIntegral != null">
+                FacilitatorProportionIntegral,
+            </if>
+            <if test="unionPrice != null">
+                UnionPrice,
+            </if>
+            <if test="unionProportionIntegral != null">
+                UnionProportionIntegral,
+            </if>
+            <if test="retailPriceVip1 != null">
+                RetailPriceVip1,
+            </if>
+            <if test="proportionIntegralVip1 != null">
+                ProportionIntegralVip1,
+            </if>
+            <if test="retailPriceVip2 != null">
+                RetailPriceVip2,
+            </if>
+            <if test="proportionIntegralVip2 != null">
+                ProportionIntegralVip2,
+            </if>
+            <if test="retailPriceVip3 != null">
+                RetailPriceVip3,
+            </if>
+            <if test="proportionIntegralVip3 != null">
+                ProportionIntegralVip3,
+            </if>
+            <if test="retailPriceVip4 != null">
+                RetailPriceVip4,
+            </if>
+            <if test="proportionIntegralVip4 != null">
+                ProportionIntegralVip4,
+            </if>
+            <if test="retailPriceVip5 != null">
+                RetailPriceVip5,
+            </if>
+            <if test="proportionIntegralVip5 != null">
+                ProportionIntegralVip5,
+            </if>
+            <if test="retailPriceVip6 != null">
+                RetailPriceVip6,
+            </if>
+            <if test="proportionIntegralVip6 != null">
+                ProportionIntegralVip6,
+            </if>
+            <if test="stockDiscount != null">
+                StockDiscount,
+            </if>
+            <if test="activityStockDiscount != null">
+                ActivityStockDiscount,
+            </if>
+            <if test="industryId != null">
+                IndustryId,
+            </if>
+            <if test="achievementPostId != null">
+                AchievementPostId,
+            </if>
+            <if test="netContent != null">
+                NetContent,
+            </if>
+            <if test="productSales != null">
+                ProductSales,
+            </if>
+            <if test="productIntroduce != null">
+                ProductIntroduce,
+            </if>
+            <if test="productDetails != null">
+                ProductDetails,
+            </if>
+            <if test="moreContent != null">
+                MoreContent,
+            </if>
+            ProductStatus,
+            <if test="instoragePrice != null">
+                InstoragePrice,
+            </if>
+            <if test="outstoragePrice != null">
+                OutstoragePrice,
+            </if>
+            <if test="outstorageProfit != null">
+                OutstorageProfit,
+            </if>
+            <if test="companyId != null">
+                CompanyId,
+            </if>
+            <if test="subsidiaryId != null">
+                SubsidiaryId,
+            </if>
+            <if test="storeIds != null">
+                StoreIds,
+            </if>
+            <if test="newCreateCompanyId != null">
+                NewCreateCompanyId,
+            </if>
+            <if test="newCreateCompanyType != null">
+                NewCreateCompanyType,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                #{productId},
+            </if>
+            <if test="CommodityTypeID != null">
+                #{CommodityTypeID},
+            </if>
+            <if test="subClassID != null">
+                #{subClassID},
+            </if>
+            <if test="k3Id != null">
+                #{k3Id},
+            </if>
+            <if test="k3Number != null">
+                #{k3Number},
+            </if>
+            <if test="bonus != null">
+                #{bonus},
+            </if>
+            <if test="productCode != null">
+                #{productCode},
+            </if>
+            <if test="productName != null">
+                #{productName},
+            </if>
+            <if test="productSubordinate != null">
+                #{productSubordinate},
+            </if>
+            <if test="stockQuantity != null">
+                #{stockQuantity},
+            </if>
+            <if test="unitId != null">
+                #{unitId},
+            </if>
+            <!--<if test="unitName != null">-->
+            <!--#{unitName},-->
+            <!--</if>-->
+            <if test="forwardedDescribe != null">
+                #{forwardedDescribe},
+            </if>
+            <if test="giveAmount != null">
+                #{giveAmount},
+            </if>
+            <if test="productPromotionType != null">
+                #{productPromotionType},
+            </if>
+            <if test="deliveryMethod != null">
+                #{deliveryMethod},
+            </if>
+            <if test="storeName != null">
+                #{storeName},
+            </if>
+            <if test="barredBuying != null">
+                #{barredBuying},
+            </if>
+            <if test="barredPayMethod != null">
+                #{barredPayMethod},
+            </if>
+            <if test="codeBuy != null">
+                #{codeBuy},
+            </if>
+            <if test="isExpansionGuest != null">
+                #{isExpansionGuest},
+            </if>
+            <if test="imageList != null">
+                #{imageList},
+            </if>
+            <if test="activityImageList != null">
+                #{activityImageList},
+            </if>
+            <if test="isCreateGuest != null">
+                #{isCreateGuest},
+            </if>
+            <if test="isPurchase != null">
+                #{isPurchase},
+            </if>
+            <if test="purchaseQuantity != null">
+                #{purchaseQuantity},
+            </if>
+            <if test="isDiscount != null">
+                #{isDiscount},
+            </if>
+            <if test="isHomePage != null">
+                #{isHomePage},
+            </if>
+            <if test="isOpenRoyalty != null">
+                #{isOpenRoyalty},
+            </if>
+            <if test="oneLevelRoyalty != null">
+                #{oneLevelRoyalty},
+            </if>
+            <if test="twoLevelRoyalty != null">
+                #{twoLevelRoyalty},
+            </if>
+            <if test="threeLevelRoyalty != null">
+                #{threeLevelRoyalty},
+            </if>
+            <if test="superRoyalty != null">
+                #{superRoyalty},
+            </if>
+            <if test="isGiveProduct != null">
+                #{isGiveProduct},
+            </if>
+            <if test="isPhotographCashProduct != null">
+                #{isPhotographCashProduct},
+            </if>
+            <if test="isOverseasBuy != null">
+                #{isOverseasBuy},
+            </if>
+            <if test="isVirtualProduct != null">
+                #{isVirtualProduct},
+            </if>
+            <if test="buyRemind != null">
+                #{buyRemind},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId},
+            </if>
+            <if test="cityId != null">
+                #{cityId},
+            </if>
+            <if test="countyId != null">
+                #{countyId},
+            </if>
+            <if test="productKind != null">
+                #{productKind},
+            </if>
+            <if test="productEffect != null">
+                #{productEffect},
+            </if>
+            <if test="productBrand != null">
+                #{productBrand},
+            </if>
+            <if test="productCategory != null">
+                #{productCategory},
+            </if>
+            <if test="merchantSource != null">
+                #{merchantSource},
+            </if>
+            <if test="productSpecification != null">
+                #{productSpecification},
+            </if>
+            <if test="commissionSettlement != null">
+                #{commissionSettlement},
+            </if>
+            <if test="productOriginalPrice != null">
+                #{productOriginalPrice},
+            </if>
+            <if test="retailPrice != null">
+                #{retailPrice},
+            </if>
+            <if test="activityRetailPrice != null">
+                #{activityRetailPrice},
+            </if>
+            <if test="isSeIntegralByProduct != null">
+                #{isSeIntegralByProduct},
+            </if>
+            <if test="facilitatorPrice != null">
+                #{facilitatorPrice},
+            </if>
+            <if test="facilitatorProportionIntegral != null">
+                #{facilitatorProportionIntegral},
+            </if>
+            <if test="unionPrice != null">
+                #{unionPrice},
+            </if>
+            <if test="unionProportionIntegral != null">
+                #{unionProportionIntegral},
+            </if>
+            <if test="retailPriceVip1 != null">
+                #{retailPriceVip1},
+            </if>
+            <if test="proportionIntegralVip1 != null">
+                #{proportionIntegralVip1},
+            </if>
+            <if test="retailPriceVip2 != null">
+                #{retailPriceVip2},
+            </if>
+            <if test="proportionIntegralVip2 != null">
+                #{proportionIntegralVip2},
+            </if>
+            <if test="retailPriceVip3 != null">
+                #{retailPriceVip3},
+            </if>
+            <if test="proportionIntegralVip3 != null">
+                #{proportionIntegralVip3},
+            </if>
+            <if test="retailPriceVip4 != null">
+                #{retailPriceVip4},
+            </if>
+            <if test="proportionIntegralVip4 != null">
+                #{proportionIntegralVip4},
+            </if>
+            <if test="retailPriceVip5 != null">
+                #{retailPriceVip5},
+            </if>
+            <if test="proportionIntegralVip5 != null">
+                #{proportionIntegralVip5},
+            </if>
+            <if test="retailPriceVip6 != null">
+                #{retailPriceVip6},
+            </if>
+            <if test="proportionIntegralVip6 != null">
+                #{proportionIntegralVip6},
+            </if>
+            <if test="stockDiscount != null">
+                #{stockDiscount},
+            </if>
+            <if test="activityStockDiscount != null">
+                #{activityStockDiscount},
+            </if>
+            <if test="industryId != null">
+                #{industryId},
+            </if>
+            <if test="achievementPostId != null">
+                #{achievementPostId},
+            </if>
+            <if test="netContent != null">
+                #{netContent},
+            </if>
+            <if test="productSales != null">
+                #{productSales},
+            </if>
+            <if test="productIntroduce != null">
+                #{productIntroduce},
+            </if>
+            <if test="productDetails != null">
+                #{productDetails},
+            </if>
+            <if test="moreContent != null">
+                #{moreContent},
+            </if>
+            1,
+            <if test="instoragePrice != null">
+                #{instoragePrice},
+            </if>
+            <if test="outstoragePrice != null">
+                #{outstoragePrice},
+            </if>
+            <if test="outstorageProfit != null">
+                #{outstorageProfit},
+            </if>
+            <if test="companyId != null">
+                #{companyId},
+            </if>
+            <if test="subsidiaryId != null">
+                #{subsidiaryId},
+            </if>
+            <if test="storeIds != null">
+                #{storeIds},
+            </if>
+            <if test="newCreateCompanyId != null">
+                #{newCreateCompanyId},
+            </if>
+            <if test="newCreateCompanyType != null">
+                #{newCreateCompanyType},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="createTime != null">
+                now(),
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                now(),
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateProduct" parameterType="Product">
+        update p_product
+        <set>
+            <if test="CommodityTypeID != null">
+                CommodityTypeID = #{CommodityTypeID},
+            </if>
+            <if test="subClassID != null">
+                SubClassID = #{subClassID},
+            </if>
+            <if test="k3Id != null">
+                K3Id = #{k3Id},
+            </if>
+            <if test="k3Number != null">
+                K3Number = #{k3Number},
+            </if>
+            <if test="bonus != null">
+                Bonus = #{bonus},
+            </if>
+            <if test="productCode != null">
+                ProductCode = #{productCode},
+            </if>
+            <if test="productName != null">
+                ProductName = #{productName},
+            </if>
+            <if test="productSubordinate != null">
+                ProductSubordinate = #{productSubordinate},
+            </if>
+            <if test="stockQuantity != null">
+                StockQuantity = #{stockQuantity},
+            </if>
+            <if test="unitId != null">
+                UnitId = #{unitId},
+            </if>
+            <!--<if test="unitName != null">-->
+            <!--UnitName = #{unitName},-->
+            <!--</if>-->
+            <if test="forwardedDescribe != null">
+                ForwardedDescribe = #{forwardedDescribe},
+            </if>
+            <if test="giveAmount != null">
+                GiveAmount = #{giveAmount},
+            </if>
+            <if test="productPromotionType != null">
+                ProductPromotionType = #{productPromotionType},
+            </if>
+            <if test="deliveryMethod != null">
+                DeliveryMethod = #{deliveryMethod},
+            </if>
+            <if test="storeName != null">
+                StoreName = #{storeName},
+            </if>
+            <if test="barredBuying != null">
+                BarredBuying = #{barredBuying},
+            </if>
+            <if test="barredPayMethod != null">
+                BarredPayMethod = #{barredPayMethod},
+            </if>
+            <if test="codeBuy != null">
+                CodeBuy = #{codeBuy},
+            </if>
+            <if test="isExpansionGuest != null">
+                IsExpansionGuest = #{isExpansionGuest},
+            </if>
+            <if test="imageList != null">
+                ImageList = #{imageList},
+            </if>
+            <if test="activityImageList != null">
+                ActivityImageList = #{activityImageList},
+            </if>
+            <if test="isCreateGuest != null">
+                IsCreateGuest = #{isCreateGuest},
+            </if>
+            <if test="isPurchase != null">
+                IsPurchase = #{isPurchase},
+            </if>
+            <if test="purchaseQuantity != null">
+                PurchaseQuantity = #{purchaseQuantity},
+            </if>
+            <if test="isDiscount != null">
+                IsDiscount = #{isDiscount},
+            </if>
+            <if test="isHomePage != null">
+                IsHomePage = #{isHomePage},
+            </if>
+            <if test="isOpenRoyalty != null">
+                IsOpenRoyalty = #{isOpenRoyalty},
+            </if>
+            <if test="oneLevelRoyalty != null">
+                OneLevelRoyalty = #{oneLevelRoyalty},
+            </if>
+            <if test="twoLevelRoyalty != null">
+                TwoLevelRoyalty = #{twoLevelRoyalty},
+            </if>
+            <if test="threeLevelRoyalty != null">
+                ThreeLevelRoyalty = #{threeLevelRoyalty},
+            </if>
+            <if test="superRoyalty != null">
+                SuperRoyalty = #{superRoyalty},
+            </if>
+            <if test="isGiveProduct != null">
+                IsGiveProduct = #{isGiveProduct},
+            </if>
+            <if test="isPhotographCashProduct != null">
+                IsPhotographCashProduct = #{isPhotographCashProduct},
+            </if>
+            <if test="isOverseasBuy != null">
+                IsOverseasBuy = #{isOverseasBuy},
+            </if>
+            <!--<if test="overseasSite != null" >-->
+            <!--OverseasSite = #{overseasSite},-->
+            <!--</if>-->
+            <if test="isVirtualProduct != null">
+                IsVirtualProduct = #{isVirtualProduct},
+            </if>
+            <if test="buyRemind != null">
+                BuyRemind = #{buyRemind},
+            </if>
+            <if test="provinceId != null">
+                ProvinceId = #{provinceId},
+            </if>
+            <if test="cityId != null">
+                CityId = #{cityId},
+            </if>
+            <if test="countyId != null">
+                CountyId = #{countyId},
+            </if>
+            <if test="productKind != null">
+                ProductKind = #{productKind},
+            </if>
+            <if test="productEffect != null">
+                ProductEffect = #{productEffect},
+            </if>
+            <if test="productBrand != null">
+                ProductBrand = #{productBrand},
+            </if>
+            <if test="productCategory != null">
+                ProductCategory = #{productCategory},
+            </if>
+            <if test="merchantSource != null">
+                MerchantSource = #{merchantSource},
+            </if>
+            <if test="productSpecification != null">
+                ProductSpecification = #{productSpecification},
+            </if>
+            <if test="commissionSettlement != null">
+                CommissionSettlement = #{commissionSettlement},
+            </if>
+            <if test="productOriginalPrice != null">
+                ProductOriginalPrice = #{productOriginalPrice},
+            </if>
+            <if test="retailPrice != null">
+                RetailPrice = #{retailPrice},
+            </if>
+            <if test="activityRetailPrice != null">
+                ActivityRetailPrice = #{activityRetailPrice},
+            </if>
+            <if test="isSeIntegralByProduct != null">
+                IsSeIntegralByProduct = #{isSeIntegralByProduct},
+            </if>
+            <if test="facilitatorPrice != null">
+                FacilitatorPrice = #{facilitatorPrice},
+            </if>
+            <if test="facilitatorProportionIntegral != null">
+                FacilitatorProportionIntegral = #{facilitatorProportionIntegral},
+            </if>
+            <if test="unionPrice != null">
+                UnionPrice = #{unionPrice},
+            </if>
+            <if test="unionProportionIntegral != null">
+                UnionProportionIntegral = #{unionProportionIntegral},
+            </if>
+            <if test="retailPriceVip1 != null">
+                RetailPriceVip1 = #{retailPriceVip1},
+            </if>
+            <if test="proportionIntegralVip1 != null">
+                ProportionIntegralVip1 = #{proportionIntegralVip1},
+            </if>
+            <if test="retailPriceVip2 != null">
+                RetailPriceVip2 = #{retailPriceVip2},
+            </if>
+            <if test="proportionIntegralVip2 != null">
+                ProportionIntegralVip2 = #{proportionIntegralVip2},
+            </if>
+            <if test="retailPriceVip3 != null">
+                RetailPriceVip3 = #{retailPriceVip3},
+            </if>
+            <if test="proportionIntegralVip3 != null">
+                ProportionIntegralVip3 = #{proportionIntegralVip3},
+            </if>
+            <if test="retailPriceVip4 != null">
+                RetailPriceVip4 = #{retailPriceVip4},
+            </if>
+            <if test="proportionIntegralVip4 != null">
+                ProportionIntegralVip4 = #{proportionIntegralVip4},
+            </if>
+            <if test="retailPriceVip5 != null">
+                RetailPriceVip5 = #{retailPriceVip5},
+            </if>
+            <if test="proportionIntegralVip5 != null">
+                ProportionIntegralVip5 = #{proportionIntegralVip5},
+            </if>
+            <if test="retailPriceVip6 != null">
+                RetailPriceVip6 = #{retailPriceVip6},
+            </if>
+            <if test="proportionIntegralVip6 != null">
+                ProportionIntegralVip6 = #{proportionIntegralVip6},
+            </if>
+            <if test="stockDiscount != null">
+                StockDiscount = #{stockDiscount},
+            </if>
+            <if test="activityStockDiscount != null">
+                ActivityStockDiscount = #{activityStockDiscount},
+            </if>
+            <if test="industryId != null">
+                IndustryId = #{industryId},
+            </if>
+            <if test="achievementPostId != null">
+                AchievementPostId = #{achievementPostId},
+            </if>
+            <if test="netContent != null">
+                NetContent = #{netContent},
+            </if>
+            <if test="productSales != null">
+                ProductSales = #{productSales},
+            </if>
+            <if test="productStatus != null">
+                ProductStatus = #{productStatus},
+            </if>
+            <if test="instoragePrice != null">
+                InstoragePrice = #{instoragePrice},
+            </if>
+            <if test="outstoragePrice != null">
+                OutstoragePrice = #{outstoragePrice},
+            </if>
+            <if test="outstorageProfit != null">
+                OutstorageProfit = #{outstorageProfit},
+            </if>
+            <if test="companyId != null">
+                CompanyId = #{companyId},
+            </if>
+            <if test="subsidiaryId != null">
+                SubsidiaryId = #{subsidiaryId},
+            </if>
+            <if test="storeIds != null">
+                StoreIds = #{storeIds},
+            </if>
+            <if test="newCreateCompanyId != null">
+                newCreateCompanyId = #{newCreateCompanyId},
+            </if>
+            <if test="newCreateCompanyType != null">
+                newCreateCompanyType = #{newCreateCompanyType},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime},
+            </if>
+            <if test="productIntroduce != null">
+                ProductIntroduce = #{productIntroduce},
+            </if>
+            <if test="productDetails != null">
+                ProductDetails = #{productDetails},
+            </if>
+            <if test="moreContent != null">
+                MoreContent = #{moreContent},
+            </if>
+        </set>
+        where ProductCode = #{productCode}
+    </update>
+
+
+    <update id="updateProductByStatus" parameterType="com.lnmj.product.entity.Product">
+        update p_product
+        set ProductStatus      = #{productStatus},
+            DataChange_LastTime=now()
+        WHERE ProductCode = #{productCode}
+    </update>
+
+    <update id="deleteProductById" parameterType="Map">
+        update p_product
+        set Status             =0,
+            ProductStatus      = 2,
+            ModifyOperator     = #{modifyOperator},
+            DataChange_LastTime=now()
+        WHERE ProductCode = #{productCode}
+    </update>
+
+
+    <!--查询所有产品名称-->
+    <select id="selectProductNameList" resultType="ProductNameVO">
+        select
+        ProductId,ProductName,ProductCode
+        from p_product
+        where Status = 1
+        <if test="keyWordProductCode != null and keyWordProductCode != ''">
+            and ProductCode = #{keyWordProductCode}
+        </if>
+        <if test="keyWordProductName != null and keyWordProductName != ''">
+            and ProductName like CONCAT('%',#{keyWordProductName},'%')
+        </if>
+        and ProductStatus = 1
+    </select>
+
+
+    <!--查询所有产品名称-->
+    <select id="selectProductAndServiceNameList" resultType="ProductAndServiceNameVO">
+        select
+            p1.ProductId,
+            p1.ProductName,
+            p1.ProductCode,
+            p2.ServiceProductId,
+            p2.ProductCode,
+            p2.ProductName
+        from p_product p1,
+             p_productservice p2
+    </select>
+
+    <select id="selectProductListById" resultType="Product" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from p_product
+        where ProductId in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <insert id="addProductSubcompany" parameterType="Map">
+        insert into p_product_subcompany
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].productCode != null">
+                ProductCode,
+            </if>
+            <if test="list[0].subcompanyId != null">
+                SubcompanyId,
+            </if>
+            <if test="list[0].upOrDown != null">
+                UpOrDown,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.productCode != null">
+                    #{item.productCode},
+                </if>
+                <if test="item.subcompanyId != null">
+                    #{item.subcompanyId},
+                </if>
+                <if test="item.upOrDown != null">
+                    #{item.upOrDown},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+    <select id="selectProductSubcompany" resultType="Product" parameterType="Map">
+        select
+        <include refid="Base_Column_List_a"/>
+        from p_product_subcompany b,p_product a
+        where a.Status =1 and b.Status =1 and a.companyId = #{companyId} and a.productCode = b.productCode
+        <if test="subcompanyId != null">
+            and b.SubcompanyId = #{subcompanyId}
+        </if>
+        <if test="upOrDown != null">
+            and b.UpOrDown = #{upOrDown}
+        </if>
+        <if test="keyWord != null">
+            and a.ProductName like CONCAT('%',#{keyWord},'%')
+        </if>
+
+    </select>
+
+    <select id="selectProductStore" resultType="Product" parameterType="Map">
+        select
+        <include refid="Base_Column_List_a"/>
+        from p_product_store b,p_product a
+        where a.Status =1 and b.Status =1 and a.companyId = #{companyId} and a.productCode = b.productCode
+        <if test="storeId != null">
+            and b.StoreId = #{storeId}
+        </if>
+        <if test="upOrDown != null">
+            and b.UpOrDown = #{upOrDown}
+        </if>
+        <if test="subClassID != null">
+            and a.SubClassID = #{subClassID}
+        </if>
+        <if test="productKind != null">
+            and a.ProductKind = #{productKind}
+        </if>
+        <if test="keyWord != null">
+            and a.ProductName like CONCAT('%',#{keyWord},'%')
+        </if>
+    </select>
+
+
+    <insert id="addProductStore" parameterType="Map">
+        insert into p_product_store
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].productCode != null">
+                ProductCode,
+            </if>
+            <if test="list[0].storeId != null">
+                StoreId,
+            </if>
+            <if test="list[0].upOrDown != null">
+                UpOrDown,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.productCode != null">
+                    #{item.productCode},
+                </if>
+                <if test="item.storeId != null">
+                    #{item.storeId},
+                </if>
+                <if test="item.upOrDown != null">
+                    #{item.upOrDown},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="onDownProductBySubcompany" parameterType="ProducSubcompany">
+        update p_product_subcompany
+        set UpOrDown            = #{upOrDown},
+            ModifyOperator      = #{modifyOperator},
+            DataChange_LastTime = now()
+        where ProductCode = #{productCode}
+          and SubcompanyId = #{subcompanyId}
+    </update>
+
+    <update id="onDownProductByStore" parameterType="ProducStore">
+        update p_product_store
+        set UpOrDown            = #{upOrDown},
+            ModifyOperator      = #{modifyOperator},
+            DataChange_LastTime = now()
+        where ProductCode = #{productCode}
+          and StoreId = #{storeId}
+    </update>
+
+    <update id="updateProductSales" parameterType="Map">
+        update p_product
+        <if test="upOrDown =='up'">
+            set ProductSales = ProductSales+1
+        </if>
+        <if test="upOrDown =='down'">
+            set ProductSales = ProductSales-1
+        </if>
+        where ProductCode = #{productCode}
+    </update>
+
+    <update id="updateStockQuantity" parameterType="Map">
+        update p_product
+        <if test="upOrDown =='up'">
+            set StockQuantity = StockQuantity+1
+        </if>
+        <if test="upOrDown =='down'">
+            set StockQuantity = StockQuantity-1
+        </if>
+        where ProductCode = #{productCode}
+    </update>
+
+    <select id="checkProductSubCompany" resultType="int" parameterType="Map">
+        select count(1)
+        from p_product_subcompany
+        where ProductCode = #{productCode}
+          and SubcompanyId = #{subcompanyId}
+    </select>
+
+    <select id="checkProductStore" resultType="int" parameterType="Map">
+        select count(1)
+        from p_product_store
+        where ProductCode = #{productCode}
+          and StoreId = #{storeId}
+    </select>
+
+    <delete id="deleteProductSubcompany" parameterType="Map">
+        delete from p_product_subcompany
+        where ProductCode = #{productCode}
+        and SubcompanyId = #{subcompanyId}
+    </delete>
+
+    <delete id="deleteProductStore" parameterType="Map">
+        delete from p_product_store
+        where ProductCode = #{productCode}
+        and StoreId = #{storeId}
+    </delete>
+</mapper>

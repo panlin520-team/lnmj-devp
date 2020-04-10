@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="customer">
+
+    <sql id="Base_Column_List">
+        Id
+        ,
+        Name,
+        K3Id,
+        K3Number,
+        CustomerType,
+        IsDefaultCust,
+        RelationSubCompanyType,
+        RelationSubCompanyId,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Customer_SubCompany">
+        CustomerId, SubCompanyId, Status, CreateOperator, CreateTime, ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Customer_Store">
+        CustomerId, StoreId, Status, CreateOperator, CreateTime, ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <select id="selectCustomerList" resultType="Customer" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from customer
+        where Status = 1
+        <if test="k3Id != null">
+            and K3Id = #{k3Id}
+        </if>
+        <if test="k3Number != null">
+            and K3Number = #{k3Number}
+        </if>
+        <if test="customerType != null">
+            and CustomerType = #{customerType}
+        </if>
+        <if test="isDefaultCust != null">
+            and IsDefaultCust = #{isDefaultCust}
+        </if>
+        <if test="keyWordName != null">
+            and Name like CONCAT('%',#{keyWordName},'%')
+        </if>
+    </select>
+
+    <insert id="insertCustomer" parameterType="Customer" useGeneratedKeys="true" keyProperty="id">
+        insert into customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="k3Id != null">
+                K3Id,
+            </if>
+            <if test="k3Number != null">
+                K3Number,
+            </if>
+            <if test="customerType != null">
+                CustomerType,
+            </if>
+            <if test="isDefaultCust != null">
+                IsDefaultCust,
+            </if>
+            <if test="relationSubCompanyType != null">
+                RelationSubCompanyType,
+            </if>
+            <if test="relationSubCompanyId != null">
+                RelationSubCompanyId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Id != null">
+                #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Number != null">
+                #{k3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="customerType != null">
+                #{customerType},
+            </if>
+            <if test="isDefaultCust != null">
+                #{isDefaultCust},
+            </if>
+            <if test="relationSubCompanyType != null">
+                #{relationSubCompanyType},
+            </if>
+            <if test="relationSubCompanyId != null">
+                #{relationSubCompanyId},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <delete id="deleteCustomer" parameterType="Customer">
+        delete
+        from customer
+        where Id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateCustomer" parameterType="Customer">
+        update customer
+        <set>
+            <if test="name != null">
+                Name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Id != null">
+                K3Id = #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Number != null">
+                K3Number = #{k3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="customerType != null">
+                CustomerType = #{customerType},
+            </if>
+            <if test="isDefaultCust != null">
+                IsDefaultCust = #{isDefaultCust},
+            </if>
+            <if test="relationSubCompanyType != null">
+                RelationSubCompanyType = #{relationSubCompanyType},
+            </if>
+            <if test="relationSubCompanyId != null">
+                RelationSubCompanyId = #{relationSubCompanyId},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where Id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectLastCustomerCode" resultType="String">
+        select K3Number
+        from customer
+        where Status = 1
+        order by K3Number desc limit 1
+    </select>
+
+    <select id="checkDefault" parameterType="Customer" resultType="int">
+        select count(1)
+        from customer
+        where Status = 1
+          and IsDefaultCust = 1
+    </select>
+
+
+    <select id="selectDefaultCust" resultType="Customer" parameterType="Customer">
+        select
+        <include refid="Base_Column_List"/>
+        from customer
+        where Status = 1
+        and IsDefaultCust = 1
+    </select>
+
+    <insert id="insertCustomerBatch" parameterType="Map">
+        insert into customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].id != null">
+                Id,
+            </if>
+            <if test="list[0].name != null">
+                Name,
+            </if>
+            <if test="list[0].k3Id != null">
+                K3Id,
+            </if>
+            <if test="list[0].k3Number != null">
+                K3Number,
+            </if>
+            <if test="list[0].customerType != null">
+                CustomerType,
+            </if>
+            <if test="list[0].isDefaultCust != null">
+                IsDefaultCust,
+            </if>
+            <if test="list[0].relationSubCompanyType != null">
+                RelationSubCompanyType,
+            </if>
+            <if test="list[0].relationSubCompanyId != null">
+                RelationSubCompanyId,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">
+                    #{item.id},
+                </if>
+                <if test="item.name != null">
+                    #{item.name},
+                </if>
+                <if test="item.k3Id != null">
+                    #{item.k3Id},
+                </if>
+                <if test="item.k3Number != null">
+                    #{item.k3Number},
+                </if>
+                <if test="item.customerType != null">
+                    #{item.customerType},
+                </if>
+                <if test="item.isDefaultCust != null">
+                    #{item.isDefaultCust},
+                </if>
+                <if test="item.relationSubCompanyType != null">
+                    #{item.relationSubCompanyType},
+                </if>
+                <if test="item.relationSubCompanyId != null">
+                    #{item.relationSubCompanyId},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+
+    <select id="checkCustomerSubCompany" resultType="CustomerSubCompany" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Customer_SubCompany"/>
+        from c_customer_subcompany
+        where Status = 1
+        <if test="customerId != null">
+            and CustomerId = #{customerId}
+        </if>
+        <if test="subCompanyId != null">
+            and SubCompanyId = #{subCompanyId}
+        </if>
+    </select>
+
+    <select id="selectLinShouCustomer" resultType="Customer" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from customer
+        where Status = 1
+            and IsDefaultCust = 1
+            and CustomerType = 1
+    </select>
+
+    <select id="checkCustomerStore" resultType="CustomerStore" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Customer_Store"/>
+        from c_customer_store
+        where Status = 1
+        <if test="customerId != null">
+            and CustomerId = #{customerId}
+        </if>
+        <if test="storeId != null">
+            and StoreId = #{storeId}
+        </if>
+    </select>
+
+
+    <insert id="addCustomerSubCompany" parameterType="Map">
+        insert into c_customer_subcompany
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                CustomerId,
+            </if>
+            <if test="subCompanyId != null">
+                SubCompanyId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                #{customerId},
+            </if>
+            <if test="subCompanyId != null">
+                #{subCompanyId},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <insert id="addCustomerStore" parameterType="Map">
+        insert into customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                CustomerId,
+            </if>
+            <if test="storeId != null">
+                StoreId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                #{customerId},
+            </if>
+            <if test="storeId != null">
+                #{storeId},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+
+
+    <delete id="deleteCustomerSubcompany" parameterType="Map">
+        delete from c_customer_subcompany
+        where 1=1
+        <if test="customerId != null">
+            and CustomerId = #{customerId}
+        </if>
+        <if test="subCompanyId != null">
+            and SubCompanyId=#{subCompanyId}
+        </if>
+    </delete>
+
+    <delete id="deleteCustomerStore" parameterType="Map">
+        delete from c_customer_store
+        where 1=1
+        <if test="customerId != null">
+            and CustomerId = #{customerId}
+        </if>
+        <if test="storeId != null">
+            and StoreId=#{storeId}
+        </if>
+    </delete>
+
+    <insert id="addCustomerSubCompanyBatch" parameterType="Map">
+        insert into c_customer_subcompany
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].customerId != null">
+                CustomerId,
+            </if>
+            <if test="list[0].subCompanyId != null">
+                SubCompanyId,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.customerId != null">
+                    #{item.customerId},
+                </if>
+                <if test="item.subCompanyId != null">
+                    #{item.subCompanyId},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+    <insert id="addCustomerStoreBatch" parameterType="Map">
+        insert into c_customer_subcompany
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].customerId != null">
+                CustomerId,
+            </if>
+            <if test="list[0].storeId != null">
+                StoreId,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.customerId != null">
+                    #{item.customerId},
+                </if>
+                <if test="item.storeId != null">
+                    #{item.storeId},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+</mapper>

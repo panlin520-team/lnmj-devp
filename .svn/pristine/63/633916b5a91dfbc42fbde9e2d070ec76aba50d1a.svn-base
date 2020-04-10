@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productStatistics">
+
+
+    <!--商品销量统计分页显示-->
+    <select id="selectByList" resultType="ProductStatisticsVO" parameterType="Map">
+        SELECT
+        Productname,
+        ProductOriginalPrice,
+        CreateTime,
+        ProductSales,
+        (ProductSales * ProductOriginalPrice) 'salesAmount',
+        OnOffSale
+        FROM
+        p_product
+        where 1=1
+        <if test="keyWord != null">
+            and Productname concat('%',#{keyWord}),'%'
+        </if>
+        <if test="time != null">
+            and CreateTime = #{time}
+        </if>
+        <if test="salaStatus != null">
+            order by ProductSales  #{salaStatus}
+        </if>
+        <if test="amountStatus != null">
+            order by salesAmount  #{amountStatus}
+        </if>
+    </select>
+</mapper>

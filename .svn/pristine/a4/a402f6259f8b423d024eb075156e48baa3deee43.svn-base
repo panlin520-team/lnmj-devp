@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lnmj.common.generator.capital_pool.CapitalPoolMapper" >
+  <resultMap id="BaseResultMap" type="com.lnmj.common.generator.capital_pool.CapitalPool" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="Type" property="type" jdbcType="INTEGER" />
+    <result column="PayType" property="payType" jdbcType="INTEGER" />
+    <result column="StoreId" property="storeId" jdbcType="BIGINT" />
+    <result column="Amount" property="amount" jdbcType="DECIMAL" />
+    <result column="Remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChange_LastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, Type, PayType, StoreId, Amount, Remarks, Status, CreateOperator, CreateTime, 
+    ModifyOperator, DataChange_LastTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lnmj.common.generator.capital_pool.CapitalPoolExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from capital_pool
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from capital_pool
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from capital_pool
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lnmj.common.generator.capital_pool.CapitalPoolExample" >
+    delete from capital_pool
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lnmj.common.generator.capital_pool.CapitalPool" >
+    insert into capital_pool (id, Type, PayType, 
+      StoreId, Amount, Remarks, 
+      Status, CreateOperator, CreateTime, 
+      ModifyOperator, DataChange_LastTime)
+    values (#{id,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{payType,jdbcType=INTEGER}, 
+      #{storeId,jdbcType=BIGINT}, #{amount,jdbcType=DECIMAL}, #{remarks,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{createOperator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyOperator,jdbcType=VARCHAR}, #{dataChange_LastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lnmj.common.generator.capital_pool.CapitalPool" >
+    insert into capital_pool
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="type != null" >
+        Type,
+      </if>
+      <if test="payType != null" >
+        PayType,
+      </if>
+      <if test="storeId != null" >
+        StoreId,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="remarks != null" >
+        Remarks,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChange_LastTime != null" >
+        #{dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lnmj.common.generator.capital_pool.CapitalPoolExample" resultType="java.lang.Integer" >
+    select count(*) from capital_pool
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update capital_pool
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.type != null" >
+        Type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.payType != null" >
+        PayType = #{record.payType,jdbcType=INTEGER},
+      </if>
+      <if test="record.storeId != null" >
+        StoreId = #{record.storeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.amount != null" >
+        Amount = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.remarks != null" >
+        Remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.createOperator != null" >
+        CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyOperator != null" >
+        ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataChange_LastTime != null" >
+        DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update capital_pool
+    set id = #{record.id,jdbcType=BIGINT},
+      Type = #{record.type,jdbcType=INTEGER},
+      PayType = #{record.payType,jdbcType=INTEGER},
+      StoreId = #{record.storeId,jdbcType=BIGINT},
+      Amount = #{record.amount,jdbcType=DECIMAL},
+      Remarks = #{record.remarks,jdbcType=VARCHAR},
+      Status = #{record.status,jdbcType=INTEGER},
+      CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+      DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lnmj.common.generator.capital_pool.CapitalPool" >
+    update capital_pool
+    <set >
+      <if test="type != null" >
+        Type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        PayType = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        StoreId = #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="amount != null" >
+        Amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null" >
+        Remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime = #{dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lnmj.common.generator.capital_pool.CapitalPool" >
+    update capital_pool
+    set Type = #{type,jdbcType=INTEGER},
+      PayType = #{payType,jdbcType=INTEGER},
+      StoreId = #{storeId,jdbcType=BIGINT},
+      Amount = #{amount,jdbcType=DECIMAL},
+      Remarks = #{remarks,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      DataChange_LastTime = #{dataChange_LastTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

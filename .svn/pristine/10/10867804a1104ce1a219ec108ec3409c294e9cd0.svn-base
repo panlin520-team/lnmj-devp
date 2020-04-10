@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="backups">
+
+
+    <insert id="insert" parameterType="List">
+        insert into lnmj_product.p_product
+        (
+        ProductName,
+        K3Id,
+        K3Number,
+        ProductSubordinate,
+        CommodityTypeID,
+        SubClassID,
+        BarredBuying,
+        BarredPayMethod,
+        ProvinceId,
+        CityId,
+        CountyId,
+        ProductKind,
+        ProductEffect,
+        ProductBrand,
+        ProductCategory,
+        ProductSpecification,
+        ProductOriginalPrice,
+        RetailPrice,
+        ActivityRetailPrice,
+        IsDiscount,
+        NetContent,
+        ProductSales,
+        UnitId,
+        InstoragePrice,
+        OutstoragePrice,
+        OutstorageProfit,
+        MoreContent)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.productName},
+            #{item.K3Id},
+            #{item.K3Number},
+            #{item.productSubordinate},
+            #{item.commodityTypeID},
+            #{item.subClassID},
+            #{item.barredBuying},
+            #{item.barredPayMethod},
+            #{item.provinceId},
+            #{item.cityId},
+            #{item.countyId},
+            #{item.productKind},
+            #{item.productEffect},
+            #{item.productBrand},
+            #{item.productCategory},
+            #{item.productSpecification},
+            #{item.productOriginalPrice},
+            #{item.retailPrice},
+            #{item.activityRetailPrice},
+            #{item.isDiscount},
+            #{item.netContent},
+            #{item.productSales},
+            #{item.unitId},
+            #{item.instoragePrice},
+            #{item.outstoragePrice},
+            #{item.outstorageProfit},
+            #{item.moreContent}
+            )
+        </foreach>
+    </insert>
+
+
+    <insert id="addServiceProduct" parameterType="List">
+        insert into lnmj_product.p_productservice
+        (ProductName,
+        K3Id,
+        K3Number,
+        IndustryId,
+        SubClassID,
+        ProductOriginalPrice,
+        RetailPrice,
+        ActivityRetailPrice,
+        IsDiscount,
+        ProductSales,
+        UnitId,
+        InstoragePrice,
+        OutstoragePrice,
+        OutstorageProfit,
+        MoreContent)
+        values
+        <foreach collection="list" item="service" index="index" separator=",">
+            (
+            #{service.productName},
+            #{service.K3Id},
+            #{service.K3Number},
+            #{service.industryId},
+            #{service.subClassID},
+            #{service.productOriginalPrice},
+            #{service.retailPrice},
+            #{service.activityRetailPrice},
+            #{service.isDiscount},
+            #{service.productSales},
+            #{service.unitId},
+            #{service.instoragePrice},
+            #{service.outstoragePrice},
+            #{service.outstorageProfit},
+            #{service.moreContent}
+            )
+        </foreach>
+    </insert>
+
+
+    <insert id="addSupplier" parameterType="List">
+        insert into lnmj_store.c_supplier
+        (SupplierName,
+        K3Id,
+        K3Number,
+        ShortName,
+        SupplierCategoryId,
+        BankDeposit,
+        CreditCardNum,
+        LinkMan,
+        LinkPhone,
+        Address
+        )
+        values
+        <foreach collection="list" item="supplier" index="index" separator=",">
+            (
+            #{supplier.SupplierName},
+            #{supplier.K3Id},
+            #{supplier.K3Number},
+            #{supplier.ShortName},
+            #{supplier.SupplierCategoryId},
+            #{supplier.BankDeposit},
+            #{supplier.CreditCardNum},
+            #{supplier.LinkMan},
+            #{supplier.LinkPhone},
+            #{supplier.Address}
+            )
+        </foreach>
+    </insert>
+
+
+    <!--    <insert id="saveMember" parameterType="Map">
+            insert into lnmj_account.m_member
+            (MemberNum,
+            UserName,
+            Password,
+            Birthday,
+            Name,
+            Sex,
+            IdCard,
+            Mobile
+            )
+            values
+            <foreach collection="list" item="member" index="index" separator=",">
+                (
+                #{member.memberNum},
+                #{member.userName},
+                #{member.password},
+                #{member.birthday},
+                #{member.name},
+                #{member.sex},
+                #{member.idCard},
+                #{member.mobile}
+                )
+            </foreach>
+        </insert>-->
+
+    <insert id="saveMember" parameterType="Map">
+        insert into lnmj_account.m_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            MemberNum,
+            UserName,
+            Password,
+            Birthday,
+            Name,
+            Sex,
+            IdCard,
+            Mobile,
+            MembershipLevelId,
+            MembershipLevelName,
+            CreateTime,
+            DataChange_LastTime
+        </trim>
+        values
+        <foreach collection="list" item="member" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{member.memberNum},
+                #{member.userName},
+                #{member.password},
+                #{member.birthday},
+                #{member.name},
+                #{member.sex},
+                #{member.idCard},
+                #{member.mobile},
+                #{member.membershipLevelId},
+                #{member.membershipLevelName},
+                now(),
+                now()
+            </trim>
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Subsidiary">
+    <resultMap id="SubsidiaryMap" type="com.lnmj.store.entity.Subsidiary">
+        <id column="SubsidiaryId" property="subsidiaryId" jdbcType="BIGINT"/>
+        <result column="SubsidiaryName" property="subsidiaryName" jdbcType="VARCHAR"/>
+        <result column="Abbreviation" property="abbreviation" jdbcType="VARCHAR"/>
+        <result column="FormerName" property="formerName" jdbcType="VARCHAR"/>
+        <result column="EnglishName" property="englishName" jdbcType="VARCHAR"/>
+        <result column="ParentCompany" property="parentCompany" jdbcType="BIGINT"/>
+        <result column="Corporate" property="corporate" jdbcType="VARCHAR"/>
+        <result column="FirstGovernor" property="firstGovernor" jdbcType="BIGINT"/>
+        <result column="SecondGovernor" property="secondGovernor" jdbcType="BIGINT"/>
+        <result column="IsThisStock" property="isThisStock" jdbcType="INTEGER"/>
+        <result column="Stock" property="stock" jdbcType="VARCHAR"/>
+        <result column="ProvinceId" property="provinceId" jdbcType="VARCHAR"/>
+        <result column="CityId" property="cityId" jdbcType="VARCHAR"/>
+        <result column="CountyId" property="countyId" jdbcType="VARCHAR"/>
+        <result column="CompanyDetailedAddress" property="companyDetailedAddress" jdbcType="VARCHAR"/>
+        <result column="DetailedAddress" property="detailedAddress" jdbcType="VARCHAR"/>
+        <result column="BaiduLongitude" property="baiduLongitude" jdbcType="DECIMAL"/>
+        <result column="BaiduLatitude" property="baiduLatitude" jdbcType="DECIMAL"/>
+        <result column="GaodeLongitude" property="gaodeLongitude" jdbcType="DECIMAL"/>
+        <result column="GaodeLatitude" property="gaodeLatitude" jdbcType="DECIMAL"/>
+        <result column="TencentLongitude" property="tencentLongitude" jdbcType="DECIMAL"/>
+        <result column="PhoneNumber" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="ChainCode" property="chainCode" jdbcType="VARCHAR"/>
+        <result column="WeChatOfficialAccount" property="weChatOfficialAccount" jdbcType="VARCHAR"/>
+        <result column="WeChatOfficialAccountName" property="weChatOfficialAccountName" jdbcType="VARCHAR"/>
+        <result column="CompanyWebSite" property="companyWebSite" jdbcType="VARCHAR"/>
+        <result column="BusinessScope" property="businessScope" jdbcType="VARCHAR"/>
+        <result column="RegisteredCapital" property="registeredCapital" jdbcType="DECIMAL"/>
+        <result column="PaidCapital" property="paidCapital" jdbcType="DECIMAL"/>
+        <result column="BusinessStatus" property="businessStatus" jdbcType="VARCHAR"/>
+        <result column="RegisterDate" property="registerDate" jdbcType="TIMESTAMP"/>
+        <result column="CreditCode" property="creditCode" jdbcType="VARCHAR"/>
+        <result column="RegistrationNumber" property="registrationNumber" jdbcType="VARCHAR"/>
+        <result column="RegistrID" property="registrID" jdbcType="VARCHAR"/>
+        <result column="OrganizationCode" property="organizationCode" jdbcType="VARCHAR"/>
+        <result column="CompanyType" property="companyType" jdbcType="VARCHAR"/>
+        <result column="Industry" property="industry" jdbcType="VARCHAR"/>
+        <result column="ApprovedDate" property="approvedDate" jdbcType="TIMESTAMP"/>
+        <result column="RegistrationAuthority" property="registrationAuthority" jdbcType="VARCHAR"/>
+        <result column="StaffNumber" property="staffNumber" jdbcType="VARCHAR"/>
+        <result column="TermOperation" property="termOperation" jdbcType="VARCHAR"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="K3Id" property="k3Id" jdbcType="VARCHAR"/>
+        <result column="K3Number" property="k3Number" jdbcType="VARCHAR"/>
+        <result column="SystemK3Number" property="systemK3Number" jdbcType="VARCHAR"/>
+        <result column="ZhangBuK3Number" property="zhangBuK3Number" jdbcType="VARCHAR"/>
+        <result column="HeSuanFanWeiK3Number" property="heSuanFanWeiK3Number" jdbcType="VARCHAR"/>
+        <result column="DataCentreUserName" property="dataCentreUserName" jdbcType="VARCHAR"/>
+        <result column="DataCentrePassword" property="dataCentrePassword" jdbcType="VARCHAR"/>
+        <result column="BankNumber" property="bankNumber" jdbcType="VARCHAR"/>
+        <result column="CashNumber" property="cashNumber" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="base_subsidiary_column">
+        SubsidiaryId
+        ,
+        SubsidiaryName,
+        Abbreviation,
+        FormerName,
+        EnglishName,
+        ParentCompany,
+        Corporate,
+        FirstGovernor,
+        SecondGovernor,
+        IsThisStock,
+        Stock,
+        ProvinceId,
+        CityId,
+        CountyId,
+        CompanyDetailedAddress,
+        DetailedAddress,
+        BaiduLongitude,
+        BaiduLatitude,
+        GaodeLongitude,
+        GaodeLatitude,
+        TencentLongitude,
+        PhoneNumber,
+        ChainCode,
+        WeChatOfficialAccount,
+        WeChatOfficialAccountName,
+        CompanyWebSite,
+        BusinessScope,
+        RegisteredCapital,
+        PaidCapital,
+        BusinessStatus,
+        RegisterDate,
+        CreditCode,
+        RegistrationNumber,
+        RegistrID,
+        OrganizationCode,
+        CompanyType,
+        Industry,
+        ApprovedDate,
+        RegistrationAuthority,
+        StaffNumber,
+        TermOperation,
+        Remark,
+        K3Id,
+        K3Number,
+        SystemK3Number,
+        ZhangBuK3Number,
+        HeSuanFanWeiK3Number,
+        BankNumber,
+        CashNumber,
+        DataCentreUserName,
+        DataCentrePassword,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <select id="selectSubsidiaryList" resultType="Subsidiary" parameterType="Map">
+        select
+        <include refid="base_subsidiary_column"/>
+        from c_subsidiary
+        where Status = 1
+        <if test="keyWordName != null and keyWordName != ''">
+            and SubsidiaryName like CONCAT('%',#{keyWordName},'%')
+        </if>
+        <if test="subsidiaryId != null and subsidiaryId != ''">
+            and SubsidiaryId = #{subsidiaryId}
+        </if>
+        <if test="companyId != null and companyId != ''">
+            and ParentCompany = #{companyId}
+        </if>
+    </select>
+
+    <select id="selectSubsidiaryByID" resultMap="SubsidiaryMap" parameterType="java.lang.Long">
+        select
+        <include refid="base_subsidiary_column"/>
+        from c_subsidiary
+        where SubsidiaryId = #{subsidiaryId,jdbcType=BIGINT}
+    </select>
+
+    <!--根据母公司查询子公司-->
+    <select id="selectSubsidiaryByParentID" resultMap="SubsidiaryMap" parameterType="java.lang.Long">
+        select
+        <include refid="base_subsidiary_column"/>
+        from c_subsidiary
+        where Status = 1
+        <if test="_parameter != null and _parameter!=''">
+            and ParentCompany = #{parentCompany}
+        </if>
+    </select>
+
+    <update id="deleteSubsidiaryByID" parameterType="Subsidiary">
+        update c_subsidiary set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        where 1=1
+        <if test="subsidiaryId != null and subsidiaryId!=''">
+            and SubsidiaryId = #{subsidiaryId}
+        </if>
+        <if test="parentCompany != null and parentCompany!=''">
+            and ParentCompany = #{parentCompany}
+        </if>
+    </update>
+
+    <insert id="insertSubsidiary" parameterType="Subsidiary" useGeneratedKeys="true" keyProperty="subsidiaryId">
+        insert into c_subsidiary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subsidiaryId != null">
+                SubsidiaryId,
+            </if>
+            <if test="subsidiaryName != null">
+                SubsidiaryName,
+            </if>
+            <if test="abbreviation != null">
+                Abbreviation,
+            </if>
+            <if test="formerName != null">
+                FormerName,
+            </if>
+            <if test="englishName != null">
+                EnglishName,
+            </if>
+            <if test="parentCompany != null">
+                ParentCompany,
+            </if>
+            <if test="corporate != null">
+                Corporate,
+            </if>
+            <if test="firstGovernor != null">
+                FirstGovernor,
+            </if>
+            <if test="secondGovernor != null">
+                SecondGovernor,
+            </if>
+            <if test="isThisStock != null">
+                IsThisStock,
+            </if>
+            <if test="stock != null">
+                Stock,
+            </if>
+            <if test="provinceId != null">
+                ProvinceId,
+            </if>
+            <if test="cityId != null">
+                CityId,
+            </if>
+            <if test="countyId != null">
+                CountyId,
+            </if>
+            <if test="companyDetailedAddress != null">
+                CompanyDetailedAddress,
+            </if>
+            <if test="detailedAddress != null">
+                DetailedAddress,
+            </if>
+            <if test="baiduLongitude != null">
+                BaiduLongitude,
+            </if>
+            <if test="baiduLatitude != null">
+                BaiduLatitude,
+            </if>
+            <if test="gaodeLongitude != null">
+                GaodeLongitude,
+            </if>
+            <if test="gaodeLatitude != null">
+                GaodeLatitude,
+            </if>
+            <if test="tencentLongitude != null">
+                TencentLongitude,
+            </if>
+            <if test="phoneNumber != null">
+                PhoneNumber,
+            </if>
+            <if test="chainCode != null">
+                ChainCode,
+            </if>
+            <if test="weChatOfficialAccount != null">
+                WeChatOfficialAccount,
+            </if>
+            <if test="weChatOfficialAccountName != null">
+                WeChatOfficialAccountName,
+            </if>
+            <if test="companyWebSite != null">
+                CompanyWebSite,
+            </if>
+            <if test="businessScope != null">
+                BusinessScope,
+            </if>
+            <if test="registeredCapital != null">
+                RegisteredCapital,
+            </if>
+            <if test="paidCapital != null">
+                PaidCapital,
+            </if>
+            <if test="businessStatus != null">
+                BusinessStatus,
+            </if>
+            <if test="registerDate != null">
+                RegisterDate,
+            </if>
+            <if test="creditCode != null">
+                CreditCode,
+            </if>
+            <if test="registrationNumber != null">
+                RegistrationNumber,
+            </if>
+            <if test="registrID != null">
+                RegistrID,
+            </if>
+            <if test="organizationCode != null">
+                OrganizationCode,
+            </if>
+            <if test="companyType != null">
+                CompanyType,
+            </if>
+            <if test="industry != null">
+                Industry,
+            </if>
+            <if test="approvedDate != null">
+                ApprovedDate,
+            </if>
+            <if test="registrationAuthority != null">
+                RegistrationAuthority,
+            </if>
+            <if test="staffNumber != null">
+                StaffNumber,
+            </if>
+            <if test="termOperation != null">
+                TermOperation,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="k3Id != null">
+                K3Id,
+            </if>
+            <if test="systemK3Number != null">
+                SystemK3Number,
+            </if>
+            <if test="zhangBuK3Number != null">
+                ZhangBuK3Number,
+            </if>
+            <if test="heSuanFanWeiK3Number != null">
+                HeSuanFanWeiK3Number,
+            </if>
+            <if test="k3Number != null">
+                K3Number,
+            </if>
+            <if test="dataCentreUserName != null">
+                DataCentreUserName,
+            </if>
+            <if test="dataCentrePassword != null">
+                DataCentrePassword,
+            </if>
+            <if test="bankNumber != null">
+                BankNumber,
+            </if>
+            <if test="cashNumber != null">
+                CashNumber,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subsidiaryId != null">
+                #{subsidiaryId,jdbcType=BIGINT},
+            </if>
+            <if test="subsidiaryName != null">
+                #{subsidiaryName,jdbcType=VARCHAR},
+            </if>
+            <if test="abbreviation != null">
+                #{abbreviation,jdbcType=VARCHAR},
+            </if>
+            <if test="formerName != null">
+                #{formerName,jdbcType=VARCHAR},
+            </if>
+            <if test="englishName != null">
+                #{englishName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentCompany != null">
+                #{parentCompany,jdbcType=BIGINT},
+            </if>
+            <if test="corporate != null">
+                #{corporate,jdbcType=VARCHAR},
+            </if>
+            <if test="firstGovernor != null">
+                #{firstGovernor,jdbcType=BIGINT},
+            </if>
+            <if test="secondGovernor != null">
+                #{secondGovernor,jdbcType=BIGINT},
+            </if>
+            <if test="isThisStock != null">
+                #{isThisStock,jdbcType=INTEGER},
+            </if>
+            <if test="stock != null">
+                #{stock,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=VARCHAR},
+            </if>
+            <if test="countyId != null">
+                #{countyId,jdbcType=VARCHAR},
+            </if>
+            <if test="companyDetailedAddress != null">
+                #{companyDetailedAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="detailedAddress != null">
+                #{detailedAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="baiduLongitude != null">
+                #{baiduLongitude,jdbcType=DECIMAL},
+            </if>
+            <if test="baiduLatitude != null">
+                #{baiduLatitude,jdbcType=DECIMAL},
+            </if>
+            <if test="gaodeLongitude != null">
+                #{gaodeLongitude,jdbcType=DECIMAL},
+            </if>
+            <if test="gaodeLatitude != null">
+                #{gaodeLatitude,jdbcType=DECIMAL},
+            </if>
+            <if test="tencentLongitude != null">
+                #{tencentLongitude,jdbcType=DECIMAL},
+            </if>
+            <if test="phoneNumber != null">
+                #{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="chainCode != null">
+                #{chainCode,jdbcType=VARCHAR},
+            </if>
+            <if test="weChatOfficialAccount != null">
+                #{weChatOfficialAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="weChatOfficialAccountName != null">
+                #{weChatOfficialAccountName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyWebSite != null">
+                #{companyWebSite,jdbcType=VARCHAR},
+            </if>
+            <if test="businessScope != null">
+                #{businessScope,jdbcType=VARCHAR},
+            </if>
+            <if test="registeredCapital != null">
+                #{registeredCapital,jdbcType=DECIMAL},
+            </if>
+            <if test="paidCapital != null">
+                #{paidCapital,jdbcType=DECIMAL},
+            </if>
+            <if test="businessStatus != null">
+                #{businessStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="registerDate != null">
+                #{registerDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creditCode != null">
+                #{creditCode,jdbcType=VARCHAR},
+            </if>
+            <if test="registrationNumber != null">
+                #{registrationNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="registrID != null">
+                #{registrID,jdbcType=VARCHAR},
+            </if>
+            <if test="organizationCode != null">
+                #{organizationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="companyType != null">
+                #{companyType,jdbcType=VARCHAR},
+            </if>
+            <if test="industry != null">
+                #{industry,jdbcType=VARCHAR},
+            </if>
+            <if test="approvedDate != null">
+                #{approvedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="registrationAuthority != null">
+                #{registrationAuthority,jdbcType=VARCHAR},
+            </if>
+            <if test="staffNumber != null">
+                #{staffNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="termOperation != null">
+                #{termOperation,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Id != null">
+                #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="systemK3Number != null">
+                #{systemK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="zhangBuK3Number != null">
+                #{zhangBuK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="heSuanFanWeiK3Number != null">
+                #{heSuanFanWeiK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Number != null">
+                #{k3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentreUserName != null">
+                #{dataCentreUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentrePassword != null">
+                #{dataCentrePassword,jdbcType=VARCHAR},
+            </if>
+            <if test="bankNumber != null">
+                #{bankNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="cashNumber != null">
+                #{cashNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSubsidiaryByID" parameterType="Subsidiary">
+        update c_subsidiary
+        <set>
+            <if test="subsidiaryName != null">
+                SubsidiaryName = #{subsidiaryName,jdbcType=VARCHAR},
+            </if>
+            <if test="abbreviation != null">
+                Abbreviation = #{abbreviation,jdbcType=VARCHAR},
+            </if>
+            <if test="formerName != null">
+                FormerName = #{formerName,jdbcType=VARCHAR},
+            </if>
+            <if test="englishName != null">
+                EnglishName = #{englishName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentCompany != null">
+                ParentCompany = #{parentCompany,jdbcType=BIGINT},
+            </if>
+            <if test="corporate != null">
+                Corporate = #{corporate,jdbcType=VARCHAR},
+            </if>
+            <if test="firstGovernor != null">
+                FirstGovernor = #{firstGovernor,jdbcType=BIGINT},
+            </if>
+            <if test="secondGovernor != null">
+                SecondGovernor = #{secondGovernor,jdbcType=BIGINT},
+            </if>
+            <if test="isThisStock != null">
+                IsThisStock = #{isThisStock,jdbcType=INTEGER},
+            </if>
+            <if test="stock != null">
+                Stock = #{stock,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null">
+                ProvinceId = #{provinceId,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                CityId = #{cityId,jdbcType=VARCHAR},
+            </if>
+            <if test="countyId != null">
+                CountyId = #{countyId,jdbcType=VARCHAR},
+            </if>
+            <if test="companyDetailedAddress != null">
+                CompanyDetailedAddress = #{companyDetailedAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="detailedAddress != null">
+                DetailedAddress = #{detailedAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="baiduLongitude != null">
+                BaiduLongitude = #{baiduLongitude,jdbcType=DECIMAL},
+            </if>
+            <if test="baiduLatitude != null">
+                BaiduLatitude = #{baiduLatitude,jdbcType=DECIMAL},
+            </if>
+            <if test="gaodeLongitude != null">
+                GaodeLongitude = #{gaodeLongitude,jdbcType=DECIMAL},
+            </if>
+            <if test="gaodeLatitude != null">
+                GaodeLatitude = #{gaodeLatitude,jdbcType=DECIMAL},
+            </if>
+            <if test="tencentLongitude != null">
+                TencentLongitude = #{tencentLongitude,jdbcType=DECIMAL},
+            </if>
+            <if test="phoneNumber != null">
+                PhoneNumber = #{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="chainCode != null">
+                ChainCode = #{chainCode,jdbcType=VARCHAR},
+            </if>
+            <if test="weChatOfficialAccount != null">
+                WeChatOfficialAccount = #{weChatOfficialAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="weChatOfficialAccountName != null">
+                WeChatOfficialAccountName = #{weChatOfficialAccountName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyWebSite != null">
+                CompanyWebSite = #{companyWebSite,jdbcType=VARCHAR},
+            </if>
+            <if test="businessScope != null">
+                BusinessScope = #{businessScope,jdbcType=VARCHAR},
+            </if>
+            <if test="registeredCapital != null">
+                RegisteredCapital = #{registeredCapital,jdbcType=DECIMAL},
+            </if>
+            <if test="paidCapital != null">
+                PaidCapital = #{paidCapital,jdbcType=DECIMAL},
+            </if>
+            <if test="businessStatus != null">
+                BusinessStatus = #{businessStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="registerDate != null">
+                RegisterDate = #{registerDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creditCode != null">
+                CreditCode = #{creditCode,jdbcType=VARCHAR},
+            </if>
+            <if test="registrationNumber != null">
+                RegistrationNumber = #{registrationNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="registrID != null">
+                RegistrID = #{registrID,jdbcType=VARCHAR},
+            </if>
+            <if test="organizationCode != null">
+                OrganizationCode = #{organizationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="companyType != null">
+                CompanyType = #{companyType,jdbcType=VARCHAR},
+            </if>
+            <if test="industry != null">
+                Industry = #{industry,jdbcType=VARCHAR},
+            </if>
+            <if test="approvedDate != null">
+                ApprovedDate = #{approvedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="registrationAuthority != null">
+                RegistrationAuthority = #{registrationAuthority,jdbcType=VARCHAR},
+            </if>
+            <if test="staffNumber != null">
+                StaffNumber = #{staffNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="termOperation != null">
+                TermOperation = #{termOperation,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Id != null">
+                K3Id = #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Number != null">
+                K3Number = #{k3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentreUserName != null">
+                DataCentreUserName = #{dataCentreUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentrePassword != null">
+                DataCentrePassword = #{dataCentrePassword,jdbcType=VARCHAR},
+            </if>
+            <if test="bankNumber != null">
+                BankNumber = #{bankNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="cashNumber != null">
+                CashNumber = #{cashNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="systemK3Number != null">
+                SystemK3Number = #{systemK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="heSuanFanWeiK3Number != null">
+                HeSuanFanWeiK3Number = #{heSuanFanWeiK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="zhangBuK3Number != null">
+                ZhangBuK3Number = #{zhangBuK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where SubsidiaryId = #{subsidiaryId,jdbcType=BIGINT}
+    </update>
+
+
+
+    <select id="checkSubCompany" parameterType="Subsidiary" resultType="int">
+        select count(1)
+        from c_subsidiary
+        where Status = 1
+        <if test="subsidiaryName != null">
+            and SubsidiaryName = #{subsidiaryName}
+        </if>
+        <if test="k3Number != null">
+            and K3Number = #{k3Number}
+        </if>
+    </select>
+</mapper>

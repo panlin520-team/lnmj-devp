@@ -1,0 +1,25 @@
+server:
+  port: 93
+eureka:
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 30
+    peer-eureka-nodes-update-interval-ms: 60000
+    environment: lnmj
+  instance:
+    ip-address: 127.0.0.1
+    preferIpAddress: true
+    lease-expiration-duration-in-seconds: 600
+  client:
+    healthcheck:
+      enabled: true
+    register-with-eureka: false
+    fetch-registry: false
+    eureka-service-url-poll-interval-seconds: 60
+    serviceUrl:
+      defaultZone: http://222.211.86.214:93/eureka/
+spring:
+  application:
+    name: eurka-server
+logging:
+  config: classpath:log4j2.yml

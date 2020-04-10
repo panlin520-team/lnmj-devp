@@ -1,0 +1,18 @@
+package com.lnmj.store.repository;
+
+import com.lnmj.store.entity.Customer;
+import com.lnmj.store.entity.Department;
+
+import java.util.List;
+import java.util.Map;
+
+public interface ICustomerDao {
+    List<Customer> selectCustomerList(Map map);
+    int insertCustomer(Customer customer);
+    int insertCustomerBatch(Map map);
+    int deleteCustomer(Customer customer);
+    int updateCustomer(Customer customer);
+    int checkDefault(Customer customer);
+    String selectLastCustomerCode();
+    Customer selectDefaultCust(Customer customer);
+}

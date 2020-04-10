@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="StockProduct" >
+  <resultMap id="StockProductMap" type="com.lnmj.product.entity.StockProduct" >
+    <id column="StockProductId" property="stockProductId" jdbcType="BIGINT" />
+    <result column="Stock" property="stock" jdbcType="VARCHAR" />
+    <result column="StockPlace" property="stockPlace" jdbcType="VARCHAR" />
+    <result column="StockStatus" property="stockStatus" jdbcType="VARCHAR" />
+    <result column="BatchNumber" property="batchNumber" jdbcType="VARCHAR" />
+    <result column="ProductType" property="productType" jdbcType="VARCHAR" />
+    <result column="ProductCode" property="productCode" jdbcType="VARCHAR" />
+    <result column="ProductName" property="productName" jdbcType="VARCHAR" />
+    <result column="SecondaryAttribute" property="secondaryAttribute" jdbcType="VARCHAR" />
+    <result column="Unit" property="unit" jdbcType="VARCHAR" />
+    <result column="Number" property="number" jdbcType="INTEGER" />
+    <result column="AveailableNumber" property="aveailableNumber" jdbcType="INTEGER" />
+    <result column="InventoryGroup" property="inventoryGroup" jdbcType="VARCHAR" />
+    <result column="ShipperType" property="shipperType" jdbcType="VARCHAR" />
+    <result column="ShipperCode" property="shipperCode" jdbcType="VARCHAR" />
+    <result column="Shipper" property="shipper" jdbcType="VARCHAR" />
+    <result column="KeeperType" property="keeperType" jdbcType="VARCHAR" />
+    <result column="KeeperCode" property="keeperCode" jdbcType="VARCHAR" />
+    <result column="Keeper" property="keeper" jdbcType="VARCHAR" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_stockproduct_cloumn" >
+    StockProductId, Stock, StockPlace, StockStatus, BatchNumber, ProductType, ProductCode,
+    ProductName, SecondaryAttribute, Unit, Number, AveailableNumber, InventoryGroup,
+    ShipperType, ShipperCode, Shipper, KeeperType, KeeperCode, Keeper, Remark, Status,
+    CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectStockProductList" resultMap="StockProductMap">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_stockproduct_cloumn" />
+    from s_stockproduct where Status = 1
+  </select>
+
+  <select id="selectStockProductByID" resultMap="StockProductMap" parameterType="java.lang.Long" >
+    select
+    <include refid="base_stockproduct_cloumn" />
+    from s_stockproduct
+    where StockProductId = #{stockProductId,jdbcType=BIGINT} and Status = 1
+  </select>
+
+  <select id="selectStockProductByStockID" resultMap="StockProductMap" parameterType="String" >
+    select
+    <include refid="base_stockproduct_cloumn" />
+    from s_stockproduct
+    where Stock = #{stock,jdbcType=VARCHAR} and Status = 1
+  </select>
+
+  <select id="selectStockProductListByProductName" resultMap="StockProductMap" parameterType="String" >
+    select
+    <include refid="base_stockproduct_cloumn" />
+    from s_stockproduct
+    where ProductName like CONCAT('%',#{productName,jdbcType=VARCHAR},'%') and Status = 1
+  </select>
+
+  <select id="selectStockProductByProductID" resultMap="StockProductMap" parameterType="String" >
+    select
+    <include refid="base_stockproduct_cloumn" />
+    from s_stockproduct
+    where ProductCode = #{productCode,jdbcType=VARCHAR} and Status = 1
+  </select>
+
+  <select id="selectStockProductByBatchNumber" resultMap="StockProductMap" parameterType="String" >
+    select
+    <include refid="base_stockproduct_cloumn" />
+    from s_stockproduct
+    where BatchNumber = #{batchNumber,jdbcType=VARCHAR} and Status = 1
+  </select>
+
+  <select id="selectStockProductByStockIDAndProductID" resultMap="StockProductMap" parameterType="Map" >
+    select
+    <include refid="base_stockproduct_cloumn" />
+    from s_stockproduct
+    where ProductCode = #{productCode,jdbcType=VARCHAR} and Stock = #{stock,jdbcType=VARCHAR}
+      and AveailableNumber>0 and Status = 1
+    order by BatchNumber asc
+  </select>
+
+  <update id="updateStockProductByStockAndProductAndBatchNumber" parameterType="Map" >
+    update s_stockproduct set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="stock != null" >
+          and Stock = #{stock,jdbcType=VARCHAR}
+        </if>
+        <if test="productCode != null" >
+          and productCode = #{productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="batchNumber != null" >
+          and BatchNumber = #{batchNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="number != null" >
+          and Number = Number + #{number,jdbcType=BIGINT}
+        </if>
+        <if test="aveailableNumber != null" >
+          and AveailableNumber = AveailableNumber + #{aveailableNumber,jdbcType=BIGINT}
+        </if>
+      </trim>
+    </where>
+  </update>
+
+  <update id="deleteStockProductByID" parameterType="StockProduct" >
+    update s_stockproduct set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="stockProductId != null" >
+          and StockProductId = #{stockProductId,jdbcType=BIGINT}
+        </if>
+        <if test="stockProductId != null" >
+          and BatchNumber = #{batchNumber,jdbcType=VARCHAR}
+        </if>
+      </trim>
+    </where>
+  </update>
+
+  <insert id="insertStockProduct" parameterType="com.lnmj.product.entity.StockProduct" useGeneratedKeys="true" keyProperty="stockProductId" >
+    insert into s_stockproduct
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stockProductId != null" >
+        StockProductId,
+      </if>
+      <if test="stock != null" >
+        Stock,
+      </if>
+      <if test="stockPlace != null" >
+        StockPlace,
+      </if>
+      <if test="stockStatus != null" >
+        StockStatus,
+      </if>
+      <if test="batchNumber != null" >
+        BatchNumber,
+      </if>
+      <if test="productType != null" >
+        ProductType,
+      </if>
+      <if test="productCode != null" >
+        ProductCode,
+      </if>
+      <if test="productName != null" >
+        ProductName,
+      </if>
+      <if test="secondaryAttribute != null" >
+        SecondaryAttribute,
+      </if>
+      <if test="unit != null" >
+        Unit,
+      </if>
+      <if test="number != null" >
+        Number,
+      </if>
+      <if test="aveailableNumber != null" >
+        AveailableNumber,
+      </if>
+      <if test="inventoryGroup != null" >
+        InventoryGroup,
+      </if>
+      <if test="shipperType != null" >
+        ShipperType,
+      </if>
+      <if test="shipperCode != null" >
+        ShipperCode,
+      </if>
+      <if test="shipper != null" >
+        Shipper,
+      </if>
+      <if test="keeperType != null" >
+        KeeperType,
+      </if>
+      <if test="keeperCode != null" >
+        KeeperCode,
+      </if>
+      <if test="keeper != null" >
+        Keeper,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stockProductId != null" >
+        #{stockProductId,jdbcType=BIGINT},
+      </if>
+      <if test="stock != null" >
+        #{stock,jdbcType=BIGINT},
+      </if>
+      <if test="stockPlace != null" >
+        #{stockPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="stockStatus != null" >
+        #{stockStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondaryAttribute != null" >
+        #{secondaryAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="aveailableNumber != null" >
+        #{aveailableNumber,jdbcType=INTEGER},
+      </if>
+      <if test="inventoryGroup != null" >
+        #{inventoryGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperType != null" >
+        #{shipperType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperCode != null" >
+        #{shipperCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipper != null" >
+        #{shipper,jdbcType=VARCHAR},
+      </if>
+      <if test="keeperType != null" >
+        #{keeperType,jdbcType=VARCHAR},
+      </if>
+      <if test="keeperCode != null" >
+        #{keeperCode,jdbcType=VARCHAR},
+      </if>
+      <if test="keeper != null" >
+        #{keeper,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateStockProductByID" parameterType="com.lnmj.product.entity.StockProduct" >
+    update s_stockproduct
+    <set >
+      <if test="stock != null" >
+        Stock = #{stock,jdbcType=VARCHAR},
+      </if>
+      <if test="stockPlace != null" >
+        StockPlace = #{stockPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="stockStatus != null" >
+        StockStatus = #{stockStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        BatchNumber = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        ProductType = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        ProductCode = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        ProductName = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondaryAttribute != null" >
+        SecondaryAttribute = #{secondaryAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        Unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        Number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="aveailableNumber != null" >
+        AveailableNumber = #{aveailableNumber,jdbcType=INTEGER},
+      </if>
+      <if test="inventoryGroup != null" >
+        InventoryGroup = #{inventoryGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperType != null" >
+        ShipperType = #{shipperType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperCode != null" >
+        ShipperCode = #{shipperCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipper != null" >
+        Shipper = #{shipper,jdbcType=VARCHAR},
+      </if>
+      <if test="keeperType != null" >
+        KeeperType = #{keeperType,jdbcType=VARCHAR},
+      </if>
+      <if test="keeperCode != null" >
+        KeeperCode = #{keeperCode,jdbcType=VARCHAR},
+      </if>
+      <if test="keeper != null" >
+        Keeper = #{keeper,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where StockProductId = #{stockProductId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

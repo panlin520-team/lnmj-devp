@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="consumeCustomMade" >
+
+  <sql id="Base_Column_List">
+    ConsumeCustomMadeId, CustomMadeOrderDetailId,OrderNumber, StoreId, NurseStore,BookingBeauticianIds,
+    NurseTime, Specifications, NurseStatus, Status, CreateOperator,
+    CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+
+  <!--定制项目使用分页查询+条件查询-->
+  <select id="selectConsumeCustomMadeList" resultType="ConsumeCustomMade">
+    select
+    <include refid="Base_Column_List" />
+    from s_consumecustommade
+    <!--<if test="orderByClause != null" >-->
+      <!--order by ${orderByClause}-->
+    <!--</if>-->
+  </select>
+
+  <!--根据美容师id 和护理时间查定制订单-->
+  <select id="selectCustomByIdsAndTime" resultType="ConsumeCustomMade" parameterType="Map" >
+    select
+    <include refid="Base_Column_List" />
+    from s_consumecustommade
+    WHERE Status =1
+    <if test="beauticianId != null" >
+      and BeauticianId LIKE concat('%',#{beauticianId},'%')
+    </if>
+    <if test="nurseTime != null" >
+      AND to_days(NurseTime) = to_days(#{nurseTime})
+    </if>
+    <if test="storeId != null" >
+      AND StoreId = #{storeId}
+    </if>
+  </select>
+
+
+  <!--添加消费定制项目记录-->
+  <insert id="insertConsumeCustomMade" parameterType="ConsumeCustomMade" useGeneratedKeys="true" keyProperty="CustomMadeOrderDetailId">
+    insert into s_consumecustommade
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="consumeCustomMadeId != null">
+        ConsumeCustomMadeId,
+      </if>
+      <if test="customMadeOrderDetailId != null">
+        CustomMadeOrderDetailId,
+      </if>
+      <if test="orderNumber != null">
+        OrderNumber,
+      </if>
+      <if test="storeId != null">
+        StoreId,
+      </if>
+      <if test="nurseStore != null">
+        NurseStore,
+      </if>
+      <if test="bookingBeauticianIds != null">
+        BookingBeauticianIds,
+      </if>
+      <if test="nurseTime != null">
+        NurseTime,
+      </if>
+      <if test="specifications != null">
+        Specifications,
+      </if>
+      <if test="nurseStatus != null">
+        NurseStatus,
+      </if>
+      <if test="status != null">
+        Status,
+      </if>
+      <if test="createOperator != null">
+        CreateOperator,
+      </if>
+      <if test="createTime != null">
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null">
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null">
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="consumeCustomMadeId != null">
+        #{consumeCustomMadeId},
+      </if>
+      <if test="customMadeOrderDetailId != null">
+        #{customMadeOrderDetailId},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber},
+      </if>
+      <if test="storeId != null">
+        #{storeId},
+      </if>
+      <if test="nurseStore != null">
+        #{nurseStore},
+      </if>
+      <if test="bookingBeauticianIds != null">
+        #{bookingBeauticianIds},
+      </if>
+      <if test="nurseTime != null">
+        #{nurseTime},
+      </if>
+      <if test="specifications != null">
+        #{specifications},
+      </if>
+      <if test="nurseStatus != null">
+        #{nurseStatus},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="createOperator != null">
+        #{createOperator},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="modifyOperator != null">
+        #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null">
+        #{dataChangeLastTime}
+      </if>
+    </trim>
+  </insert>
+
+
+  <!--查看定制项目使用情况-->
+  <select id="selectUserListBycustomMadeId" resultType="ConsumeCustomMadeVO" parameterType="Long" >
+    SELECT
+      o1.OrderLink,
+      o1.Mobile,
+      o1.OrderNumber,
+      o1.OrderTime,
+      o2.*
+    FROM
+      s_custommadeorder o1,
+      s_consumecustommade o2
+    WHERE
+      o1.OrderNumber = o2.OrderNumber
+      AND o2.CustomMadeOrderDetailId =#{customMadeOrderDetailId}
+  </select>
+
+
+</mapper>

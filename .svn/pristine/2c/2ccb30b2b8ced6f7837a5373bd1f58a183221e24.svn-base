@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="walletRechargeRecord">
+
+    <sql id="Base_Column_List">
+        RechargeRecordId
+        ,
+        Name,
+        Mobile,
+        CardNumber,
+        GiveAccount,
+        StoreId,
+        OrderNo,
+        BeauticianId,
+        TransactionTime,
+        PaymentTime,
+        Amount,
+        RechargeType,
+        PayAccount,
+        IsRoyalty,
+        Isintegral,
+        Payee,
+        PayType,
+        PayStatus,
+        FailureCause,
+        RechargeChannel,
+        Remarks,
+        AuditStatus,
+        AccountTypeId,
+        PayTypeAndAmount,
+        AuditAmountStatus,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_walletrechargerecordRefuse">
+        Id
+        ,
+        OrderNo,
+        Name,
+        Mobile,
+        Amount,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <insert id="insertWalletRechargeRecord" parameterType="WalletRechargeRecord">
+        insert into w_walletrechargerecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rechargeRecordId != null">
+                RechargeRecordId,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="mobile != null">
+                Mobile,
+            </if>
+            <if test="cardNumber != null">
+                CardNumber,
+            </if>
+            <if test="giveAccount != null">
+                GiveAccount,
+            </if>
+            <if test="storeId != null">
+                StoreId,
+            </if>
+            <if test="orderNo != null">
+                OrderNo,
+            </if>
+            <if test="beauticianId != null">
+                BeauticianId,
+            </if>
+            <if test="transactionTime != null">
+                TransactionTime,
+            </if>
+            <if test="paymentTime != null">
+                PaymentTime,
+            </if>
+            <if test="amount != null">
+                Amount,
+            </if>
+            <if test="rechargeType != null">
+                RechargeType,
+            </if>
+            <if test="payAccount != null">
+                PayAccount,
+            </if>
+            <if test="isRoyalty != null">
+                IsRoyalty,
+            </if>
+            <if test="isintegral != null">
+                Isintegral,
+            </if>
+            <if test="payee != null">
+                Payee,
+            </if>
+            <if test="payType != null">
+                PayType,
+            </if>
+            <if test="payStatus != null">
+                PayStatus,
+            </if>
+            <if test="failureCause != null">
+                FailureCause,
+            </if>
+            <if test="rechargeChannel != null">
+                RechargeChannel,
+            </if>
+            <if test="remarks != null">
+                Remarks,
+            </if>
+            <if test="auditStatus != null">
+                AuditStatus,
+            </if>
+            <if test="accountTypeId != null">
+                AccountTypeId,
+            </if>
+            <if test="payTypeAndAmount != null">
+                PayTypeAndAmount,
+            </if>
+            <if test="auditAmountStatus != null">
+                AuditAmountStatus,
+            </if>
+
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rechargeRecordId != null">
+                #{rechargeRecordId},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="mobile != null">
+                #{mobile},
+            </if>
+            <if test="cardNumber != null">
+                #{cardNumber},
+            </if>
+            <if test="giveAccount != null">
+                #{giveAccount},
+            </if>
+            <if test="storeId != null">
+                #{storeId},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo},
+            </if>
+            <if test="beauticianId != null">
+                #{beauticianId},
+            </if>
+            <if test="transactionTime != null">
+                #{transactionTime},
+            </if>
+            <if test="paymentTime != null">
+                #{paymentTime},
+            </if>
+            <if test="amount != null">
+                #{amount},
+            </if>
+            <if test="rechargeType != null">
+                #{rechargeType},
+            </if>
+            <if test="payAccount != null">
+                #{payAccount},
+            </if>
+            <if test="isRoyalty != null">
+                #{isRoyalty},
+            </if>
+            <if test="isintegral != null">
+                #{isintegral},
+            </if>
+            <if test="payee != null">
+                #{payee},
+            </if>
+            <if test="payType != null">
+                #{payType},
+            </if>
+            <if test="payStatus != null">
+                #{payStatus},
+            </if>
+            <if test="failureCause != null">
+                #{failureCause},
+            </if>
+            <if test="rechargeChannel != null">
+                #{rechargeChannel},
+            </if>
+            <if test="remarks != null">
+                #{remarks},
+            </if>
+            <if test="auditStatus != null">
+                #{auditStatus},
+            </if>
+            <if test="accountTypeId != null">
+                #{accountTypeId},
+            </if>
+            <if test="payTypeAndAmount != null">
+                #{payTypeAndAmount},
+            </if>
+            <if test="auditAmountStatus != null">
+                #{auditAmountStatus},
+            </if>
+
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                #{createOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                now(),
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectRechargeList" resultType="WalletRechargeRecord" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from w_walletrechargerecord
+        where Status = 1
+        and storeId in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="keyWord!= null">
+            and Name like CONCAT('%',#{keyWord},'%')
+        </if>
+        <if test="accountTypeId!= null">
+            and accountTypeId = #{accountTypeId}
+        </if>
+        <if test="auditStatus!= null">
+            and auditStatus = #{auditStatus}
+        </if>
+    </select>
+
+    <select id="selectSumAmount" resultType="int" parameterType="Map">
+        SELECT
+        case when ISNULL(sum(Amount)) THEN 0
+        ELSE sum(Amount) END AS sum
+        FROM
+        w_walletrechargerecord
+        WHERE Status = 1
+        <if test="cardNumber!= null and cardNumber!= ''">
+            and CardNumber = #{cardNumber}
+        </if>
+        <if test="list != null and list!=''">
+            and storeId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND TO_DAYS(CreateTime) = TO_DAYS(NOW())
+
+    </select>
+
+
+    <select id="selectTodayAmount" resultType="WalletRechargeRecord" parameterType="Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        w_walletrechargerecord
+        WHERE Status = 1
+        <if test="list != null and list!=''">
+            and storeId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="orderDate != null">
+            and TO_DAYS(CreateTime)= TO_DAYS(CONCAT('',#{orderDate},''))
+        </if>
+    </select>
+
+    <select id="selectTodayAmountRefuse" resultType="Map" parameterType="Map">
+        SELECT
+        a.AccountTypeId,b.Amount
+        FROM
+        w_walletrechargerecord a,w_walletrechargerecord_refuse b
+        WHERE a.Status = 1 and a.OrderNo = b.OrderNo
+        <if test="list != null and list!=''">
+            and a.StoreId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="orderDate != null">
+            and TO_DAYS(b.CreateTime)= TO_DAYS(CONCAT('',#{orderDate},''))
+        </if>
+    </select>
+
+
+    <select id="selectSumAmountAll" resultType="double" parameterType="Map">
+        SELECT
+        case when ISNULL(sum(Amount)) THEN 0
+        ELSE sum(Amount) END AS sum
+        FROM
+        w_walletrechargerecord
+        WHERE Status = 1
+        <if test="cardNumber!= null and cardNumber!= ''">
+            and CardNumber = #{cardNumber}
+        </if>
+    </select>
+
+    <select id="selectSumAmountAllRefuse" resultType="double" parameterType="Map">
+        SELECT
+        case when ISNULL(sum(b.Amount)) THEN 0
+        ELSE sum(b.Amount) END AS sum
+        FROM
+        w_walletrechargerecord a,w_walletrechargerecord_refuse b
+        WHERE a.Status = 1 and a.OrderNo = b.OrderNo
+        <if test="cardNumber!= null and cardNumber!= ''">
+            and a.CardNumber = #{cardNumber}
+        </if>
+    </select>
+
+    <select id="selectSumAmountMax" resultType="double" parameterType="Map">
+        SELECT
+        case when ISNULL(max(Amount)) THEN 0
+        ELSE max(Amount) END AS sum
+        FROM
+        w_walletrechargerecord
+        WHERE Status = 1
+        <if test="cardNumber!= null and cardNumber!= ''">
+            and CardNumber = #{cardNumber}
+        </if>
+    </select>
+
+    <select id="selectConsumerAmount" resultType="int" parameterType="String">
+        SELECT
+            case
+                when ISNULL(sum(Amount)) THEN 0
+                ELSE sum(Amount) END
+            AS
+            sum
+        FROM
+            w_walletconsumerecord
+        WHERE CardNumber = #{cardNumber}
+    </select>
+
+    <select id="selectRechargeByCondition" parameterType="WalletRechargeRecord" resultType="List">
+        select
+        <include refid="Base_Column_List"/>
+        from w_walletrechargerecord
+        where
+        1=1
+        <if test="cardNumber != null">
+            and CardNumber =#{cardNumber}
+        </if>
+        <if test="name != null">
+            and Name =#{name}
+        </if>
+    </select>
+
+    <select id="selectRechargeById" parameterType="Map" resultType="WalletRechargeRecord">
+        select
+        <include refid="Base_Column_List"/>
+        from w_walletrechargerecord
+        WHERE CardNumber = #{cardNumber}
+        <if test="accountTypeId != null">
+            and AccountTypeId = #{accountTypeId}
+        </if>
+        <if test="date != null and date != ''">
+            and TO_DAYS(CreateTime)= TO_DAYS(CONCAT('',#{date},''))
+        </if>
+    </select>
+
+
+    <update id="deleteRechargeRecordById" parameterType="Long">
+        update w_walletrechargerecord
+        set Status              = 0,
+            ModifyOperator      = #{modifyOperator},
+            DataChange_LastTime = now()
+        where RechargeRecordId = #{rechargeRecordId}
+    </update>
+
+    <update id="audit" parameterType="WalletRechargeRecord">
+        update w_walletrechargerecord
+        set
+        <if test="failureCause != null and failureCause!=''">
+            FailureCause =#{failureCause},
+        </if>
+        AuditStatus =#{auditStatus},
+        ModifyOperator = #{modifyOperator},
+        DataChange_LastTime = now()
+        where RechargeRecordId = #{rechargeRecordId}
+    </update>
+
+    <update id="batchAudit" parameterType="Map">
+        update w_walletrechargerecord
+        set
+        AuditStatus =#{auditStatus},
+        ModifyOperator = #{modifyOperator},
+        DataChange_LastTime = now()
+        where RechargeRecordId in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="selectRechargeOrderList" resultType="int" parameterType="Map">
+        SELECT
+        count(1)
+        FROM
+        w_walletrechargerecord
+        WHERE
+        STATUS = 1
+        AND TO_DAYS(CreateTime) = TO_DAYS(#{date})
+        and Amount &gt; 0
+        <if test="list != null and list!=''">
+            and StoreId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="countRechargeOrderSum" resultType="int" parameterType="Date">
+        SELECT
+        sum(Amount)
+        FROM
+        w_walletrechargerecord
+        WHERE
+        STATUS = 1
+        <if test="_parameter != null">
+            AND TO_DAYS(CreateTime) = TO_DAYS(CONCAT('',#{date},''))
+        </if>
+    </select>
+
+    <select id="selectRechargeByOrderNum" resultType="WalletRechargeRecord" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from w_walletrechargerecord
+        where Status = 1
+        <if test="orderDate != null">
+            and TO_DAYS(CreateTime)= TO_DAYS(CONCAT('',#{orderDate},''))
+        </if>
+        <if test="orderNo != null and orderNo!=''">
+            and OrderNo = #{orderNo}
+        </if>
+        <if test="list != null">
+            AND storeId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectRechargeOrderListTopTen" resultType="WalletRechargeRecord" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from w_walletrechargerecord
+        where Status = 1
+        and CardNumber = #{cardNumber}
+        and StoreId = #{storeId}
+        order by CreateTime desc
+        limit 10
+
+    </select>
+
+    <insert id="insertRechargeRefuse" parameterType="WalletrechargerecordRefuse">
+        insert into w_walletrechargerecord_refuse
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="orderNo != null">
+                OrderNo,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="mobile != null">
+                Mobile,
+            </if>
+            <if test="amount != null">
+                Amount,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChange_LastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectRechargeRefuseList" resultType="WalletrechargerecordRefuse"
+            parameterType="WalletrechargerecordRefuse">
+        select
+        <include refid="Base_Column_List_walletrechargerecordRefuse"/>
+        from w_walletrechargerecord_refuse
+        where Status = 1
+        <if test="name != null and name != ''">
+            and Name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="mobile != null and mobile != ''">
+            and Mobile = #{mobile}
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            and OrderNo = #{orderNo}
+        </if>
+        <if test="endDate != null and endDate!=''">
+            and to_days(CreateTime) between to_days(#{startdate}) and to_days(#{endDate})
+        </if>
+    </select>
+
+
+    <update id="batchAuditAmount" parameterType="Map">
+        update w_walletrechargerecord
+        set
+        AuditAmountStatus =#{auditStatus},
+        ModifyOperator = #{modifyOperator},
+        DataChange_LastTime = now()
+        where OrderNo in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="selectRechargeByOrderNumber" resultType="WalletRechargeRecord" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from w_walletrechargerecord
+        where Status = 1
+        <if test="orderNo != null and orderNo!=''">
+            and OrderNo = #{orderNo}
+        </if>
+    </select>
+
+    <update id="updateWalletRechargeRecord" parameterType="WalletRechargeRecord">
+        update w_walletrechargerecord set AuditAmountStatus = #{auditAmountStatus} where OrderNo = #{orderNo}
+    </update>
+</mapper>

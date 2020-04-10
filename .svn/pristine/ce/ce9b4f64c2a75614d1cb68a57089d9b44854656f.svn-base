@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="backups">
+
+
+    <insert id="insert" parameterType="List">
+        insert into lnmj_product.p_product
+        (
+        ProductName,
+        ProductSubordinate,
+        CommodityTypeID,
+        SubClassID,
+        BarredBuying,
+        BarredPayMethod,
+        ProvinceId,
+        CityId,
+        CountyId,
+        ProductKind,
+        ProductEffect,
+        ProductBrand,
+        ProductCategory,
+        ProductSpecification,
+        ProductOriginalPrice,
+        RetailPrice,
+        ActivityRetailPrice,
+        IsDiscount,
+        NetContent,
+        ProductSales,
+        UnitId,
+        InstoragePrice,
+        OutstoragePrice,
+        OutstorageProfit,
+        MoreContent)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.productName},
+            #{item.productSubordinate},
+            #{item.commodityTypeID},
+            #{item.subClassID},
+            #{item.barredBuying},
+            #{item.barredPayMethod},
+            #{item.provinceId},
+            #{item.cityId},
+            #{item.countyId},
+            #{item.productKind},
+            #{item.productEffect},
+            #{item.productBrand},
+            #{item.productCategory},
+            #{item.productSpecification},
+            #{item.productOriginalPrice},
+            #{item.retailPrice},
+            #{item.activityRetailPrice},
+            #{item.isDiscount},
+            #{item.netContent},
+            #{item.productSales},
+            #{item.unitId},
+            #{item.InstoragePrice},
+            #{item.OutstoragePrice},
+            #{item.OutstorageProfit},
+            #{item.moreContent}
+            )
+        </foreach>
+    </insert>
+
+
+    <insert id="addServiceProduct" parameterType="List">
+        insert into p_productservice
+        (productName,
+        industry,
+        commodityTypeID,
+        subClassID,
+        productOriginalPrice,
+        retailPrice,
+        activityRetailPrice,
+        isDiscount,
+        productSales,
+        unitId,
+        InstoragePrice,
+        OutstoragePrice,
+        OutstorageProfit,
+        moreContent)
+        values
+        <foreach collection="list" item="service" index="index" separator=",">
+            (
+            #{service.productName},
+            #{service.industry},
+            #{service.commodityTypeID},
+            #{service.subClassID},
+            #{service.productOriginalPrice},
+            #{service.retailPrice},
+            #{service.activityRetailPrice},
+            #{service.isDiscount},
+            #{service.productSales},
+            #{service.unitId},
+            #{service.InstoragePrice},
+            #{service.OutstoragePrice},
+            #{service.OutstorageProfit},
+            #{service.moreContent}
+            )
+        </foreach>
+    </insert>
+
+
+    <insert id="addSupplier" parameterType="List">
+        insert into lnmj_store.c_supplier
+        (supplierName,
+        shortName,
+        supplierCategoryId,
+        bankDeposit,
+        creditCardNum,
+        linkMan)
+        values
+        <foreach collection="list" item="supplier" index="index" separator=",">
+            (
+            #{supplier.supplierName},
+            #{supplier.shortName},
+            #{supplier.supplierCategoryId},
+            #{supplier.bankDeposit},
+            #{supplier.creditCardNum},
+            #{supplier.linkMan}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

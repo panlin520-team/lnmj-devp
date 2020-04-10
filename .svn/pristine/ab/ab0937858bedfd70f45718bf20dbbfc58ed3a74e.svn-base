@@ -1,0 +1,940 @@
+package com.lnmj.product.entity;
+
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+public class ServiceProduct {
+    private Long serviceProductId;
+
+    private Long subClassID;
+
+    private String productCode;
+
+    private String productName;
+
+    private Integer Frequency;
+
+    private BigDecimal Discount;
+
+    private String forwardedDescribe;
+
+    private String postType;
+
+    private Long productPromotionType;
+
+    private String barredBuying;
+
+    private String barredPayMethod;
+
+    private Integer codeBuy;
+
+    private Long unitId;
+
+    private Integer isExpansionGuest;
+
+    private String imageList;
+
+    private String activityImageList;
+
+    private Integer isCreateGuest;
+
+    private Integer isPurchase;
+
+    private Integer purchaseQuantity;
+
+    private Integer isDiscount;
+    private Long industryId;
+    @Transient
+    private String industryName;
+    private Long CommodityTypeID;
+    private Integer isHomePage;
+
+    private Integer isExperienceCart;
+
+    private Integer isOpenRoyalty;
+
+    private BigDecimal oneLevelRoyalty;
+
+    private BigDecimal twoLevelRoyalty;
+
+    private BigDecimal threeLevelRoyalty;
+
+    private Integer experienceProjectQuantity;
+
+    private BigDecimal superRoyalty;
+
+    private BigDecimal cosmetologistRoyalty;
+
+    private Integer isGiveProduct;
+
+    private Integer isPhotographCashProduct;
+
+    private Integer isVirtualProduct;
+
+    private String buyRemind;
+
+    private Long provinceId;
+
+    private Long cityId;
+
+    private Long countyId;
+
+    private Long productKind;
+
+    private Long productEffect;
+
+    private Long productBrand;
+
+    private Long productCategory;
+
+//    private Long merchantSource;
+
+    private String duration;//护理时长
+
+    private Long nurseProductBuyMeans;
+
+    private BigDecimal commissionSettlement;
+
+    private BigDecimal productOriginalPrice;
+
+    private BigDecimal retailPrice;
+
+    private BigDecimal activityRetailPrice;
+
+    private Integer isSeIntegralByProduct;
+
+    private BigDecimal facilitatorPrice;
+
+    private Integer facilitatorProportionIntegral;
+
+    private BigDecimal unionPrice;
+
+    private Integer unionProportionIntegral;
+
+    private BigDecimal retailPriceVip1;
+
+    private Integer proportionIntegralVip1;
+
+    private BigDecimal retailPriceVip2;
+
+    private Integer proportionIntegralVip2;
+
+    private BigDecimal retailPriceVip3;
+
+    private Integer proportionIntegralVip3;
+
+    private BigDecimal retailPriceVip4;
+
+    private Integer proportionIntegralVip4;
+
+    private BigDecimal retailPriceVip5;
+
+    private Integer proportionIntegralVip5;
+
+    private BigDecimal retailPriceVip6;
+
+    private Integer proportionIntegralVip6;
+
+    private Integer productSales;
+
+    private String productIntroduce;
+
+    private String productDetails;
+
+    private String moreContent;
+
+    private Integer onOffSale;
+    private Integer productStatus;
+    private BigDecimal instoragePrice;
+    private BigDecimal outstorageProfit;
+    private BigDecimal outstoragePrice;
+    //所属总公司
+    private String companyId;
+    //授权子公司
+    private String subsidiaryId;
+    //授权门店
+    private String storeIds;
+    private String newCreateCompanyId;
+    private String newCreateCompanyType;
+
+    private String k3Id;
+
+    private String k3Number;
+
+    private Integer status;
+
+    private String createOperator;
+
+    private Date createTime;
+
+    private String modifyOperator;
+
+    private Date dataChangeLastTime;
+
+    //图片url
+    @Transient
+    private List<ProductImage> serviceProductImageList;
+    @Transient
+    private List<ProductActivityImage> serviceProductActivityImageList;
+    @Transient
+    private Integer isChecked=0;
+    @Transient
+    private Integer stockNum=0;
+    @Transient
+    private Integer productType;
+
+    @Transient
+    @JsonProperty("LAY_CHECKED")
+    private String LAY_CHECKED;
+
+    public Long getServiceProductId() {
+        return serviceProductId;
+    }
+
+    public void setServiceProductId(Long serviceProductId) {
+        this.serviceProductId = serviceProductId;
+    }
+
+    public Long getSubClassID() {
+        return subClassID;
+    }
+
+    public void setSubClassID(Long subClassID) {
+        this.subClassID = subClassID;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Integer getFrequency() {
+        return Frequency;
+    }
+
+    public void setFrequency(Integer frequency) {
+        Frequency = frequency;
+    }
+
+    public BigDecimal getDiscount() {
+        return Discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        Discount = discount;
+    }
+
+    public String getForwardedDescribe() {
+        return forwardedDescribe;
+    }
+
+    public void setForwardedDescribe(String forwardedDescribe) {
+        this.forwardedDescribe = forwardedDescribe;
+    }
+
+    public String getPostType() {
+        return postType;
+    }
+
+    public void setPostType(String postType) {
+        this.postType = postType;
+    }
+
+    public Long getProductPromotionType() {
+        return productPromotionType;
+    }
+
+    public void setProductPromotionType(Long productPromotionType) {
+        this.productPromotionType = productPromotionType;
+    }
+
+    public String getBarredBuying() {
+        return barredBuying;
+    }
+
+    public void setBarredBuying(String barredBuying) {
+        this.barredBuying = barredBuying;
+    }
+
+    public String getBarredPayMethod() {
+        return barredPayMethod;
+    }
+
+    public void setBarredPayMethod(String barredPayMethod) {
+        this.barredPayMethod = barredPayMethod;
+    }
+
+    public Integer getCodeBuy() {
+        return codeBuy;
+    }
+
+    public void setCodeBuy(Integer codeBuy) {
+        this.codeBuy = codeBuy;
+    }
+
+    public Long getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(Long unitId) {
+        this.unitId = unitId;
+    }
+
+    public Integer getIsExpansionGuest() {
+        return isExpansionGuest;
+    }
+
+    public void setIsExpansionGuest(Integer isExpansionGuest) {
+        this.isExpansionGuest = isExpansionGuest;
+    }
+
+    public String getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(String imageList) {
+        this.imageList = imageList;
+    }
+
+    public String getActivityImageList() {
+        return activityImageList;
+    }
+
+    public void setActivityImageList(String activityImageList) {
+        this.activityImageList = activityImageList;
+    }
+
+    public Integer getIsCreateGuest() {
+        return isCreateGuest;
+    }
+
+    public void setIsCreateGuest(Integer isCreateGuest) {
+        this.isCreateGuest = isCreateGuest;
+    }
+
+    public Integer getIsPurchase() {
+        return isPurchase;
+    }
+
+    public void setIsPurchase(Integer isPurchase) {
+        this.isPurchase = isPurchase;
+    }
+
+    public Integer getPurchaseQuantity() {
+        return purchaseQuantity;
+    }
+
+    public void setPurchaseQuantity(Integer purchaseQuantity) {
+        this.purchaseQuantity = purchaseQuantity;
+    }
+
+    public Integer getIsDiscount() {
+        return isDiscount;
+    }
+
+    public void setIsDiscount(Integer isDiscount) {
+        this.isDiscount = isDiscount;
+    }
+
+    public Long getIndustryId() {
+        return industryId;
+    }
+
+    public void setIndustryId(Long industryId) {
+        this.industryId = industryId;
+    }
+
+    public Long getCommodityTypeID() {
+        return CommodityTypeID;
+    }
+
+    public void setCommodityTypeID(Long commodityTypeID) {
+        CommodityTypeID = commodityTypeID;
+    }
+
+    public Integer getIsHomePage() {
+        return isHomePage;
+    }
+
+    public void setIsHomePage(Integer isHomePage) {
+        this.isHomePage = isHomePage;
+    }
+
+    public Integer getIsExperienceCart() {
+        return isExperienceCart;
+    }
+
+    public void setIsExperienceCart(Integer isExperienceCart) {
+        this.isExperienceCart = isExperienceCart;
+    }
+
+    public Integer getIsOpenRoyalty() {
+        return isOpenRoyalty;
+    }
+
+    public void setIsOpenRoyalty(Integer isOpenRoyalty) {
+        this.isOpenRoyalty = isOpenRoyalty;
+    }
+
+    public BigDecimal getOneLevelRoyalty() {
+        return oneLevelRoyalty;
+    }
+
+    public void setOneLevelRoyalty(BigDecimal oneLevelRoyalty) {
+        this.oneLevelRoyalty = oneLevelRoyalty;
+    }
+
+    public BigDecimal getTwoLevelRoyalty() {
+        return twoLevelRoyalty;
+    }
+
+    public void setTwoLevelRoyalty(BigDecimal twoLevelRoyalty) {
+        this.twoLevelRoyalty = twoLevelRoyalty;
+    }
+
+    public BigDecimal getThreeLevelRoyalty() {
+        return threeLevelRoyalty;
+    }
+
+    public void setThreeLevelRoyalty(BigDecimal threeLevelRoyalty) {
+        this.threeLevelRoyalty = threeLevelRoyalty;
+    }
+
+    public Integer getExperienceProjectQuantity() {
+        return experienceProjectQuantity;
+    }
+
+    public void setExperienceProjectQuantity(Integer experienceProjectQuantity) {
+        this.experienceProjectQuantity = experienceProjectQuantity;
+    }
+
+    public BigDecimal getSuperRoyalty() {
+        return superRoyalty;
+    }
+
+    public void setSuperRoyalty(BigDecimal superRoyalty) {
+        this.superRoyalty = superRoyalty;
+    }
+
+    public BigDecimal getCosmetologistRoyalty() {
+        return cosmetologistRoyalty;
+    }
+
+    public void setCosmetologistRoyalty(BigDecimal cosmetologistRoyalty) {
+        this.cosmetologistRoyalty = cosmetologistRoyalty;
+    }
+
+    public Integer getIsGiveProduct() {
+        return isGiveProduct;
+    }
+
+    public void setIsGiveProduct(Integer isGiveProduct) {
+        this.isGiveProduct = isGiveProduct;
+    }
+
+    public Integer getIsPhotographCashProduct() {
+        return isPhotographCashProduct;
+    }
+
+    public void setIsPhotographCashProduct(Integer isPhotographCashProduct) {
+        this.isPhotographCashProduct = isPhotographCashProduct;
+    }
+
+    public Integer getIsVirtualProduct() {
+        return isVirtualProduct;
+    }
+
+    public void setIsVirtualProduct(Integer isVirtualProduct) {
+        this.isVirtualProduct = isVirtualProduct;
+    }
+
+    public String getBuyRemind() {
+        return buyRemind;
+    }
+
+    public void setBuyRemind(String buyRemind) {
+        this.buyRemind = buyRemind;
+    }
+
+    public Long getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(Long provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
+    }
+
+    public Long getCountyId() {
+        return countyId;
+    }
+
+    public void setCountyId(Long countyId) {
+        this.countyId = countyId;
+    }
+
+    public Long getProductKind() {
+        return productKind;
+    }
+
+    public void setProductKind(Long productKind) {
+        this.productKind = productKind;
+    }
+
+    public Long getProductEffect() {
+        return productEffect;
+    }
+
+    public void setProductEffect(Long productEffect) {
+        this.productEffect = productEffect;
+    }
+
+    public Long getProductBrand() {
+        return productBrand;
+    }
+
+    public void setProductBrand(Long productBrand) {
+        this.productBrand = productBrand;
+    }
+
+    public Long getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(Long productCategory) {
+        this.productCategory = productCategory;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public Long getNurseProductBuyMeans() {
+        return nurseProductBuyMeans;
+    }
+
+    public void setNurseProductBuyMeans(Long nurseProductBuyMeans) {
+        this.nurseProductBuyMeans = nurseProductBuyMeans;
+    }
+
+    public BigDecimal getCommissionSettlement() {
+        return commissionSettlement;
+    }
+
+    public void setCommissionSettlement(BigDecimal commissionSettlement) {
+        this.commissionSettlement = commissionSettlement;
+    }
+
+    public BigDecimal getProductOriginalPrice() {
+        return productOriginalPrice;
+    }
+
+    public void setProductOriginalPrice(BigDecimal productOriginalPrice) {
+        this.productOriginalPrice = productOriginalPrice;
+    }
+
+    public BigDecimal getRetailPrice() {
+        return retailPrice;
+    }
+
+    public void setRetailPrice(BigDecimal retailPrice) {
+        this.retailPrice = retailPrice;
+    }
+
+    public BigDecimal getActivityRetailPrice() {
+        return activityRetailPrice;
+    }
+
+    public void setActivityRetailPrice(BigDecimal activityRetailPrice) {
+        this.activityRetailPrice = activityRetailPrice;
+    }
+
+    public Integer getIsSeIntegralByProduct() {
+        return isSeIntegralByProduct;
+    }
+
+    public void setIsSeIntegralByProduct(Integer isSeIntegralByProduct) {
+        this.isSeIntegralByProduct = isSeIntegralByProduct;
+    }
+
+    public BigDecimal getFacilitatorPrice() {
+        return facilitatorPrice;
+    }
+
+    public void setFacilitatorPrice(BigDecimal facilitatorPrice) {
+        this.facilitatorPrice = facilitatorPrice;
+    }
+
+    public Integer getFacilitatorProportionIntegral() {
+        return facilitatorProportionIntegral;
+    }
+
+    public void setFacilitatorProportionIntegral(Integer facilitatorProportionIntegral) {
+        this.facilitatorProportionIntegral = facilitatorProportionIntegral;
+    }
+
+    public BigDecimal getUnionPrice() {
+        return unionPrice;
+    }
+
+    public void setUnionPrice(BigDecimal unionPrice) {
+        this.unionPrice = unionPrice;
+    }
+
+    public Integer getUnionProportionIntegral() {
+        return unionProportionIntegral;
+    }
+
+    public void setUnionProportionIntegral(Integer unionProportionIntegral) {
+        this.unionProportionIntegral = unionProportionIntegral;
+    }
+
+    public BigDecimal getRetailPriceVip1() {
+        return retailPriceVip1;
+    }
+
+    public void setRetailPriceVip1(BigDecimal retailPriceVip1) {
+        this.retailPriceVip1 = retailPriceVip1;
+    }
+
+    public Integer getProportionIntegralVip1() {
+        return proportionIntegralVip1;
+    }
+
+    public void setProportionIntegralVip1(Integer proportionIntegralVip1) {
+        this.proportionIntegralVip1 = proportionIntegralVip1;
+    }
+
+    public BigDecimal getRetailPriceVip2() {
+        return retailPriceVip2;
+    }
+
+    public void setRetailPriceVip2(BigDecimal retailPriceVip2) {
+        this.retailPriceVip2 = retailPriceVip2;
+    }
+
+    public Integer getProportionIntegralVip2() {
+        return proportionIntegralVip2;
+    }
+
+    public void setProportionIntegralVip2(Integer proportionIntegralVip2) {
+        this.proportionIntegralVip2 = proportionIntegralVip2;
+    }
+
+    public BigDecimal getRetailPriceVip3() {
+        return retailPriceVip3;
+    }
+
+    public void setRetailPriceVip3(BigDecimal retailPriceVip3) {
+        this.retailPriceVip3 = retailPriceVip3;
+    }
+
+    public Integer getProportionIntegralVip3() {
+        return proportionIntegralVip3;
+    }
+
+    public void setProportionIntegralVip3(Integer proportionIntegralVip3) {
+        this.proportionIntegralVip3 = proportionIntegralVip3;
+    }
+
+    public BigDecimal getRetailPriceVip4() {
+        return retailPriceVip4;
+    }
+
+    public void setRetailPriceVip4(BigDecimal retailPriceVip4) {
+        this.retailPriceVip4 = retailPriceVip4;
+    }
+
+    public Integer getProportionIntegralVip4() {
+        return proportionIntegralVip4;
+    }
+
+    public void setProportionIntegralVip4(Integer proportionIntegralVip4) {
+        this.proportionIntegralVip4 = proportionIntegralVip4;
+    }
+
+    public BigDecimal getRetailPriceVip5() {
+        return retailPriceVip5;
+    }
+
+    public void setRetailPriceVip5(BigDecimal retailPriceVip5) {
+        this.retailPriceVip5 = retailPriceVip5;
+    }
+
+    public Integer getProportionIntegralVip5() {
+        return proportionIntegralVip5;
+    }
+
+    public void setProportionIntegralVip5(Integer proportionIntegralVip5) {
+        this.proportionIntegralVip5 = proportionIntegralVip5;
+    }
+
+    public BigDecimal getRetailPriceVip6() {
+        return retailPriceVip6;
+    }
+
+    public void setRetailPriceVip6(BigDecimal retailPriceVip6) {
+        this.retailPriceVip6 = retailPriceVip6;
+    }
+
+    public Integer getProportionIntegralVip6() {
+        return proportionIntegralVip6;
+    }
+
+    public void setProportionIntegralVip6(Integer proportionIntegralVip6) {
+        this.proportionIntegralVip6 = proportionIntegralVip6;
+    }
+
+    public Integer getProductSales() {
+        return productSales;
+    }
+
+    public void setProductSales(Integer productSales) {
+        this.productSales = productSales;
+    }
+
+    public String getProductIntroduce() {
+        return productIntroduce;
+    }
+
+    public void setProductIntroduce(String productIntroduce) {
+        this.productIntroduce = productIntroduce;
+    }
+
+    public String getProductDetails() {
+        return productDetails;
+    }
+
+    public void setProductDetails(String productDetails) {
+        this.productDetails = productDetails;
+    }
+
+    public String getMoreContent() {
+        return moreContent;
+    }
+
+    public void setMoreContent(String moreContent) {
+        this.moreContent = moreContent;
+    }
+
+    public Integer getOnOffSale() {
+        return onOffSale;
+    }
+
+    public void setOnOffSale(Integer onOffSale) {
+        this.onOffSale = onOffSale;
+    }
+
+    public Integer getProductStatus() {
+        return productStatus;
+    }
+
+    public void setProductStatus(Integer productStatus) {
+        this.productStatus = productStatus;
+    }
+
+    public BigDecimal getInstoragePrice() {
+        return instoragePrice;
+    }
+
+    public void setInstoragePrice(BigDecimal instoragePrice) {
+        this.instoragePrice = instoragePrice;
+    }
+
+    public BigDecimal getOutstorageProfit() {
+        return outstorageProfit;
+    }
+
+    public void setOutstorageProfit(BigDecimal outstorageProfit) {
+        this.outstorageProfit = outstorageProfit;
+    }
+
+    public BigDecimal getOutstoragePrice() {
+        return outstoragePrice;
+    }
+
+    public void setOutstoragePrice(BigDecimal outstoragePrice) {
+        this.outstoragePrice = outstoragePrice;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getSubsidiaryId() {
+        return subsidiaryId;
+    }
+
+    public void setSubsidiaryId(String subsidiaryId) {
+        this.subsidiaryId = subsidiaryId;
+    }
+
+    public String getStoreIds() {
+        return storeIds;
+    }
+
+    public void setStoreIds(String storeIds) {
+        this.storeIds = storeIds;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getCreateOperator() {
+        return createOperator;
+    }
+
+    public void setCreateOperator(String createOperator) {
+        this.createOperator = createOperator;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getModifyOperator() {
+        return modifyOperator;
+    }
+
+    public void setModifyOperator(String modifyOperator) {
+        this.modifyOperator = modifyOperator;
+    }
+
+    public Date getDataChangeLastTime() {
+        return dataChangeLastTime;
+    }
+
+    public void setDataChangeLastTime(Date dataChangeLastTime) {
+        this.dataChangeLastTime = dataChangeLastTime;
+    }
+
+    public List<ProductImage> getServiceProductImageList() {
+        return serviceProductImageList;
+    }
+
+    public void setServiceProductImageList(List<ProductImage> serviceProductImageList) {
+        this.serviceProductImageList = serviceProductImageList;
+    }
+
+    public List<ProductActivityImage> getServiceProductActivityImageList() {
+        return serviceProductActivityImageList;
+    }
+
+    public void setServiceProductActivityImageList(List<ProductActivityImage> serviceProductActivityImageList) {
+        this.serviceProductActivityImageList = serviceProductActivityImageList;
+    }
+
+    public Integer getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(Integer isChecked) {
+        this.isChecked = isChecked;
+    }
+
+    public Integer getStockNum() {
+        return stockNum;
+    }
+
+    public void setStockNum(Integer stockNum) {
+        this.stockNum = stockNum;
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
+    }
+
+    public String getLAY_CHECKED() {
+        return LAY_CHECKED;
+    }
+
+    public void setLAY_CHECKED(String LAY_CHECKED) {
+        this.LAY_CHECKED = LAY_CHECKED;
+    }
+
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
+    }
+
+    public String getK3Id() {
+        return k3Id;
+    }
+
+    public void setK3Id(String k3Id) {
+        this.k3Id = k3Id;
+    }
+
+    public String getK3Number() {
+        return k3Number;
+    }
+
+    public void setK3Number(String k3Number) {
+        this.k3Number = k3Number;
+    }
+
+    public String getNewCreateCompanyId() {
+        return newCreateCompanyId;
+    }
+
+    public void setNewCreateCompanyId(String newCreateCompanyId) {
+        this.newCreateCompanyId = newCreateCompanyId;
+    }
+
+    public String getNewCreateCompanyType() {
+        return newCreateCompanyType;
+    }
+
+    public void setNewCreateCompanyType(String newCreateCompanyType) {
+        this.newCreateCompanyType = newCreateCompanyType;
+    }
+}

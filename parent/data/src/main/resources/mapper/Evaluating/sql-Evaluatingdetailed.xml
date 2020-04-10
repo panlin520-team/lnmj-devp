@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="evaluatingDetailed" >
+  <resultMap id="EvaluatingDetailedMap" type="com.lnmj.data.entity.EvaluatingDetailed" >
+    <id column="EvaluatingDetailedID" property="evaluatingDetailedID" jdbcType="BIGINT" />
+    <result column="EvaluatingDetailedEvaluatingID" property="evaluatingDetailedEvaluatingID" jdbcType="BIGINT" />
+    <result column="EvaluatingDetailedAmount" property="evaluatingDetailedAmount" jdbcType="DECIMAL" />
+    <result column="EvaluatingDetailedRechargeOrderID" property="evaluatingDetailedRechargeOrderID" jdbcType="BIGINT" />
+    <result column="EvaluatingDetailedOrderID" property="evaluatingDetailedOrderID" jdbcType="BIGINT" />
+    <result column="EvaluatingDetailedRelationshipID" property="evaluatingDetailedRelationshipID" jdbcType="BIGINT" />
+    <result column="EvaluatingDetailedDatetime" property="evaluatingDetailedDatetime" jdbcType="TIMESTAMP" />
+    <result column="UserId" property="userId" jdbcType="BIGINT" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_EvaluatingDetailed_column" >
+    EvaluatingDetailedID, EvaluatingDetailedEvaluatingID, EvaluatingDetailedAmount, EvaluatingDetailedRechargeOrderID, 
+    EvaluatingDetailedOrderID, EvaluatingDetailedRelationshipID, EvaluatingDetailedDatetime, 
+    UserId, Remark, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectEvaluatingDetailedByUserIdAndDate" resultMap="EvaluatingDetailedMap" parameterType="Map">
+    select
+    <include refid="base_EvaluatingDetailed_column" />
+    from e_evaluatingdetailed where Status=1
+    <if test="userId != null" >
+      and UserId = #{userId}
+    </if>
+    <if test="evaluatingID != null" >
+      and EvaluatingDetailedEvaluatingID = #{evaluatingID}
+    </if>
+    <if test="start != null and end != null" >
+      and EvaluatingDetailedDatetime between  DATE_FORMAT(#{start}, '%Y-%m-%d %H:%i:%S') and DATE_FORMAT(#{end},'%Y-%m-%d %H:%i:%S')
+    </if>
+  </select>
+
+  <select id="selectEvaluatingDetailedList" resultMap="EvaluatingDetailedMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_EvaluatingDetailed_column" />
+    from e_evaluatingdetailed where Status=1
+  </select>
+
+  <select id="selectEvaluatingDetailedByID" resultMap="EvaluatingDetailedMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_EvaluatingDetailed_column" />
+    from e_evaluatingdetailed
+    where EvaluatingDetailedID = #{evaluatingDetailedID,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectEvaluatingDetailedByCondition" resultMap="EvaluatingDetailedMap" parameterType="com.lnmj.data.entity.EvaluatingDetailed" >
+    select
+    <include refid="base_EvaluatingDetailed_column" />
+    from e_evaluatingdetailed
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="evaluatingDetailedEvaluatingID != null" >
+          AND EvaluatingDetailedEvaluatingID = #{evaluatingDetailedEvaluatingID,jdbcType=BIGINT}
+        </if>
+        <if test="evaluatingDetailedAmount != null" >
+          AND EvaluatingDetailedAmount = #{evaluatingDetailedAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="evaluatingDetailedRechargeOrderID != null" >
+          AND  EvaluatingDetailedRechargeOrderID = #{evaluatingDetailedRechargeOrderID,jdbcType=BIGINT}
+        </if>
+        <if test="evaluatingDetailedOrderID != null" >
+          AND  EvaluatingDetailedOrderID = #{evaluatingDetailedOrderID,jdbcType=BIGINT}
+        </if>
+        <if test="evaluatingDetailedRelationshipID != null" >
+          AND  EvaluatingDetailedRelationshipID = #{evaluatingDetailedRelationshipID,jdbcType=BIGINT}
+        </if>
+        <if test="evaluatingDetailedDatetime != null" >
+          AND EvaluatingDetailedDatetime = #{evaluatingDetailedDatetime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="userId != null" >
+          AND UserId = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="remark != null" >
+          AND Remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null" >
+          AND Status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null" >
+          AND Status = 1
+        </if>
+        <if test="createOperator != null" >
+          AND CreateOperator = #{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null" >
+          AND CreateTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="modifyOperator != null" >
+          AND ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="dataChangeLastTime != null" >
+          AND DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+  <update id="deleteEvaluatingDetailedByID" parameterType="com.lnmj.data.entity.EvaluatingDetailed" >
+    update e_evaluatingdetailed set  Status = 0,ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+    where EvaluatingDetailedID = #{evaluatingDetailedID,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertEvaluatingDetailed" parameterType="com.lnmj.data.entity.EvaluatingDetailed" useGeneratedKeys="true" keyProperty="evaluatingDetailedID" >
+    insert into e_evaluatingdetailed
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="evaluatingDetailedID != null" >
+        EvaluatingDetailedID,
+      </if>
+      <if test="evaluatingDetailedEvaluatingID != null" >
+        EvaluatingDetailedEvaluatingID,
+      </if>
+      <if test="evaluatingDetailedAmount != null" >
+        EvaluatingDetailedAmount,
+      </if>
+      <if test="evaluatingDetailedRechargeOrderID != null" >
+        EvaluatingDetailedRechargeOrderID,
+      </if>
+      <if test="evaluatingDetailedOrderID != null" >
+        EvaluatingDetailedOrderID,
+      </if>
+      <if test="evaluatingDetailedRelationshipID != null" >
+        EvaluatingDetailedRelationshipID,
+      </if>
+      <if test="evaluatingDetailedDatetime != null" >
+        EvaluatingDetailedDatetime,
+      </if>
+      <if test="userId != null" >
+        UserId,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="evaluatingDetailedID != null" >
+        #{evaluatingDetailedID,jdbcType=BIGINT},
+      </if>
+      <if test="evaluatingDetailedEvaluatingID != null" >
+        #{evaluatingDetailedEvaluatingID,jdbcType=BIGINT},
+      </if>
+      <if test="evaluatingDetailedAmount != null" >
+        #{evaluatingDetailedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="evaluatingDetailedRechargeOrderID != null" >
+        #{evaluatingDetailedRechargeOrderID,jdbcType=BIGINT},
+      </if>
+      <if test="evaluatingDetailedOrderID != null" >
+        #{evaluatingDetailedOrderID,jdbcType=BIGINT},
+      </if>
+      <if test="evaluatingDetailedRelationshipID != null" >
+        #{evaluatingDetailedRelationshipID,jdbcType=BIGINT},
+      </if>
+      <if test="evaluatingDetailedDatetime != null" >
+        #{evaluatingDetailedDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateEvaluatingDetailedByID" parameterType="com.lnmj.data.entity.EvaluatingDetailed" >
+    update e_evaluatingdetailed
+    <set >
+      <if test="evaluatingDetailedEvaluatingID != null" >
+        EvaluatingDetailedEvaluatingID = #{evaluatingDetailedEvaluatingID,jdbcType=BIGINT},
+      </if>
+      <if test="evaluatingDetailedAmount != null" >
+        EvaluatingDetailedAmount = #{evaluatingDetailedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="evaluatingDetailedRechargeOrderID != null" >
+        EvaluatingDetailedRechargeOrderID = #{evaluatingDetailedRechargeOrderID,jdbcType=BIGINT},
+      </if>
+      <if test="evaluatingDetailedOrderID != null" >
+        EvaluatingDetailedOrderID = #{evaluatingDetailedOrderID,jdbcType=BIGINT},
+      </if>
+      <if test="evaluatingDetailedRelationshipID != null" >
+        EvaluatingDetailedRelationshipID = #{evaluatingDetailedRelationshipID,jdbcType=BIGINT},
+      </if>
+      <if test="evaluatingDetailedDatetime != null" >
+        EvaluatingDetailedDatetime = #{evaluatingDetailedDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        UserId = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where EvaluatingDetailedID = #{evaluatingDetailedID,jdbcType=BIGINT}
+  </update>
+</mapper>

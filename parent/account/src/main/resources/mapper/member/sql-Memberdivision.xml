@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MemberDivision" >
+  <resultMap id="MemberDivisionMap" type="com.lnmj.account.entity.MMemberdivision" >
+    <id column="MemberDivisionID" property="memberDivisionID" jdbcType="BIGINT" />
+    <result column="MemberDivision" property="memberDivision" jdbcType="VARCHAR" />
+    <result column="MemberLevel" property="memberLevel" jdbcType="BIGINT" />
+    <result column="PercentPage" property="percentPage" jdbcType="DECIMAL" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_memberdivision_column" >
+    MemberDivisionID, MemberDivision, MemberLevel, PercentPage, Status, CreateOperator, 
+    CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <!--根据等级ID修改-->
+  <update id="updatememberDivisionList"  parameterType="List">
+    update m_memberdivision
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="MemberDivision = case" suffix="end,">
+        <foreach collection="memberDivisionList" item="item">
+          <if test="item.memberDivision != null">
+            when id=#{item.memberDivisionID} then #{item.memberDivision}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="MemberLevel = case" suffix="end,">
+        <foreach collection="memberDivisionList" item="item">
+          <if test="item.memberLevel != null">
+            when id=#{item.memberDivisionID} then #{item.memberLevel}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="PercentPage = case" suffix="end,">
+        <foreach collection="memberDivisionList" item="item">
+          <if test="item.percentPage != null">
+            when id=#{item.memberDivisionID} then #{item.percentPage}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="ModifyOperator = case" suffix="end,">
+        <foreach collection="memberDivisionList" item="item">
+          <if test="item.modifyOperator != null">
+            when id=#{item.memberDivisionID} then #{item.modifyOperator}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="DataChange_LastTime = case" suffix="end,">
+        <foreach collection="memberDivisionList" item="item">
+          <if test="item.dataChangeLastTime != null">
+            when id=#{item.memberDivisionID} then #{item.dataChangeLastTime}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+  </update>
+
+  <!--根据等级ID插入-->
+  <insert id="insertmemberDivisionList" parameterType="List" keyProperty="memberDivisionID" useGeneratedKeys="true">
+    insert into m_memberdivision( MemberDivision, MemberLevel, PercentPage, Status, CreateOperator,
+    CreateTime, ModifyOperator, DataChange_LastTime)
+    values
+    <foreach collection="memberDivisionList" item="item" index="index" separator=",">
+      <trim suffix=")" prefix="(" suffixOverrides=",">
+        <if test="item.memberDivision != null" >
+          #{item.memberDivision,jdbcType=VARCHAR},
+        </if>
+        <if test="item.memberDivision == null" >
+          "",
+        </if>
+        <if test="item.memberLevel != null" >
+          #{item.memberLevel,jdbcType=BIGINT},
+        </if>
+        <if test="item.percentPage != null" >
+          #{item.percentPage,jdbcType=DECIMAL},
+        </if>
+        <if test="item.status != null" >
+          #{item.status,jdbcType=INTEGER},
+        </if>
+        <if test="item.status == null" >
+          1,
+        </if>
+        <if test="item.createOperator != null" >
+          #{item.createOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="item.createOperator == null" >
+          "",
+        </if>
+        <if test="item.createTime != null" >
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime != null" >
+          NOW(),
+        </if>
+        <if test="item.modifyOperator != null" >
+          #{item.modifyOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="item.modifyOperator == null" >
+          "",
+        </if>
+        <if test="item.dataChangeLastTime != null" >
+          #{item.dataChangeLastTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.dataChangeLastTime == null" >
+          NOW(),
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+
+  <!--根据等级ID删除-->
+  <update id="deleteMemberDivisionByMemberID" parameterType="MMemberaccount" >
+    update m_memberaccount set  Status = 0,ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},DataChange_LastTime = NOW()
+    where MemberLevel = #{memberLevel,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectMemberDivisionList" resultMap="MemberDivisionMap" parameterType="com.lnmj.account.entity.MMemberdivision" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_memberdivision_column" />
+    from m_memberdivision where Status = 1
+  </select>
+
+  <select id="selectMemberDivisionByMemberID" resultMap="MemberDivisionMap" parameterType="java.lang.Long" >
+    select
+    <include refid="base_memberdivision_column" />
+    from m_memberdivision
+    where MemberLevel = #{memberLevel,jdbcType=BIGINT} and Status = 1
+  </select>
+
+  <select id="selectMemberDivisionByID" resultMap="MemberDivisionMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_memberdivision_column" />
+    from m_memberdivision
+    where MemberDivisionID = #{memberDivisionID,jdbcType=BIGINT}
+  </select>
+
+  <update id="deleteMemberDivisionByID" parameterType="com.lnmj.account.entity.MMemberdivision" >
+    update m_memberdivision set Status = 0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    where MemberDivisionID = #{memberDivisionID,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertMemberDivision" parameterType="MMemberdivision" useGeneratedKeys="true" keyProperty="memberDivisionID">
+    insert into m_memberdivision
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberDivisionID != null" >
+        MemberDivisionID,
+      </if>
+      <if test="memberDivision != null" >
+        MemberDivision,
+      </if>
+      <if test="memberLevel != null" >
+        MemberLevel,
+      </if>
+      <if test="percentPage != null" >
+        PercentPage,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberDivisionID != null" >
+        #{memberDivisionID,jdbcType=BIGINT},
+      </if>
+      <if test="memberDivision != null" >
+        #{memberDivision,jdbcType=VARCHAR},
+      </if>
+      <if test="memberLevel != null" >
+        #{memberLevel,jdbcType=BIGINT},
+      </if>
+      <if test="percentPage != null" >
+        #{percentPage,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateMemberDivision" parameterType="MMemberdivision" >
+    update m_memberdivision
+    <set >
+      <if test="memberDivision != null" >
+        MemberDivision = #{memberDivision,jdbcType=VARCHAR},
+      </if>
+      <if test="memberLevel != null" >
+        MemberLevel = #{memberLevel,jdbcType=BIGINT},
+      </if>
+      <if test="percentPage != null" >
+        PercentPage = #{percentPage,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where MemberDivisionID = #{memberDivisionID,jdbcType=BIGINT}
+  </update>
+
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lnmj.authservice.Dao.UserDao" >
+    <resultMap id="BaseResultMap" type="com.lnmj.authservice.Entity.Account" >
+        <!--<id column="UserId" property="userId" jdbcType="INTEGER" />
+        <result column="Account" property="account" jdbcType="VARCHAR" />
+        <result column="Password" property="password" jdbcType="VARCHAR" />
+        <result column="UserType" property="userType" jdbcType="INTEGER" />
+        <result column="Mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="Email" property="email" jdbcType="VARCHAR" />
+        <result column="Name" property="name" jdbcType="VARCHAR" />
+        <result column="Sex" property="sex" jdbcType="INTEGER" />
+        <result column="NickName" property="nickName" jdbcType="VARCHAR" />
+        <result column="IDType" property="iDType" jdbcType="INTEGER" />
+        <result column="IDNumber" property="iDNumber" jdbcType="VARCHAR" />
+        <result column="OpenId" property="openId" jdbcType="VARCHAR" />
+        <result column="ProvinceId" property="provinceId" jdbcType="INTEGER" />
+        <result column="CityId" property="cityId" jdbcType="INTEGER" />
+        <result column="CountyId" property="countyId" jdbcType="INTEGER" />
+        <result column="StreetAddress" property="streetAddress" jdbcType="VARCHAR" />
+        <result column="AddressDetail" property="addressDetail" jdbcType="VARCHAR" />
+        <result column="CardNumber" property="cardNumber" jdbcType="VARCHAR" />
+        <result column="MembershipLevelId" property="membershipLevelId" jdbcType="INTEGER" />
+        <result column="MembershipLevelName" property="membershipLevelName" jdbcType="VARCHAR" />
+        <result column="RegistrationChannel" property="registrationChannel" jdbcType="VARCHAR" />
+        <result column="RegistrationTime" property="registrationTime" jdbcType="DATE" />
+        <result column="EmailAuthentication" property="emailAuthentication" jdbcType="INTEGER" />
+        <result column="MobileAuthentication" property="mobileAuthentication" jdbcType="INTEGER" />
+        <result column="ParentId" property="parentId" jdbcType="INTEGER" />
+        <result column="UserIdentityKey" property="userIdentityKey" jdbcType="VARCHAR" />
+        <result column="StoreId" property="storeId" jdbcType="INTEGER" />
+        <result column="IsEnable" property="isEnable" jdbcType="INTEGER" />
+        <result column="IsLogin" property="isLogin" jdbcType="INTEGER" />
+        <result column="Status" property="status" jdbcType="INTEGER" />
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+        <result column="CreateTime" property="createTime" jdbcType="DATE" />
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+        <result column="DataChangeLastTime" property="dataChange_LastTime" jdbcType="DATE" />-->
+    </resultMap>
+
+<!--    <sql id="Base_Column_List" >
+        UserId,Account,Password,UserType,Mobile,Email,Name,Sex,NickName,IDType,IDNumber,OpenId,ProvinceId,CityId,CountyId,StreetAddress,
+        AddressDetail,CardNumber,MembershipLevelId,MembershipLevelName,RegistrationChannel,RegistrationTime,EmailAuthentication,
+        MobileAuthentication,ParentId,UserIdentityKey,StoreId,IsEnable,IsLogin,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>-->
+
+    <sql id="Base_Column_List">
+        UserId,Account,Password,UserType,Mobile,Email,Name,Sex,NickName,IDType,IDNumber,OpenId,ProvinceId,CityId,CountyId,StreetAddress,
+        AddressDetail,CardNumber,MembershipLevelId,MembershipLevelName,RegistrationChannel,RegistrationTime,EmailAuthentication,
+        MobileAuthentication,ParentId,UserIdentityKey,StoreId,IsEnable,IsLogin,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_Permis_List">
+        d.id,d.PermissionCode,d.PermissionMethodType,d.PermissionName,d.PermissionType,d.PermissionUri,d.Status,d.CreateOperator,d.CreateTime,d.ModifyOperator,d.DataChange_LastTime
+    </sql>
+
+    <select id="findByAccount" resultType="Account" parameterType="String">
+        select
+        <include refid="Base_Column_List" />
+        from u_user
+        where Status=1
+        and Account=#{account}
+    </select>
+
+    <select id="findByEmail" resultType="Account" parameterType="String">
+        select
+        <include refid="Base_Column_List" />
+        from u_user
+        where Status=1
+        and Email=#{email}
+    </select>
+
+    <select id="findByMobile" resultType="Account" parameterType="String">
+        select
+        <include refid="Base_Column_List" />
+        from u_user
+        where Status=1
+        and Mobile=#{mobile}
+    </select>
+
+    <select id="findPermisByAccount" resultType="PermissionView" parameterType="String">
+        select
+        <include refid="Base_Column_Permis_List" />
+        from u_user a left join u_user_role_info b on a.UserId=b.UserId
+        left join u_role_permission_info c on b.RoleCode=c.RoleCode
+        left join u_permission_info d on c.PermissionCode=d.PermissionCode
+        where a.Status=1
+        and d.Status = 1
+        and a.Account=#{account}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="systemParameterType">
+    <!--系统参数类型-->
+    <!--系统参数类型基本字段-->
+    <sql id="parameterType_base_column" >
+        ParameterTypeId,ParameterType,ParentId,
+        Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <!--插入系统参数类型表字段-->
+    <sql id="sql_insert_parameterType_column" >
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="parameterType != null" >ParameterType,</if>
+            <if test="parentId != null" >ParentId,</if>
+            <if test="status != null" >Status,</if>
+            <if test="createOperator != null" >CreateOperator,</if>
+            <if test="modifyOperator != null" >ModifyOperator,</if>
+        </trim>
+    </sql>
+    <!--插入系统参数类型表值-->
+    <sql id="sql_insert_parameterType_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="parameterType != null" >#{parameterType},</if>
+            <if test="parentId != null" >#{parentId},</if>
+            <if test="status != null" >#{status},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <!--修改系统参数类型-->
+    <sql id="sql_set_parameterType_column" >
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="parameterType != null" >,ParameterType=#{parameterType}</if>
+                <if test="parentId != null" >,ParentId=#{parentId}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}</if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+    <!--系统参数类型查询条件-->
+    <sql id="sql_where_parameterType_column" >
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="parameterTypeId != null">AND ParameterTypeId=#{parameterTypeId}</if>
+                <if test="parameterType != null">AND ParameterType like CONCAT('%',#{parameterType},'%')</if>
+                <if test="parentId != null">AND ParentId=#{parentId}</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <if test="createTime != null">AND CreateTime=#{createTime}</if>
+                <if test="modifyOperator != null">AND ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">AND DataChange_LastTime=#{dataChangeLastTime}</if>
+            </trim>
+        </where>
+    </sql>
+
+    <!--系统参数类型分页显示-->
+    <select id="selectParameterTypeList" resultType="com.lnmj.system.entity.ParameterType">
+        select <include refid="parameterType_base_column" /> from s_parameterType
+        where Status = 1
+    </select>
+    <!--查询系统参数类型-->
+    <select id="selectParameterTypeByWhere" parameterType="ParameterType" resultType="com.lnmj.system.entity.ParameterType" >
+        select <include refid="parameterType_base_column"/> from  s_parameterType
+        <include refid="sql_where_parameterType_column"/>
+    </select>
+    <!--新增系统参数类型-->
+    <insert id="insertParameterType" parameterType="ParameterType" keyProperty="parameterTypeId" useGeneratedKeys="true" >
+        insert into s_parameterType
+        <include refid="sql_insert_parameterType_column"/>
+        <include refid="sql_insert_parameterType_values"/>
+    </insert>
+    <!--修改系统参数类型-->
+    <update id="updateParameterType" parameterType="ParameterType" >
+        update s_parameterType
+        <include refid="sql_set_parameterType_column"/>
+        where ParameterTypeId = #{parameterTypeId}
+    </update>
+    <!--删除系统参数类型-->
+    <update id="deleteParameterType" parameterType="ParameterType" >
+        update s_parameterType
+        set  Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        where ParameterTypeId = #{parameterTypeId}
+    </update>
+</mapper>
+

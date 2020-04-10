@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="LabelCategory">
+
+    <sql id="Base_Column_List">
+        LabelCategoryId, CategoryName,
+        Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+
+    <select id="selectCategoryList" resultType="LabelCategory">
+        select
+        <include refid="Base_Column_List"/>
+        from u_labelcategory
+        where Status = 1
+    </select>
+
+
+    <select id="selectLabelCategoryParent" resultType="LabelCategory">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+            u_labelcategory
+
+    </select>
+
+
+    <select id="selectLabelCategoryById" resultType="LabelCategory" parameterType="String">
+        select
+        <include refid="Base_Column_List"/>
+        from u_labelcategory
+        where LabelCategoryId = #{labelCategoryId}
+    </select>
+
+
+    <select id="checkCategoryName" resultType="boolean" parameterType="String">
+        select
+        count(1)
+        from u_labelcategory
+        where CategoryName = #{categoryName}
+    </select>
+
+
+    <insert id="insertSelective" parameterType="LabelCategory" useGeneratedKeys="true" keyProperty="labelCategoryId" >
+        insert into u_labelcategory
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="labelCategoryId != null" >
+                LabelCategoryId,
+            </if>
+            <if test="categoryName != null" >
+                CategoryName,
+            </if>
+            <if test="status != null" >
+                Status,
+            </if>
+            <if test="createOperator != null" >
+                CreateOperator,
+            </if>
+            <if test="createTime != null" >
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null" >
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null" >
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="labelCategoryId != null" >
+                #{labelCategoryId},
+            </if>
+            <if test="categoryName != null" >
+                #{categoryName},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null" >
+                #{createOperator},
+            </if>
+            <if test="createTime != null" >
+                #{createTime},
+            </if>
+            <if test="modifyOperator != null" >
+                #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null" >
+                #{dataChangeLastTime},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getCategoryByParentId" parameterType="Long" resultType="LabelCategory">
+        select
+        <include refid="Base_Column_List"/>
+        from u_labelcategory
+       /* where ParentId = #{parentId}*/
+    </select>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="LabelCategory" >
+        update u_labelcategory
+        <set >
+            <if test="categoryName != null" >
+                CategoryName = #{categoryName},
+            </if>
+            <if test="status != null" >
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null" >
+                CreateOperator = #{createOperator},
+            </if>
+            <if test="createTime != null" >
+                CreateTime = #{createTime},
+            </if>
+            <if test="modifyOperator != null" >
+                ModifyOperator = #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null" >
+                DataChange_LastTime = #{dataChangeLastTime},
+            </if>
+        </set>
+          where LabelCategoryId = #{labelCategoryId}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="Integer">
+        update u_labelcategory
+        <set>
+            Status =0,
+        </set>
+        where LabelCategoryId = #{LabelCategoryId}
+    </delete>
+
+</mapper>

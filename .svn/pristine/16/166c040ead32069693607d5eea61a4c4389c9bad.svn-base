@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="customMadeStatistics" >
+
+  <sql id="Base_Column_List" >
+    CustomMadeId, name, Mobile, OrderTime, NurseProject, Amount, PayType, Store, UserCount
+  </sql>
+
+  <select id="selectCustomMadeByList" resultType="CustomMadeStatistics" parameterType="Map" >
+    select
+    <include refid="Base_Column_List" />
+    from lnmj_datastatistics.custommadestatistics
+    where 1=1
+    <if test="store != null">
+      and Store =#{store}
+    </if>
+    <if test="startTime != null">
+      and OrderTime &gt;={startTime}
+    </if>
+    <if test="endTime != null">
+      and OrderTime &lt;={endTime}
+    </if>
+  </select>
+
+</mapper>

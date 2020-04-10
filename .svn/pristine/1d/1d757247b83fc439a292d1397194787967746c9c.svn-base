@@ -1,0 +1,10 @@
+package com.lnmj.k3cloud.repository;
+
+/**
+ * @Author: yilihua
+ * @Date: 2019-11-08 15:07
+ * @Description:  金蝶dao
+ */
+public interface IK3CLOUDDao {
+
+}

@@ -1,0 +1,955 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="store">
+    <sql id="Base_Column_List_detail">
+        StoreId
+        ,
+        Name,
+        Code,
+        SubCompanyId,
+        ERPStock,
+        IsThisStock,
+        IsEnableAppointment,
+        DistributionType,
+        ShopOpenId,
+        IndustryID,
+        GeneralManagerOpenId,
+        AssistantManagerOpenId,
+        ShopManagerOpenId,
+        SpareShopManagerOneOpenId,
+        SpareShopManagerTowOpenId,
+        FirstGovernorOpenId,
+        SecondGovernorOpenId,
+        MarketServiceOpenId,
+        ProvinceId,
+        CityId,
+        CountyId,
+        ShopDetailedAddress,
+        DetailedAddress,
+        BaiduLongitude,
+        BaiduLatitude,
+        GaodeLongitude,
+        GaodeLatitude,
+        TencentLongitude,
+        TencentLatitude,
+        EnvironmentGrade,
+        NursingType,
+        StoreImage,
+        CourseCardConsumptionAuthCode,
+        ShopBusinessTime,
+        PhoneNumber,
+        StoreCategoryId,
+        K3Id,
+        K3Number,
+        SystemK3Number,
+        ZhangBuK3Number,
+        HeSuanFanWeiK3Number,
+        DataCentreUserName,
+        DataCentrePassword,
+        BankNumber,
+        CashNumber,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_detail_a">
+        a
+        .
+        StoreId
+        ,
+        a
+        .
+        Name,
+        a
+        .
+        Code,
+        a
+        .
+        SubCompanyId,
+        a
+        .
+        ERPStock,
+        a
+        .
+        IsThisStock,
+        a
+        .
+        IsEnableAppointment,
+        a
+        .
+        DistributionType,
+        a
+        .
+        ShopOpenId,
+        a
+        .
+        IndustryID,
+        a
+        .
+        GeneralManagerOpenId,
+        a
+        .
+        AssistantManagerOpenId,
+        a
+        .
+        ShopManagerOpenId,
+        a
+        .
+        SpareShopManagerOneOpenId,
+        a
+        .
+        SpareShopManagerTowOpenId,
+        a
+        .
+        FirstGovernorOpenId,
+        a
+        .
+        SecondGovernorOpenId,
+        a
+        .
+        MarketServiceOpenId,
+        a
+        .
+        ProvinceId,
+        a
+        .
+        CityId,
+        a
+        .
+        CountyId,
+        a
+        .
+        ShopDetailedAddress,
+        a
+        .
+        DetailedAddress,
+        a
+        .
+        BaiduLongitude,
+        a
+        .
+        BaiduLatitude,
+        a
+        .
+        GaodeLongitude,
+        a
+        .
+        GaodeLatitude,
+        a
+        .
+        TencentLongitude,
+        a
+        .
+        TencentLatitude,
+        a
+        .
+        EnvironmentGrade,
+        a
+        .
+        NursingType,
+        a
+        .
+        StoreImage,
+        a
+        .
+        CourseCardConsumptionAuthCode,
+        a
+        .
+        ShopBusinessTime,
+        a
+        .
+        PhoneNumber,
+        a
+        .
+        StoreCategoryId,
+        a
+        .
+        K3Id,
+        a
+        .
+        K3Number,
+        a
+        .
+        SystemK3Number,
+        a
+        .
+        ZhangBuK3Number,
+        a
+        .
+        HeSuanFanWeiK3Number,
+        a
+        .
+        DataCentreUserName,
+        a
+        .
+        DataCentrePassword,
+        a
+        .
+        BankNumber,
+        a
+        .
+        CashNumber,
+        a
+        .
+        Status,
+        a
+        .
+        CreateOperator,
+        a
+        .
+        CreateTime,
+        a
+        .
+        ModifyOperator,
+        a
+        .
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List">
+        StoreId
+        ,
+        Name,
+        IndustryID,
+        Code,
+        SubCompanyId,
+        IsEnableAppointment,
+        ProvinceId,
+        CityId,
+        CountyId,
+        ShopDetailedAddress,
+        BaiduLongitude,
+        BaiduLatitude,
+        ShopBusinessTime,
+        PhoneNumber,
+        StoreCategoryId,
+        NursingType,
+        StoreImage,
+        K3Id,
+        K3Number,
+        SystemK3Number,
+        ZhangBuK3Number,
+        HeSuanFanWeiK3Number,
+        DataCentreUserName,
+        DataCentrePassword,
+        BankNumber,
+        CashNumber
+    </sql>
+
+
+    <sql id="Base_Column_List_Category">
+        StoreCategoryId
+        ,
+        StoreCategoryName,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Memo">
+        Id
+        ,
+        MemoNumStart,
+        MemoNumEnd,
+        StoreId,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <select id="selectStoretList" resultType="StoreVO" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from s_store
+        where Status=1
+        <if test="keyWordName != null and keyWordName != ''">
+            and Name like CONCAT('%',#{keyWordName},'%')
+        </if>
+        <if test="keyWordPhone != null and keyWordPhone != ''">
+            and PhoneNumber = #{keyWordPhone}
+        </if>
+        <if test="storeCategoryId != null and storeCategoryId != ''">
+            and StoreCategoryId = #{storeCategoryId}
+        </if>
+        <if test="subCompanyId != null and subCompanyId != ''">
+            and SubCompanyId = #{subCompanyId}
+        </if>
+        <if test="industryID != null and industryID != ''">
+            and IndustryID = #{industryID}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and storeId != #{storeId}
+        </if>
+        <if test="list != null">
+            and SubCompanyId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectStoreById" resultType="Store" parameterType="Long">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_store
+        where StoreId = #{storeId}
+    </select>
+
+    <select id="selectStoreByCodeOrName" resultType="Store" parameterType="Map">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_store
+        where Status = 1
+        <if test="name != null and name!=''">
+            and Name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="code != null and code!=''">
+            and Code = #{code}
+        </if>
+        <if test="storeId != null and storeId!=''">
+            and StoreId = #{storeId}
+        </if>
+    </select>
+
+    <insert id="insertSelective" parameterType="Store" useGeneratedKeys="true" keyProperty="storeId">
+        insert into s_store
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storeId != null">
+                StoreId,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="code != null">
+                Code,
+            </if>
+            <if test="subCompanyId != null">
+                SubCompanyId,
+            </if>
+            <if test="erpStock != null">
+                ERPStock,
+            </if>
+            <if test="isThisStock != null">
+                IsThisStock,
+            </if>
+            <if test="isEnableAppointment != null">
+                IsEnableAppointment,
+            </if>
+            <if test="distributionType != null">
+                DistributionType,
+            </if>
+            <if test="shopOpenId != null">
+                ShopOpenId,
+            </if>
+            <if test="industryID != null">
+                IndustryID,
+            </if>
+            <if test="generalManagerOpenId != null">
+                GeneralManagerOpenId,
+            </if>
+            <if test="assistantManagerOpenId != null">
+                AssistantManagerOpenId,
+            </if>
+            <if test="shopManagerOpenId != null">
+                ShopManagerOpenId,
+            </if>
+            <if test="spareShopManagerOneOpenId != null">
+                SpareShopManagerOneOpenId,
+            </if>
+            <if test="spareShopManagerTowOpenId != null">
+                SpareShopManagerTowOpenId,
+            </if>
+            <if test="firstGovernorOpenId != null">
+                FirstGovernorOpenId,
+            </if>
+            <if test="secondGovernorOpenId != null">
+                SecondGovernorOpenId,
+            </if>
+            <if test="marketServiceOpenId != null">
+                MarketServiceOpenId,
+            </if>
+            <if test="provinceId != null">
+                ProvinceId,
+            </if>
+            <if test="cityId != null">
+                CityId,
+            </if>
+            <if test="countyId != null">
+                CountyId,
+            </if>
+            <if test="shopDetailedAddress != null">
+                ShopDetailedAddress,
+            </if>
+            <if test="detailedAddress != null">
+                DetailedAddress,
+            </if>
+            <if test="baiduLongitude != null">
+                BaiduLongitude,
+            </if>
+            <if test="baiduLatitude != null">
+                BaiduLatitude,
+            </if>
+            <if test="gaodeLongitude != null">
+                GaodeLongitude,
+            </if>
+            <if test="gaodeLatitude != null">
+                GaodeLatitude,
+            </if>
+            <if test="tencentLongitude != null">
+                TencentLongitude,
+            </if>
+            <if test="tencentLatitude != null">
+                TencentLatitude,
+            </if>
+            <if test="environmentGrade != null">
+                EnvironmentGrade,
+            </if>
+            <if test="nursingType != null">
+                NursingType,
+            </if>
+            <if test="storeImage != null">
+                StoreImage,
+            </if>
+            <if test="courseCardConsumptionAuthCode != null">
+                CourseCardConsumptionAuthCode,
+            </if>
+            <if test="shopBusinessTime != null">
+                ShopBusinessTime,
+            </if>
+            <if test="phoneNumber != null">
+                PhoneNumber,
+            </if>
+            <if test="storeCategoryId != null">
+                StoreCategoryId,
+            </if>
+            <if test="k3Id != null">
+                K3Id,
+            </if>
+            <if test="k3Number != null">
+                K3Number,
+            </if>
+            <if test="systemK3Number != null">
+                SystemK3Number,
+            </if>
+            <if test="zhangBuK3Number != null">
+                ZhangBuK3Number,
+            </if>
+            <if test="heSuanFanWeiK3Number != null">
+                HeSuanFanWeiK3Number,
+            </if>
+            <if test="dataCentreUserName != null">
+                DataCentreUserName,
+            </if>
+            <if test="dataCentrePassword != null">
+                DataCentrePassword,
+            </if>
+            <if test="bankNumber != null">
+                BankNumber,
+            </if>
+            <if test="cashNumber != null">
+                CashNumber,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storeId != null">
+                #{storeId},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="code != null">
+                #{code},
+            </if>
+            <if test="subCompanyId != null">
+                #{subCompanyId},
+            </if>
+            <if test="erpStock != null">
+                #{erpStock},
+            </if>
+            <if test="isThisStock != null">
+                #{isThisStock},
+            </if>
+            <if test="isEnableAppointment != null">
+                #{isEnableAppointment},
+            </if>
+            <if test="distributionType != null">
+                #{distributionType},
+            </if>
+            <if test="shopOpenId != null">
+                #{shopOpenId},
+            </if>
+            <if test="industryID != null">
+                #{industryID},
+            </if>
+            <if test="generalManagerOpenId != null">
+                #{generalManagerOpenId},
+            </if>
+            <if test="assistantManagerOpenId != null">
+                #{assistantManagerOpenId},
+            </if>
+            <if test="shopManagerOpenId != null">
+                #{shopManagerOpenId},
+            </if>
+            <if test="spareShopManagerOneOpenId != null">
+                #{spareShopManagerOneOpenId},
+            </if>
+            <if test="spareShopManagerTowOpenId != null">
+                #{spareShopManagerTowOpenId},
+            </if>
+            <if test="firstGovernorOpenId != null">
+                #{firstGovernorOpenId},
+            </if>
+            <if test="secondGovernorOpenId != null">
+                #{secondGovernorOpenId},
+            </if>
+            <if test="marketServiceOpenId != null">
+                #{marketServiceOpenId},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId},
+            </if>
+            <if test="cityId != null">
+                #{cityId},
+            </if>
+            <if test="countyId != null">
+                #{countyId},
+            </if>
+            <if test="shopDetailedAddress != null">
+                #{shopDetailedAddress},
+            </if>
+            <if test="detailedAddress != null">
+                #{detailedAddress},
+            </if>
+            <if test="baiduLongitude != null">
+                #{baiduLongitude},
+            </if>
+            <if test="baiduLatitude != null">
+                #{baiduLatitude},
+            </if>
+            <if test="gaodeLongitude != null">
+                #{gaodeLongitude},
+            </if>
+            <if test="gaodeLatitude != null">
+                #{gaodeLatitude},
+            </if>
+            <if test="tencentLongitude != null">
+                #{tencentLongitude},
+            </if>
+            <if test="tencentLatitude != null">
+                #{tencentLatitude},
+            </if>
+            <if test="environmentGrade != null">
+                #{environmentGrade},
+            </if>
+            <if test="nursingType != null">
+                #{nursingType},
+            </if>
+            <if test="storeImage != null">
+                #{storeImage},
+            </if>
+            <if test="courseCardConsumptionAuthCode != null">
+                #{courseCardConsumptionAuthCode},
+            </if>
+            <if test="shopBusinessTime != null">
+                #{shopBusinessTime},
+            </if>
+            <if test="phoneNumber != null">
+                #{phoneNumber},
+            </if>
+            <if test="storeCategoryId != null">
+                #{storeCategoryId},
+            </if>
+            <if test="k3Id != null">
+                #{k3Id},
+            </if>
+            <if test="k3Number != null">
+                #{k3Number},
+            </if>
+            <if test="systemK3Number != null">
+                #{systemK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="zhangBuK3Number != null">
+                #{zhangBuK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="heSuanFanWeiK3Number != null">
+                #{heSuanFanWeiK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentreUserName != null">
+                #{dataCentreUserName},
+            </if>
+            <if test="dataCentrePassword != null">
+                #{dataCentrePassword},
+            </if>
+            <if test="bankNumber != null">
+                #{bankNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="cashNumber != null">
+                #{cashNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            now(),
+        </trim>
+    </insert>
+
+    <select id="checkStoreName" resultType="int" parameterType="String">
+        select
+            count(1)
+        from s_store
+        where Name = #{storeName}
+          and Status = 1
+    </select>
+
+    <select id="checkStoreK3Number" resultType="int" parameterType="String">
+        select
+            count(1)
+        from s_store
+        where K3Number = #{k3Number}
+          and Status = 1
+    </select>
+
+    <update id="updateStoreByCodeOrId" parameterType="Store">
+        update s_store
+        <set>
+            <if test="name != null">
+                Name = #{name},
+            </if>
+            <if test="code != null">
+                Code = #{code},
+            </if>
+            <if test="subCompanyId != null">
+                SubCompanyId = #{subCompanyId},
+            </if>
+            <if test="erpStock != null">
+                ERPStock = #{erpStock},
+            </if>
+            <if test="isThisStock != null">
+                IsThisStock = #{isThisStock},
+            </if>
+            <if test="isEnableAppointment != null">
+                IsEnableAppointment = #{isEnableAppointment},
+            </if>
+            <if test="distributionType != null">
+                DistributionType = #{distributionType},
+            </if>
+            <if test="shopOpenId != null">
+                ShopOpenId = #{shopOpenId},
+            </if>
+            <if test="industryID != null">
+                IndustryID = #{industryID},
+            </if>
+            <if test="generalManagerOpenId != null">
+                GeneralManagerOpenId = #{generalManagerOpenId},
+            </if>
+            <if test="assistantManagerOpenId != null">
+                AssistantManagerOpenId = #{assistantManagerOpenId},
+            </if>
+            <if test="shopManagerOpenId != null">
+                ShopManagerOpenId = #{shopManagerOpenId},
+            </if>
+            <if test="spareShopManagerOneOpenId != null">
+                SpareShopManagerOneOpenId = #{spareShopManagerOneOpenId},
+            </if>
+            <if test="spareShopManagerTowOpenId != null">
+                SpareShopManagerTowOpenId = #{spareShopManagerTowOpenId},
+            </if>
+            <if test="firstGovernorOpenId != null">
+                FirstGovernorOpenId = #{firstGovernorOpenId},
+            </if>
+            <if test="secondGovernorOpenId != null">
+                SecondGovernorOpenId = #{secondGovernorOpenId},
+            </if>
+            <if test="marketServiceOpenId != null">
+                MarketServiceOpenId = #{marketServiceOpenId},
+            </if>
+            <if test="provinceId != null">
+                ProvinceId = #{provinceId},
+            </if>
+            <if test="cityId != null">
+                CityId = #{cityId},
+            </if>
+            <if test="countyId != null">
+                CountyId = #{countyId},
+            </if>
+            <if test="shopDetailedAddress != null">
+                ShopDetailedAddress = #{shopDetailedAddress},
+            </if>
+            <if test="detailedAddress != null">
+                DetailedAddress = #{detailedAddress},
+            </if>
+            <if test="baiduLongitude != null">
+                BaiduLongitude = #{baiduLongitude},
+            </if>
+            <if test="baiduLatitude != null">
+                BaiduLatitude = #{baiduLatitude},
+            </if>
+            <if test="gaodeLongitude != null">
+                GaodeLongitude = #{gaodeLongitude},
+            </if>
+            <if test="gaodeLatitude != null">
+                GaodeLatitude = #{gaodeLatitude},
+            </if>
+            <if test="tencentLongitude != null">
+                TencentLongitude = #{tencentLongitude},
+            </if>
+            <if test="tencentLatitude != null">
+                TencentLatitude = #{tencentLatitude},
+            </if>
+            <if test="environmentGrade != null">
+                EnvironmentGrade = #{environmentGrade},
+            </if>
+            <if test="nursingType != null">
+                NursingType = #{nursingType},
+            </if>
+            <if test="storeImage != null">
+                StoreImage = #{storeImage},
+            </if>
+            <if test="courseCardConsumptionAuthCode != null">
+                CourseCardConsumptionAuthCode = #{courseCardConsumptionAuthCode},
+            </if>
+            <if test="shopBusinessTime != null">
+                ShopBusinessTime = #{shopBusinessTime},
+            </if>
+            <if test="phoneNumber != null">
+                PhoneNumber = #{phoneNumber},
+            </if>
+            <if test="storeCategoryId != null">
+                StoreCategoryId = #{storeCategoryId},
+            </if>
+            <if test="k3Id != null">
+                K3Id = #{k3Id},
+            </if>
+            <if test="k3Number != null">
+                K3Number = #{k3Number},
+            </if>
+            <if test="systemK3Number != null">
+                SystemK3Number = #{systemK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="heSuanFanWeiK3Number != null">
+                HeSuanFanWeiK3Number = #{heSuanFanWeiK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="zhangBuK3Number != null">
+                ZhangBuK3Number = #{zhangBuK3Number,jdbcType=VARCHAR},
+            </if>
+            <if test="dataCentreUserName != null">
+                DataCentreUserName = #{dataCentreUserName},
+            </if>
+            <if test="dataCentrePassword != null">
+                DataCentrePassword = #{dataCentrePassword},
+            </if>
+            <if test="bankNumber != null">
+                BankNumber = #{bankNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="cashNumber != null">
+                CashNumber = #{cashNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now(),
+        </set>
+        where 1=1
+        <if test="storeId != null">
+            and StoreId = #{storeId}
+        </if>
+    </update>
+
+    <update id="deleteStore" parameterType="Map">
+        update s_store
+        set Status=0,
+        ModifyOperator=#{modifyOperator},
+        DataChange_LastTime=now()
+        where 1=1
+        <if test="storeId != null">
+            and StoreId = #{storeId}
+        </if>
+        <if test="subCompanyId != null">
+            and SubCompanyId = #{subCompanyId}
+        </if>
+    </update>
+
+    <select id="selectStoresByIds" resultType="Store" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from s_store
+        where Status = 1
+        and StoreId in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="storeCategoryList" resultType="StoreCategory" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Category"/>
+        from s_store_category
+        where 1=1
+        <if test="keyWordStoreCategoryName != null and keyWordStoreCategoryName!=''">
+            and StoreCategoryName like CONCAT('%',#{keyWordStoreCategoryName},'%')
+        </if>
+
+    </select>
+
+
+    <update id="updateStoreCategory" parameterType="StoreCategory">
+        update s_store_category
+        <set>
+            <if test="storeCategoryName != null">
+                StoreCategoryName = #{storeCategoryName},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where StoreCategoryId = #{storeCategoryId}
+    </update>
+
+    <insert id="insertStoreCategory" parameterType="StoreCategory">
+        insert into s_store_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storeCategoryId != null">
+                StoreCategoryId,
+            </if>
+            <if test="storeCategoryName != null">
+                StoreCategoryName,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storeCategoryId != null">
+                #{storeCategoryId},
+            </if>
+            <if test="storeCategoryName != null">
+                #{storeCategoryName},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <delete id="deleteStoreCategory" parameterType="Long">
+        delete
+        from s_store_category
+        where StoreCategoryId = #{storeCategoryId}
+    </delete>
+
+    <select id="selectStoreListByCompanyId" resultType="Store" parameterType="Long">
+        select
+        <include refid="Base_Column_List_detail_a"/>
+        from s_store a,c_subsidiary b,c_company c
+        where a.SubCompanyId = b.SubsidiaryId
+        and b.ParentCompany = c.CompanyId
+        and a.Status = 1
+        and b.Status = 1
+        and c.Status = 1
+        and c.CompanyId = #{companyId}
+    </select>
+
+    <select id="selectStoreListBySubCompany" resultType="Store" parameterType="Long">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_store
+        where SubCompanyId = #{subsidiaryId} and Status = 1
+    </select>
+
+
+    <insert id="addStoreMemoNum" parameterType="StoreMemoNum">
+        insert into s_store_memo_num
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="memoNumStart != null">
+                MemoNumStart,
+            </if>
+            <if test="memoNumEnd != null">
+                MemoNumEnd,
+            </if>
+            <if test="storeId != null">
+                StoreId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="memoNumStart != null">
+                #{memoNumStart,jdbcType=INTEGER},
+            </if>
+            <if test="memoNumEnd != null">
+                #{memoNumEnd,jdbcType=INTEGER},
+            </if>
+            <if test="storeId != null">
+                #{storeId,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            now()
+
+
+        </trim>
+    </insert>
+
+    <select id="listStoreMemo" resultType="StoreMemoNum" parameterType="StoreMemoNum">
+        select
+        <include refid="Base_Column_List_Memo"/>
+        from s_store_memo_num
+        where StoreId = #{storeId} and Status = 1
+    </select>
+</mapper>
+

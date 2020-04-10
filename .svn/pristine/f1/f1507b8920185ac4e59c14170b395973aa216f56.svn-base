@@ -1,0 +1,2239 @@
+package com.lnmj.k3cloud.business.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.lnmj.common.response.ResponseResult;
+import com.lnmj.k3cloud.business.IStockService;
+import com.lnmj.k3cloud.entity.base.*;
+import com.lnmj.k3cloud.entity.organization.organizationForm.addSendParam.Fmodifierid;
+import com.lnmj.k3cloud.entity.stock.*;
+import com.lnmj.k3cloud.entity.stock.MarketOutstorageSaveParam.*;
+import com.lnmj.k3cloud.entity.stock.MarketReturnSaveParam.*;
+import com.lnmj.k3cloud.entity.stock.OtherInstorageSaveParam.*;
+import com.lnmj.k3cloud.entity.stock.OtherOutstorageSaveParam.FOutstorageEntity;
+import com.lnmj.k3cloud.entity.stock.OtherOutstorageSaveParam.OtherOutstorageModel;
+import com.lnmj.k3cloud.entity.stock.OtherOutstorageSaveParam.OtherOutstorageSaveParam;
+import com.lnmj.k3cloud.entity.stock.PurchaseInstorageSaveParam.*;
+import com.lnmj.k3cloud.entity.stock.PurchaseReturnSaveParam.*;
+import com.lnmj.k3cloud.entity.stock.inventory.InventorySaveParam;
+import com.lnmj.k3cloud.entity.stock.stock.FCustomerId;
+import com.lnmj.k3cloud.entity.stock.stock.StockModel;
+import com.lnmj.k3cloud.entity.stock.stock.StockSaveParam;
+import com.lnmj.k3cloud.entity.stock.stockStatus.StockStatusModel;
+import com.lnmj.k3cloud.entity.stock.stockStatus.StockStatusSaveParam;
+import com.lnmj.k3cloud.util.InvokeHelper;
+import com.lnmj.k3cloud.util.K3cloudConfig;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.*;
+
+@Service("StockServiceImpl")
+public class StockServiceImpl  implements IStockService {
+    //====================================采购入库==============================================
+    @Override
+    public ResponseResult savePurchaseInstorage(String acctId,
+                                                String dataCentreUserName,
+                                                String dataCentrePassword,
+                                                String orgK3Number,
+                                                String fPurchaseOrgId,
+                                                String fSupplierId,
+                                                String fDate,
+                                                String fSupplyAddress,
+                                                String fCONTACTNUMBER,
+                                                String jsonArrayProduct
+                                               ){
+        List produdctArray = new ArrayList();
+        JSONArray productArrayIn = JSON.parseArray(jsonArrayProduct);
+        for (int i = 0; i < productArrayIn.size(); i++) {
+            JSONObject objectAll = new JSONObject(new LinkedHashMap());
+
+            objectAll.put("FRowType","Standard");
+
+            JSONObject objectFMaterialId = new JSONObject();
+            objectFMaterialId.put("FNumber",productArrayIn.getJSONObject(i).getString("productK3Number"));
+            objectAll.put("FMaterialId",objectFMaterialId);
+
+            JSONObject objectFUnitID = new JSONObject();
+            objectFUnitID.put("FNumber",productArrayIn.getJSONObject(i).getString("unitK3Number"));
+            objectAll.put("FUnitID",objectFUnitID);
+
+            objectAll.put("FRealQty",productArrayIn.getJSONObject(i).getDouble("number"));
+
+            JSONObject objectFPriceUnitID = new JSONObject();
+            objectFPriceUnitID.put("FNumber",productArrayIn.getJSONObject(i).getString("unitK3Number"));
+            objectAll.put("FPriceUnitID",objectFPriceUnitID);
+
+            JSONObject objectFStockId = new JSONObject();
+            objectFStockId.put("FNumber",productArrayIn.getJSONObject(i).getString("stockK3Nunber"));
+            objectAll.put("FStockId",objectFStockId);
+
+            JSONObject objectFStockStatusId = new JSONObject();
+            objectFStockStatusId.put("FNumber","KCZT01_SYS");
+            objectAll.put("FStockStatusId",objectFStockStatusId);
+
+            objectAll.put("FGiveAway", false);
+
+            objectAll.put("FCheckInComing", false);
+
+            objectAll.put("FIsReceiveUpdateStock", false);
+
+            objectAll.put("FPriceBaseQty", productArrayIn.getJSONObject(i).getDouble("number"));
+
+            JSONObject objectFRemainInStockUnitId = new JSONObject();
+            objectFRemainInStockUnitId.put("FNumber",productArrayIn.getJSONObject(i).getString("unitK3Number"));
+            objectAll.put("FRemainInStockUnitId",objectFRemainInStockUnitId);
+
+            objectAll.put("FBILLINGCLOSE",false);
+
+            objectAll.put("FRemainInStockQty",productArrayIn.getJSONObject(i).getDouble("number"));
+
+            objectAll.put("FAPNotJoinQty",productArrayIn.getJSONObject(i).getDouble("number"));
+
+            objectAll.put("FRemainInStockBaseQty",productArrayIn.getJSONObject(i).getDouble("number"));
+
+            produdctArray.add(objectAll);
+        }
+        String  produdctArrayStr = produdctArray.toString();
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            try {
+                //必填项：
+                //   收料组织：FStockOrgId  (必填项)
+                //	 入库日期：FDate  (必填项)
+                //	 单据类型：FBillTypeID  (必填项)
+                //	 货主类型：FOwnerTypeIdHead  (必填项)
+                //	 货主：FOwnerIdHead  (必填项)
+                //	 采购组织：FPurchaseOrgId  (必填项)
+                //	 供应商：FSupplierId  (必填项)
+                //	 结算组织：FSettleOrgId  (必填项)
+                //	 结算币别：FSettleCurrId  (必填项)
+                //	 定价时点：FPriceTimePoint  (必填项)
+                //	 物料编码：FMaterialId  (必填项)
+                //	 库存单位：FUnitID  (必填项)
+                //	 计价单位：FPriceUnitID  (必填项)
+                //	 采购单位：FRemainInStockUnitId  (必填项)
+
+
+
+
+                JSONObject iv_salesic = InvokeHelper.Save("STK_InStock","{\n" +
+                        "    \"Creator\": \"\",\n" +
+                        "    \"NeedUpDateFields\": [],\n" +
+                        "    \"NeedReturnFields\": [],\n" +
+                        "    \"IsDeleteEntry\": \"true\",\n" +
+                        "    \"SubSystemId\": \"\",\n" +
+                        "    \"IsVerifyBaseDataField\": \"false\",\n" +
+                        "    \"IsEntryBatchFill\": \"true\",\n" +
+                        "    \"ValidateFlag\": \"true\",\n" +
+                        "    \"NumberSearch\": \"true\",\n" +
+                        "    \"InterationFlags\": \"\",\n" +
+                        "    \"IsAutoSubmitAndAudit\": \"false\",\n" +
+                        "    \"Model\": {\n" +
+                        "        \"FID\": 0,\n" +
+                        "        \"FBillTypeID\": {\n" +
+                        "            \"FNUMBER\": \"RKD01_SYS\"\n" +
+                        "        },\n" +
+                        "        \"FDate\": \""+fDate+"\",\n" +
+                        "        \"FStockOrgId\": {\n" +
+                        "            \"FNumber\": \""+orgK3Number+"\"\n" +
+                        "        },\n" +
+                        "        \"FDemandOrgId\": {\n" +
+                        "            \"FNumber\": \""+orgK3Number+"\"\n" +
+                        "        },\n" +
+                        "        \"FPurchaseOrgId\": {\n" +
+                        "            \"FNumber\": \""+fPurchaseOrgId+"\"\n" +
+                        "        },\n" +
+                        "        \"FSupplierId\": {\n" +
+                        "            \"FNumber\": \""+fSupplierId+"\"\n" +
+                        "        },\n" +
+                        "        \"FSupplyId\": {\n" +
+                        "            \"FNumber\": \""+fSupplierId+"\"\n" +
+                        "        },\n" +
+                        "        \"FSupplyAddress\": \""+fSupplyAddress+"\",\n" +
+                        "        \"FSettleId\": {\n" +
+                        "            \"FNumber\": \""+fSupplierId+"\"\n" +
+                        "        },\n" +
+                        "        \"FChargeId\": {\n" +
+                        "            \"FNumber\": \""+fSupplierId+"\"\n" +
+                        "        },\n" +
+                        "        \"FOwnerTypeIdHead\": \"BD_OwnerOrg\",\n" +
+                        "        \"FOwnerIdHead\": {\n" +
+                        "            \"FNumber\": \""+orgK3Number+"\"\n" +
+                        "        },\n" +
+                        "        \"FProviderContactID\": {\n" +
+                        "            \"FCONTACTNUMBER\": \""+fCONTACTNUMBER+"\"\n" +
+                        "        },\n" +
+                        "        \"FInStockFin\": {\n" +
+                        "            \"FSettleOrgId\": {\n" +
+                        "                \"FNumber\": \""+fPurchaseOrgId+"\"\n" +
+                        "            },\n" +
+                        "            \"FSettleCurrId\": {\n" +
+                        "                \"FNumber\": \"PRE001\"\n" +
+                        "            },\n" +
+                        "            \"FIsIncludedTax\": true,\n" +
+                        "            \"FPriceTimePoint\": \"1\",\n" +
+                        "            \"FLocalCurrId\": {\n" +
+                        "                \"FNumber\": \"PRE001\"\n" +
+                        "            },\n" +
+                        "            \"FExchangeTypeId\": {\n" +
+                        "                \"FNumber\": \"HLTX01_SYS\"\n" +
+                        "            },\n" +
+                        "            \"FExchangeRate\": 1.0,\n" +
+                        "            \"FISPRICEEXCLUDETAX\": true\n" +
+                        "        },\n" +
+                        "        \"FInStockEntry\": "+produdctArrayStr+"\n" +
+                        "    }\n" +
+                        "}");
+
+                String Id = (((Map) (iv_salesic.get("Result")))).get("Id").toString();
+                //提交
+                this.submitPurchaseInstorage(acctId,dataCentreUserName,dataCentrePassword,null,Id);
+                //审核
+                this.auditPurchaseInstorage(acctId,dataCentreUserName,dataCentrePassword,null,Id);
+                return ResponseResult.success(iv_salesic);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }else{
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult deletePurchaseInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Delete("STK_InStock", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult unAuditPurchaseInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseAuditBean baseAuditBean = new BaseAuditBean();
+                baseAuditBean.setIds(ids);
+                baseAuditBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseAuditBean);
+                JSONObject jsonObject = InvokeHelper.UnAudit("STK_InStock", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult auditPurchaseInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        List<String> resultList = null;
+        if (numbers!=null){
+            String[] numbersStrList = numbers.split(",");
+            resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        }
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseAuditBean baseAuditBean = new BaseAuditBean();
+                baseAuditBean.setIds(ids);
+                baseAuditBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseAuditBean);
+                JSONObject jsonObject = InvokeHelper.Audit("STK_InStock", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult submitPurchaseInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        List<String> resultList = null;
+        if (numbers!=null){
+            String[] numbersStrList = numbers.split(",");
+            resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        }
+
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseSubmitBean baseSubmitBean = new BaseSubmitBean();
+                baseSubmitBean.setIds(ids);
+                baseSubmitBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseSubmitBean);
+                JSONObject jsonObject = InvokeHelper.Submit("STK_InStock", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult viewPurchaseInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String number,String id) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseViewBean baseViewBean = new BaseViewBean();
+                baseViewBean.setNumber(number);
+                baseViewBean.setId(id);
+                String a = JSON.toJSONString(baseViewBean);
+                JSONObject jsonObject = InvokeHelper.View("STK_InStock", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult cancelPurchaseInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Cancel("STK_InStock","Cancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult unCancelPurchaseInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.UnCancel("STK_InStock","UnCancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+
+    @Override
+    public ResponseResult batchSavePurchaseInstorage() {
+        return null;
+    }
+
+    //===============================================其他入库=========================================
+    @Override
+    public ResponseResult saveOtherInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,
+                                             String fBillTypeID,
+                                             String fStockOrgId,
+                                             String fStockDirect,
+                                             String fDate,
+                                             String fDEPTID,
+                                             String fSUPPLIERID,
+                                             String fOwnerTypeIdHead,
+                                             String fOwnerIdHead,
+                                             String fBaseCurrId,
+                                             String jsonArrayProduct,
+                                             String fUnitID,
+                                             String fSTOCKID,
+                                             String fSTOCKSTATUSID,
+                                             String fQty,
+                                             String fOWNERTYPEID,
+                                             String fOWNERID,
+                                             String fKEEPERTYPEID,
+                                             String fKEEPERID) {
+        List produdctArray = new ArrayList();
+        JSONArray productArrayIn = JSON.parseArray(jsonArrayProduct);
+        for (int i = 0; i < productArrayIn.size(); i++) {
+            JSONObject objectAll = new JSONObject(new LinkedHashMap());
+            JSONObject objectFMATERIALID1 = new JSONObject();
+            objectFMATERIALID1.put("FNumber",productArrayIn.getJSONObject(i).getString("productK3Number"));
+            objectAll.put("FMATERIALID",objectFMATERIALID1);
+
+
+            JSONObject objectFUnitID1 = new JSONObject();
+            objectFUnitID1.put("FNumber",productArrayIn.getJSONObject(i).getString("unitK3Number"));
+            objectAll.put("FUnitID",objectFUnitID1);
+
+            JSONObject objectFSTOCKID1 = new JSONObject();
+            objectFSTOCKID1.put("FNumber",fSTOCKID);
+            objectAll.put("FSTOCKID",objectFSTOCKID1);
+
+            JSONObject objectFSTOCKSTATUSID1 = new JSONObject();
+            objectFSTOCKSTATUSID1.put("FNumber",fSTOCKSTATUSID);
+            objectAll.put("FSTOCKSTATUSID",objectFSTOCKSTATUSID1);
+
+
+
+
+            objectAll.put("FOWNERTYPEID",fOWNERTYPEID);
+
+            JSONObject objectFOWNERID1 = new JSONObject();
+            objectFOWNERID1.put("FNumber",fOWNERID);
+            objectAll.put("FOWNERID",objectFOWNERID1);
+
+            objectAll.put("FKEEPERTYPEID",fKEEPERTYPEID);
+
+            JSONObject objectFKEEPERID1 = new JSONObject();
+            objectFKEEPERID1.put("FNumber",fKEEPERID);
+            objectAll.put("FKEEPERID",objectFKEEPERID1);
+
+            objectAll.put("FQty",productArrayIn.getJSONObject(i).getDouble("number"));
+
+
+
+            produdctArray.add(objectAll);
+        }
+        String  produdctArrayStr = produdctArray.toString();
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            try {
+                //必填项：
+                // 基本信息：FBillHead
+                //   库存组织：FStockOrgId  (必填项)
+                //	 日期：FDate  (必填项)
+                //	 单据类型：FBillTypeID  (必填项)
+                //	 货主类型：FOwnerTypeIdHead  (必填项)
+                //	 库存方向：FStockDirect  (必填项)
+                //明细信息：FEntity
+                //	 物料编码：FMATERIALID  (必填项)
+                //	 物料名称：FMATERIALNAME
+                //	 收货仓库：FSTOCKID  (必填项)
+                //	 单位：FUnitID  (必填项)
+                //	 库存状态：FSTOCKSTATUSID  (必填项)
+                //	 实收数量(基本单位)：FBASEQTY
+                //	 库存辅单位：FSecUNITID
+                //	 实收数量(库存辅单位)：FSecQTY
+                //	 货主类型：FOWNERTYPEID  (必填项)
+                //	 货主：FOWNERID  (必填项)
+                //	 保管者类型：FKEEPERTYPEID  (必填项)
+                //	 保管者：FKEEPERID  (必填项)
+                JSONObject jsonObject = InvokeHelper.Save("STK_MISCELLANEOUS", "{\n" +
+                        "    \"Creator\": \"\",\n" +
+                        "    \"NeedUpDateFields\": [],\n" +
+                        "    \"NeedReturnFields\": [],\n" +
+                        "    \"IsDeleteEntry\": \"true\",\n" +
+                        "    \"SubSystemId\": \"\",\n" +
+                        "    \"IsVerifyBaseDataField\": \"false\",\n" +
+                        "    \"IsEntryBatchFill\": \"true\",\n" +
+                        "    \"ValidateFlag\": \"true\",\n" +
+                        "    \"NumberSearch\": \"true\",\n" +
+                        "    \"InterationFlags\": \"\",\n" +
+                        "    \"IsAutoSubmitAndAudit\": \"true\",\n" +
+                        "    \"Model\": {\n" +
+                        "        \"FID\": 0,\n" +
+                        "        \"FBillTypeID\": {\n" +
+                        "            \"FNUMBER\": \""+fBillTypeID+"\"\n" +
+                        "        },\n" +
+                        "        \"FStockOrgId\": {\n" +
+                        "            \"FNumber\": \""+fStockOrgId+"\"\n" +
+                        "        },\n" +
+                        "        \"FStockDirect\": \""+fStockDirect+"\",\n" +
+                        "        \"FDate\": \""+fDate+"\",\n" +
+                        "        \"FSUPPLIERID\": {\n" +
+                        "            \"FNumber\": \""+fSUPPLIERID+"\"\n" +
+                        "        },\n" +
+                        "        \"FDEPTID\": {\n" +
+                        "            \"FNumber\": \""+fDEPTID+"\"\n" +
+                        "        },\n" +
+                        "        \"FOwnerTypeIdHead\": \""+fOwnerTypeIdHead+"\",\n" +
+                        "        \"FStockDirect\": \""+fStockDirect+"\",\n" +
+                        "        \"FOwnerIdHead\": {\n" +
+                        "            \"FNumber\": \""+fOwnerIdHead+"\"\n" +
+                        "        },\n" +
+                        "        \"FBaseCurrId\": {\n" +
+                        "            \"FNumber\": \""+fBaseCurrId+"\"\n" +
+                        "        },\n" +
+                        "        \"FEntity\": "+produdctArrayStr+"\n" +
+                        "    }\n" +
+                        "}");
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+    @Override
+    public ResponseResult viewOtherInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String number,String id) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseViewBean baseViewBean = new BaseViewBean();
+            baseViewBean.setNumber(number);
+            baseViewBean.setId(id);
+            String s = JSON.toJSONString(baseViewBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.View("STK_MISCELLANEOUS", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult submitOtherInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseSubmitBean baseSubmitBean = new BaseSubmitBean();
+            baseSubmitBean.setNumbers(stringList);
+            baseSubmitBean.setIds(ids);
+            String s = JSON.toJSONString(baseSubmitBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Submit("STK_MISCELLANEOUS", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult auditOtherInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Audit("STK_MISCELLANEOUS", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unAuditOtherInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.UnAudit("STK_MISCELLANEOUS", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult deleteOtherInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        if(login){
+            BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+            baseDeleteBean.setNumbers(stringList);
+            baseDeleteBean.setIds(ids);
+            String s = JSON.toJSONString(baseDeleteBean);
+            try {
+                JSONObject delete = InvokeHelper.Delete("STK_MISCELLANEOUS", s);
+                return ResponseResult.success(delete);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unCancelOtherInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.UnCancel("STK_MISCELLANEOUS","UnCancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult cancelOtherInstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Cancel("STK_MISCELLANEOUS","Cancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult batchSaveOtherInstorage() {
+        return null;
+    }
+
+    //=====================================仓库状态============================================
+    @Override
+    public ResponseResult batchSaveStockStatus() {
+        return null;
+    }
+
+    @Override
+    public ResponseResult viewStockStatus(String acctId,String dataCentreUserName,String dataCentrePassword,String number,String id) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseViewBean baseViewBean = new BaseViewBean();
+            baseViewBean.setNumber(number);
+            baseViewBean.setId(id);
+            String s = JSON.toJSONString(baseViewBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.View("BD_StockStatus", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult submitStockStatus(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseSubmitBean baseSubmitBean = new BaseSubmitBean();
+            baseSubmitBean.setNumbers(stringList);
+            baseSubmitBean.setIds(ids);
+            String s = JSON.toJSONString(baseSubmitBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Submit("BD_StockStatus", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult auditStockStatus(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Audit("BD_StockStatus", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unAuditStockStatus(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.UnAudit("BD_StockStatus", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult deleteStockStatus(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        if(login){
+            BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+            baseDeleteBean.setNumbers(stringList);
+            baseDeleteBean.setIds(ids);
+            String s = JSON.toJSONString(baseDeleteBean);
+            try {
+                JSONObject delete = InvokeHelper.Delete("BD_StockStatus", s);
+                return ResponseResult.success(delete);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult enableStockStatus(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Enable("BD_StockStatus","Enable", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult forbidStockStatus(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Forbid("BD_StockStatus","Forbid", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult saveStockStatus(String acctId,String dataCentreUserName,String dataCentrePassword,String fName,String fNumberCreateOrg,String fNumberUseOrg,String fType,String fNumber,String fStockStatusId) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            try {
+                //必填项：
+                //  名称：FName  (必填项)
+                //  创建组织：FCreateOrgId  (必填项)
+                //	 使用组织：FUseOrgId  (必填项)
+                //	 类型：FType  (必填项)
+                StockStatusModel model = new StockStatusModel();
+                model.setFName(fName);
+                FCreateOrgId fCreateOrgId = new FCreateOrgId();
+                fCreateOrgId.setFNumber(fNumberCreateOrg);
+                model.setFCreateOrgId(fCreateOrgId);
+                FUseOrgId fUseOrgId = new FUseOrgId();
+                fUseOrgId.setFNumber(fNumberUseOrg);
+                model.setFUseOrgId(fUseOrgId);
+                model.setFType(fType);
+                if(!StringUtils.isBlank(fNumber)){
+                    model.setFNumber(fNumber);
+                }
+                if(!StringUtils.isBlank(fStockStatusId)){
+                    model.setFStockStatusId(Integer.valueOf(fStockStatusId));
+                }
+                StockStatusSaveParam stockStatusSaveParam = new StockStatusSaveParam();
+                stockStatusSaveParam.setModel(model);
+                String s = JSON.toJSONString(stockStatusSaveParam);
+                JSONObject jsonObect = InvokeHelper.Save("BD_StockStatus", s);
+                return ResponseResult.success(jsonObect);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult batchSaveStock() {
+        return null;
+    }
+
+    //================================仓库============================================
+    @Override
+    public ResponseResult viewStock(String acctId,String dataCentreUserName,String dataCentrePassword,String number,String id) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseViewBean baseViewBean = new BaseViewBean();
+            baseViewBean.setNumber(number);
+            baseViewBean.setId(id);
+            String s = JSON.toJSONString(baseViewBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.View("BD_STOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult submitStock(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseSubmitBean baseSubmitBean = new BaseSubmitBean();
+            baseSubmitBean.setNumbers(stringList);
+            baseSubmitBean.setIds(ids);
+            String s = JSON.toJSONString(baseSubmitBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Submit("BD_STOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult auditStock(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Audit("BD_STOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unAuditStock(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.UnAudit("BD_STOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult deleteStock(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        if(login){
+            BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+            baseDeleteBean.setNumbers(stringList);
+            baseDeleteBean.setIds(ids);
+            String s = JSON.toJSONString(baseDeleteBean);
+            try {
+                JSONObject delete = InvokeHelper.Delete("BD_STOCK", s);
+                return ResponseResult.success(delete);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult enableStock(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Enable("BD_STOCK","Enable", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult forbidStock(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Forbid("BD_STOCK","Forbid", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult saveStock(String acctId,
+                                    String dataCentreUserName,
+                                    String dataCentrePassword,
+                                    String fName,
+                                    String fNumberCreateOrg,
+                                    String fNumerUseOrg,
+                                    String fStockProperty,
+                                    String fStockStatusType,
+                                    String fNumber,
+                                    String fStockId) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            try {
+                //必填项：
+                //   名称：FName  (必填项)
+                //   创建组织：FCreateOrgId  (必填项)
+                //	 使用组织：FUseOrgId  (必填项)
+                //	 仓库属性：FStockProperty  (必填项)
+                //	 库存状态类型：FStockStatusType  (必填项)
+                StockModel stockModel = new StockModel();
+                stockModel.setFName(fName);
+                FCreateOrgId fCreateOrgId = new FCreateOrgId();
+                fCreateOrgId.setFNumber(fNumberCreateOrg);
+                stockModel.setFCreateOrgId(fCreateOrgId);
+                FUseOrgId fUseOrgId = new FUseOrgId();
+                fUseOrgId.setFNumber(fNumerUseOrg);
+                stockModel.setFUseOrgId(fUseOrgId);
+                stockModel.setFStockProperty(fStockProperty);
+                stockModel.setFStockStatusType(fStockStatusType);
+                if(!StringUtils.isBlank(fNumber)){
+                    stockModel.setFNumber(fNumber);
+                }
+                if(!StringUtils.isBlank(fStockId)){
+                    stockModel.setFStockId(Integer.valueOf(fStockId));
+                }
+                StockSaveParam stockSaveParam = new StockSaveParam();
+                stockSaveParam.setModel(stockModel);
+                stockSaveParam.setIsautosubmitandaudit(true);
+                String s = JSON.toJSONString(stockSaveParam);
+                JSONObject jsonObject = InvokeHelper.Save("BD_STOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    //===================================即时库存=====================================
+    @Override
+    public ResponseResult saveInventory(String acctId,String dataCentreUserName,String dataCentrePassword,InventorySaveParam inventorySaveParam) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            try {
+                //必填项：无
+                String s = JSON.toJSONString(inventorySaveParam);
+                JSONObject jsonObject = InvokeHelper.Save("STK_Inventory", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult batchSaveInventory() {
+        return null;
+    }
+
+    @Override
+    public ResponseResult queryInventory(String acctId,String dataCentreUserName,String dataCentrePassword,String formId,String fieldKeys) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                //1.1.FormId：业务对象表单Id（必录）
+                //1.2.FieldKeys：需查询的字段key集合，字符串类型，格式："key1,key2,..." （必录）
+                // 注（查询单据体内码,需加单据体Key和下划线,如：FEntryKey_FEntryId）
+                BaseQueryBean inventoryQueryParam = new BaseQueryBean();
+                inventoryQueryParam.setFormId(formId);
+                inventoryQueryParam.setFieldKeys(fieldKeys);
+                String a = JSON.toJSONString(inventoryQueryParam);
+                JSONArray jsonObject = InvokeHelper.Query(a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    //=======================================其他出库=================================
+    @Override
+    public ResponseResult saveOtherOutstorage(String acctId,
+                                              String dataCentreUserName,
+                                              String dataCentrePassword,
+                                              String fStockOrgId,
+                                              String fPickOrgId,
+                                              String fDate,
+                                              String fCustId,
+                                              String fOwnerIdHead,
+                                              String jsonArrayProduct,
+                                              String fStockDirect) {
+        List produdctArray = new ArrayList();
+        JSONArray productArrayIn = JSON.parseArray(jsonArrayProduct);
+
+        for (int i = 0; i < productArrayIn.size(); i++) {
+            JSONObject objectAll = new JSONObject(new LinkedHashMap());
+
+            JSONObject objectFMaterialId = new JSONObject();
+            objectFMaterialId.put("FNumber",productArrayIn.getJSONObject(i).getString("productK3Number"));
+            objectAll.put("FMaterialId",objectFMaterialId);
+
+            JSONObject objectFUnitID = new JSONObject();
+            objectFUnitID.put("FNumber",productArrayIn.getJSONObject(i).getString("unitK3Number"));
+            objectAll.put("FUnitID",objectFUnitID);
+
+            objectAll.put("FQty",productArrayIn.getJSONObject(i).getDouble("number"));
+
+            JSONObject objectFBaseUnitId = new JSONObject();
+            objectFBaseUnitId.put("FNumber",productArrayIn.getJSONObject(i).getString("unitK3Number"));
+            objectAll.put("FBaseUnitId",objectFBaseUnitId);
+
+            JSONObject objectFStockId = new JSONObject();
+            objectFStockId.put("FNumber",productArrayIn.getJSONObject(i).getString("stockK3Nunber"));
+            objectAll.put("FStockId",objectFStockId);
+
+            objectAll.put("FOwnerTypeId", "BD_OwnerOrg");
+
+            JSONObject objectFOwnerId = new JSONObject();
+            objectFOwnerId.put("FNumber",productArrayIn.getJSONObject(i).getString("fOwnerID"));
+            objectAll.put("FOwnerId",objectFOwnerId);
+
+            JSONObject objectFStockStatusId = new JSONObject();
+            objectFStockStatusId.put("FNumber","KCZT01_SYS");
+            objectAll.put("FStockStatusId",objectFStockStatusId);
+
+            objectAll.put("FKeeperTypeId", "BD_KeeperOrg");
+
+            objectAll.put("FDistribution", false);
+
+            JSONObject objectFKeeperId = new JSONObject();
+            objectFKeeperId.put("FNumber",productArrayIn.getJSONObject(i).getString("fOwnerID"));
+            objectAll.put("FKeeperId",objectFKeeperId);
+
+
+
+            produdctArray.add(objectAll);
+        }
+        String  produdctArrayStr = produdctArray.toString();
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            try {
+                //必填项：
+                // 基本信息：FBillHead
+                //   库存组织：FStockOrgId  (必填项)
+                //	 日期：FDate  (必填项)
+                //	 单据类型：FBillTypeID  (必填项)
+                //	 货主类型：FOwnerTypeIdHead  (必填项)
+                //	 库存方向：FStockDirect  (必填项)
+                //	 业务类型：FBizType  (必填项)
+                //明细信息：FEntity
+                //	 物料编码：FMaterialId  (必填项)
+                //	 物料名称：FMaterialName
+                //	 发货仓库：FStockId  (必填项)
+                //	 单位：FUnitID  (必填项)
+                //	 库存状态：FStockStatusId  (必填项)
+                //	 货主类型：FOwnerTypeId  (必填项)
+                //	 货主：FOwnerId  (必填项)
+                //	 保管者类型：FKeeperTypeId  (必填项)
+                //	 保管者：FKeeperId  (必填项)
+                //	 基本单位：FBaseUnitId  (必填项)
+                JSONObject jsonObject = InvokeHelper.Save("STK_MisDelivery", "{\n" +
+                        "    \"Creator\": \"\",\n" +
+                        "    \"NeedUpDateFields\": [],\n" +
+                        "    \"NeedReturnFields\": [],\n" +
+                        "    \"IsDeleteEntry\": \"true\",\n" +
+                        "    \"SubSystemId\": \"\",\n" +
+                        "    \"IsVerifyBaseDataField\": \"false\",\n" +
+                        "    \"IsEntryBatchFill\": \"true\",\n" +
+                        "    \"ValidateFlag\": \"true\",\n" +
+                        "    \"NumberSearch\": \"true\",\n" +
+                        "    \"InterationFlags\": \"\",\n" +
+                        "    \"IsAutoSubmitAndAudit\": \"true\",\n" +
+                        "    \"Model\": {\n" +
+                        "        \"FID\": 0,\n" +
+                        "        \"FBillTypeID\": {\n" +
+                        "            \"FNUMBER\": \"QTCKD01_SYS\"\n" +
+                        "        },\n" +
+                        "        \"FStockOrgId\": {\n" +
+                        "            \"FNumber\": \""+fStockOrgId+"\"\n" +
+                        "        },\n" +
+                        "        \"FPickOrgId\": {\n" +
+                        "            \"FNumber\": \""+fPickOrgId+"\"\n" +
+                        "        },\n" +
+                        "        \"FStockDirect\": \""+fStockDirect+"\",\n" +
+                        "        \"FDate\": \""+fDate+"\",\n" +
+                        "        \"FCustId\": {\n" +
+                        "            \"FNumber\": \""+fCustId+"\"\n" +
+                        "        },\n" +
+                        "        \"FOwnerTypeIdHead\": \"BD_OwnerOrg\",\n" +
+                        "        \"FOwnerIdHead\": {\n" +
+                        "            \"FNumber\": \""+fOwnerIdHead+"\"\n" +
+                        "        },\n" +
+                        "        \"FBaseCurrId\": {\n" +
+                        "            \"FNumber\": \"PRE001\"\n" +
+                        "        },\n" +
+                        "        \"FEntity\": "+produdctArrayStr+"\n" +
+                        "    }\n" +
+                        "}");
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+    @Override
+    public ResponseResult viewOtherOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String number,String id) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseViewBean baseViewBean = new BaseViewBean();
+            baseViewBean.setNumber(number);
+            baseViewBean.setId(id);
+            String s = JSON.toJSONString(baseViewBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.View("STK_MisDelivery", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult submitOtherOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseSubmitBean baseSubmitBean = new BaseSubmitBean();
+            baseSubmitBean.setNumbers(stringList);
+            baseSubmitBean.setIds(ids);
+            String s = JSON.toJSONString(baseSubmitBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Submit("STK_MisDelivery", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult auditOtherOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Audit("STK_MisDelivery", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unAuditOtherOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.UnAudit("STK_MisDelivery", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult deleteOtherOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        if(login){
+            BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+            baseDeleteBean.setNumbers(stringList);
+            baseDeleteBean.setIds(ids);
+            String s = JSON.toJSONString(baseDeleteBean);
+            try {
+                JSONObject delete = InvokeHelper.Delete("STK_MisDelivery", s);
+                return ResponseResult.success(delete);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unCancelOtherOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.UnCancel("STK_MisDelivery","UnCancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult cancelOtherOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Cancel("STK_MisDelivery","Cancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult batchSaveOtherOutstorage() {
+        return null;
+    }
+
+    //===================================销售出库=====================================
+    @Override
+    public ResponseResult saveMarketOutstorage(String acctId,
+                                               String dataCentreUserName,
+                                               String dataCentrePassword,
+                                               String fNumberSaleOrg,
+                                               String fDate,
+                                               String fNumberStockOrg,
+                                               String fNumberCustomer,
+                                               String fNumberSettleOrg,
+                                               String jsonArrayProduct) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            try {
+                //必填项：
+                //基本信息：FBillHead
+                //	 销售组织：FSaleOrgId  (必填项)
+                //	 日期：FDate  (必填项)
+                //	 发货组织：FStockOrgId  (必填项)
+                //	 客户：FCustomerID  (必填项)
+                //	 单据类型：FBillTypeID  (必填项)
+                //财务信息：SubHeadEntity
+                //	 结算组织：FSettleOrgID  (必填项)
+                //	 结算币别：FSettleCurrID  (必填项)
+                //明细信息：FEntity
+                //	 库存单位：FUnitID  (必填项)
+                //	 货主：FOwnerID  (必填项)
+                // 物流跟踪明细：FOutStockTrace
+                //	 物流单号：FCarryBillNo  (必填项)
+                List produdctArray = new ArrayList();
+                JSONArray productArrayIn = JSON.parseArray(jsonArrayProduct);
+                for (int i = 0; i < productArrayIn.size(); i++) {
+                    JSONObject objectAll = new JSONObject(new LinkedHashMap());
+                    objectAll.put("FRowType","Standard");
+
+                    JSONObject objectFMaterialID = new JSONObject();
+                    objectFMaterialID.put("FNumber",productArrayIn.getJSONObject(i).getString("productK3Number"));
+                    objectAll.put("FMaterialID",objectFMaterialID);
+
+                    JSONObject objectFUnitID1 = new JSONObject();
+                    objectFUnitID1.put("FNumber",productArrayIn.getJSONObject(i).getString("unitK3Number"));
+                    objectAll.put("FUnitID",objectFUnitID1);
+
+                    objectAll.put("FRealQty",productArrayIn.getJSONObject(i).getString("number"));
+
+                    objectAll.put("FIsFree",false);
+
+                    objectAll.put("FOwnerTypeID","BD_OwnerOrg");
+
+                    JSONObject objectFOwnerID = new JSONObject();
+                    objectFOwnerID.put("FNumber",productArrayIn.getJSONObject(i).getString("fOwnerID"));
+                    objectAll.put("FOwnerID",objectFOwnerID);
+
+                    JSONObject objectFStockID = new JSONObject();
+                    objectFStockID.put("FNumber",productArrayIn.getJSONObject(i).getString("stockK3Nunber"));
+                    objectAll.put("FStockID",objectFStockID);
+
+                    JSONObject objectFStockStatusID = new JSONObject();
+                    objectFStockStatusID.put("FNumber","KCZT01_SYS");
+                    objectAll.put("FStockStatusID",objectFStockStatusID);
+
+                    JSONObject objectFSalUnitID = new JSONObject();
+                    objectFSalUnitID.put("FNumber",productArrayIn.getJSONObject(i).getString("unitK3Number"));
+                    objectAll.put("FSalUnitID",objectFSalUnitID);
+
+                    objectAll.put("FSALUNITQTY",productArrayIn.getJSONObject(i).getString("number"));
+                    objectAll.put("FSALBASEQTY",productArrayIn.getJSONObject(i).getString("number"));
+                    objectAll.put("FPRICEBASEQTY",productArrayIn.getJSONObject(i).getString("number"));
+                    objectAll.put("FOUTCONTROL",false);
+                    objectAll.put("FIsOverLegalOrg",false);
+                    objectAll.put("FARNOTJOINQTY",productArrayIn.getJSONObject(i).getString("number"));
+                    objectAll.put("FCheckDelivery",false);
+
+                    produdctArray.add(objectAll);
+                }
+                String  produdctArrayStr = produdctArray.toString();
+
+                JSONObject jsonObject = InvokeHelper.Save("SAL_OUTSTOCK", "{\n" +
+                        "    \"Creator\": \"\",\n" +
+                        "    \"NeedUpDateFields\": [],\n" +
+                        "    \"NeedReturnFields\": [],\n" +
+                        "    \"IsDeleteEntry\": \"true\",\n" +
+                        "    \"SubSystemId\": \"\",\n" +
+                        "    \"IsVerifyBaseDataField\": \"false\",\n" +
+                        "    \"IsEntryBatchFill\": \"true\",\n" +
+                        "    \"ValidateFlag\": \"true\",\n" +
+                        "    \"NumberSearch\": \"true\",\n" +
+                        "    \"InterationFlags\": \"\",\n" +
+                        "    \"IsAutoSubmitAndAudit\": \"false\",\n" +
+                        "    \"Model\": {\n" +
+                        "        \"FID\": 0,\n" +
+                        "        \"FBillTypeID\": {\n" +
+                        "            \"FNUMBER\": \"XSCKD01_SYS\"\n" +
+                        "        },\n" +
+                        "        \"FDate\": \""+fDate+"\",\n" +
+                        "        \"FSaleOrgId\": {\n" +
+                        "            \"FNumber\": \""+fNumberSaleOrg+"\"\n" +
+                        "        },\n" +
+                        "        \"FCustomerID\": {\n" +
+                        "            \"FNumber\": \""+fNumberCustomer+"\"\n" +
+                        "        },\n" +
+                        "        \"FStockOrgId\": {\n" +
+                        "            \"FNumber\": \""+fNumberStockOrg+"\"\n" +
+                        "        },\n" +
+                        "        \"FReceiverID\": {\n" +
+                        "            \"FNumber\": \""+fNumberCustomer+"\"\n" +
+                        "        },\n" +
+                        "        \"FSettleID\": {\n" +
+                        "            \"FNumber\": \""+fNumberCustomer+"\"\n" +
+                        "        },\n" +
+                        "        \"FPayerID\": {\n" +
+                        "            \"FNumber\": \""+fNumberCustomer+"\"\n" +
+                        "        },\n" +
+                        "        \"FOwnerTypeIdHead\": \"BD_OwnerOrg\",\n" +
+                        "        \"FIsTotalServiceOrCost\": false,\n" +
+                        "        \"SubHeadEntity\": {\n" +
+                        "            \"FSettleCurrID\": {\n" +
+                        "                \"FNumber\": \"PRE001\"\n" +
+                        "            },\n" +
+                        "            \"FSettleOrgID\": {\n" +
+                        "                \"FNumber\": \""+fNumberSettleOrg+"\"\n" +
+                        "            },\n" +
+                        "            \"FLocalCurrID\": {\n" +
+                        "                \"FNumber\": \"PRE001\"\n" +
+                        "            },\n" +
+                        "            \"FExchangeTypeID\": {\n" +
+                        "                \"FNumber\": \"HLTX01_SYS\"\n" +
+                        "            },\n" +
+                        "            \"FExchangeRate\": \"1\",\n" +
+                        "            \"FIsIncludedTax\": true,\n" +
+                        "            \"FIsPriceExcludeTax\": true\n" +
+                        "        },\n" +
+                        "        \"FEntity\": "+produdctArrayStr+"\n" +
+                        "    }\n" +
+                        "}");
+                JSONObject saveresult = (JSONObject)jsonObject.get("Result");
+                JSONObject saveStatus = (JSONObject)saveresult.get("ResponseStatus");
+                Boolean isSaveSuccess = (Boolean) saveStatus.get("IsSuccess");
+                Integer id = Integer.parseInt( saveresult.get("Id").toString());
+                if (isSaveSuccess){
+                    //提交
+                    this.submitMarketOutstorage(acctId,dataCentreUserName,dataCentrePassword,null,id.toString());
+                    //审核
+                    ResponseResult responseResultAudit = this.auditMarketOutstorage(acctId,dataCentreUserName,dataCentrePassword,null,id.toString());
+                    JSONObject objectHashMap = (JSONObject) responseResultAudit.getResult();
+                    JSONObject auditResult = (JSONObject) objectHashMap.get("Result");
+                    JSONObject auditStatus = (JSONObject) auditResult.get("ResponseStatus");
+                    Boolean isAuditSuccess = (Boolean) auditStatus.get("IsSuccess");
+                    if (isAuditSuccess){
+                        return ResponseResult.success(jsonObject);
+                    }
+                }else{
+                    return ResponseResult.success("k3插入失败");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+    @Override
+    public ResponseResult viewMarketOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String number,String id) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseViewBean baseViewBean = new BaseViewBean();
+            baseViewBean.setNumber(number);
+            baseViewBean.setId(id);
+            String s = JSON.toJSONString(baseViewBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.View("SAL_OUTSTOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult submitMarketOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        List<String> stringList = null;
+        if (numbers!=null){
+            String[] split = numbers.split(",");
+            stringList = Arrays.asList(split);
+        }
+
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseSubmitBean baseSubmitBean = new BaseSubmitBean();
+            baseSubmitBean.setNumbers(stringList);
+            baseSubmitBean.setIds(ids);
+            String s = JSON.toJSONString(baseSubmitBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Submit("SAL_OUTSTOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult auditMarketOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        List<String> stringList = null;
+        if (numbers!=null){
+            String[] split = numbers.split(",");
+           stringList = Arrays.asList(split);
+        }
+
+
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Audit("SAL_OUTSTOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unAuditMarketOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.UnAudit("SAL_OUTSTOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult deleteMarketOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        if(login){
+            BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+            baseDeleteBean.setNumbers(stringList);
+            baseDeleteBean.setIds(ids);
+            String s = JSON.toJSONString(baseDeleteBean);
+            try {
+                JSONObject delete = InvokeHelper.Delete("SAL_OUTSTOCK", s);
+                return ResponseResult.success(delete);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unCancelMarketOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.UnCancel("SAL_OUTSTOCK","UnCancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult cancelMarketOutstorage(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Cancel("SAL_OUTSTOCK","Cancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult batchSaveMarketOutstorage() {
+        return null;
+    }
+
+
+    //===========================================销售退货===============================================
+    @Override
+    public ResponseResult saveMarketReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String fNumberSaleOrg,String fDate,String fNumberStockOrg,String fNumberFrecust,
+                           String fNumberBillType,String fNumberSettleOrg,String fNumberSettleCurr,String entityJson,String fID ,String fBillNo) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            try {
+                //必填项：
+                //基本信息：FBillHead
+                //   销售组织：FSaleOrgId  (必填项)
+                //	 日期：FDate  (必填项)
+                //	 库存组织：FStockOrgId  (必填项)
+                //	 退货客户：FRetcustId  (必填项)
+                //	 单据类型：FBillTypeID  (必填项)
+                //明细信息：FEntity
+                //	 物料编码：FMaterialId  (必填项)
+                //	 库存单位：FUnitID  (必填项)
+                //	 货主：FOwnerId  (必填项)
+                //	 退货类型：FReturnType  (必填项)
+                //	 退货日期：FDeliveryDate  (必填项)
+                //财务信息：SubHeadEntity
+                //   结算组织：FSettleOrgId  (必填项)
+                //	 结算币别：FSettleCurrId  (必填项)
+                MarketReturnModel model = new MarketReturnModel();
+                FSaleOrgId fSaleOrgId = new FSaleOrgId();
+                fSaleOrgId.setFNumber(fNumberSaleOrg);
+                model.setFSaleOrgId(fSaleOrgId);
+                model.setFDate(fDate);
+                FStockOrgId fStockOrgId = new FStockOrgId();
+                fSaleOrgId.setFNumber(fNumberStockOrg);
+                model.setFStockOrgId(fStockOrgId);
+                FRetcustId fretcustid = new FRetcustId();
+                fretcustid.setFNumber(fNumberFrecust);
+                model.setFRetcustId(fretcustid);
+                FBillTypeID fBillTypeID = new FBillTypeID();
+                fBillTypeID.setFNUMBER(fNumberBillType);
+                model.setFBillTypeID(fBillTypeID);
+                JSONArray array = JSON.parseArray(entityJson);
+                List<FEntity> fentityList = new ArrayList<>();
+                for (int i = 0; i < array.size(); i++) {
+                    String fMaterialId = array.getJSONObject(i).getString("FMaterialId");
+                    String fUnitID = array.getJSONObject(i).getString("FUnitID");
+                    String fOwnerId = array.getJSONObject(i).getString("FOwnerId");
+                    String fReturnType = array.getJSONObject(i).getString("FReturnType");
+                    String fDeliveryDate = array.getJSONObject(i).getString("FDeliveryDate");
+                    FEntity fentity = new FEntity();
+                    FMaterialId materialId = new FMaterialId("CH4438");
+                    materialId.setFNumber(fMaterialId);
+                    fentity.setFMaterialId(materialId);
+                    FUnitID unitID = new FUnitID();
+                    unitID.setFNumber(fUnitID);
+                    fentity.setFUnitID(unitID);
+                    FOwnerId ownerId = new FOwnerId();
+                    ownerId.setFNumber(fOwnerId);
+                    fentity.setFOwnerId(ownerId);
+                    FReturnType returntype = new FReturnType();
+                    returntype.setFNumber(fReturnType);
+                    fentity.setFReturnType(returntype);
+                    fentity.setFDeliveryDate(fDeliveryDate);
+                    fentityList.add(fentity);
+                }
+                model.setFEntity(fentityList);
+                Subheadentity subheadentity = new Subheadentity();
+                FSettleOrgID settleOrgID = new FSettleOrgID();
+                settleOrgID.setFNumber(fNumberSettleOrg);
+                subheadentity.setFSettleOrgId(settleOrgID);
+                FSettleCurrID settleCurrID = new FSettleCurrID();
+                settleCurrID.setFNumber(fNumberSettleCurr);
+                subheadentity.setFSettleCurrId(settleCurrID);
+                model.setSubHeadEntity(subheadentity);
+                if(!StringUtils.isBlank(fID)){
+                    model.setFID(Integer.valueOf(fID));
+                }
+                if(!StringUtils.isBlank(fBillNo)){
+                    model.setFBillNo(fBillNo);
+                }
+                MarketReturnSaveParam marketReturnSaveParam = new MarketReturnSaveParam();
+                marketReturnSaveParam.setModel(model);
+                String s =JSON.toJSONString(marketReturnSaveParam,SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+                JSONObject save = InvokeHelper.Save("SAL_RETURNSTOCK", s);
+                return ResponseResult.success(save);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult viewMarketReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String number,String id) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseViewBean baseViewBean = new BaseViewBean();
+            baseViewBean.setNumber(number);
+            baseViewBean.setId(id);
+            String s = JSON.toJSONString(baseViewBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.View("SAL_RETURNSTOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult submitMarketReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseSubmitBean baseSubmitBean = new BaseSubmitBean();
+            baseSubmitBean.setNumbers(stringList);
+            baseSubmitBean.setIds(ids);
+            String s = JSON.toJSONString(baseSubmitBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Submit("SAL_RETURNSTOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult auditMarketReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Audit("SAL_RETURNSTOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unAuditMarketReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.UnAudit("SAL_RETURNSTOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult deleteMarketReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        if(login){
+            BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+            baseDeleteBean.setNumbers(stringList);
+            baseDeleteBean.setIds(ids);
+            String s = JSON.toJSONString(baseDeleteBean);
+            try {
+                JSONObject delete = InvokeHelper.Delete("SAL_RETURNSTOCK", s);
+                return ResponseResult.success(delete);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unCancelMarketReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.UnCancel("SAL_RETURNSTOCK","UnCancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult cancelMarketReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Cancel("SAL_RETURNSTOCK","Cancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult manageUnAuditMarketReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids){
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.ManageUnAudit("SAL_RETURNSTOCK", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult batchSaveMarketReturn() {
+        return null;
+    }
+
+    //===========================================采购退料================================================
+    @Override
+    public ResponseResult savePurchaseReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String fNumberStockOrg,String fDate,String fNumberBillType,
+            String fOwnerTypeIdHead,String fNumberOwnerIdHead,String fNumebrSupplierId,String fNumberPurchaseOrg,
+            String fMrtype,String fMrmode,String fNumberRequireOrg,String fNumberSettleOrg,
+            String fNumberSettleCurr,String fPriceTimepoint,String purmrbEntryJson,String fID ,String fBillNo) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            try {
+                //必填项：
+                //基本信息：FBillHead
+                //	 退料组织：FStockOrgId  (必填项)
+                //	 退料日期：FDate  (必填项)
+                //	 单据类型：FBillTypeID  (必填项)
+                //	 货主类型：FOwnerTypeIdHead  (必填项)
+                //	 货主：FOwnerIdHead  (必填项)
+                //	 供应商：FSupplierID  (必填项)
+                //	 采购组织：FPurchaseOrgId  (必填项)
+                //	 退料类型：FMRTYPE  (必填项)
+                //	 退料方式：FMRMODE  (必填项)
+                //	 需求组织：FRequireOrgId  (必填项)
+                //财务信息：FPURMRBFIN
+                //   结算组织：FSettleOrgId  (必填项)
+                //   结算币别：FSettleCurrId  (必填项)
+                //   定价时点：FPRICETIMEPOINT  (必填项)
+                //明细信息：FPURMRBENTRY
+                //   物料编码：FMATERIALID  (必填项)
+                //   计价单位：FPRICEUNITID  (必填项)
+                //	 库存单位：FUnitID  (必填项)
+                //	 采购单位：FCarryUnitId  (必填项)
+                PurchaseReturnSaveModel model = new PurchaseReturnSaveModel();
+                FStockOrgId fStockOrgId = new FStockOrgId();
+                fStockOrgId.setFNumber(fNumberStockOrg);
+                model.setFStockOrgId(fStockOrgId);
+                model.setFDate(fDate);
+                FBillTypeID fBillTypeID = new FBillTypeID();
+                fBillTypeID.setFNUMBER(fNumberBillType);
+                model.setFBillTypeID(fBillTypeID);
+                model.setFOwnerTypeIdHead(fOwnerTypeIdHead);
+                FOwnerIdHead fOwnerIdHead = new FOwnerIdHead();
+                fOwnerIdHead.setFNumber(fNumberOwnerIdHead);
+                model.setFOwnerIdHead(fOwnerIdHead);
+                FSupplierId fSupplierId = new FSupplierId();
+                fStockOrgId.setFNumber(fNumebrSupplierId);
+                model.setFSupplierID(fSupplierId);
+                FPurchaseOrgId fPurchaseOrgId = new FPurchaseOrgId();
+                fPurchaseOrgId.setFNumber(fNumberPurchaseOrg);
+                model.setFPurchaseOrgId(fPurchaseOrgId);
+                model.setFMRTYPE(fMrtype);
+                model.setFMRMODE(fMrmode);
+                FRequireOrgId frequireorgid = new FRequireOrgId();
+                frequireorgid.setFNumber(fNumberRequireOrg);
+                model.setFRequireOrgId(frequireorgid);
+                FPURMRBFIN fpurmrbfin = new FPURMRBFIN();
+                FSettleOrgID fSettleOrgID = new FSettleOrgID();
+                fSettleOrgID.setFNumber(fNumberSettleOrg);
+                fpurmrbfin.setFSettleOrgId(fSettleOrgID);
+                FSettleCurrID fSettleCurrID = new FSettleCurrID();
+                fSettleCurrID.setFNumber(fNumberSettleCurr);
+                fpurmrbfin.setFSettleCurrId(fSettleCurrID);
+                fpurmrbfin.setFPRICETIMEPOINT(fPriceTimepoint);
+                model.setFPURMRBFIN(fpurmrbfin);
+                if(!StringUtils.isBlank(fID)){
+                    model.setFID(Integer.valueOf(fID));
+                }
+                if(!StringUtils.isBlank(fBillNo)){
+                    model.setFBillNo(fBillNo);
+                }
+                List<FPURMRBENTRY> fpurmrbentryList = new ArrayList<>();
+                JSONArray array = JSON.parseArray(purmrbEntryJson);
+                for (int i = 0; i < array.size(); i++) {
+                    String fmaterialid = array.getJSONObject(i).getString("FMATERIALID");
+                    String fpriceunitid = array.getJSONObject(i).getString("FPRICEUNITID");
+                    String fUnitID = array.getJSONObject(i).getString("FUnitID");
+                    String fCarryUnitId = array.getJSONObject(i).getString("FCarryUnitId");
+                    FPURMRBENTRY fpurmrbentry = new FPURMRBENTRY();
+                    FMaterialId materialId = new FMaterialId("CH4438");
+                    materialId.setFNumber(fmaterialid);
+                    fpurmrbentry.setFMATERIALID(materialId);
+                    FPriceUnitID priceUnitID = new FPriceUnitID();
+                    priceUnitID.setFNumber(fpriceunitid);
+                    fpurmrbentry.setFPRICEUNITID(priceUnitID);
+                    FUnitID unitID = new FUnitID();
+                    unitID.setFNumber(fUnitID);
+                    fpurmrbentry.setFUnitID(unitID);
+                    FCarryUnitId  carryunitid = new FCarryUnitId();
+                    carryunitid.setFNumber(fCarryUnitId);
+                    fpurmrbentry.setFCarryUnitId(carryunitid);
+                    fpurmrbentryList.add(fpurmrbentry);
+                }
+                model.setFPURMRBENTRY(fpurmrbentryList);
+                PurchaseReturnSaveParam purchaseReturnSaveParam = new PurchaseReturnSaveParam();
+                purchaseReturnSaveParam.setModel(model);
+                String s = JSON.toJSONString(purchaseReturnSaveParam,SerializerFeature.WriteMapNullValue,
+                        SerializerFeature.WriteNullListAsEmpty,SerializerFeature.WriteNullStringAsEmpty,
+                        SerializerFeature.WriteNullNumberAsZero,SerializerFeature.WriteNullBooleanAsFalse);
+                JSONObject jsonObject = InvokeHelper.Save("PUR_MRB", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+    @Override
+    public ResponseResult viewPurchaseReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String number,String id) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseViewBean baseViewBean = new BaseViewBean();
+            baseViewBean.setNumber(number);
+            baseViewBean.setId(id);
+            String s = JSON.toJSONString(baseViewBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.View("PUR_MRB", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult submitPurchaseReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseSubmitBean baseSubmitBean = new BaseSubmitBean();
+            baseSubmitBean.setNumbers(stringList);
+            baseSubmitBean.setIds(ids);
+            String s = JSON.toJSONString(baseSubmitBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Submit("PUR_MRB", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult auditPurchaseReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.Audit("PUR_MRB", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unAuditPurchaseReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.UnAudit("PUR_MRB", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult deletePurchaseReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers,String ids) {
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        if(login){
+            BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+            baseDeleteBean.setNumbers(stringList);
+            baseDeleteBean.setIds(ids);
+            String s = JSON.toJSONString(baseDeleteBean);
+            try {
+                JSONObject delete = InvokeHelper.Delete("PUR_MRB", s);
+                return ResponseResult.success(delete);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult unCancelPurchaseReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.UnCancel("PUR_MRB","UnCancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult cancelPurchaseReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids) {
+        String[] numbersStrList = numbers.split(",");
+        List<String> resultList = new ArrayList<>(Arrays.asList(numbersStrList));
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if (login) {
+            try {
+                BaseDeleteBean baseDeleteBean = new BaseDeleteBean();
+                baseDeleteBean.setIds(ids);
+                baseDeleteBean.setNumbers(resultList);
+                String a = JSON.toJSONString(baseDeleteBean);
+                JSONObject jsonObject = InvokeHelper.Cancel("PUR_MRB","Cancel", a);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        } else {
+            return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseResult manageUnAuditPurchaseReturn(String acctId,String dataCentreUserName,String dataCentrePassword,String numbers, String ids){
+        String[] split = numbers.split(",");
+        List<String> stringList = Arrays.asList(split);
+        Boolean login = K3cloudConfig.login(acctId,dataCentreUserName,dataCentrePassword);
+        if(login){
+            BaseAuditBean baseAuditBean = new BaseAuditBean();
+            baseAuditBean.setNumbers(stringList);
+            baseAuditBean.setIds(ids);
+            String s = JSON.toJSONString(baseAuditBean);
+            try {
+                JSONObject jsonObject = InvokeHelper.ManageUnAudit("PUR_MRB", s);
+                return ResponseResult.success(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.success(e);
+            }
+        }
+        return ResponseResult.success(K3cloudConfig.LOGIN_FAIL);
+    }
+
+    @Override
+    public ResponseResult batchSavePurchaseReturn() {
+        return null;
+    }
+}

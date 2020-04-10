@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="walletcashrecord" >
+
+  <!--提现sql片段-->
+  <sql id="Base_Column_List" >
+    CashRecordId, WalletId, BankCardId, TransactionNo, CashTime, RechargeAccount,CardNumber
+    CashChannel, CashStatus, FailureCause, Remarks, Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+  </sql>
+
+  <!--提现详情sql片段-->
+  <sql id="Column_detail" >
+    CashRecordId,WalletId, BonusTypeId, OrderNumber, OrderPrice, OrderTime, Amount, CardNumber,Name, MembershipLevel,BonusStatus,
+    Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+
+  <select id="selectCashrecordUserIds" resultType="Long" >
+      select CardNumber from w_walletcashrecord
+  </select>
+
+
+  <!--提现分页查询-->
+  <select id="selectCashrecordList" resultType="WalletCashRecord" parameterType="String">
+    SELECT
+    a.*,
+    b.name,
+    b.BankName,
+    b.BankCode
+    FROM
+    w_walletcashrecord a,
+    w_walletbankcard b
+    WHERE
+    a.BankCardId = b.BankCardId
+      and a.Status = 1
+    <if test = "status!= null" >
+      AND a.Status = #{status}
+    </if >
+    <if test = "cashTime!= null" >
+      AND a.CashTime = #{cashTime}
+    </if >
+  </select>
+
+  <!--提现详情分页-->
+  <select id="selectCashRecordDetailList" resultType="WalletBonudDetail" parameterType="Map">
+    select
+    <include refid="Column_detail"/>
+    from w_wallet_bonud_detail
+    WHERE Status = 1
+    <if test = "bonusTypeId!= null" >
+      AND BonusTypeId = #{bonusTypeId}
+    </if >
+    <if test = "cashRecordId!= null" >
+      AND CashRecordId = #{cashRecordId}
+    </if >
+  </select>
+
+
+
+  <select id="selectCashAmount" resultType="BigDecimal" >
+    select sum(Amount) from w_walletcashrecord
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from w_walletcashrecord
+    where CashRecordId = #{cashRecordId}
+  </delete>
+
+
+  <delete id="deleteByExample" parameterType="Walletcashrecord" >
+    delete from w_walletcashrecord
+  </delete>
+
+  <insert id="insertSelective" parameterType="Walletcashrecord" >
+    insert into w_walletcashrecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cashRecordId != null" >
+        CashRecordId,
+      </if>
+      <if test="cardNumber != null" >
+        CardNumber,
+      </if>
+      <if test="walletId != null" >
+        WalletId,
+      </if>
+      <if test="bankCardId != null" >
+        BankCardId,
+      </if>
+      <if test="transactionNo != null" >
+        TransactionNo,
+      </if>
+      <if test="cashTime != null" >
+        CashTime,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="rechargeAccount != null" >
+        RechargeAccount,
+      </if>
+      <if test="cashChannel != null" >
+        CashChannel,
+      </if>
+      <if test="cashStatus != null" >
+        CashStatus,
+      </if>
+      <if test="failureCause != null" >
+        FailureCause,
+      </if>
+      <if test="remarks != null" >
+        Remarks,
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cashRecordId != null" >
+        #{cashRecordId},
+      </if>
+      <if test="cardNumber != null" >
+        #{cardNumber},
+      </if>
+      <if test="walletId != null" >
+        #{walletId},
+      </if>
+      <if test="bankCardId != null" >
+        #{bankCardId},
+      </if>
+      <if test="transactionNo != null" >
+        #{transactionNo},
+      </if>
+      <if test="cashTime != null" >
+        #{cashTime},
+      </if>
+      <if test="amount != null" >
+        #{amount},
+      </if>
+      <if test="rechargeAccount != null" >
+        #{rechargeAccount},
+      </if>
+      <if test="cashChannel != null" >
+        #{cashChannel},
+      </if>
+      <if test="cashStatus != null" >
+        #{cashStatus},
+      </if>
+      <if test="failureCause != null" >
+        #{failureCause},
+      </if>
+      <if test="remarks != null" >
+        #{remarks},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime},
+      </if>
+    </trim>
+  </insert>
+
+
+  <!--添加提现详情-->
+  <insert id="addCashDetail" parameterType="WalletCashRecordDetail">
+    insert into w_walletcashrecord_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cashRecordDetailId != null" >
+        CashRecordDetailId,
+      </if>
+      <if test="cashRecordId != null" >
+        CashRecordId,
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber,
+      </if>
+      <if test="orderTime != null" >
+        OrderTime,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="nickName != null" >
+        NickName,
+      </if>
+      <if test="membershipLevel != null" >
+        MembershipLevel,
+      </if>
+      <if test="orderAmount != null" >
+        OrderAmount,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="cashStatus != null" >
+        CashStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cashRecordDetailId != null" >
+        #{cashRecordDetailIdLong},
+      </if>
+      <if test="cashRecordId != null" >
+        #{cashRecordIdLong},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumberLong},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTimeLong},
+      </if>
+      <if test="name != null" >
+        #{nameLong},
+      </if>
+      <if test="nickName != null" >
+        #{nickNameLong},
+      </if>
+      <if test="membershipLevel != null" >
+        #{membershipLevelLong},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmountLong},
+      </if>
+      <if test="amount != null" >
+        #{amountLong},
+      </if>
+      <if test="cashStatus != null" >
+        #{cashStatusLong},
+      </if>
+      <if test="status != null" >
+        #{statusLong},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperatorLong},
+      </if>
+      <if test="createTime != null" >
+        #{createTimeLong},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperatorLong},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTimeLong},
+      </if>
+    </trim>
+  </insert>
+
+
+  <!--添加提现-->
+  <insert id="addCash" parameterType="WalletCashRecord" keyProperty="CashRecordId" useGeneratedKeys="true">
+    insert into w_walletcashrecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cashRecordId != null" >
+        CashRecordId,
+      </if>
+      <if test="walletId != null" >
+        WalletId,
+      </if>
+      <if test="bankCardId != null" >
+        BankCardId,
+      </if>
+      <if test="transactionNo != null" >
+        TransactionNo,
+      </if>
+      <if test="cashTime != null" >
+        CashTime,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="mobile != null" >
+        Mobile,
+      </if>
+      <if test="cardNumber != null" >
+        CardNumber,
+      </if>
+      <if test="cashChannel != null" >
+        CashChannel,
+      </if>
+      <if test="cashStatus != null" >
+        CashStatus,
+      </if>
+      <if test="failureCause != null" >
+        FailureCause,
+      </if>
+      <if test="remarks != null" >
+        Remarks,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cashRecordId != null" >
+        #{cashRecordIdLong},
+      </if>
+      <if test="walletId != null" >
+        #{walletIdLong},
+      </if>
+      <if test="bankCardId != null" >
+        #{bankCardIdLong},
+      </if>
+      <if test="transactionNo != null" >
+        #{transactionNoLong},
+      </if>
+      <if test="cashTime != null" >
+        #{cashTimeLong},
+      </if>
+      <if test="amount != null" >
+        #{amountLong},
+      </if>
+      <if test="mobile != null" >
+        #{mobileLong},
+      </if>
+      <if test="cardNumber != null" >
+        #{cardNumberLong},
+      </if>
+      <if test="cashChannel != null" >
+        #{cashChannelLong},
+      </if>
+      <if test="cashStatus != null" >
+        #{cashStatusLong},
+      </if>
+      <if test="failureCause != null" >
+        #{failureCauseLong},
+      </if>
+      <if test="remarks != null" >
+        #{remarksLong},
+      </if>
+      <if test="status != null" >
+        #{statusLong},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperatorLong},
+      </if>
+      <if test="createTime != null" >
+        #{createTimeLong},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperatorLong},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTimeLong}
+      </if>
+    </trim>
+  </insert>
+
+
+  <select id="countByExample" parameterType="Walletcashrecord" resultType="java.lang.Integer" >
+    select count(*) from w_walletcashrecord
+  </select>
+
+
+  <update id="updateByExampleSelective" parameterType="map" >
+    update w_walletcashrecord
+    <set >
+      <if test="cashRecordId != null" >
+        CashRecordId = #{cashRecordId},
+      </if>
+      <if test="walletId != null" >
+        WalletId = #{walletId},
+      </if>
+      <if test="cardNumber != null" >
+        CardNumber = #{cardNumber},
+      </if>
+      <if test="bankCardId != null" >
+        BankCardId = #{bankCardId},
+      </if>
+      <if test="transactionNo != null" >
+        TransactionNo = #{transactionNo},
+      </if>
+      <if test="cashTime != null" >
+        CashTime = #{cashTime},
+      </if>
+      <if test="amount != null" >
+        Amount = #{amount},
+      </if>
+      <if test="rechargeAccount != null" >
+        RechargeAccount = #{rechargeAccount},
+      </if>
+      <if test="cashChannel != null" >
+        CashChannel = #{cashChannel},
+      </if>
+      <if test="cashStatus != null" >
+        CashStatus = #{cashStatus},
+      </if>
+      <if test="failureCause != null" >
+        FailureCause = #{failureCause},
+      </if>
+      <if test="remarks != null" >
+        Remarks = #{remarks},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime},
+      </if>
+    </set>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterType="Walletcashrecord" >
+    update w_walletcashrecord
+    <set >
+
+      <if test="walletId != null" >
+        WalletId = #{walletId},
+      </if>
+      <if test="cardNumber != null" >
+        CardNumber = #{cardNumber},
+      </if>
+      <if test="bankCardId != null" >
+        BankCardId = #{bankCardId},
+      </if>
+      <if test="transactionNo != null" >
+        TransactionNo = #{transactionNo},
+      </if>
+      <if test="cashTime != null" >
+        CashTime = #{cashTime},
+      </if>
+      <if test="amount != null" >
+        Amount = #{amount},
+      </if>
+      <if test="rechargeAccount != null" >
+        RechargeAccount = #{rechargeAccount},
+      </if>
+      <if test="cashChannel != null" >
+        CashChannel = #{cashChannel},
+      </if>
+      <if test="cashStatus != null" >
+        CashStatus = #{cashStatus},
+      </if>
+      <if test="failureCause != null" >
+        FailureCause = #{failureCause},
+      </if>
+      <if test="remarks != null" >
+        Remarks = #{remarks},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime},
+      </if>
+    </set>
+    where CashRecordId = #{cashRecordId}
+  </update>
+
+  <update id="examine" parameterType="Long" >
+    update w_walletcashrecord set CashStatus =2 ,DataChange_LastTime = now() where CashRecordId = #{cashRecordId}
+  </update>
+
+</mapper>

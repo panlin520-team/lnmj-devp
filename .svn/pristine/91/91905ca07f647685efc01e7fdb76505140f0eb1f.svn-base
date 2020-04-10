@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SomeGuest" >
+  <resultMap id="SomeGuestMap" type="com.lnmj.account.entity.SomeGuest" >
+    <id column="SomeGuestID" property="someGuestID" jdbcType="BIGINT" />
+    <result column="SomeGuest" property="someGuest" jdbcType="VARCHAR" />
+    <result column="IndustryID" property="industryID" jdbcType="BIGINT" />
+    <result column="StoreID" property="storeID" jdbcType="BIGINT" />
+    <result column="NumberToShop" property="numberToShop" jdbcType="INTEGER" />
+    <result column="SameStaffNumber" property="sameStaffNumber" jdbcType="INTEGER" />
+    <result column="SameStaffContinueNumber" property="sameStaffContinueNumber" jdbcType="INTEGER" />
+    <result column="ContinueOtherNumber" property="continueOtherNumber" jdbcType="INTEGER" />
+    <result column="LossDay" property="lossDay" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_SomeGuest_column" >
+    SomeGuestID, SomeGuest, IndustryID, StoreID, NumberToShop, SameStaffNumber, SameStaffContinueNumber, 
+    ContinueOtherNumber, LossDay, Remark, Status, CreateOperator, CreateTime, ModifyOperator, 
+    DataChange_LastTime
+  </sql>
+
+  <select id="selectSomeGuestList" resultMap="SomeGuestMap">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_SomeGuest_column" />
+    from u_someguest where Status = 1
+  </select>
+
+  <select id="selectSomeGuestByID" resultMap="SomeGuestMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_SomeGuest_column" />
+    from u_someguest
+    where SomeGuestID = #{someGuestID,jdbcType=BIGINT} and Status = 1
+  </select>
+
+  <update id="deleteSomeGuestByID" parameterType="SomeGuest" >
+    update u_someguest set Status = 0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    where SomeGuestID = #{someGuestID,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertSomeGuest" parameterType="com.lnmj.account.entity.SomeGuest" keyProperty="someGuestID" useGeneratedKeys="true" >
+    insert into u_someguest
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="someGuestID != null" >
+        SomeGuestID,
+      </if>
+      <if test="someGuest != null" >
+        SomeGuest,
+      </if>
+      <if test="industryID != null" >
+        IndustryID,
+      </if>
+      <if test="storeID != null" >
+        StoreID,
+      </if>
+      <if test="numberToShop != null" >
+        NumberToShop,
+      </if>
+      <if test="sameStaffNumber != null" >
+        SameStaffNumber,
+      </if>
+      <if test="sameStaffContinueNumber != null" >
+        SameStaffContinueNumber,
+      </if>
+      <if test="continueOtherNumber != null" >
+        ContinueOtherNumber,
+      </if>
+      <if test="lossDay != null" >
+        LossDay,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="someGuestID != null" >
+        #{someGuestID,jdbcType=BIGINT},
+      </if>
+      <if test="someGuest != null" >
+        #{someGuest,jdbcType=VARCHAR},
+      </if>
+      <if test="industryID != null" >
+        #{industryID,jdbcType=BIGINT},
+      </if>
+      <if test="storeID != null" >
+        #{storeID,jdbcType=BIGINT},
+      </if>
+      <if test="numberToShop != null" >
+        #{numberToShop,jdbcType=INTEGER},
+      </if>
+      <if test="sameStaffNumber != null" >
+        #{sameStaffNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sameStaffContinueNumber != null" >
+        #{sameStaffContinueNumber,jdbcType=INTEGER},
+      </if>
+      <if test="continueOtherNumber != null" >
+        #{continueOtherNumber,jdbcType=INTEGER},
+      </if>
+      <if test="lossDay != null" >
+        #{lossDay,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateSomeGuestByID" parameterType="com.lnmj.account.entity.SomeGuest" >
+    update u_someguest
+    <set >
+      <if test="someGuest != null" >
+        SomeGuest = #{someGuest,jdbcType=VARCHAR},
+      </if>
+      <if test="industryID != null" >
+        IndustryID = #{industryID,jdbcType=BIGINT},
+      </if>
+      <if test="storeID != null" >
+        StoreID = #{storeID,jdbcType=BIGINT},
+      </if>
+      <if test="numberToShop != null" >
+        NumberToShop = #{numberToShop,jdbcType=INTEGER},
+      </if>
+      <if test="sameStaffNumber != null" >
+        SameStaffNumber = #{sameStaffNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sameStaffContinueNumber != null" >
+        SameStaffContinueNumber = #{sameStaffContinueNumber,jdbcType=INTEGER},
+      </if>
+      <if test="continueOtherNumber != null" >
+        ContinueOtherNumber = #{continueOtherNumber,jdbcType=INTEGER},
+      </if>
+      <if test="lossDay != null" >
+        LossDay = #{lossDay,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where SomeGuestID = #{someGuestID,jdbcType=BIGINT}
+  </update>
+
+</mapper>

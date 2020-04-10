@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="subordBuyLimit">
+    <sql id="Base_Column_List">
+        SubordBuyLimitId,
+        SubordBuyLimitName,
+        SubordBuyLimitNumber,
+        ProductType,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+
+    <select id="selectSubordBuyLimitList" resultType="SubordBuyLimit" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from s_subord_buy_limit
+        where 1=1
+        <if test="keyWordSubordBuyLimitName != null and keyWordSubordBuyLimitName!=''">
+            and  SubordBuyLimitName like CONCAT('%',#{keyWordSubordBuyLimitName},'%')
+        </if>
+        <if test="productType != null and productType!=''">
+            and  ProductType = #{productType}
+        </if>
+    </select>
+
+    <delete id="deleteSubordBuyLimit" parameterType="Map">
+        delete from s_subord_buy_limit where SubordBuyLimitId = #{subordBuyLimitId}
+    </delete>
+
+
+    <insert id="addSubordBuyLimit" parameterType="SubordBuyLimit">
+        insert into s_subord_buy_limit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subordBuyLimitId != null">
+                SubordBuyLimitId,
+            </if>
+            <if test="subordBuyLimitName != null">
+                SubordBuyLimitName,
+            </if>
+            <if test="subordBuyLimitNumber != null">
+                SubordBuyLimitNumber,
+            </if>
+            <if test="productType != null">
+                ProductType,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subordBuyLimitId != null">
+                #{subordBuyLimitId},
+            </if>
+            <if test="subordBuyLimitName != null">
+                #{subordBuyLimitName},
+            </if>
+            <if test="subordBuyLimitNumber != null">
+                #{subordBuyLimitNumber},
+            </if>
+            <if test="productType != null">
+                #{productType},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <update id="updateSubordBuyLimit" parameterType="SubordBuyLimit" >
+        update s_subord_buy_limit
+        <set >
+            <if test="subordBuyLimitName != null" >
+                SubordBuyLimitName = #{subordBuyLimitName},
+            </if>
+            <if test="subordBuyLimitNumber != null" >
+                SubordBuyLimitNumber = #{subordBuyLimitNumber},
+            </if>
+            <if test="productType != null" >
+                ProductType = #{productType},
+            </if>
+            <if test="status != null" >
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null" >
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where SubordBuyLimitId = #{subordBuyLimitId}
+    </update>
+
+    <select id="selectSubordBuyLimitById" resultType="SubordBuyLimit" parameterType="Long">
+        select
+        <include refid="Base_Column_List"/>
+        from s_subord_buy_limit
+        where SubordBuyLimitId = #{subordBuyLimitId}
+    </select>
+
+</mapper>

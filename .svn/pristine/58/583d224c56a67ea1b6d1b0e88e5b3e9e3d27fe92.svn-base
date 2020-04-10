@@ -1,0 +1,1034 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="beautician">
+
+    <sql id="Base_Column_List_detail">
+        BeauticianId,
+        K3Id,
+        K3Number,
+        Name,
+        Gender,
+        StaffNumber,
+        EntryTime,
+        OpenId,
+        CompanyType,
+        CompanyId,
+        StoreId,
+        DepartmentId,
+        GroupId,
+        PostId,
+        PostCategoryId,
+        PartTimePostId,
+        PartTimePostCategoryId,
+        IsSkipTurn,
+        TactGrade,
+        SkillGrade,
+        CumulativeCustomer,
+        Sort,
+        GradeId,
+        HeadUrl,
+        WorkingState,
+        Introduction,
+        NursingDate,
+        IsPartTime,
+        Mobile,
+        IsBasicSalary,
+        IsSaleMan,
+        YeWuYuanK3Id,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_Group">
+        GroupId,
+        Name,
+        StoreId,
+        GroupLeaderId,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_Post">
+        PostId,
+        PostLevel,
+        Name,
+        PostCategoryId,
+        PostIndustryID,
+        PostAchievement,
+        DepartmentId,
+        CompanyType,
+        CompanyId,
+        K3Id,
+        K3Number,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_Post_Level">
+        PostLevelId,
+        PostLevelName,
+        CompanyId,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_Post_Category">
+        PostCategoryId
+        ,
+        Name,
+        IndustryID,
+        CompanyId,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <select id="selectBeauticiantList" resultType="Beautician" parameterType="Beautician">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_beautician
+        where Status=1
+        <if test="name != null">
+            and Name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="staffNumber != null">
+            and StaffNumber = #{staffNumber}
+        </if>
+        <if test="list != null">
+            and CompanyId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="postId != null">
+            and PostId = #{postId}
+        </if>
+        <if test="companyType != null">
+            and companyType = #{companyType}
+        </if>
+        <if test="isSaleMan != null">
+            and IsSaleMan = #{isSaleMan}
+        </if>
+        <if test="companyId != null">
+            and CompanyId = #{companyId}
+        </if>
+    </select>
+
+    <select id="selectBeauticianByStoreId" resultType="Beautician" parameterType="Map">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_beautician
+        where Status=1
+        <if test="companyType != null">
+            and CompanyType = #{companyType}
+        </if>
+        <if test="companyId != null">
+            and CompanyId = #{companyId}
+        </if>
+    </select>
+
+    <select id="selectBeauticianByStoreIdArray" resultType="Beautician" parameterType="Map">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_beautician
+        where Status=1
+        <if test="list != null">
+            and CompanyId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="companyType != null">
+            and CompanyType = #{companyType}
+        </if>
+
+    </select>
+
+    <select id="selectBeauticianById" resultType="Beautician" parameterType="Long">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_beautician
+        where BeauticianId = #{beauticianId}
+    </select>
+
+    <select id="selectBeauticianByCode" resultType="Beautician" parameterType="String">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_beautician
+        where StaffNumber = #{staffNumber}
+    </select>
+
+    <insert id="insertBeautician" parameterType="Beautician" useGeneratedKeys="true" keyProperty="beauticianId">
+        insert into s_beautician
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="beauticianId != null">
+                BeauticianId,
+            </if>
+            <if test="k3Id != null">
+                K3Id,
+            </if>
+            <if test="k3Number != null">
+                K3Number,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="gender != null">
+                Gender,
+            </if>
+            <if test="staffNumber != null">
+                StaffNumber,
+            </if>
+            <if test="entryTime != null">
+                EntryTime,
+            </if>
+            <if test="openId != null and openId !=''">
+                OpenId,
+            </if>
+            <if test="companyType != null">
+                CompanyType,
+            </if>
+            <if test="companyId != null">
+                CompanyId,
+            </if>
+            <if test="storeId != null">
+                StoreId,
+            </if>
+            <if test="departmentId != null">
+                DepartmentId,
+            </if>
+            <if test="groupId != null">
+                GroupId,
+            </if>
+            <if test="postId != null">
+                PostId,
+            </if>
+            <if test="postCategoryId != null">
+                PostCategoryId,
+            </if>
+            <if test="partTimePostId != null">
+                PartTimePostId,
+            </if>
+            <if test="partTimePostCategoryId != null">
+                PartTimePostCategoryId,
+            </if>
+            <if test="isSkipTurn != null">
+                IsSkipTurn,
+            </if>
+            <if test="tactGrade != null">
+                TactGrade,
+            </if>
+            <if test="skillGrade != null">
+                SkillGrade,
+            </if>
+            <if test="cumulativeCustomer != null">
+                CumulativeCustomer,
+            </if>
+            <if test="sort != null">
+                Sort,
+            </if>
+            <if test="gradeId != null">
+                GradeId,
+            </if>
+            <if test="headUrl != null">
+                HeadUrl,
+            </if>
+            <if test="workingState != null">
+                WorkingState,
+            </if>
+            <if test="introduction != null">
+                Introduction,
+            </if>
+            <if test="nursingDate != null">
+                NursingDate,
+            </if>
+            <if test="isPartTime != null">
+                IsPartTime,
+            </if>
+            <if test="mobile != null">
+                Mobile,
+            </if>
+            <if test="isBasicSalary != null">
+                IsBasicSalary,
+            </if>
+            <if test="isSaleMan != null">
+                IsSaleMan,
+            </if>
+            <if test="yeWuYuanK3Id != null">
+                YeWuYuanK3Id,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="beauticianId != null">
+                #{beauticianId},
+            </if>
+            <if test="k3Id != null">
+                #{k3Id},
+            </if>
+            <if test="k3Number != null">
+                #{k3Number},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="gender != null">
+                #{gender},
+            </if>
+            <if test="staffNumber != null">
+                #{staffNumber},
+            </if>
+            <if test="entryTime != null">
+                #{entryTime},
+            </if>
+            <if test="openId != null and openId !=''">
+                #{openId},
+            </if>
+            <if test="companyType != null">
+                #{companyType},
+            </if>
+            <if test="companyId != null">
+                #{companyId},
+            </if>
+            <if test="storeId != null">
+                #{storeId},
+            </if>
+            <if test="departmentId != null">
+                #{departmentId},
+            </if>
+            <if test="groupId != null">
+                #{groupId},
+            </if>
+            <if test="postId != null">
+                #{postId},
+            </if>
+            <if test="postCategoryId != null">
+                #{postCategoryId},
+            </if>
+            <if test="partTimePostId != null">
+                #{partTimePostId},
+            </if>
+            <if test="partTimePostCategoryId != null">
+                #{partTimePostCategoryId},
+            </if>
+            <if test="isSkipTurn != null">
+                #{isSkipTurn},
+            </if>
+            <if test="tactGrade != null">
+                #{tactGrade},
+            </if>
+            <if test="skillGrade != null">
+                #{skillGrade},
+            </if>
+            <if test="cumulativeCustomer != null">
+                #{cumulativeCustomer},
+            </if>
+            <if test="sort != null">
+                #{sort},
+            </if>
+            <if test="gradeId != null">
+                #{gradeId},
+            </if>
+            <if test="headUrl != null">
+                #{headUrl},
+            </if>
+            <if test="workingState != null">
+                #{workingState},
+            </if>
+            <if test="introduction != null">
+                #{introduction},
+            </if>
+            <if test="nursingDate != null">
+                #{nursingDate},
+            </if>
+            <if test="isPartTime != null">
+                #{isPartTime},
+            </if>
+            <if test="mobile != null">
+                #{mobile},
+            </if>
+            <if test="isBasicSalary != null">
+                #{isBasicSalary},
+            </if>
+            <if test="isSaleMan != null">
+                #{isSaleMan},
+            </if>
+            <if test="yeWuYuanK3Id != null">
+                #{yeWuYuanK3Id},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            now(),
+        </trim>
+    </insert>
+
+    <update id="updateBeautician" parameterType="Beautician">
+        update s_beautician
+        <set>
+            <if test="name != null">
+                Name = #{name},
+            </if>
+            <if test="k3Id != null">
+                K3Id = #{k3Id},
+            </if>
+            <if test="k3Number != null">
+                K3Number = #{k3Number},
+            </if>
+            <if test="gender != null">
+                Gender = #{gender},
+            </if>
+            <if test="staffNumber != null">
+                StaffNumber = #{staffNumber},
+            </if>
+            <if test="entryTime != null">
+                EntryTime = #{entryTime},
+            </if>
+            <if test="openId != null">
+                OpenId = #{openId},
+            </if>
+            <if test="companyType != null">
+                CompanyType = #{companyType},
+            </if>
+            <if test="companyId != null">
+                CompanyId = #{companyId},
+            </if>
+            <if test="storeId != null">
+                StoreId = #{storeId},
+            </if>
+            <if test="departmentId != null">
+                DepartmentId = #{departmentId},
+            </if>
+            <if test="groupId != null">
+                GroupId = #{groupId},
+            </if>
+            <if test="postId != null">
+                PostId = #{postId},
+            </if>
+            <if test="postCategoryId != null">
+                PostCategoryId = #{postCategoryId},
+            </if>
+            <if test="partTimePostId != null">
+                PartTimePostId = #{partTimePostId},
+            </if>
+            <if test="partTimePostCategoryId != null">
+                PartTimePostCategoryId = #{partTimePostCategoryId},
+            </if>
+            <if test="isSkipTurn != null">
+                IsSkipTurn = #{isSkipTurn},
+            </if>
+            <if test="tactGrade != null">
+                TactGrade = #{tactGrade},
+            </if>
+            <if test="skillGrade != null">
+                SkillGrade = #{skillGrade},
+            </if>
+            <if test="cumulativeCustomer != null">
+                CumulativeCustomer = #{cumulativeCustomer},
+            </if>
+            <if test="sort != null">
+                Sort = #{sort},
+            </if>
+            <if test="gradeId != null">
+                GradeId = #{gradeId},
+            </if>
+            <if test="headUrl != null">
+                HeadUrl = #{headUrl},
+            </if>
+            <if test="workingState != null">
+                WorkingState = #{workingState},
+            </if>
+            <if test="introduction != null">
+                Introduction = #{introduction},
+            </if>
+            <if test="nursingDate != null">
+                NursingDate = #{nursingDate},
+            </if>
+            <if test="isPartTime != null">
+                IsPartTime = #{isPartTime},
+            </if>
+            <if test="mobile != null">
+                Mobile = #{mobile},
+            </if>
+            <if test="isBasicSalary != null">
+                IsBasicSalary = #{isBasicSalary},
+            </if>
+            <if test="isSaleMan != null">
+                isSaleMan = #{isSaleMan},
+            </if>
+            <if test="yeWuYuanK3Id != null">
+                YeWuYuanK3Id = #{yeWuYuanK3Id},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where BeauticianId = #{beauticianId}
+    </update>
+
+    <update id="deleteBeautician" parameterType="Map">
+        update s_beautician set Status = 0,ModifyOperator=#{modifyOperator},DataChange_LastTime=now() where BeauticianId
+        in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="selectGroup" resultType="Group" parameterType="Group">
+        select
+        <include refid="Base_Column_Group"/>
+        from s_group
+        where 1=1
+        <if test="storeId != null">
+            and StoreId = #{storeId}
+        </if>
+        <if test="name != null">
+            and Name like CONCAT('%',#{name},'%')
+        </if>
+    </select>
+
+    <select id="selectPost" resultType="Post">
+        select
+        <include refid="Base_Column_Post"/>
+        from s_post
+        where Status = 1
+        <if test="postIndustryIDSearch != null and postIndustryIDSearch!=''">
+            and PostIndustryID = #{postIndustryIDSearch}
+        </if>
+        <if test="postCategoryId != null and postCategoryId!=''">
+            and PostCategoryId = #{postCategoryId}
+        </if>
+        <if test="companyId != null and companyId!=''">
+            and CompanyId = #{companyId}
+        </if>
+        <if test="companyType != null and companyType!=''">
+            and CompanyType = #{companyType}
+        </if>
+        <if test="departmentId != null and departmentId!=''">
+            and DepartmentId = #{departmentId}
+        </if>
+        <if test="postNameKeyword != null">
+            and Name like CONCAT('%',#{postNameKeyword},'%')
+        </if>
+    </select>
+
+    <select id="selectPostById" resultType="Post" parameterType="Long">
+        select
+        <include refid="Base_Column_Post"/>
+        from s_post where PostId = #{postId} and Status = 1
+    </select>
+
+    <select id="selectPostByCategoryId" resultType="Long" parameterType="Long">
+        select PostId
+        from s_post
+        where PostCategoryId = #{postCategoryId}
+          and Status = 1
+    </select>
+
+    <select id="checkMobile" resultType="int" parameterType="Beautician">
+        select count(1)
+        from s_beautician
+        where Status=1
+        and Mobile = #{mobile}
+        <if test="beauticianId != null">
+            and BeauticianId != #{beauticianId}
+        </if>
+    </select>
+
+    <insert id="addPost" parameterType="Post" useGeneratedKeys="true" keyProperty="postId">
+        insert into s_post
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="postId != null">
+                PostId,
+            </if>
+            <if test="postLevel != null">
+                PostLevel,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="postCategoryId != null">
+                PostCategoryId,
+            </if>
+            <if test="postIndustryID != null">
+                PostIndustryID,
+            </if>
+            <if test="postAchievement != null">
+                PostAchievement,
+            </if>
+            <if test="departmentId != null">
+                DepartmentId,
+            </if>
+            <if test="companyType != null">
+                CompanyType,
+            </if>
+            <if test="companyId != null">
+                CompanyId,
+            </if>
+            <if test="k3Id != null">
+                K3Id,
+            </if>
+            <if test="k3Number != null">
+                K3Number,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="postId != null">
+                #{postId},
+            </if>
+            <if test="postLevel != null">
+                #{postLevel},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="postCategoryId != null">
+                #{postCategoryId},
+            </if>
+            <if test="postIndustryID != null">
+                #{postIndustryID},
+            </if>
+            <if test="postAchievement != null">
+                #{postAchievement},
+            </if>
+            <if test="departmentId != null">
+                #{departmentId},
+            </if>
+            <if test="companyType != null">
+                #{companyType},
+            </if>
+            <if test="companyId != null">
+                #{companyId},
+            </if>
+            <if test="k3Id != null">
+                #{k3Id},
+            </if>
+            <if test="k3Number != null">
+                #{k3Number},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            now(),
+        </trim>
+    </insert>
+
+    <delete id="deletePost" parameterType="Long">
+        delete
+        from s_post
+        where PostId = #{postId}
+    </delete>
+
+    <delete id="deleteGroup" parameterType="Long">
+        delete
+        from s_group
+        where GroupId = #{groupId}
+    </delete>
+
+    <update id="updatePost" parameterType="Post">
+        update s_post
+        <set>
+            <if test="name != null">
+                Name = #{name},
+            </if>
+            <if test="postCategoryId != null">
+                PostCategoryId = #{postCategoryId},
+            </if>
+            <if test="postLevel != null">
+                PostLevel = #{postLevel},
+            </if>
+            <if test="postIndustryID != null">
+                PostIndustryID = #{postIndustryID},
+            </if>
+            <if test="postAchievement != null">
+                PostAchievement = #{postAchievement},
+            </if>
+            <if test="departmentId != null">
+                DepartmentId = #{departmentId},
+            </if>
+            <if test="companyType != null">
+                CompanyType =  #{companyType},
+            </if>
+            <if test="companyId != null">
+                CompanyId = #{companyId},
+            </if>
+            <if test="k3Id != null">
+                K3Id = #{k3Id},
+            </if>
+            <if test="k3Number != null">
+                K3Number = #{k3Number},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where PostId = #{postId}
+    </update>
+
+    <update id="updateGroup" parameterType="Group">
+        update s_group
+        <set>
+            <if test="name != null">
+                Name = #{name},
+            </if>
+            <if test="groupLeaderId != null">
+                GroupLeaderId = #{groupLeaderId},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where GroupId = #{groupId}
+    </update>
+
+    <select id="checkPostUse" parameterType="Long" resultType="int">
+        select count(1)
+        from s_beautician
+        where Status = 1
+          and PostId = #{postId}
+    </select>
+
+    <select id="checkGroupUse" parameterType="Long" resultType="int">
+        select count(1)
+        from s_beautician
+        where Status = 1
+          and GroupId = #{groupId}
+    </select>
+
+    <insert id="addGroup" parameterType="Group">
+        insert into s_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">
+                GroupId,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="storeId != null">
+                StoreId,
+            </if>
+            <if test="groupLeaderId != null">
+                GroupLeaderId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">
+                #{groupId},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="storeId != null">
+                #{storeId},
+            </if>
+            <if test="groupLeaderId != null">
+                #{groupLeaderId},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            now(),
+        </trim>
+    </insert>
+
+
+    <select id="selectPostLevel" resultType="PostLevel" parameterType="Map">
+        select
+        <include refid="Base_Column_Post_Level"/>
+        from s_post_level
+        where Status=1
+        <if test="postLevelNameKeyword != null">
+            and PostLevelName LIKE CONCAT('%',#{postLevelNameKeyword},'%')
+        </if>
+        <if test="companyId != null and companyId!=''">
+            and CompanyId = #{companyId}
+        </if>
+    </select>
+
+    <select id="selectBeauticianByStoreIdAndPostId" resultType="Beautician" parameterType="Map">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_beautician
+        where 1=1
+        <if test="postId != null">
+            and PostId = #{postId}
+        </if>
+        <if test="companyId != null">
+            and CompanyId = #{companyId}
+        </if>
+        <if test="companyType != null">
+            and CompanyType = #{companyType}
+        </if>
+    </select>
+
+    <select id="selectPostCategoryList" resultType="PostCategory" parameterType="Map">
+        select
+        <include refid="Base_Column_Post_Category"/>
+        from s_post_category
+        where Status = 1
+        <if test="postCategoryNameKeyword != null">
+            and Name like CONCAT('%',#{postCategoryNameKeyword},'%')
+        </if>
+        <if test="postCategoryId != null">
+            and PostCategoryId = #{postCategoryId}
+        </if>
+        <if test="postIndustryIDSearch != null and postIndustryIDSearch!=''">
+            and IndustryID = #{postIndustryIDSearch}
+        </if>
+        <if test="companyId != null and companyId!=''">
+            and CompanyId = #{companyId}
+        </if>
+    </select>
+
+    <insert id="insertPostCategory" parameterType="PostCategory">
+        insert into s_post_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="postCategoryId != null">
+                PostCategoryId,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="industryID != null">
+                IndustryID,
+            </if>
+            <if test="companyId != null">
+                CompanyId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="postCategoryId != null">
+                #{postCategoryId},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="industryID != null">
+                #{industryID},
+            </if>
+            <if test="companyId != null">
+                #{companyId},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <insert id="addPostLevel" parameterType="PostLevel">
+        insert into s_post_level
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="postLevelId != null">
+                PostLevelId,
+            </if>
+            <if test="postLevelName != null">
+                PostLevelName,
+            </if>
+            <if test="companyId != null">
+                CompanyId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="postLevelId != null">
+                #{postLevelId},
+            </if>
+            <if test="postLevelName != null">
+                #{postLevelName},
+            </if>
+            <if test="companyId != null">
+                #{companyId},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+
+    <update id="updatePostLevel" parameterType="PostLevel">
+        update s_post_level
+        <set>
+            <if test="postLevelName != null">
+                PostLevelName = #{postLevelName},
+            </if>
+            <if test="companyId != null">
+                CompanyId = #{companyId},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where PostLevelId = #{postLevelId}
+    </update>
+
+    <delete id="deletePostLevel" parameterType="PostLevel">
+        delete from s_post_level
+        where PostLevelId = #{postLevelId}
+    </delete>
+
+    <update id="updatePostCategory" parameterType="PostCategory">
+        update s_post_category
+        <set>
+            <if test="name != null">
+                Name = #{name},
+            </if>
+            <if test="industryID != null">
+                IndustryID = #{industryID},
+            </if>
+            <if test="companyId != null">
+                CompanyId = #{companyId},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where PostCategoryId = #{postCategoryId}
+    </update>
+
+    <delete id="deletePostCategory" parameterType="PostCategory">
+        delete from s_post_category
+        where PostCategoryId = #{postCategoryId}
+    </delete>
+
+    <select id="checkGroupName" parameterType="Group" resultType="int">
+    select count(1)
+    from s_group
+    where Status = 1
+      and Name = #{name}
+      and StoreId = #{storeId}
+  </select>
+
+    <select id="checkStaffName" parameterType="Beautician" resultType="int">
+    select count(1)
+    from s_beautician
+    where Status = 1
+      and Name = #{name}
+      and StoreId = #{storeId}
+  </select>
+</mapper>
+

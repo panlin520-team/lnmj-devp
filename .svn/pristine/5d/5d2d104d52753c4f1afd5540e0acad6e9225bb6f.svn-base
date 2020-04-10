@@ -1,0 +1,10 @@
+package com.lnmj.k3cloud.repository.impl;
+
+import com.lnmj.common.baseDao.impl.BaseDao;
+import com.lnmj.k3cloud.repository.IK3CLOUDDao;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class WalletRechargeRecordDaoImpl extends BaseDao implements IK3CLOUDDao {
+
+}

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="experiencecardProduct">
+    <sql id="Base_Column_List">
+        CardProductId
+        ,
+        CardNum,
+        ProductCode,
+        ProductKind,
+        ProductName,
+        UseLimit,
+        UseTotalTimes,
+        EfficientCondition,
+        EfficientDate,
+        Link,
+        TotalSales,
+        TotalCommission,
+        ForwardTitle,
+        ForwardDescribe,
+        LogoImge,
+        OutStockPrice,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+
+    <select id="selectExpCardProductListByCarNum" resultType="ExperiencecardProduct" parameterType="String">
+        select
+        <include refid="Base_Column_List"/>
+        from s_experiencecard_product
+        where 1=1
+        <if test="_parameter != null">
+            and CardNum = #{cardNum}
+        </if>
+    </select>
+
+    <select id="selectExperienceCardProductById" resultType="ExperiencecardProduct" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from s_experiencecard_product
+        where 1=1
+        <if test="cardProductId != null and cardProductId!=''">
+            and CardProductId = #{cardProductId}
+        </if>
+    </select>
+
+    <delete id="deleteExpCardProductByCarNum" parameterType="String">
+        delete
+        from s_experiencecard_product
+        where CardNum = #{cardNum}
+    </delete>
+
+    <delete id="deleteExpCardProductById" parameterType="Long">
+        delete
+        from s_experiencecard_product
+        where CardProductId = #{cardProductId}
+    </delete>
+
+
+    <update id="updateExpCardProductById" parameterType="ExperiencecardProduct">
+        update s_experiencecard_product
+        <set>
+            <if test="cardNum != null and cardNum!=''">
+                CardNum = #{cardNum,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null and productCode!=''">
+                ProductCode = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productKind != null and productKind!=''">
+                ProductKind = #{productKind,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null and productName!=''">
+                ProductName = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="useLimit != null and useLimit!=''">
+                UseLimit = #{useLimit,jdbcType=VARCHAR},
+            </if>
+            <if test="useTotalTimes != null and useTotalTimes!=''">
+                UseTotalTimes = #{useTotalTimes,jdbcType=INTEGER},
+            </if>
+            <if test="efficientCondition != null and efficientCondition!=''">
+                EfficientCondition = #{efficientCondition,jdbcType=INTEGER},
+            </if>
+            <if test="efficientDate != null and efficientDate!=''">
+                EfficientDate = #{efficientDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="link != null and link!=''">
+                Link = #{link,jdbcType=VARCHAR},
+            </if>
+            <if test="totalSales != null and totalSales!=''">
+                TotalSales = #{totalSales,jdbcType=DECIMAL},
+            </if>
+            <if test="totalCommission != null and totalCommission!=''">
+                TotalCommission = #{totalCommission,jdbcType=DECIMAL},
+            </if>
+            <if test="forwardTitle != null and forwardTitle!=''">
+                ForwardTitle = #{forwardTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="forwardDescribe != null and forwardDescribe!=''">
+                ForwardDescribe = #{forwardDescribe,jdbcType=VARCHAR},
+            </if>
+            <if test="logoImge != null and logoImge!=''">
+                LogoImge = #{logoImge,jdbcType=VARCHAR},
+            </if>
+            <if test="outStockPrice != null and outStockPrice!=''">
+                OutStockPrice = #{outStockPrice},
+            </if>
+            <if test="status != null and status!=''">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null and createOperator!=''">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where CardProductId = #{cardProductId,jdbcType=BIGINT}
+    </update>
+
+
+    <insert id="addExpCardProduct" parameterType="Map">
+        insert into s_experiencecard_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].cardProductId != null">
+                CardProductId,
+            </if>
+            <if test="list[0].cardNum != null">
+                CardNum,
+            </if>
+            <if test="list[0].productCode != null">
+                ProductCode,
+            </if>
+            <if test="list[0].productKind != null">
+                ProductKind,
+            </if>
+            <if test="list[0].productName != null">
+                ProductName,
+            </if>
+            <if test="list[0].useLimit != null">
+                UseLimit,
+            </if>
+            <if test="list[0].useTotalTimes != null">
+                UseTotalTimes,
+            </if>
+            <if test="list[0].efficientCondition != null">
+                EfficientCondition,
+            </if>
+            <if test="list[0].efficientDate != null">
+                EfficientDate,
+            </if>
+            <if test="list[0].link != null">
+                Link,
+            </if>
+            <if test="list[0].totalSales != null">
+                TotalSales,
+            </if>
+            <if test="list[0].totalCommission != null">
+                TotalCommission,
+            </if>
+            <if test="list[0].forwardTitle != null">
+                ForwardTitle,
+            </if>
+            <if test="list[0].forwardDescribe != null">
+                ForwardDescribe,
+            </if>
+            <if test="list[0].logoImge != null">
+                LogoImge,
+            </if>
+            <if test="list[0].outStockPrice != null">
+                OutStockPrice,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.cardProductId != null">
+                    #{item.cardProductId},
+                </if>
+                <if test="item.cardNum != null">
+                    #{item.cardNum},
+                </if>
+                <if test="item.productCode != null">
+                    #{item.productCode},
+                </if>
+                <if test="item.productKind != null">
+                    #{item.productKind},
+                </if>
+                <if test="item.productName != null">
+                    #{item.productName},
+                </if>
+                <if test="item.useLimit != null">
+                    #{item.useLimit},
+                </if>
+                <if test="item.useTotalTimes != null">
+                    #{item.useTotalTimes},
+                </if>
+                <if test="item.efficientCondition != null">
+                    #{item.efficientCondition},
+                </if>
+                <if test="item.efficientDate != null">
+                    #{item.efficientDate},
+                </if>
+                <if test="item.link != null">
+                    #{item.link},
+                </if>
+                <if test="item.totalSales != null">
+                    #{item.totalSales},
+                </if>
+                <if test="item.totalCommission != null">
+                    #{item.totalCommission},
+                </if>
+                <if test="item.forwardTitle != null">
+                    #{item.forwardTitle},
+                </if>
+                <if test="item.forwardDescribe != null">
+                    #{item.forwardDescribe},
+                </if>
+                <if test="item.logoImge != null">
+                    #{item.logoImge},
+                </if>
+                <if test="item.outStockPrice != null">
+                    #{item.outStockPrice},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+
+    <update id="updateExpCardProductBatch" parameterType="List">
+        update s_experiencecard_product
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="OutStockPrice = case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.outStockPrice != null">
+                        when CardProductId=#{item.cardProductId} then #{item.outStockPrice}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where CardProductId in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.cardProductId}
+        </foreach>
+    </update>
+
+</mapper>

@@ -1,0 +1,17 @@
+package com.lnmj.store.business;
+
+import com.lnmj.common.response.ResponseResult;
+import com.lnmj.store.entity.Customer;
+import com.lnmj.store.entity.Department;
+import org.springframework.stereotype.Service;
+
+
+@Service("iCustomerService")
+public interface ICustomerService {
+    ResponseResult selectCustomerList(int pageNum, int pageSize, String keyWordName, String companyType, String companyId);
+    ResponseResult selectCustomerListNoPage(String companyType, String companyId);
+    ResponseResult insertCustomer(Customer customer);
+    ResponseResult deleteCustomer(Customer customer);
+    ResponseResult updateCustomer(Customer customer);
+    ResponseResult selectDefaultCust(Customer customer);
+}

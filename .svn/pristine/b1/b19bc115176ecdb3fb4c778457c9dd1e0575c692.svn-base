@@ -1,0 +1,304 @@
+package com.lnmj.data.controller.backend;
+
+
+import com.lnmj.data.business.BackupsService;
+import com.lnmj.data.entity.VO.ProductDBVO;
+import com.lnmj.data.entity.VO.ServiceProductDBVO;
+import com.lnmj.data.entity.VO.SupplierDBVO;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.formula.functions.T;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/backups")
+public class BackupsController {
+
+    @Resource
+    private BackupsService backupsService;
+
+
+    @ResponseBody
+    @RequestMapping(value = "/backupsProduct", method = RequestMethod.POST)
+    public void upload(MultipartFile file) {
+        List product = this.getExcelInfo(file, "product");
+        //拿到读取数据，做数据批量处理，具体根据具体需求，进行判断
+        backupsService.saveProductData(product);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/backupsServiceProduct", method = RequestMethod.POST)
+    public void backupsServiceProduct(@RequestParam(value = "file") MultipartFile file) {
+        List serviceproduct = this.getExcelInfo(file, "serviceproduct");
+        //拿到读取数据，做数据批量处理，具体根据具体需求，进行判断
+        backupsService.saveServiceProductData(serviceproduct);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/backupsSupplier", method = RequestMethod.POST)
+    public void backupsSupplier(@RequestParam(value = "file") MultipartFile file) {
+        List supplier = this.getExcelInfo(file, "supplier");
+        //拿到读取数据，做数据批量处理，具体根据具体需求，进行判断
+        backupsService.saveSupplierData(supplier);
+    }
+
+    /**
+     * @return List<T>
+     * @Title: getExcelInfo
+     * @Description: 读取Excel信息
+     * @author fun
+     * @date 2018年9月7日
+     */
+    public List getExcelInfo(MultipartFile mFile, String type) {
+        String fileName = mFile.getOriginalFilename();// 获取文件名
+        List list = new ArrayList<>();
+        Map map = new HashMap<>();
+        List<String> error = new ArrayList<>();
+        try {
+            if (!validateExcel(fileName)) {// 验证文件名是否合格
+                return null;
+            }
+            boolean isExcel2003 = true;// 根据文件名判断文件是2003版本还是2007版本
+            if (isExcel2007(fileName)) {
+                isExcel2003 = false;
+            }
+            list = createExcel(mFile.getInputStream(), isExcel2003, error, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * @return boolean
+     * @Title: validateExcel
+     * @Description: 验证EXCEL文件
+     * @author fun
+     * @date 2018年9月10日
+     */
+    public boolean validateExcel(String filePath) {
+        if (filePath == null || !(isExcel2003(filePath) || isExcel2007(filePath))) {
+            String errorMsg = "文件名不是excel格式";
+            return false;
+        }
+        return true;
+    }
+
+
+    // 是否是2003的excel，返回true是2003
+    public static boolean isExcel2003(String filePath) {
+        return filePath.matches("^.+\\.(?i)(xls)$");
+    }
+
+    // 是否是2007的excel，返回true是2007
+    public static boolean isExcel2007(String filePath) {
+        return filePath.matches("^.+\\.(?i)(xlsx)$");
+    }
+
+
+    /**
+     * @return List<T>
+     * @Title: createExcel
+     * @Description: 根据excel里面的内容读取信息
+     * @author fun
+     * @date 2018年9月10日
+     */
+    public List createExcel(InputStream is, boolean isExcel2003, List<String> error, String type) {
+        List list = new ArrayList<>();
+//        Map map = new HashMap<>();
+        try {
+            Workbook wb = null;
+            if (isExcel2003) {// 当excel是2003时,创建excel2003
+                wb = new HSSFWorkbook(is);
+            } else {// 当excel是2007时,创建excel2007
+                wb = new XSSFWorkbook(is);
+            }
+//            map = readExcelValue(wb, error, type);// 读取Excel里面客户的信息
+            list = readExcelValue(wb, error, type);// 读取Excel里面客户的信息
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
+    /**
+     * @return List<T>
+     * @Title: readExcelValue
+     * @Description: 读取Excel信息
+     * @author fun
+     * @date 2018年9月5日
+     */
+    public List readExcelValue(Workbook wb, List<String> error, String type) {
+        int totalRows = 0;
+        int totalCells = 0;
+        // 得到第一个shell
+        Sheet sheet = wb.getSheetAt(0);
+        // 得到Excel的行数
+        totalRows = sheet.getPhysicalNumberOfRows();
+        // 得到Excel的列数(前提是有行数)
+        if (totalRows > 1 && sheet.getRow(0) != null) {
+            totalCells = sheet.getRow(0).getPhysicalNumberOfCells();
+        }
+
+        List<ProductDBVO> productDBVOList = new ArrayList<>();
+        List<ServiceProductDBVO> serviceProductDBVOList = new ArrayList<>();
+        List<SupplierDBVO> supplierDBVOList = new ArrayList<>();
+
+        // 循环Excel行数
+        for (int r = 1; r < totalRows; r++) {
+            Row row = sheet.getRow(r);
+            if (row == null) {
+                continue;
+            }
+            T model = new T();
+            // 循环Excel的列
+            ProductDBVO productDBVO = new ProductDBVO();
+            ServiceProductDBVO serviceProductDBVO = new ServiceProductDBVO();
+            SupplierDBVO supplierDBVO = new SupplierDBVO();
+            for (int c = 0; c < totalCells; c++) {
+                Cell cell = row.getCell(c);
+                cell.setCellType(CellType.STRING);
+                if (null != cell) {
+                    if (type.equals("product")) {
+                        if (c == 0) {
+                            productDBVO.setProductName(cell.getStringCellValue());
+                        } else if (c == 1) {
+                            productDBVO.setProductSubordinate(cell.getStringCellValue());
+                        } else if (c == 2) {
+                            productDBVO.setCommodityTypeID(cell.getStringCellValue());
+                        } else if (c == 3) {
+                            productDBVO.setSubClassID(cell.getStringCellValue());
+                        } else if (c == 4) {
+                            productDBVO.setBarredBuying(cell.getStringCellValue());
+                        } else if (c == 5) {
+                            productDBVO.setBarredPayMethod(cell.getStringCellValue());
+                        } else if (c == 6) {
+                            productDBVO.setProvinceId(cell.getStringCellValue());
+                        } else if (c == 7) {
+                            productDBVO.setCityId(cell.getStringCellValue());
+                        } else if (c == 8) {
+                            productDBVO.setCountyId(cell.getStringCellValue());
+                        } else if (c == 9) {
+                            productDBVO.setProductKind(cell.getStringCellValue());
+                        } else if (c == 10) {
+                            productDBVO.setProductEffect(cell.getStringCellValue());
+                        } else if (c == 11) {
+                            productDBVO.setProductBrand(cell.getStringCellValue());
+                        } else if (c == 12) {
+                            productDBVO.setProductCategory(cell.getStringCellValue());
+                        } else if (c == 13) {
+                            productDBVO.setProductSpecification(cell.getStringCellValue());
+                        } else if (c == 14) {
+                            productDBVO.setProductOriginalPrice(cell.getStringCellValue());
+                        } else if (c == 15) {
+                            productDBVO.setRetailPrice(cell.getStringCellValue());
+                        } else if (c == 16) {
+                            productDBVO.setActivityRetailPrice(cell.getStringCellValue());
+                        } else if (c == 17) {
+                            productDBVO.setIsDiscount(cell.getStringCellValue());
+                        } else if (c == 18) {
+                            productDBVO.setNetContent(cell.getStringCellValue());
+                        } else if (c == 19) {
+                            productDBVO.setProductSales(cell.getStringCellValue());
+                        } else if (c == 20) {
+                            productDBVO.setUnitId(cell.getStringCellValue());
+                        } else if (c == 21) {
+                            productDBVO.setInstoragePrice(cell.getStringCellValue());
+                        } else if (c == 22) {
+                            productDBVO.setOutstoragePrice(cell.getStringCellValue());
+                        } else if (c == 23) {
+                            productDBVO.setOutstorageProfit(cell.getStringCellValue());
+                        } else if (c == 24) {
+                            productDBVO.setMoreContent(cell.getStringCellValue());
+                        }
+                    } else if (type.equals("serviceproduct")) {
+                        if (c == 0) {
+                            serviceProductDBVO.setProductName(cell.getStringCellValue());
+                        } else if (c == 1) {
+                            serviceProductDBVO.setIndustry(cell.getStringCellValue());
+                        } else if (c == 2) {
+                            serviceProductDBVO.setCommodityTypeID(cell.getStringCellValue());
+                        } else if (c == 3) {
+                            serviceProductDBVO.setSubClassID(cell.getStringCellValue());
+                        } else if (c == 4) {
+                            serviceProductDBVO.setProductOriginalPrice(cell.getStringCellValue());
+                        } else if (c == 5) {
+                            serviceProductDBVO.setRetailPrice(cell.getStringCellValue());
+                        } else if (c == 6) {
+                            serviceProductDBVO.setActivityRetailPrice(cell.getStringCellValue());
+                        } else if (c == 7) {
+                            serviceProductDBVO.setIsDiscount(cell.getStringCellValue());
+                        } else if (c == 8) {
+                            serviceProductDBVO.setProductSales(cell.getStringCellValue());
+                        } else if (c == 9) {
+                            serviceProductDBVO.setUnitId(cell.getStringCellValue());
+                        } else if (c == 10) {
+                            serviceProductDBVO.setInstoragePrice(cell.getStringCellValue());
+                        } else if (c == 11) {
+                            serviceProductDBVO.setOutstoragePrice(cell.getStringCellValue());
+                        } else if (c == 12) {
+                            serviceProductDBVO.setOutstorageProfit(cell.getStringCellValue());
+                        } else if (c == 13) {
+                            serviceProductDBVO.setMoreContent(cell.getStringCellValue());
+                        }
+                    } else if (type.equals("supplier")) {
+                        if (c == 0) {
+                            supplierDBVO.setSupplierName(cell.getStringCellValue());
+                        } else if (c == 1) {
+                            supplierDBVO.setShortName(cell.getStringCellValue());
+                        } else if (c == 2) {
+                            supplierDBVO.setSupplierCategoryId(cell.getStringCellValue());
+                        } else if (c == 3) {
+                            supplierDBVO.setBankDeposit(cell.getStringCellValue());
+                        } else if (c == 4) {
+                            supplierDBVO.setCreditCardNum(cell.getStringCellValue());
+                        } else if (c == 5) {
+                            supplierDBVO.setLinkMan(cell.getStringCellValue());
+                        }
+                    }
+                }
+            }
+            if (type.equals("product")) {
+                productDBVOList.add(productDBVO);
+            } else if (type.equals("serviceproduct")) {
+
+            } else if (type.equals("supplier")) {
+                supplierDBVOList.add(supplierDBVO);
+            }
+        }
+//        Map map = new HashMap<>();
+//        if (type.equals("product")) {
+//            map.put("list", productDBVOList);
+//            return map;
+//        } else if (type.equals("serviceproduct")) {
+//            map.put("list", serviceProductDBVOList);
+//            return map;
+//        } else {
+//            map.put("list", supplierDBVOList);
+//            return map;
+//        }
+
+        if (type.equals("product")) {
+            return productDBVOList;
+        } else if (type.equals("serviceproduct")) {
+            return serviceProductDBVOList;
+        } else {
+            return supplierDBVOList;
+        }
+    }
+
+
+}

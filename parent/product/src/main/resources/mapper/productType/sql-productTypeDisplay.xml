@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productTypeDisplay" >
+    <resultMap type="com.lnmj.product.entity.base.BaseEntity" id="baseResultMap">
+        <!-- 用result属性来映射非主键字段
+        status;                //状态
+        createOperator;      //创建人
+        createTime;            //创建时间
+        String modifyOperator;      //修改人
+        Date dataChangeLastTime;    //数据最后更新时间
+        -->
+        <result property="status" column="Status" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="createOperator" column="CreateOperator" javaType="String" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CreateTime" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="modifyOperator" column="ModifyOperator" javaType="String" jdbcType="VARCHAR"/>
+        <result property="dataChangeLastTime" column="DataChange_LastTime" javaType="Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="productTypeDisplayResultMap" type="ProductTypeDisplay" extends="baseResultMap">
+        <id property="productTypeDisplayId" column="ProductTypeDisplayId" javaType="Long" jdbcType="BIGINT"/>
+        <result property="productTypeDisplayName" column="ProductTypeDisplayName" javaType="String" jdbcType="VARCHAR"/>
+        <result property="productTypeDisplayDesc" column="ProductTypeDisplayDesc" javaType="String" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--产品显示表-->
+    <sql id="sql_base_product_type_display_column">
+        ProductTypeDisplayId,ProductTypeDisplayName,ProductTypeDisplayDesc,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <sql id="sql_insert_product_type_display_column">
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="productTypeDisplayName != null" >ProductTypeDisplayName,</if>
+            <if test="productTypeDisplayDesc != null" >ProductTypeDisplayDesc,</if>
+            <if test="createOperator != null" >CreateOperator,</if>
+            <if test="modifyOperator != null" >ModifyOperator,</if>
+        </trim>
+    </sql>
+    <sql id="sql_insert_product_type_display_value">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="productTypeDisplayName != null" >#{productTypeDisplayName},</if>
+            <if test="productTypeDisplayDesc != null" >#{productTypeDisplayDesc},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <sql id="sql_set_product_type_display_column">
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="productTypeDisplayName != null" >,ProductTypeDisplayName=#{productTypeDisplayName}</if>
+                <if test="productTypeDisplayDesc != null" >,ProductTypeDisplayDesc=#{productTypeDisplayDesc}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}></if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+    <!--查询商品显示-->
+    <select id="selectProductTypeDisplayList" resultType="com.lnmj.product.entity.ProductTypeDisplay">
+        select <include refid="sql_base_product_type_display_column"/> from p_producttypedisplay
+        where Status = 1
+    </select>
+    <!--新增商品显示-->
+    <insert id="insertProductTypeDisplay" parameterType="com.lnmj.product.entity.ProductTypeDisplay" useGeneratedKeys="true" keyProperty="productTypeDisplayId">
+        insert into p_producttypedisplay
+        <include refid="sql_insert_product_type_display_column"/>
+        <include refid="sql_insert_product_type_display_value"/>
+    </insert>
+    <!--修改和删除商品显示-->
+    <update id="updateProductTypeDisplay" parameterType="com.lnmj.product.entity.ProductTypeDisplay">
+        update p_producttypedisplay
+        <include refid="sql_set_product_type_display_column"/>
+        where ProductTypeDisplayId=#{productTypeDisplayId}
+    </update>
+    <!--根据id查询商品显示-->
+    <select id="selectProductTypeDisplayById" parameterType="Long" resultType="Integer">
+        select count(1) from p_producttypedisplay
+        where ProductTypeDisplayId=#{productTypeDisplayId} and Status = 1
+    </select>
+    <!--根据商品显示id查询商品显示是否在使用-->
+    <!--商品品牌-->
+    <select id="selectProductBrandByProductTypeDisplayId" parameterType="Long" resultType="com.lnmj.product.entity.ProductBrand">
+        select <include refid="productBrand.product_brand_base_column"/> from p_productbrand where ProductTypeDisplayId=#{productTypeDisplayId}
+    </select>
+    <!--商品品类-->
+    <select id="selectProductCategoryByProductTypeDisplayId" parameterType="Long" resultType="com.lnmj.product.entity.ProductCategory">
+        select <include refid="productCategory.product_category_base_column"/> from p_productcategory where ProductTypeDisplayId=#{productTypeDisplayId}
+    </select>
+    <!--商品功效-->
+    <select id="selectProductEffectByProductTypeDisplayId" parameterType="Long" resultType="com.lnmj.product.entity.ProductEffect">
+        select <include refid="productEffect.product_effect_base_column"/> from p_producteffect where ProductTypeDisplayId=#{productTypeDisplayId}
+    </select>
+    <!--商品产地-->
+    <select id="selectProductSiteByProductTypeDisplayId" parameterType="Long" resultType="com.lnmj.product.entity.ProductSite">
+        select <include refid="productSite.product_site_base_column"/> from p_productsite where ProductTypeDisplayId=#{productTypeDisplayId}
+    </select>
+    <!--商品种类-->
+    <select id="selectProductKindByProductTypeDisplayId" parameterType="Long" resultType="com.lnmj.product.entity.ProductKind">
+        select <include refid="productKind.product_kind_base_column"/> from p_productkind where ProductTypeDisplayId=#{productTypeDisplayId}
+    </select>
+    <!--商品种类-->
+    <select id="selectProductDivisionByProductTypeDisplayId" parameterType="Long" resultType="com.lnmj.product.entity.ProductDivision">
+        select <include refid="productDivision.product_division_base_column"/> from p_productdivision where ProductTypeDisplayId=#{productTypeDisplayId}
+    </select>
+</mapper>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="evaluating">
+    <resultMap id="EvaluatingMap" type="com.lnmj.data.entity.Evaluating">
+        <id column="EvaluatingID" property="evaluatingID" jdbcType="BIGINT"/>
+        <result column="EvaluatingName" property="evaluatingName" jdbcType="VARCHAR"/>
+        <result column="EvaluatingIndustryID" property="evaluatingIndustryID" jdbcType="BIGINT"/>
+        <result column="EvaluatingType" property="evaluatingType" jdbcType="INTEGER"/>
+        <result column="EvaluatingMethods" property="evaluatingMethods" jdbcType="INTEGER"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="base_evaluating_column">
+        EvaluatingID
+        ,
+        EvaluatingName,
+        EvaluatingIndustryID,
+        EvaluatingType,
+        EvaluatingMethods,
+        Remark,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <select id="selectEvaluatingList" resultMap="EvaluatingMap" parameterType="Map">
+        select
+        <include refid="base_evaluating_column"/>
+        from e_evaluating
+        where Status=1
+        <if test="keyWord != null">
+            AND EvaluatingName LIKE concat('%',#{keyWord},'%')
+        </if>
+        <if test="evaluatingIndustryID != null">
+            AND EvaluatingIndustryID = #{evaluatingIndustryID}
+        </if>
+    </select>
+
+    <select id="selectEvaluatingByCondition" resultMap="EvaluatingMap" parameterType="com.lnmj.data.entity.Evaluating">
+        select
+        <include refid="base_evaluating_column"/>
+        from e_evaluating
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="evaluatingID != null">
+                    AND EvaluatingID = #{evaluatingID,jdbcType=BIGINT}
+                </if>
+                <if test="evaluatingName != null">
+                    AND EvaluatingName = #{evaluatingName,jdbcType=VARCHAR}
+                </if>
+                <if test="evaluatingIndustryID != null">
+                    AND EvaluatingIndustryID = #{evaluatingIndustryID,jdbcType=BIGINT}
+                </if>
+                <if test="evaluatingType != null">
+                    AND EvaluatingType = #{evaluatingType,jdbcType=INTEGER}
+                </if>
+                <if test="evaluatingMethods != null">
+                    AND EvaluatingMethods = #{evaluatingMethods,jdbcType=INTEGER}
+                </if>
+                <if test="remark != null">
+                    AND Remark = #{remark,jdbcType=VARCHAR}
+                </if>
+                <if test="status != null">
+                    AND Status = #{status,jdbcType=INTEGER}
+                </if>
+                <if test="status == null">
+                    AND Status = 1
+                </if>
+                <if test="createOperator != null">
+                    AND CreateOperator = #{createOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="createTime != null">
+                    AND CreateTime = #{createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="modifyOperator != null">
+                    AND ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="dataChangeLastTime != null">
+                    AND DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <select id="selectEvaluatingByID" resultMap="EvaluatingMap" parameterType="java.lang.Long">
+        select
+        <include refid="base_evaluating_column"/>
+        from e_evaluating
+        where EvaluatingID = #{evaluatingID,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectEvaluatingByType" resultMap="EvaluatingMap" parameterType="map">
+        select
+        <include refid="base_evaluating_column"/>
+        from e_evaluating
+        where
+        <trim prefix="" prefixOverrides="AND">
+            <if test="evaluatingType != null">
+                AND EvaluatingType = #{evaluatingType,jdbcType=INTEGER}
+            </if>
+            <if test="evaluatingName != null">
+                AND EvaluatingIndustryID = #{evaluatingIndustryID,jdbcType=BIGINT}
+            </if>
+        </trim>
+    </select>
+
+    <update id="deleteEvaluatingByID" parameterType="com.lnmj.data.entity.Evaluating">
+        update e_evaluating
+        set Status         = 0,
+            ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        where EvaluatingID = #{evaluatingID,jdbcType=BIGINT}
+          and Status = 1
+    </update>
+
+    <insert id="insertEvaluating" parameterType="com.lnmj.data.entity.Evaluating" keyProperty="evaluatingID"
+            useGeneratedKeys="true">
+        insert into e_evaluating
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="evaluatingID != null">
+                EvaluatingID,
+            </if>
+            <if test="evaluatingName != null">
+                EvaluatingName,
+            </if>
+            <if test="evaluatingIndustryID != null">
+                EvaluatingIndustryID,
+            </if>
+            <if test="evaluatingType != null">
+                EvaluatingType,
+            </if>
+            <if test="evaluatingMethods != null">
+                EvaluatingMethods,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="evaluatingID != null">
+                #{evaluatingID,jdbcType=BIGINT},
+            </if>
+            <if test="evaluatingName != null">
+                #{evaluatingName,jdbcType=VARCHAR},
+            </if>
+            <if test="evaluatingIndustryID != null">
+                #{evaluatingIndustryID,jdbcType=BIGINT},
+            </if>
+            <if test="evaluatingType != null">
+                #{evaluatingType,jdbcType=INTEGER},
+            </if>
+            <if test="evaluatingMethods != null">
+                #{evaluatingMethods,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateEvaluatingByID" parameterType="com.lnmj.data.entity.Evaluating">
+        update e_evaluating
+        <set>
+            <if test="evaluatingName != null">
+                EvaluatingName = #{evaluatingName,jdbcType=VARCHAR},
+            </if>
+            <if test="evaluatingIndustryID != null">
+                EvaluatingIndustryID = #{evaluatingIndustryID,jdbcType=BIGINT},
+            </if>
+            <if test="evaluatingType != null">
+                EvaluatingType = #{evaluatingType,jdbcType=INTEGER},
+            </if>
+            <if test="evaluatingMethods != null">
+                EvaluatingMethods = #{evaluatingMethods,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where EvaluatingID = #{evaluatingID,jdbcType=BIGINT}
+    </update>
+
+</mapper>

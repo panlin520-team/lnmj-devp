@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="customProjectUser">
+    <resultMap id="BaseResultMap" type="CustomProjectUser">
+        <id column="Id" property="id" jdbcType="BIGINT"/>
+        <result column="OrderNum" property="orderNum" jdbcType="VARCHAR"/>
+        <result column="SubOrderId" property="subOrderId" jdbcType="VARCHAR"/>
+        <result column="MemberNum" property="memberNum" jdbcType="VARCHAR"/>
+        <result column="ProductCode" property="productCode" jdbcType="VARCHAR"/>
+        <result column="ProductName" property="productName" jdbcType="VARCHAR"/>
+        <result column="UseLimit" property="useLimit" jdbcType="VARCHAR"/>
+        <result column="TotalTimes" property="totalTimes" jdbcType="INTEGER"/>
+        <result column="UseTimes" property="useTimes" jdbcType="INTEGER"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChange_LastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        Id
+        ,
+        OrderNum,
+        MemberNum,
+        SubOrderId,
+        ProductCode,
+        ProductName,
+        UseLimit,
+        TotalTimes,
+        UseTimes,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <sql id="Base_Column_List_a">
+        a.Id
+        ,
+        a.OrderNum,
+        a.MemberNum,
+        a.SubOrderId,
+        a.ProductCode,
+        a.ProductName,
+        a.UseLimit,
+        a.TotalTimes,
+        a.UseTimes,
+        a.Status,
+        a.CreateOperator,
+        a.CreateTime,
+        a.ModifyOperator,
+        a.DataChange_LastTime
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="CustomProjectUser">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from custom_project_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from custom_project_user
+        where Id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from custom_project_user
+        where Id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByExample" parameterType="CustomProjectUser">
+        delete from custom_project_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="CustomProjectUser">
+        insert into custom_project_user (Id, MemberNum, OrderNum, SubOrderId,
+                                         ProductCode, ProductName, UseLimit,
+                                         TotalTimes, UseTimes, Status,
+                                         CreateOperator, CreateTime, ModifyOperator,
+                                         DataChange_LastTime)
+        values (#{id,jdbcType=BIGINT}, #{memberNum,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR},
+                #{subOrderId,jdbcType=VARCHAR},
+                #{productCode,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{useLimit,jdbcType=VARCHAR},
+                #{totalTimes,jdbcType=INTEGER}, #{useTimes,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+                #{createOperator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{modifyOperator,jdbcType=VARCHAR},
+                #{dataChange_LastTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="CustomProjectUser">
+        insert into custom_project_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="orderNum != null">
+                OrderNum,
+            </if>
+            <if test="memberNum != null">
+                MemberNum,
+            </if>
+            <if test="subOrderId != null">
+                SubOrderId,
+            </if>
+            <if test="productCode != null">
+                ProductCode,
+            </if>
+            <if test="productName != null">
+                ProductName,
+            </if>
+            <if test="useLimit != null">
+                UseLimit,
+            </if>
+            <if test="totalTimes != null">
+                TotalTimes,
+            </if>
+            <if test="useTimes != null">
+                UseTimes,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChange_LastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderNum != null">
+                #{orderNum,jdbcType=VARCHAR},
+            </if>
+            <if test="memberNum != null">
+                #{memberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="subOrderId != null">
+                #{subOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="useLimit != null">
+                #{useLimit,jdbcType=VARCHAR},
+            </if>
+            <if test="totalTimes != null">
+                #{totalTimes,jdbcType=INTEGER},
+            </if>
+            <if test="useTimes != null">
+                #{useTimes,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChange_LastTime != null">
+                #{dataChange_LastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="CustomProjectUser" resultType="java.lang.Integer">
+        select count(*) from custom_project_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update custom_project_user
+        <set>
+            <if test="record.id != null">
+                Id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.orderNum != null">
+                OrderNum = #{record.orderNum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.memberNum != null">
+                MemberNum = #{record.memberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.subOrderId != null">
+                SubOrderId = #{record.subOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.productCode != null">
+                ProductCode = #{record.productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.productName != null">
+                ProductName = #{record.productName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.useLimit != null">
+                UseLimit = #{record.useLimit,jdbcType=VARCHAR},
+            </if>
+            <if test="record.totalTimes != null">
+                TotalTimes = #{record.totalTimes,jdbcType=INTEGER},
+            </if>
+            <if test="record.useTimes != null">
+                UseTimes = #{record.useTimes,jdbcType=INTEGER},
+            </if>
+            <if test="record.status != null">
+                Status = #{record.status,jdbcType=INTEGER},
+            </if>
+            <if test="record.createOperator != null">
+                CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.modifyOperator != null">
+                ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dataChange_LastTime != null">
+                DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update custom_project_user
+        set Id = #{record.id,jdbcType=BIGINT},
+        OrderNum = #{record.orderNum,jdbcType=VARCHAR},
+        MemberNum = #{record.memberNum,jdbcType=VARCHAR},
+        SubOrderId = #{record.subOrderId,jdbcType=VARCHAR},
+        ProductCode = #{record.productCode,jdbcType=VARCHAR},
+        ProductName = #{record.productName,jdbcType=VARCHAR},
+        UseLimit = #{record.useLimit,jdbcType=VARCHAR},
+        TotalTimes = #{record.totalTimes,jdbcType=INTEGER},
+        UseTimes = #{record.useTimes,jdbcType=INTEGER},
+        Status = #{record.status,jdbcType=INTEGER},
+        CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+        DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="CustomProjectUser">
+        update custom_project_user
+        <set>
+            <if test="orderNum != null">
+                OrderNum = #{orderNum,jdbcType=VARCHAR},
+            </if>
+            <if test="memberNum != null">
+                MemberNum = #{memberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="subOrderId != null">
+                SubOrderId = #{subOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                ProductCode = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                ProductName = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="useLimit != null">
+                UseLimit = #{useLimit,jdbcType=VARCHAR},
+            </if>
+            <if test="totalTimes != null">
+                TotalTimes = #{totalTimes,jdbcType=INTEGER},
+            </if>
+            <if test="useTimes != null">
+                UseTimes = #{useTimes,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChange_LastTime != null">
+                DataChange_LastTime = #{dataChange_LastTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where Id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="CustomProjectUser">
+        update custom_project_user
+        set OrderNum            = #{orderNum,jdbcType=VARCHAR},
+            MemberNum           = #{memberNum,jdbcType=VARCHAR},
+            SubOrderId          = #{subOrderId,jdbcType=VARCHAR},
+            ProductCode         = #{productCode,jdbcType=VARCHAR},
+            ProductName         = #{productName,jdbcType=VARCHAR},
+            UseLimit            = #{useLimit,jdbcType=VARCHAR},
+            TotalTimes          = #{totalTimes,jdbcType=INTEGER},
+            UseTimes            = #{useTimes,jdbcType=INTEGER},
+            Status              = #{status,jdbcType=INTEGER},
+            CreateOperator      = #{createOperator,jdbcType=VARCHAR},
+            CreateTime          = #{createTime,jdbcType=TIMESTAMP},
+            ModifyOperator      = #{modifyOperator,jdbcType=VARCHAR},
+            DataChange_LastTime = #{dataChange_LastTime,jdbcType=TIMESTAMP}
+        where Id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <insert id="addCustomProjectUserBatch" parameterType="Map">
+        insert into custom_project_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].id != null">
+                Id,
+            </if>
+            <if test="list[0].orderNum != null">
+                OrderNum,
+            </if>
+            <if test="list[0].memberNum != null">
+                MemberNum,
+            </if>
+            <if test="list[0].subOrderId != null">
+                SubOrderId,
+            </if>
+            <if test="list[0].productCode != null">
+                ProductCode,
+            </if>
+            <if test="list[0].productName != null">
+                ProductName,
+            </if>
+            <if test="list[0].useLimit != null">
+                UseLimit,
+            </if>
+            <if test="list[0].totalTimes != null">
+                TotalTimes,
+            </if>
+            <if test="list[0].useTimes != null">
+                UseTimes,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">
+                    #{item.id},
+                </if>
+                <if test="item.orderNum != null">
+                    #{item.orderNum},
+                </if>
+                <if test="item.memberNum != null">
+                    #{item.memberNum},
+                </if>
+                <if test="item.subOrderId != null">
+                    #{item.subOrderId},
+                </if>
+                <if test="item.productCode != null">
+                    #{item.productCode},
+                </if>
+                <if test="item.productName != null">
+                    #{item.productName},
+                </if>
+                <if test="item.useLimit != null">
+                    #{item.useLimit},
+                </if>
+                <if test="item.totalTimes != null">
+                    #{item.totalTimes},
+                </if>
+                <if test="item.useTimes != null">
+                    #{item.useTimes},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+    <select id="selectCustomProjectByMember" resultType="CustomProjectUser" parameterType="Map">
+        select
+        <include refid="Base_Column_List_a"/>
+        from custom_project_user a,o_order b
+        where a.OrderNum = b.OrderNumber
+        and b.OrderStatus = 2
+        <if test="memberNum != null">
+          and a.MemberNum = #{memberNum}
+        </if>
+        <if test="orderNum != null">
+            and a.OrderNum = #{orderNum}
+        </if>
+    </select>
+
+    <select id="selectCustomProjectUserById" resultType="CustomProjectUser" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from custom_project_user
+        where Id = #{id}
+    </select>
+
+    <update id="updateUserCustomUseTimes" parameterType="Map">
+        update custom_project_user
+        set UseTimes=UseTimes + 1
+        where Id = #{id}
+    </update>
+
+    <update id="addUserCustomUseTimes" parameterType="Long">
+        update custom_project_user
+        set UseTimes=UseTimes - 1
+        where id = #{customProjectUserId}
+    </update>
+
+    <select id="selectCustomProjectUserAndPayById" resultType="CustomProjectUser" parameterType="CustomProjectUser">
+        select
+        <include refid="Base_Column_List_a"/>,b.PayPrice,b.PayTypeAndAmount,b.CardNumber
+        from custom_project_user a left join o_order b on a.OrderNum = b.OrderNumber
+        where a.Id = #{id}
+    </select>
+
+    <select id="selectCustomProjectUserByOrderNum" resultType="CustomProjectUser" parameterType="CustomProjectUser">
+        select
+        <include refid="Base_Column_List"/>
+        from custom_project_user
+        where Status = 1
+        <if test="orderNum != null">
+            and OrderNum = #{orderNum}
+        </if>
+    </select>
+
+    <update id="updateUserCustomTotalTimes" parameterType="Map">
+        update custom_project_user
+        set TotalTimes=TotalTimes - #{refuseTimes}
+        where id = #{id}
+    </update>
+
+
+    <select id="checkDingZhiProjectIsUse" resultType="int" parameterType="String">
+        select
+            count(1)
+        from custom_project_user
+        where Status = 1
+          and OrderNum = #{orderNumber}
+          and UseTimes > 0
+    </select>
+</mapper>

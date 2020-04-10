@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="customProjectUserRefuse" >
+  <resultMap id="BaseResultMap" type="CustomProjectUserRefuse" >
+    <id column="Id" property="id" jdbcType="BIGINT" />
+    <result column="CustomProjectUserId" property="customProjectUserId" jdbcType="BIGINT" />
+    <result column="RefuseTimes" property="refuseTimes" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    Id, CustomProjectUserId, RefuseTimes, Status, CreateOperator, CreateTime, ModifyOperator, 
+    DataChange_LastTime
+  </sql>
+
+  <insert id="addCustomProjectUserRefuse" parameterType="CustomProjectUserRefuse" >
+    insert into custom_project_user_refuse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="customProjectUserId != null" >
+        CustomProjectUserId,
+      </if>
+      <if test="refuseTimes != null" >
+        RefuseTimes,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+        CreateTime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="customProjectUserId != null" >
+        #{customProjectUserId,jdbcType=BIGINT},
+      </if>
+      <if test="refuseTimes != null" >
+        #{refuseTimes,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      now()
+    </trim>
+  </insert>
+
+  <select id="selectCustomProjectUserRefuseList" resultType="CustomProjectUserRefuse" parameterType="Map" >
+    select
+    <include refid="Base_Column_List" />
+    from custom_project_user_refuse
+    where CustomProjectUserId = #{id}
+  </select>
+
+</mapper>

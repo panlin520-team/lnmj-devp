@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="wallet">
+
+    <sql id="Base_Column_List">
+        WalletId, CardNumber,Bonus,Integral,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_account">
+        WalletId,AccountTypeId, Amount,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_account_type">
+        AccountTypeId,AccountType,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <!--添加钱包-->
+    <insert id="insertSelective" parameterType="Wallet" useGeneratedKeys="true" keyProperty="walletId">
+        insert into w_wallet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="walletId != null">
+                WalletId,
+            </if>
+            <if test="cardNumber != null">
+                CardNumber,
+            </if>
+            <if test="bonus != null">
+                Bonus,
+            </if>
+            <if test="integral != null">
+                Integral,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="walletId != null">
+                #{walletId},
+            </if>
+            <if test="cardNumber != null">
+                #{cardNumber},
+            </if>
+            <if test="bonus != null">
+                bonus,
+            </if>
+            <if test="integral != null">
+                #{integral},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                #{createOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime},
+            </if>
+        </trim>
+    </insert>
+
+    <!--查询钱包信息-->
+    <select id="selectWalletInfoById" parameterType="Long" resultType="Wallet">
+        select
+        <include refid="Base_Column_List"/>
+        from w_wallet
+        where UserId = #{userId}
+    </select>
+
+    <!--查询余额信息-->
+    <select id="selectBalanceInfoById" parameterType="Map" resultType="WalletAmount">
+        select
+        <include refid="Base_Column_List_account"/>
+        from w_wallet_amount
+        where Status = 1
+        and WalletId = #{walletId}
+        <if test="accountTypeId != null" >
+            and AccountTypeId = #{accountTypeId}
+        </if>
+    </select>
+
+    <!--通过会员id查询用户钱包是否存在-->
+    <select id="checkWallet" parameterType="String" resultType="int">
+        SELECT
+            count(1)
+        FROM
+            w_wallet
+        WHERE Status =1 and
+            CardNumber = #{carNum}
+    </select>
+
+
+
+    <!--通过会员卡查询钱包-->
+    <select id="selectWalletIdByCardNumber" parameterType="String" resultType="Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+            w_wallet
+        WHERE
+            CardNumber = #{cardNumber}
+    </select>
+
+    <!--通过id查钱包-->
+    <select id="selectWalletById" parameterType="Long" resultType="Wallet">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+            w_wallet
+        WHERE
+          WalletId = #{walletId}
+    </select>
+    <!--通过会员卡号进行充值-->
+    <update id="recharge" parameterType="WalletRechargeRecord" >
+        update w_wallet
+        <set >
+        <if test="amount != null" >
+        RechargeAmount = RechargeAmount + #{amount},
+        </if>
+        <if test="giveAmount != null" >
+            GiveAmount = GiveAmount + #{giveAmount},
+        </if>
+        DataChange_LastTime = now(),
+        </set>
+        where Status = 1
+        <if test="cardNumber != null" >
+            and CardNumber = #{cardNumber}
+        </if>
+    </update>
+
+    <select id="checkUserWallet" resultType="int" parameterType="Long">
+        select count(0) from w_wallet where Status = 1 and UserId = #{userId}
+    </select>
+    <update id="updateRechargeAmount" parameterType="Map">
+        update w_wallet set RechargeAmount = RechargeAmount + #{updateRechargeAmount} where UserId = #{userId}
+    </update>
+
+
+    <select id="selectWalletIdByUserId" parameterType="Long" resultType="Long">
+        SELECT
+            WalletId
+        FROM
+            w_wallet
+        WHERE
+            UserId = #{userId}
+    </select>
+
+
+    <select id="selectRechargeType" resultType="RechargeType">
+        SELECT
+            <include refid="Base_Column_List_account_type"/>
+        FROM
+            w_rechargetype
+    </select>
+
+    <update id="updateWallet" parameterType="Wallet" >
+        update w_wallet
+        <set >
+            <if test="cardNumber != null" >
+                CardNumber = #{cardNumber},
+            </if>
+            <if test="bonus != null" >
+                Bonus = #{bonus},
+            </if>
+            <if test="integral != null" >
+                Integral = #{integral},
+            </if>
+            <if test="status != null" >
+                Status = #{status},
+            </if>
+            <if test="createOperator != null" >
+                CreateOperator = #{createOperator},
+            </if>
+            <if test="createTime != null" >
+                CreateTime = #{createTime},
+            </if>
+            <if test="modifyOperator != null" >
+                ModifyOperator = #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null" >
+                DataChange_LastTime = now(),
+            </if>
+        </set>
+        where WalletId = #{walletId}
+    </update>
+
+    <select id="selectAccountAmountByWalletId" resultType="WalletAmount" parameterType="Long">
+        SELECT
+        <include refid="Base_Column_List_account"/>
+        FROM
+        w_wallet_amount
+        where WalletId = #{walletId}
+    </select>
+
+    <update id="updateWalletAccount" parameterType="Map" >
+        update w_wallet_amount
+        set  Amount = Amount + #{amount}
+        where WalletId = #{walletId}
+         and AccountTypeId = #{accountTypeId}
+    </update>
+
+    <update id="updateWalletAccountDown" parameterType="Map" >
+        update w_wallet_amount
+        set  Amount = Amount - #{amount}
+        where WalletId = #{walletId}
+          and AccountTypeId = #{accountTypeId}
+    </update>
+</mapper>

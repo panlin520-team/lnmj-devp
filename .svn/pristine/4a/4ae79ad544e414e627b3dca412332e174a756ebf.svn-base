@@ -1,0 +1,16 @@
+package com.lnmj.k3cloud.repository;
+
+import com.github.pagehelper.PageInfo;
+import com.lnmj.k3cloud.entity.DataCentre;
+
+import java.util.List;
+
+/**
+ * @Author: yilihua
+ * @Date: 2019-11-08 15:07
+ * @Description:  金蝶dao
+ */
+public interface IK3CLOUDDao {
+    PageInfo<DataCentre> selectK3DataCentreList(int pageNum, int pageSize);
+
+}

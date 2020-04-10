@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ladderDetailed">
+    <resultMap id="BaseResultMap" type="com.lnmj.data.entity.LadderDetailed">
+        <id column="LadderDetailedID" property="ladderDetailedID" jdbcType="BIGINT"/>
+        <result column="rownum" property="rownum" jdbcType="BIGINT"/>
+        <result column="LadderDetailedAchievementID" property="ladderDetailedAchievementID" jdbcType="BIGINT"/>
+        <result column="LadderDetailedStoreId" property="ladderDetailedStoreId" jdbcType="BIGINT"/>
+        <result column="LadderDetailedAmount" property="ladderDetailedAmount" jdbcType="DECIMAL"/>
+        <result column="LadderDetailedBeauticianId" property="ladderDetailedBeauticianId" jdbcType="BIGINT"/>
+        <result column="LadderDetailedState" property="ladderDetailedState" jdbcType="INTEGER"/>
+        <result column="LadderDetailedDatetime" property="ladderDetailedDatetime" jdbcType="TIMESTAMP"/>
+        <result column="LadderDetailedOrderId" property="ladderDetailedOrderId" jdbcType="BIGINT"/>
+        <result column="OrderType" property="orderType" jdbcType="TINYINT"/>
+        <result column="LadderDetailedNumber" property="ladderDetailedNumber" jdbcType="DECIMAL"/>
+        <result column="SalesmanConfirm" property="salesmanConfirm" jdbcType="TINYINT"/>
+        <result column="ManagementConfirm" property="managementConfirm" jdbcType="TINYINT"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="base_ladderDetailed_column">
+            (@i:=@i+1)
+            AS
+            rownum
+            ,
+            LadderDetailedID
+            ,
+            LadderDetailedAchievementID
+            ,
+            LadderDetailedStoreId
+            ,
+            LadderDetailedAmount
+            ,
+            LadderDetailedBeauticianId
+            ,
+            LadderDetailedState
+            ,
+            LadderDetailedDatetime
+            ,
+            LadderDetailedOrderId
+            ,
+            OrderType
+            ,
+            LadderDetailedNumber
+            ,
+            SalesmanConfirm
+            ,
+            ManagementConfirm
+            ,
+            LadderDetailedType
+            ,
+            Status
+            ,
+            CreateOperator
+            ,
+            CreateTime
+            ,
+            ModifyOperator
+            ,
+            DataChange_LastTime
+    </sql>
+
+    <select id="statisticPerformance" resultMap="BaseResultMap" parameterType="Map">
+        select
+        <include refid="base_ladderDetailed_column"/>
+        from a_ladderdetailed where Status = 1
+        <if test="state != null">
+            and LadderDetailedState = #{state}
+        </if>
+        <if test="salesmanID != null">
+            and LadderDetailedBeauticianId = #{salesmanID}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and LadderDetailedStoreId = #{storeId}
+        </if>
+        <if test="salesmanConfirm != null">
+            and SalesmanConfirm = #{salesmanConfirm}
+        </if>
+        <if test="managementConfirm != null">
+            and ManagementConfirm = #{managementConfirm}
+        </if>
+        <if test="start != null and end != null">
+            and LadderDetailedDatetime between DATE_FORMAT(#{start}, '%Y-%m-%d %H:%i:%S') and
+            DATE_FORMAT(#{end},'%Y-%m-%d %H:%i:%S')
+        </if>
+    </select>
+
+    <select id="selectLadderDetailedList" resultMap="BaseResultMap" parameterType="Map">
+        select
+        <include refid="base_ladderDetailed_column"/>
+        from a_ladderdetailed,(select @i:=0) as it where Status = 1
+        <if test="list != null">
+            and LadderDetailedStoreId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="startDate != null">
+            and CreateTime between DATE_FORMAT(#{startDate}, '%Y-%m-%d %H:%i:%S') and DATE_FORMAT(#{endDate},'%Y-%m-%d
+            %H:%i:%S')
+        </if>
+        <if test="ladderDetailedBeauticianId != null and ladderDetailedBeauticianId != ''">
+            and LadderDetailedBeauticianId = #{ladderDetailedBeauticianId}
+        </if>
+        <if test="forNumber != null and forNumber != ''">
+            and LadderDetailedNumber != 0
+        </if>
+    </select>
+
+    <select id="selectLadderDetailedByID" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="base_ladderDetailed_column"/>
+        from a_ladderdetailed,(select @i:=0) as it
+        where LadderDetailedID = #{ladderDetailedID,jdbcType=BIGINT} and Status = 1
+    </select>
+
+    <select id="selectLadderDetailedByCondition" resultMap="BaseResultMap" parameterType="LadderDetailed">
+        select
+        <include refid="base_ladderDetailed_column"/>
+        from a_ladderdetailed,(select @i:=0) as it
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="ladderDetailedID != null">
+                    AND LadderDetailedID = #{ladderDetailedID,jdbcType=BIGINT}
+                </if>
+                <if test="ladderDetailedAchievementID != null">
+                    AND LadderDetailedAchievementID = #{ladderDetailedAchievementID,jdbcType=BIGINT}
+                </if>
+                <if test="list != null">
+                    AND LadderDetailedStoreId in
+                    <foreach item="item" collection="list" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="ladderDetailedAmount != null">
+                    AND LadderDetailedAmount = #{ladderDetailedAmount,jdbcType=DECIMAL}
+                </if>
+                <if test="ladderDetailedBeauticianId != null">
+                    AND LadderDetailedBeauticianId = #{ladderDetailedBeauticianId,jdbcType=BIGINT}
+                </if>
+                <if test="ladderDetailedState != null">
+                    AND LadderDetailedState = #{ladderDetailedState,jdbcType=INTEGER}
+                </if>
+                <if test="ladderDetailedDatetime != null">
+                    AND TO_DAYS(LadderDetailedDatetime) =
+                    TO_DAYS(CONCAT('',#{ladderDetailedDatetime,jdbcType=TIMESTAMP},''))
+                </if>
+                <if test="ladderDetailedOrderId != null">
+                    AND LadderDetailedOrderId = #{ladderDetailedOrderId,jdbcType=BIGINT}
+                </if>
+                <if test="orderType != null">
+                    AND OrderType = #{orderType,jdbcType=BIGINT}
+                </if>
+                <if test="ladderDetailedNumber != null">
+                    AND LadderDetailedNumber = #{ladderDetailedNumber,jdbcType=DECIMAL}
+                </if>
+                <if test="salesmanConfirm != null">
+                    AND SalesmanConfirm = #{salesmanConfirm,jdbcType=TINYINT}
+                </if>
+                <if test="managementConfirm != null">
+                    AND ManagementConfirm = #{managementConfirm,jdbcType=TINYINT}
+                </if>
+                <if test="status != null">
+                    AND Status = #{status,jdbcType=INTEGER}
+                </if>
+                <if test="status == null">
+                    AND Status = 1
+                </if>
+                <if test="createOperator != null">
+                    AND CreateOperator = #{createOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="createTime != null">
+                    AND CreateTime = #{createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="modifyOperator != null">
+                    AND ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="dataChangeLastTime != null">
+                    AND DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <update id="deleteLadderDetailedByID" parameterType="Map">
+        update a_ladderdetailed
+        set Status         = 0,
+            ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        where LadderDetailedID = #{ladderDetailedID,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteLadderDetailedByOrder" parameterType="Map">
+        update a_ladderdetailed
+        set Status         = 0,
+            ModifyOperator = #{modifyOperator}
+        where LadderDetailedOrderId = #{orderNum}
+    </update>
+
+    <insert id="insertLadderDetailed" parameterType="com.lnmj.data.entity.LadderDetailed" useGeneratedKeys="true"
+            keyProperty="ladderDetailedID">
+        insert into a_ladderdetailed
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ladderDetailedID != null">
+                LadderDetailedID,
+            </if>
+            <if test="ladderDetailedAchievementID != null">
+                LadderDetailedAchievementID,
+            </if>
+            <if test="ladderDetailedStoreId != null">
+                LadderDetailedStoreId,
+            </if>
+            <if test="ladderDetailedAmount != null">
+                LadderDetailedAmount,
+            </if>
+            <if test="ladderDetailedBeauticianId != null">
+                LadderDetailedBeauticianId,
+            </if>
+            <if test="ladderDetailedState != null">
+                LadderDetailedState,
+            </if>
+            <if test="ladderDetailedDatetime != null">
+                LadderDetailedDatetime,
+            </if>
+            <if test="ladderDetailedOrderId != null">
+                LadderDetailedOrderId,
+            </if>
+            <if test="orderType != null">
+                OrderType,
+            </if>
+            <if test="ladderDetailedNumber != null">
+                LadderDetailedNumber,
+            </if>
+            <if test="salesmanConfirm != null">
+                SalesmanConfirm,
+            </if>
+            <if test="managementConfirm != null">
+                ManagementConfirm,
+            </if>
+            <if test="ladderDetailedType != null">
+                LadderDetailedType,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ladderDetailedID != null">
+                #{ladderDetailedID,jdbcType=BIGINT},
+            </if>
+            <if test="ladderDetailedAchievementID != null">
+                #{ladderDetailedAchievementID,jdbcType=BIGINT},
+            </if>
+            <if test="ladderDetailedStoreId != null">
+                #{ladderDetailedStoreId,jdbcType=BIGINT},
+            </if>
+            <if test="ladderDetailedAmount != null">
+                #{ladderDetailedAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="ladderDetailedBeauticianId != null">
+                #{ladderDetailedBeauticianId,jdbcType=BIGINT},
+            </if>
+            <if test="ladderDetailedState != null">
+                #{ladderDetailedState,jdbcType=INTEGER},
+            </if>
+            <if test="ladderDetailedDatetime != null">
+                #{ladderDetailedDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ladderDetailedOrderId != null">
+                #{ladderDetailedOrderId,jdbcType=BIGINT},
+            </if>
+            <if test="orderType != null">
+                #{orderType,jdbcType=BIGINT},
+            </if>
+            <if test="ladderDetailedNumber != null">
+                #{ladderDetailedNumber,jdbcType=DECIMAL},
+            </if>
+            <if test="salesmanConfirm != null">
+                #{salesmanConfirm,jdbcType=TINYINT},
+            </if>
+            <if test="managementConfirm != null">
+                #{managementConfirm,jdbcType=TINYINT},
+            </if>
+            <if test="ladderDetailedType != null">
+                #{ladderDetailedType},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateLadderDetailed" parameterType="com.lnmj.data.entity.LadderDetailed">
+        update a_ladderdetailed
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="ladderDetailedAchievementID != null">
+                    LadderDetailedAchievementID = #{ladderDetailedAchievementID,jdbcType=BIGINT},
+                </if>
+                <if test="ladderDetailedStoreId != null">
+                    LadderDetailedStoreId = #{ladderDetailedStoreId,jdbcType=BIGINT},
+                </if>
+                <if test="ladderDetailedAmount != null">
+                    LadderDetailedAmount = #{ladderDetailedAmount,jdbcType=DECIMAL},
+                </if>
+                <if test="ladderDetailedBeauticianId != null">
+                    LadderDetailedBeauticianId = #{ladderDetailedBeauticianId,jdbcType=BIGINT},
+                </if>
+                <if test="ladderDetailedState != null">
+                    LadderDetailedState = #{ladderDetailedState,jdbcType=INTEGER},
+                </if>
+                <if test="ladderDetailedDatetime != null">
+                    LadderDetailedDatetime = #{ladderDetailedDatetime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="ladderDetailedOrderId != null">
+                    LadderDetailedOrderId = #{ladderDetailedOrderId,jdbcType=BIGINT},
+                </if>
+                <if test="orderType != null">
+                    OrderType = #{orderType,jdbcType=BIGINT},
+                </if>
+                <if test="ladderDetailedNumber != null">
+                    LadderDetailedNumber = #{ladderDetailedNumber,jdbcType=DECIMAL},
+                </if>
+                <if test="salesmanConfirm != null">
+                    SalesmanConfirm = #{salesmanConfirm,jdbcType=TINYINT},
+                </if>
+                <if test="managementConfirm != null">
+                    ManagementConfirm = #{managementConfirm,jdbcType=TINYINT},
+                </if>
+                <if test="ladderDetailedType != null">
+                    LadderDetailedType = #{ladderDetailedType},
+                </if>
+                <if test="status != null">
+                    Status = #{status,jdbcType=INTEGER},
+                </if>
+                <if test="createOperator != null">
+                    CreateOperator = #{createOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null">
+                    CreateTime = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="modifyOperator != null">
+                    ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="dataChangeLastTime != null">
+                    DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+                </if>
+            </trim>
+        </set>
+        where 1=1
+        <if test="ladderDetailedID != null">
+            and LadderDetailedID = #{ladderDetailedID,jdbcType=BIGINT}
+        </if>
+        <if test="ladderDetailedOrderId != null">
+            and LadderDetailedOrderId = #{ladderDetailedOrderId}
+        </if>
+    </update>
+
+
+    <delete id="deleteLadderDetailedByCondition" parameterType="LadderDetailed">
+        delete from a_ladderdetailed where LadderDetailedOrderId = #{ladderDetailedOrderId}
+    </delete>
+
+    <select id="selectLadderDetailedByRechargeOrderNum" resultType="LadderDetailed" parameterType="Long">
+        select
+        <include refid="base_ladderDetailed_column"/>
+        from a_ladderdetailed
+        where LadderDetailedOrderId = #{orderNumber} and Status = 1
+    </select>
+</mapper>

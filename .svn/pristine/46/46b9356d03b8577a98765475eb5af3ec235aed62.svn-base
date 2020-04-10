@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="walletAmount" >
+  <sql id="Base_Column_List" >
+    WalletId, AccountTypeId, Amount, Status, CreateOperator, CreateTime, ModifyOperator, 
+    DataChange_LastTime
+  </sql>
+
+  <select id="selectByExample" resultType="WalletAmount" parameterType="Map" >
+    select
+    <include refid="Base_Column_List" />
+    from w_wallet_amount
+  </select>
+
+
+  <insert id="insertSelective" parameterType="WalletAmount" >
+    insert into w_wallet_amount
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="walletId != null" >
+        WalletId,
+      </if>
+      <if test="accountTypeId != null" >
+        AccountTypeId,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="walletId != null" >
+        #{walletId},
+      </if>
+      <if test="accountTypeId != null" >
+        #{accountTypeId},
+      </if>
+      <if test="amount != null" >
+        #{amount},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime},
+      </if>
+    </trim>
+  </insert>
+
+  <!--执行充值-->
+  <update id="recharge" parameterType="WalletAmount" >
+    update w_wallet_amount
+    <set >
+      <if test="amount != null" >
+        Amount = Amount + #{amount},
+      </if>
+      <if test="status != null" >
+        Status = #{status},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = now(),
+      </if>
+    </set>
+    where WalletId = #{walletId} and AccountTypeId = #{accountTypeId}
+  </update>
+
+  <!--更新账户余额-->
+  <update id="updateWalletAmount" parameterType="WalletAmount" >
+    update w_wallet_amount
+    <set >
+      <if test="accountTypeId != null" >
+        AccountTypeId = #{accountTypeId},
+      </if>
+      <if test="amount != null" >
+        Amount = #{amount},
+      </if>
+      <if test="status != null" >
+        Status = #{status},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator},
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime = now(),
+      </if>
+    </set>
+      where WalletId = #{walletId}
+  </update>
+
+
+  <!--审核通过执行充值-->
+  <update id="updateAmount" parameterType="WalletAmount" >
+    update w_wallet_amount
+    <set >
+      <if test="amount != null" >
+        Amount = Amount + #{amount},
+      </if>
+      <if test="status != null" >
+        Status = #{status},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = now(),
+      </if>
+    </set>
+    where WalletId = #{walletId} and AccountTypeId = #{accountTypeId}
+  </update>
+
+
+  <select id="checkAmountByWalletIdAndTypeId" parameterType="Map" resultType="int">
+      select count(1) from w_wallet_amount where WalletId = #{walletId} and AccountTypeId = #{accountTypeId}
+
+  </select>
+</mapper>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="experienceCard">
+    <resultMap id="BaseResultMap" type="Experiencecard">
+        <id column="CardId" property="cardId" jdbcType="BIGINT"/>
+        <result column="CardNum" property="cardNum" jdbcType="VARCHAR"/>
+        <result column="CardName" property="cardName" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        CardId,
+        Account,
+        StoreId,
+        CardNum,
+        CardName,
+        LogoImage,
+        SubordBuyLimitId,
+        SubClassId,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+
+    <select id="selectExperienceCardList" resultMap="BaseResultMap" parameterType="Experiencecard">
+        select
+        <include refid="Base_Column_List"/>
+        from s_experiencecard
+        where 1=1
+        <if test="keyWordCardName != null and keyWordCardName!=''">
+            and  CardName like CONCAT('%',#{keyWordCardName},'%')
+        </if>
+        <if test="keyWordCarNum != null and keyWordCarNum!=''">
+            and  CardNum = #{keyWordCarNum}
+        </if>
+    </select>
+
+    <select id="selectExperienceCardByCardNum" resultType="Experiencecard" parameterType="String">
+        select
+        <include refid="Base_Column_List"/>
+        from s_experiencecard
+        where CardNum=#{cardNum}
+    </select>
+
+    <delete id="deleteExpCardByCarNum" parameterType="String">
+        delete
+        from s_experiencecard
+        where CardNum = #{cardNum}
+    </delete>
+
+    <update id="updateExpCardById" parameterType="Experiencecard" >
+        update s_experiencecard
+        <set >
+            <if test="account != null" >
+                Account = #{account},
+            </if>
+            <if test="storeId != null" >
+                StoreId = #{storeId},
+            </if>
+            <if test="cardNum != null" >
+                CardNum = #{cardNum},
+            </if>
+            <if test="cardName != null" >
+                CardName = #{cardName},
+            </if>
+            <if test="subordBuyLimitId != null" >
+                SubordBuyLimitId = #{subordBuyLimitId},
+            </if>
+            <if test="subClassId != null" >
+                SubClassId = #{subClassId},
+            </if>
+            <if test="logoImage != null" >
+                LogoImage = #{logoImage},
+            </if>
+            <if test="status != null" >
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null" >
+                ModifyOperator = #{modifyOperator},
+            </if>
+                DataChange_LastTime = now()
+        </set>
+        where CardId = #{cardId}
+    </update>
+
+    <insert id="addExpCard" parameterType="Experiencecard">
+        insert into s_experiencecard
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="cardId != null" >
+                CardId,
+            </if>
+            <if test="account != null" >
+                Account,
+            </if>
+            <if test="cardNum != null" >
+                CardNum,
+            </if>
+            <if test="storeId != null" >
+                StoreId,
+            </if>
+            <if test="cardName != null" >
+                CardName,
+            </if>
+            <if test="subordBuyLimitId != null" >
+                SubordBuyLimitId,
+            </if>
+            <if test="subClassId != null" >
+                SubClassId,
+            </if>
+            <if test="logoImage != null" >
+                LogoImage,
+            </if>
+            <if test="status != null" >
+                Status,
+            </if>
+            <if test="createOperator != null" >
+                CreateOperator,
+            </if>
+                CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="cardId != null" >
+                #{cardId},
+            </if>
+            <if test="account != null" >
+                #{account},
+            </if>
+            <if test="cardNum != null" >
+                #{cardNum},
+            </if>
+            <if test="storeId != null" >
+                #{storeId},
+            </if>
+            <if test="cardName != null" >
+                #{cardName},
+            </if>
+            <if test="subordBuyLimitId != null" >
+                #{subordBuyLimitId},
+            </if>
+            <if test="subClassId != null" >
+                #{subClassId},
+            </if>
+            <if test="logoImage != null" >
+                #{logoImage},
+            </if>
+            <if test="status != null" >
+                #{status},
+            </if>
+            <if test="createOperator != null" >
+                #{createOperator},
+            </if>
+               now()
+        </trim>
+    </insert>
+</mapper>

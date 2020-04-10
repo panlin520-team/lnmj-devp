@@ -1,0 +1,292 @@
+package com.lnmj.store.business.impl;
+
+import com.lnmj.common.Enum.ResponseEnum.errorMsgEnum.ResponseCustomerEnum;
+import com.lnmj.common.response.Error;
+import com.lnmj.common.response.ResponseResult;
+import com.lnmj.common.utils.ListPageUntil;
+import com.lnmj.store.business.ICustomerService;
+import com.lnmj.store.entity.Company;
+import com.lnmj.store.entity.Customer;
+import com.lnmj.store.entity.Store;
+import com.lnmj.store.entity.Subsidiary;
+import com.lnmj.store.entity.VO.StoreVO;
+import com.lnmj.store.repository.ICompanyDao;
+import com.lnmj.store.repository.ICustomerDao;
+import com.lnmj.store.repository.IStoreDao;
+import com.lnmj.store.serviceProxy.K3Api_organization;
+import com.lnmj.store.serviceProxy.ProductApi;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Author: yilihua
+ * @Date: 2019/9/19 18:23
+ * @Description:
+ */
+@Transactional
+@Service("customerService")
+public class CustomerService implements ICustomerService {
+    @Resource
+    private ICustomerDao iCustomerDao;
+    @Resource
+    private ICompanyDao iCompanyDao;
+    @Resource
+    private IStoreDao iStoreDao;
+    @Resource
+    private K3Api_organization k3Api;
+    @Resource
+    private ProductApi productApi;
+
+    @Override
+    public ResponseResult selectCustomerList(int pageNum, int pageSize, String keyWordName, String companyType, String companyId) {
+
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("companyType", companyType);
+        map.put("keyWordName", keyWordName);
+        List<Customer> customerList = iCustomerDao.selectCustomerList(map);
+
+        List<Company> companyList = iCompanyDao.selectCompanyList(new HashMap());
+        List<Subsidiary> subCompanyList = iCompanyDao.selectSubsidiaryList(new HashMap());
+        List<StoreVO> storeList = iStoreDao.selectStoretList(new HashMap());
+        //查看公司名称
+        if (companyType.equals("1")) {
+            //如果是总公司
+            for (Customer customer : customerList) {
+                for (Company company : companyList) {
+                    if (customer.getCompanyId().equals(company.getCompanyId().toString())) {
+                        customer.setCompanyName(company.getCompanyName());
+                    }
+                }
+            }
+
+        } else if (companyType.equals("2")) {
+            //如果是子公司
+            for (Customer customer : customerList) {
+                for (Subsidiary subsidiary : subCompanyList) {
+                    if (customer.getCompanyId().equals(subsidiary.getSubsidiaryId().toString())) {
+                        customer.setCompanyName(subsidiary.getSubsidiaryName());
+                    }
+                }
+            }
+        } else if (companyType.equals("3")) {
+            //如果是分公司
+            for (Customer customer : customerList) {
+                for (StoreVO storeVO : storeList) {
+                    if (customer.getCompanyId().equals(storeVO.getStoreId().toString())) {
+                        customer.setCompanyName(storeVO.getName());
+                    }
+                }
+            }
+        }
+
+
+        Map mapRsultPage = ListPageUntil.listPage(customerList, pageSize, pageNum);
+        Map mapResult = new HashMap();
+        if (((List) mapRsultPage.get("list")).size() > 0) {
+            mapResult.put("list", mapRsultPage.get("list"));
+            mapResult.put("total", mapRsultPage.get("total"));
+            return ResponseResult.success(mapResult);
+        }
+        return ResponseResult.error(new Error(ResponseCustomerEnum.CUSTOMER_LIST_NULL.getCode(),
+                ResponseCustomerEnum.CUSTOMER_LIST_NULL.getDesc()));
+
+    }
+
+    @Override
+    public ResponseResult selectCustomerListNoPage(String companyType, String companyId) {
+
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("companyType", companyType);
+        List<Customer> customerList = iCustomerDao.selectCustomerList(map);
+        if (customerList.size() > 0) {
+            return ResponseResult.success(customerList);
+        }
+        return ResponseResult.error(new Error(ResponseCustomerEnum.CUSTOMER_LIST_NULL.getCode(),
+                ResponseCustomerEnum.CUSTOMER_LIST_NULL.getDesc()));
+    }
+
+    @Override
+    public ResponseResult insertCustomer(Customer customer) {
+        if (customer.getIsDefaultCust().toString().equals("1")){
+            //查看是否有默认
+            int resultInt = iCustomerDao.checkDefault(customer);
+            if (resultInt>0){
+                return ResponseResult.error(new Error(ResponseCustomerEnum.CUSTOMER_ADD_FAIL_DEFUALT_EXIT.getCode(),
+                        ResponseCustomerEnum.CUSTOMER_ADD_FAIL_DEFUALT_EXIT.getDesc()));
+            }
+        }
+
+
+        //生成客户编码
+        String k3NumberLast = iCustomerDao.selectLastCustomerCode();
+        String k3NumberAdd = null;
+        if (k3NumberLast == null) {
+            customer.setK3Number("CUST" + "0001");
+        } else {
+            String substring = k3NumberLast.substring(4, 8);
+            int i = Integer.parseInt(substring);
+            k3NumberAdd = "CUST" + String.format("%4d", i + 1).replace(" ", "0");
+            customer.setK3Number(k3NumberAdd);
+
+        }
+        int resultInt = iCustomerDao.insertCustomer(customer);
+        //添加到k3
+        String k3UserName = null;
+        String k3PassWord = null;
+        String dataCentre = null;
+        if (customer.getCompanyType().equals("1")) {
+            //如果是总公司
+            Company company = iCompanyDao.selectCompanyByID(Long.parseLong(customer.getCompanyId()));
+            k3UserName = company.getYewuDataCentreUserName();
+            k3PassWord = company.getYewuDataCentrePassword();
+            dataCentre = company.getDataCentre();
+        } else if (customer.getCompanyType().equals("2")) {
+            //如果是子公司
+            Subsidiary subsidiary = iCompanyDao.selectSubsidiaryByID(Long.parseLong(customer.getCompanyId()));
+            Company company = iCompanyDao.selectCompanyByID(subsidiary.getParentCompany());
+            k3UserName = company.getYewuDataCentreUserName();
+            k3PassWord = company.getYewuDataCentrePassword();
+            dataCentre = company.getDataCentre();
+        } else if (customer.getCompanyType().equals("3")) {
+            //如果是分公司
+            Store store = iStoreDao.selectStoreById(Long.parseLong(customer.getCompanyId()));
+            Subsidiary subsidiary = iCompanyDao.selectSubsidiaryByID(store.getSubCompanyId());
+            Company company = iCompanyDao.selectCompanyByID(subsidiary.getParentCompany());
+            k3UserName = company.getYewuDataCentreUserName();
+            k3PassWord = company.getYewuDataCentrePassword();
+            dataCentre = company.getDataCentre();
+        }
+        String fCustTypeId = null;
+        if (customer.getCustomerType() == 1) {
+            fCustTypeId = "KHLB001_SYS";
+        } else if (customer.getCustomerType() == 2) {
+            fCustTypeId = "KHLB002_SYS";
+        } else if (customer.getCustomerType() == 3) {
+            fCustTypeId = "KHLB003_SYS";
+        }
+
+
+        ResponseResult responseResult = k3Api.customerSave(dataCentre, k3UserName, k3PassWord, customer.getName(), customer.getK3Number(), customer.getName(), customer.getK3OrgNumber(), customer.getK3OrgNumber(), fCustTypeId, null, null);
+        if (!((Map) (((Map) (((Map) (responseResult.getResult())).get("Result"))).get("ResponseStatus"))).get("IsSuccess").toString().equals("true")) {
+            return ResponseResult.success("客户添加成功,K3客户添加未成功:" + ((Map) (((List) (((Map) (((Map) (((Map) (responseResult.getResult())).get("Result"))).get("ResponseStatus"))).get("Errors"))).get(0))).get("Message").toString());
+        }
+        if (resultInt > 0) {
+            String k3Id = (((Map) (((Map) responseResult.getResult()).get("Result")))).get("Id").toString();
+            Customer customerUpdate = new Customer();
+            customerUpdate.setId(customer.getId());
+            customerUpdate.setK3Number(k3NumberAdd);
+            customerUpdate.setK3Id(k3Id);
+            iCustomerDao.updateCustomer(customerUpdate);
+            return ResponseResult.success("客户添加成功,K3客户添加成功");
+        } else {
+            return ResponseResult.error(new Error(ResponseCustomerEnum.CUSTOMER_ADD_FAIL.getCode(),
+                    ResponseCustomerEnum.CUSTOMER_ADD_FAIL.getDesc()));
+
+        }
+
+    }
+
+    @Override
+    public ResponseResult deleteCustomer(Customer customer) {
+        //判断客户是否正在被使用
+        List<Map> outstorageListMap = (List<Map>) (productApi.checkOutstorageByCust(customer.getK3Number()).getResult());
+        if (outstorageListMap != null && outstorageListMap.size() > 0) {
+            return ResponseResult.error(new Error(ResponseCustomerEnum.CUSTOMER_OUTSTORAGE_USE.getCode(),
+                    ResponseCustomerEnum.CUSTOMER_OUTSTORAGE_USE.getDesc()));
+        }
+
+        int resultInt = iCustomerDao.deleteCustomer(customer);
+        String k3UserName = null;
+        String k3PassWord = null;
+        String dataCentre = null;
+        if (customer.getCompanyType().equals("1")) {
+            //如果是总公司
+            Company company = iCompanyDao.selectCompanyByID(Long.parseLong(customer.getCompanyId()));
+            k3UserName = company.getYewuDataCentreUserName();
+            k3PassWord = company.getYewuDataCentrePassword();
+            dataCentre = company.getDataCentre();
+        } else if (customer.getCompanyType().equals("2")) {
+            //如果是子公司
+            Subsidiary subsidiary = iCompanyDao.selectSubsidiaryByID(Long.parseLong(customer.getCompanyId()));
+            Company company = iCompanyDao.selectCompanyByID(subsidiary.getParentCompany());
+            k3UserName = company.getYewuDataCentreUserName();
+            k3PassWord = company.getYewuDataCentrePassword();
+            dataCentre = company.getDataCentre();
+        } else if (customer.getCompanyType().equals("3")) {
+            //如果是分公司
+            Store store = iStoreDao.selectStoreById(Long.parseLong(customer.getCompanyId()));
+            Subsidiary subsidiary = iCompanyDao.selectSubsidiaryByID(store.getSubCompanyId());
+            Company company = iCompanyDao.selectCompanyByID(subsidiary.getParentCompany());
+            k3UserName = company.getYewuDataCentreUserName();
+            k3PassWord = company.getYewuDataCentrePassword();
+            dataCentre = company.getDataCentre();
+        }
+        ResponseResult responseResult = k3Api.customerDelete(dataCentre, k3UserName, k3PassWord, null, customer.getK3Id());
+        if (!((Map) (((Map) (((Map) (responseResult.getResult())).get("Result"))).get("ResponseStatus"))).get("IsSuccess").toString().equals("true")) {
+            return ResponseResult.success("客户删除成功,K3客户删除未成功:" + ((Map) (((List) (((Map) (((Map) (((Map) (responseResult.getResult())).get("Result"))).get("ResponseStatus"))).get("Errors"))).get(0))).get("Message").toString());
+        }
+
+        if (resultInt > 0) {
+            return ResponseResult.success("客户删除成功,K3客户删除成功");
+        } else {
+            return ResponseResult.error(new Error(ResponseCustomerEnum.CUSTOMER_DELETE_FAIL.getCode(),
+                    ResponseCustomerEnum.CUSTOMER_DELETE_FAIL.getDesc()));
+
+        }
+    }
+
+    @Override
+    public ResponseResult updateCustomer(Customer customer) {
+        int resultInt = iCustomerDao.updateCustomer(customer);
+        //K3接入
+        String k3UserName = null;
+        String k3PassWord = null;
+        String dataCentre = null;
+        if (customer.getCompanyType().equals("1")) {
+            //如果是总公司
+            Company company = iCompanyDao.selectCompanyByID(Long.parseLong(customer.getCompanyId()));
+            k3UserName = company.getYewuDataCentreUserName();
+            k3PassWord = company.getYewuDataCentrePassword();
+            dataCentre = company.getDataCentre();
+        } else if (customer.getCompanyType().equals("2")) {
+            //如果是子公司
+            Subsidiary subsidiary = iCompanyDao.selectSubsidiaryByID(Long.parseLong(customer.getCompanyId()));
+            Company company = iCompanyDao.selectCompanyByID(subsidiary.getParentCompany());
+            k3UserName = company.getYewuDataCentreUserName();
+            k3PassWord = company.getYewuDataCentrePassword();
+            dataCentre = company.getDataCentre();
+        } else if (customer.getCompanyType().equals("3")) {
+            //如果是分公司
+            Store store = iStoreDao.selectStoreById(Long.parseLong(customer.getCompanyId()));
+            Subsidiary subsidiary = iCompanyDao.selectSubsidiaryByID(store.getSubCompanyId());
+            Company company = iCompanyDao.selectCompanyByID(subsidiary.getParentCompany());
+            k3UserName = company.getYewuDataCentreUserName();
+            k3PassWord = company.getYewuDataCentrePassword();
+            dataCentre = company.getDataCentre();
+        }
+        ResponseResult responseResult = k3Api.customerSave(dataCentre, k3UserName, k3PassWord, customer.getName(), "", "", "", "", "", "FName", Integer.parseInt(customer.getK3Id()));
+        if (!((Map) (((Map) (((Map) (responseResult.getResult())).get("Result"))).get("ResponseStatus"))).get("IsSuccess").toString().equals("true")) {
+            return ResponseResult.success("客户修改成功,K3客户修改未成功:" + ((Map) (((List) (((Map) (((Map) (((Map) (responseResult.getResult())).get("Result"))).get("ResponseStatus"))).get("Errors"))).get(0))).get("Message").toString());
+        }
+        if (resultInt > 0) {
+            return ResponseResult.success("客户修改成功,K3客户修改成功");
+        } else {
+            return ResponseResult.error(new Error(ResponseCustomerEnum.CUSTOMER_UPDATE_FAIL.getCode(),
+                    ResponseCustomerEnum.CUSTOMER_UPDATE_FAIL.getDesc()));
+
+        }
+    }
+
+    @Override
+    public ResponseResult selectDefaultCust(Customer customer) {
+        Customer customerResult = iCustomerDao.selectDefaultCust(customer);
+        return ResponseResult.success(customerResult);
+    }
+}

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="experiencecardUser">
+
+
+    <sql id="Base_Column_List_Product">
+        id
+        ,
+        ExperiencecardNum
+        ,
+        ExperiencecardUserId
+        ,
+        MemberNum,
+        ExperiencecardProductCode,
+        TotalTimes,
+        UseTimes,
+        UseLimit,
+        CardOrderCode,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Product_a">
+        a.id
+        ,
+        a.ExperiencecardNum
+        ,
+        a.ExperiencecardUserId
+        ,
+        a.MemberNum,
+        a.ExperiencecardProductCode,
+        a.TotalTimes,
+        a.UseTimes,
+        a.UseLimit,
+        a.CardOrderCode,
+        a.Status,
+        a.CreateOperator,
+        a.CreateTime,
+        a.ModifyOperator,
+        a.DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_expCard">
+        id
+        ,
+        ExperiencecardNum
+        ,
+        MemberNum,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_VO">
+        a.CardId,
+        a.Account,
+        a.StoreId,
+        a.CardNum,
+        a.CardName,
+        a.LogoImage,
+        a.SubordBuyLimitId,
+        a.AchievementPostId,
+        a.Status,
+        a.CreateOperator,
+        a.CreateTime,
+        a.ModifyOperator,
+        a.DataChange_LastTime,
+        b.id
+    </sql>
+
+
+    <select id="selectExpCardUserList" resultType="ExperiencecardUser">
+        select
+        <include refid="Base_Column_List_expCard"/>
+        from s_experiencecard_user
+    </select>
+
+    <select id="selectExperienceCardProductUserList" resultType="ExperiencecardProductUser" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Product"/>
+        from s_experiencecard_product_user
+        where Status = 1
+        <if test="memberNum != null">
+            and MemberNum = #{memberNum}
+        </if>
+        <if test="productCode != null">
+            and ExperiencecardProductCode = #{productCode}
+        </if>
+        <if test="id != null">
+            and id = #{id}
+        </if>
+    </select>
+
+    <update id="updateUserExpUseTimes" parameterType="Map">
+        update s_experiencecard_product_user
+        set UseTimes=UseTimes + 1
+        where id = #{id}
+    </update>
+
+    <update id="addUserExpUseTimes" parameterType="Long">
+        update s_experiencecard_product_user
+        set UseTimes=UseTimes - 1
+        where id = #{id}
+    </update>
+
+    <insert id="addExpCardUser" parameterType="ExperiencecardUser" useGeneratedKeys="true" keyProperty="id">
+        insert into s_experiencecard_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="experiencecardNum != null">
+                ExperiencecardNum,
+            </if>
+            <if test="memberNum != null">
+                MemberNum,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="experiencecardNum != null">
+                #{experiencecardNum},
+            </if>
+            <if test="memberNum != null">
+                #{memberNum},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <insert id="addExpCardUserProduct" parameterType="ExperiencecardProductUser">
+        insert into s_experiencecard_product_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].experiencecardUserId != null">
+                ExperiencecardUserId,
+            </if>
+            <if test="list[0].experiencecardNum != null">
+                ExperiencecardNum,
+            </if>
+            <if test="list[0].memberNum != null">
+                MemberNum,
+            </if>
+            <if test="list[0].experiencecardProductCode != null">
+                ExperiencecardProductCode,
+            </if>
+            <if test="list[0].totalTimes != null">
+                TotalTimes,
+            </if>
+            <if test="list[0].useTimes != null">
+                UseTimes,
+            </if>
+            <if test="list[0].useLimit != null">
+                UseLimit,
+            </if>
+            <if test="list[0].cardOrderCode != null">
+                CardOrderCode,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.experiencecardUserId != null">
+                    #{item.experiencecardUserId},
+                </if>
+                <if test="item.experiencecardNum != null">
+                    #{item.experiencecardNum},
+                </if>
+                <if test="item.memberNum != null">
+                    #{item.memberNum},
+                </if>
+                <if test="item.experiencecardProductCode != null">
+                    #{item.experiencecardProductCode},
+                </if>
+                <if test="item.totalTimes != null">
+                    #{item.totalTimes},
+                </if>
+                <if test="item.useTimes != null">
+                    #{item.useTimes},
+                </if>
+                <if test="item.useLimit != null">
+                    #{item.useLimit},
+                </if>
+                <if test="item.cardOrderCode != null">
+                    #{item.cardOrderCode},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+    <select id="selectExperienceCardVoUserList" resultType="ExperiencecardVO" parameterType="Map">
+        select
+        <include refid="Base_Column_List_VO"/>
+        from s_experiencecard a,s_experiencecard_user b
+        where a.Status = 1 and a.CardNum = b.ExperiencecardNum
+        <if test="memberNum != null">
+            and b.MemberNum = #{memberNum}
+        </if>
+
+    </select>
+
+    <select id="selectExpCardUserProduct" resultType="ExperiencecardProductUser" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Product_a"/>
+        from s_experiencecard_product_user a,s_experiencecard_order b
+        where a.CardOrderCode = b.CardOrderCode
+              and a.Status = 1
+        <if test="memberNum != null">
+            and a.MemberNum = #{memberNum}
+        </if>
+        <if test="experiencecardUserId != null">
+            and a.ExperiencecardUserId = #{experiencecardUserId}
+        </if>
+            and b.OrderStatus = 2
+    </select>
+
+    <select id="checkExpIsUse" resultType="int" parameterType="Map">
+        select
+        count(1)
+        from s_experiencecard_product_user a left join s_experiencecard_use_record b on a.id = b.experiencecardProductUserId
+        where a.Status = 1 and  b.Status = 1
+          and a.ExperiencecardNum = #{experiencecardNum}
+          and a.MemberNum = #{memberCode}
+          and b.RecordStatus = 1
+    </select>
+
+
+
+</mapper>

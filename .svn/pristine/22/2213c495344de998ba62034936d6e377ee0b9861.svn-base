@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="backupRestore">
+    <sql id="sql_base_backupRestore_column">
+        BackupRestoreId,FileUrl,StartTime,EndTime,FileSize,Content,Operation,
+        Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <sql id="sql_insert_BackupRestore_column" >
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="fileUrl != null" >FileUrl,</if>
+            <if test="startTime != null" >StartTime,</if>
+            <if test="endTime != null" >EndTime,</if>
+            <if test="fileSize != null" >FileSize,</if>
+            <if test="content != null" >Content,</if>
+            <if test="operation != null" >Operation,</if>
+            <if test="createOperator != null" >CreateOperator,</if>
+            <if test="modifyOperator != null" >ModifyOperator,</if>
+        </trim>
+    </sql>
+    <sql id="sql_insert_BackupRestore_values" >
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="fileUrl != null" >#{fileUrl},</if>
+            <if test="startTime != null" >#{startTime},</if>
+            <if test="endTime != null" >#{endTime},</if>
+            <if test="fileSize != null" >#{fileSize},</if>
+            <if test="content != null" >#{content},</if>
+            <if test="operation != null" >#{operation},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <sql id="sql_where_BackupRestore_condition">
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="backupRestoreId != null">AND BackupRestoreId=#{backupRestoreId}</if>
+                <if test="fileUrl != null">AND FileUrl=#{fileUrl}</if>
+                <if test="startTime != null">AND TO_DAYS(StartTime)= TO_DAYS(CONCAT('',#{startTime},''))</if>
+                <if test="endTime != null">AND TO_DAYS(EndTime)= TO_DAYS(CONCAT('',#{endTime},''))</if>
+                <if test="fileSize != null">AND FileSize=#{fileSize}</if>
+                <if test="content != null">AND Content like CONCAT('%',#{content},'%')</if>
+                <if test="operation != null">AND Operation like CONCAT('%',#{operation},'%')</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <if test="createTime != null">AND CreateTime=#{createTime}</if>
+                <if test="modifyOperator != null">AND ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">AND DataChange_LastTime=#{dataChangeLastTime}</if>
+            </trim>
+        </where>
+    </sql>
+
+    <!--添加备份记录-->
+    <insert id="insertBackupRestore" parameterType="BackupRestore" keyProperty="backupRestoreId" useGeneratedKeys="true">
+        insert into s_BackupRestore
+        <include refid="sql_insert_BackupRestore_column"/>
+        <include refid="sql_insert_BackupRestore_values"/>
+    </insert>
+    <!--查看备份记录（没有删除的）-->
+    <select id="selectBackupRestore" parameterType="BackupRestore" resultType="BackupRestore" >
+        select <include refid="sql_base_backupRestore_column" />
+        from s_BackupRestore
+        <include refid="sql_where_BackupRestore_condition"/>
+    </select>
+    <!--显示所有数据库-->
+    <select id="showSchema" resultType="String">
+        show databases
+    </select>
+    <!--显示数据库所有表
+        <![CDATA[use `]]>${_parameter}<![CDATA[`]]>
+    -->
+    <update id="useSchema" parameterType="String">
+        use ${_parameter}
+    </update>
+    <select id="showTable" resultType="String" >
+        show tables
+    </select>
+</mapper>
+

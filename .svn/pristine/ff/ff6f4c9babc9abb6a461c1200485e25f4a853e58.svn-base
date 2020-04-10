@@ -1,0 +1,73 @@
+package com.lnmj.k3cloud.repository.impl;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.lnmj.common.baseDao.impl.BaseDao;
+import com.lnmj.k3cloud.comfig.DBUtil;
+import com.lnmj.k3cloud.entity.DataCentre;
+import com.lnmj.k3cloud.entity.Organization;
+import com.lnmj.k3cloud.pojo.Incident;
+import com.lnmj.k3cloud.repository.IIncidentDao;
+import com.lnmj.k3cloud.repository.IK3CLOUDDao;
+import org.springframework.stereotype.Repository;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @Author: yilihua
+ * @Date: 2019/10/10 09:47
+ * @Description: 事件接口实现
+ */
+@Repository
+public class K3CLOUDDao implements IK3CLOUDDao {
+    @Override
+    public PageInfo<DataCentre> selectK3DataCentreList(int pageNum,int pageSize,String dataCentreId) {
+       /* dataCentreId = "K3DBConfiger20191165913949"; //正式服务器上的*/
+        dataCentreId = "K3DBConfiger2020325919345"; //192.168.100.2 服务器上的
+
+        PageHelper.startPage(pageNum, pageSize);
+        DBUtil dbUtil = new DBUtil();
+        Connection conn = dbUtil.getConnection(dataCentreId);
+        //3.通过数据库的连接操作数据库，实现增删改查
+        List<DataCentre> dataCentreList = new ArrayList<>();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select FDATACENTERID,FNUMBER,FDATABASENAME from T_BAS_DATACENTER where FRUNTASK = 1");
+            while (rs.next()) {//如果对象中有数据，就会循环打印出来
+                DataCentre dataCentre = new DataCentre();
+                dataCentre.setFDATACENTERID(rs.getString("fDATACENTERID"));
+                dataCentre.setFNUMBER(rs.getString("fNUMBER"));
+                dataCentre.setFDATABASENAME(rs.getString("fDATABASENAME"));
+                dataCentreList.add(dataCentre);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        PageInfo pageInfo = new PageInfo(dataCentreList);
+        return pageInfo;
+
+    }
+
+    @Override
+    public Organization selectK3LegalPersonNumber(String dataCentreId) {
+        DBUtil dbUtil = new DBUtil();
+        Connection conn = dbUtil.getConnection(dataCentreId);
+        //3.通过数据库的连接操作数据库，实现增删改查
+        Organization organization = new Organization();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select FNUMBER from T_ORG_ORGANIZATIONS where FACCTORGTYPE = 1");
+            while (rs.next()) {//如果对象中有数据，就会循环打印出来
+                organization.setFNUMBER(rs.getString("fNUMBER"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  organization;
+    }
+}

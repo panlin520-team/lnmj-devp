@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="basesalary" >
+  <sql id="Base_Column_List" >
+    BaseSalaryScoreID, BaseSalaryName, BaseSalaryIndustryID, BaseSalaryStoreId, BaseSalaryPostID, 
+    BaseSalaryLow, BaseSalaryAmount, Status, CreateOperator, CreateTime, ModifyOperator, 
+    DataChange_LastTime
+  </sql>
+  <select id="selectList" resultType="Basesalary">
+    select 
+    <include refid="Base_Column_List" />
+    from a_basesalary
+    where Status = 1
+  </select>
+
+  <select id="selectByCondition" resultType="Basesalary" >
+    select
+    <include refid="Base_Column_List" />
+    from a_basesalary
+    where Status = 1
+    <trim prefix="and" suffix="" suffixOverrides="," prefixOverrides="">
+      <if test="baseSalaryIndustryID != null" >
+        BaseSalaryIndustryID = #{baseSalaryIndustryID},
+      </if>
+      <if test="baseSalaryStoreId != null" >
+        BaseSalaryStoreId = #{baseSalaryStoreId},
+      </if>
+      <if test="baseSalaryPostID != null" >
+        BaseSalaryPostID = #{baseSalaryPostID},
+      </if>
+    </trim>
+    order by BaseSalaryLow
+  </select>
+
+  <insert id="addBasesalary" parameterType="Basesalary" >
+    insert into a_basesalary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="baseSalaryScoreID != null" >
+        BaseSalaryScoreID,
+      </if>
+      <if test="baseSalaryName != null" >
+        BaseSalaryName,
+      </if>
+      <if test="baseSalaryIndustryID != null" >
+        BaseSalaryIndustryID,
+      </if>
+      <if test="baseSalaryStoreId != null" >
+        BaseSalaryStoreId,
+      </if>
+      <if test="baseSalaryPostID != null" >
+        BaseSalaryPostID,
+      </if>
+      <if test="baseSalaryLow != null" >
+        BaseSalaryLow,
+      </if>
+      <if test="baseSalaryAmount != null" >
+        BaseSalaryAmount,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="baseSalaryScoreID != null" >
+        #{baseSalaryScoreID,jdbcType=BIGINT},
+      </if>
+      <if test="baseSalaryName != null" >
+        #{baseSalaryName,jdbcType=VARCHAR},
+      </if>
+      <if test="baseSalaryIndustryID != null" >
+        #{baseSalaryIndustryID,jdbcType=BIGINT},
+      </if>
+      <if test="baseSalaryStoreId != null" >
+        #{baseSalaryStoreId,jdbcType=BIGINT},
+      </if>
+      <if test="baseSalaryPostID != null" >
+        #{baseSalaryPostID,jdbcType=BIGINT},
+      </if>
+      <if test="baseSalaryLow != null" >
+        #{baseSalaryLow,jdbcType=REAL},
+      </if>
+      <if test="baseSalaryAmount != null" >
+        #{baseSalaryAmount,jdbcType=REAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateBasesalary" parameterType="Basesalary" >
+    update a_basesalary
+    <set >
+      <if test="baseSalaryName != null" >
+        BaseSalaryName = #{baseSalaryName,jdbcType=VARCHAR},
+      </if>
+      <if test="baseSalaryIndustryID != null" >
+        BaseSalaryIndustryID = #{baseSalaryIndustryID,jdbcType=BIGINT},
+      </if>
+      <if test="baseSalaryStoreId != null" >
+        BaseSalaryStoreId = #{baseSalaryStoreId,jdbcType=BIGINT},
+      </if>
+      <if test="baseSalaryPostID != null" >
+        BaseSalaryPostID = #{baseSalaryPostID,jdbcType=BIGINT},
+      </if>
+      <if test="baseSalaryLow != null" >
+        BaseSalaryLow = #{baseSalaryLow,jdbcType=REAL},
+      </if>
+      <if test="baseSalaryAmount != null" >
+        BaseSalaryAmount = #{baseSalaryAmount,jdbcType=REAL},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = now(),
+      </if>
+    </set>
+    where BaseSalaryScoreID = #{baseSalaryScoreID,jdbcType=BIGINT}
+  </update>
+  <update id="deleteBasesalary" parameterType="Basesalary" >
+    update a_basesalary
+    <set >
+        Status = 0,
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+        DataChange_LastTime = now()
+    </set>
+    where BaseSalaryScoreID = #{baseSalaryScoreID,jdbcType=BIGINT}
+  </update>
+</mapper>

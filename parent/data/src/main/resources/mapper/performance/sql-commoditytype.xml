@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="commodityType">
+    <resultMap id="CommodityTypeMap" type="com.lnmj.data.entity.CommodityType">
+        <id column="CommodityTypeID" property="commodityTypeID" jdbcType="BIGINT"/>
+        <result column="CommodityTypeIndustryID" property="commodityTypeIndustryID" jdbcType="BIGINT"/>
+        <result column="CommodityTypeName" property="commodityTypeName" jdbcType="VARCHAR"/>
+        <result column="CommodityProductType" property="commodityProductType" jdbcType="VARCHAR"/>
+        <result column="IsShowInPos" property="isShowInPos" jdbcType="INTEGER"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="base_commodityType_column">
+        CommodityTypeID
+        ,
+        CommodityTypeIndustryID,
+        CommodityTypeName,
+        CommodityProductType,
+        IsShowInPos,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <select id="selectCommodityTypeList" resultMap="CommodityTypeMap"
+            parameterType="com.lnmj.data.entity.CommodityType">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="base_commodityType_column"/>
+        from a_commoditytype where Status = 1
+        <if test="commodityTypeIndustryID != null">
+            and CommodityTypeIndustryID = #{commodityTypeIndustryID}
+        </if>
+        <if test="commodityProductType != null">
+            and CommodityProductType = #{commodityProductType}
+        </if>
+        <if test="searchWord != null">
+            and CommodityTypeName like CONCAT('%',#{searchWord},'%')
+        </if>
+    </select>
+
+    <select id="selectCommodityTypeByID" resultMap="CommodityTypeMap" parameterType="long">
+        select
+        <include refid="base_commodityType_column"/>
+        from a_commoditytype
+        where CommodityTypeID = #{commodityTypeID,jdbcType=BIGINT} and Status = 1
+    </select>
+
+    <select id="selectCommodityTypeByCondition" resultMap="CommodityTypeMap" parameterType="CommodityType">
+        select
+        <include refid="base_commodityType_column"/>
+        from a_commoditytype
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="commodityTypeID != null">
+                    AND CommodityTypeID = #{commodityTypeID,jdbcType=BIGINT}
+                </if>
+                <if test="commodityTypeIndustryID != null and commodityTypeIndustryID != ''">
+                    AND CommodityTypeIndustryID = #{commodityTypeIndustryID,jdbcType=BIGINT}
+                </if>
+                <if test="commodityTypeName != null and commodityTypeName!=''">
+                    AND CommodityTypeName = #{commodityTypeName,jdbcType=VARCHAR}
+                </if>
+                <if test="commodityProductType != null and commodityProductType != ''">
+                    AND CommodityProductType = #{commodityProductType,jdbcType=VARCHAR}
+                </if>
+                <if test="status != null">
+                    AND Status = #{status,jdbcType=INTEGER}
+                </if>
+                <if test="status == null">
+                    AND Status = 1
+                </if>
+                <if test="createOperator != null">
+                    AND CreateOperator = #{createOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="createTime != null">
+                    AND CreateTime = #{createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="modifyOperator != null">
+                    AND ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="dataChangeLastTime != null">
+                    AND DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <update id="deleteCommodityTypeByID" parameterType="com.lnmj.data.entity.CommodityType">
+        update a_commoditytype
+        set Status         = 0,
+            ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        where CommodityTypeID = #{commodityTypeID,jdbcType=BIGINT}
+    </update>
+    <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >-->
+    <!--delete from a_commoditytype-->
+    <!--where CommodityTypeID = #{commodityTypeID,jdbcType=BIGINT}-->
+    <!--</delete>-->
+    <insert id="insertCommodityType" parameterType="com.lnmj.data.entity.CommodityType" useGeneratedKeys="true"
+            keyProperty="commodityTypeID">
+        insert into a_commoditytype
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commodityTypeID != null">
+                CommodityTypeID,
+            </if>
+            <if test="commodityTypeIndustryID != null">
+                CommodityTypeIndustryID,
+            </if>
+            <if test="commodityTypeName != null">
+                CommodityTypeName,
+            </if>
+            <if test="commodityProductType != null">
+                CommodityProductType,
+            </if>
+            <if test="isShowInPos != null">
+                IsShowInPos,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commodityTypeID != null">
+                #{commodityTypeID,jdbcType=BIGINT},
+            </if>
+            <if test="commodityTypeIndustryID != null">
+                #{commodityTypeIndustryID,jdbcType=BIGINT},
+            </if>
+            <if test="commodityTypeName != null">
+                #{commodityTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityProductType != null">
+                #{commodityProductType,jdbcType=VARCHAR},
+            </if>
+            <if test="isShowInPos != null">
+                #{isShowInPos,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateCommodityType" parameterType="com.lnmj.data.entity.CommodityType">
+        update a_commoditytype
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="commodityTypeIndustryID != null">
+                    CommodityTypeIndustryID = #{commodityTypeIndustryID,jdbcType=BIGINT},
+                </if>
+                <if test="commodityTypeName != null">
+                    CommodityTypeName = #{commodityTypeName,jdbcType=VARCHAR},
+                </if>
+                <if test="commodityProductType != null">
+                    CommodityProductType = #{commodityProductType,jdbcType=VARCHAR},
+                </if>
+                <if test="isShowInPos != null">
+                    IsShowInPos = #{isShowInPos,jdbcType=INTEGER},
+                </if>
+                <if test="status != null">
+                    Status = #{status,jdbcType=INTEGER},
+                </if>
+                <if test="createOperator != null">
+                    CreateOperator = #{createOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null">
+                    CreateTime = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="modifyOperator != null">
+                    ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="dataChangeLastTime != null">
+                    DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+                </if>
+            </trim>
+        </set>
+        where CommodityTypeID = #{commodityTypeID,jdbcType=BIGINT}
+    </update>
+
+</mapper>

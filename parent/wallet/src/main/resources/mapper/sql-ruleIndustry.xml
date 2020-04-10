@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="IndustryAccount">
+    <sql id="base_rule_industry_colums">
+        IndustryAccountId,
+        AccountUseRuleId,
+        IndustryId,
+        Industry,
+        UseSum,
+        UseMax,
+        UnitPrice,
+        Remark,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <!--插入时列-->
+    <sql id="sql_insert_rule_industry_colums">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="industryAccountId != null">
+                IndustryAccountId,
+            </if>
+            <if test="accountUseRuleId != null">
+                AccountUseRuleId,
+            </if>
+            <if test="industryId != null">
+                IndustryId,
+            </if>
+            <if test="industry != null">
+                Industry,
+            </if>
+            <if test="useSum != null">
+                UseSum,
+            </if>
+            <if test="useMax != null">
+                UseMax,
+            </if>
+            <if test="unitPrice != null">
+                UnitPrice,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+        </trim>
+    </sql>
+    <!--插入时值-->
+    <sql id="sql_insert_rule_industry_values">
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="industryAccountId != null">
+                #{industryAccountId},
+            </if>
+            <if test="accountUseRuleId != null">
+                #{accountUseRuleId},
+            </if>
+            <if test="industryId != null">
+                #{industryId},
+            </if>
+            <if test="industry != null">
+                #{industry},
+            </if>
+            <if test="useSum != null">
+                #{useSum},
+            </if>
+            <if test="useMax != null">
+                #{useMax},
+            </if>
+            <if test="unitPrice != null">
+                #{unitPrice},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+        </trim>
+    </sql>
+    <!--where条件-->
+    <sql id="sql_where_rule_industry_condition">
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="industryAccountId != null">AND IndustryAccountId=#{industryAccountId}</if>
+                <if test="accountUseRuleId != null">AND AccountUseRuleId=#{accountUseRuleId}</if>
+                <if test="industryId != null">AND IndustryId=#{industryId}</if>
+                <if test="industry !=null">AND Industry like CONCAT('%',#{industry},'%')</if>
+                <if test="useSum != null">AND UseSum=#{useSum}</if>
+                <if test="useMax != null">AND UseMax=#{useMax}</if>
+                <if test="unitPrice != null">AND UnitPrice=#{unitPrice}</if>
+                <if test="remark != null">AND Remark=#{remark}</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <!--<if test="createTime != null"><![CDATA[AND CreateTime <= #{createTime}]]></if>-->
+                <if test="createTime != null">AND CreateTime =#{createTime}></if>
+                <if test="modifyOperator != null">AND ModifyOperator=#{modifyOperator}</if>
+                <!--<if test="ddataChange_LastTime != null"><![CDATA[AND DataChange_LastTime >= #{dataChangeLastTime}]]></if>-->
+                <if test="dataChangeLastTime != null">AND DataChange_LastTime =#{dataChangeLastTime}</if>
+            </trim>
+        </where>
+    </sql>
+    <!--set字段-->
+    <sql id="sql_set_rule_industry_colums">
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <!--<if test="industryAccountId != null">,IndustryAccountId=#{industryAccountId}</if>-->
+                <if test="accountUseRuleId != null">,AccountUseRuleId=#{accountUseRuleId}</if>
+                <if test="industryId != null">,IndustryId=#{industryId}</if>
+                <if test="industry !=null">,Industry=#{industry}</if>
+                <if test="useSum != null">,UseSum=#{useSum}</if>
+                <if test="useMax != null">,UseMax=#{useMax}</if>
+                <if test="unitPrice != null">,UnitPrice=#{unitPrice}</if>
+                <if test="remark != null">,Remark=#{remark}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <!--<if test="createOperator != null">,CreateOperator=#{createOperator}</if>-->
+                <!--<if test="createTime != null">,CreateTime=#{createTime}</if>-->
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}></if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+
+    <!--批量插入账号规则行业-->
+    <insert id="insertIndustryAccountList" parameterType="List" keyProperty="industryAccountId" useGeneratedKeys="true">
+        insert into w_industryaccount(AccountUseRuleId, IndustryId, Industry, UseSum, UseMax,UnitPrice,Remark,
+        Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime)
+        values
+        <foreach collection="accountList" item="item" index="index" separator=",">
+            <trim suffix=")" prefix="(" suffixOverrides=",">
+                <!--<if test="item.industryAccountId != null" >-->
+                <!--#{item.industryAccountId,jdbcType=BIGINT},-->
+                <!--</if>-->
+                <if test="item.accountUseRuleId != null">
+                    #{item.accountUseRuleId,jdbcType=BIGINT},
+                </if>
+                <if test="item.industryId != null">
+                    #{item.industryId,jdbcType=BIGINT},
+                </if>
+                <if test="item.industry != null">
+                    #{item.industry,jdbcType=VARCHAR},
+                </if>
+                <if test="item.industry == null">
+                    "",
+                </if>
+                <if test="item.useSum != null">
+                    #{item.useSum,jdbcType=INTEGER},
+                </if>
+                <if test="item.useSum == null">
+                    0,
+                </if>
+                <if test="item.useMax != null">
+                    #{item.useMax,jdbcType=DECIMAL},
+                </if>
+                <if test="item.useMax == null">
+                    0,
+                </if>
+                <if test="item.unitPrice != null">
+                    #{item.unitPrice,jdbcType=DECIMAL},
+                </if>
+                <if test="item.unitPrice == null">
+                    0,
+                </if>
+                <if test="item.remark != null">
+                    #{item.remark,jdbcType=VARCHAR},
+                </if>
+                <if test="item.remark == null">
+                    "",
+                </if>
+                <if test="item.status != null">
+                    #{item.status,jdbcType=INTEGER},
+                </if>
+                <if test="item.status == null">
+                    1,
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="item.createOperator == null">
+                    "",
+                </if>
+                <if test="item.createTime != null">
+                    #{item.createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.createTime != null">
+                    NOW(),
+                </if>
+                <if test="item.modifyOperator != null">
+                    #{item.modifyOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="item.modifyOperator == null">
+                    "",
+                </if>
+                <if test="item.dataChangeLastTime != null">
+                    #{item.dataChangeLastTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.dataChangeLastTime == null">
+                    NOW(),
+                </if>
+            </trim>
+        </foreach>
+    </insert>
+
+    <!--根据账号规则删除账号规则行业-->
+    <delete id="deleteIndustryAccountByAccountRuleID" parameterType="IndustryAccount">
+--         delete  from w_industryaccount
+        update w_industryaccount set Status = 0,ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        where AccountUseRuleId=#{accountUseRuleId}
+    </delete>
+
+    <!--根据账号规则更新账号规则行业-->
+    <update id="updateIndustryAccountList" parameterType="List">
+        update a_ladder
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="AccountUseRuleId = case" suffix="end,">
+                <foreach collection="accountList" item="item">
+                    <if test="item.accountUseRuleId != null">
+                        when id=#{item.industryAccountId} then #{item.accountUseRuleId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="IndustryId = case" suffix="end,">
+                <foreach collection="accountList" item="item">
+                    <if test="item.industryId != null">
+                        when id=#{item.industryAccountId} then #{item.industryId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="UseSum = case" suffix="end,">
+                <foreach collection="accountList" item="item">
+                    <if test="item.useSum != null">
+                        when id=#{item.industryAccountId} then #{item.useSum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="UseMax = case" suffix="end,">
+                <foreach collection="accountList" item="item">
+                    <if test="item.useMax != null">
+                        when id=#{item.industryAccountId} then #{item.useMax}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="UnitPrice = case" suffix="end,">
+                <foreach collection="accountList" item="item">
+                    <if test="item.unitPrice != null">
+                        when id=#{item.industryAccountId} then #{item.unitPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="Remark = case" suffix="end,">
+                <foreach collection="accountList" item="item">
+                    <if test="item.remark != null">
+                        when id=#{item.industryAccountId} then #{item.remark}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="ModifyOperator = case" suffix="end,">
+                <foreach collection="accountList" item="item">
+                    <if test="item.modifyOperator != null">
+                        when id=#{item.industryAccountId} then #{item.modifyOperator}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="DataChange_LastTime = case" suffix="end,">
+                <foreach collection="accountList" item="item">
+                    <if test="item.dataChangeLastTime != null">
+                        when id=#{item.industryAccountId} then #{item.dataChangeLastTime}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+    </update>
+
+    <!--查询所有账户规则行业 -->
+    <select id="selectAllRuleIndustryList" resultType="com.lnmj.wallet.entity.IndustryAccount">
+        select
+        <include refid="base_rule_industry_colums"/>
+        from w_industryaccount where Status = 1
+    </select>
+    <!--按条件查询账户规则行业-->
+    <select id="selectRuleIndustryByCondition" resultType="IndustryAccount" parameterType="IndustryAccount">
+        select
+        <include refid="base_rule_industry_colums"/>
+        from w_industryaccount
+        <include refid="sql_where_rule_industry_condition"/>
+    </select>
+    <!--${}和#{}的区别:
+        #{}能够很大程度上防止sql注入;
+        $一般用入传入数据库对象，比如数据库表名;
+        ${}传入数据直接显示在生成的sql中,order by时使用
+    -->
+    <!--插入账号规则行业-->
+    <insert id="insertIndustryAccount" parameterType="IndustryAccount" useGeneratedKeys="true"
+            keyProperty="industryAccountId">
+        insert into w_industryaccount
+        <include refid="sql_insert_rule_industry_colums"/>
+        <include refid="sql_insert_rule_industry_values"/>
+    </insert>
+    <!--删除账号规则行业-->
+    <update id="deleteIndustryAccountById" parameterType="IndustryAccount">
+        update w_industryaccount set Status = 0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        WHERE IndustryAccountId=#{industryAccountId}
+    </update>
+    <!--更新账号规则行业-->
+    <update id="updateIndustryAccountById" parameterType="IndustryAccount">
+        update w_industryaccount
+        <include refid="sql_set_rule_industry_colums"/>
+        where IndustryAccountId=#{industryAccountId}
+    </update>
+
+</mapper>

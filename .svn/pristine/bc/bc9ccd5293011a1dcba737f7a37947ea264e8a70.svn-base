@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="systemParameter">
+    <!--系统参数-->
+    <!--系统参数基本字段-->
+    <sql id="parameter_base_column" >
+        ParameterId,ParameterTypeId,ParameterName,ParameterValue,ParameterSort,
+        Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <!--插入系统参数表字段-->
+    <sql id="sql_insert_parameter_column" >
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="parameterTypeId != null" >ParameterTypeId,</if>
+            <if test="parameterName != null" >ParameterName,</if>
+            <if test="parameterValue != null" >ParameterValue,</if>
+            <if test="parameterSort != null" >ParameterSort,</if>
+            <if test="status != null" >Status,</if>
+            <if test="createOperator != null" >CreateOperator,</if>
+            <if test="modifyOperator != null" >ModifyOperator,</if>
+        </trim>
+    </sql>
+    <!--插入系统参数表值-->
+    <sql id="sql_insert_parameter_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="parameterTypeId != null" >#{parameterTypeId},</if>
+            <if test="parameterName != null" >#{parameterName},</if>
+            <if test="parameterValue != null" >#{parameterValue},</if>
+            <if test="parameterSort != null" >#{parameterSort},</if>
+            <if test="status != null" >#{status},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <!--修改系统参数-->
+    <sql id="sql_set_parameter_column" >
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="parameterTypeId != null" >,ParameterTypeId=#{parameterTypeId}</if>
+                <if test="parameterName != null" >,ParameterName=#{parameterName}</if>
+                <if test="parameterValue != null" >,ParameterValue=#{parameterValue}</if>
+                <if test="parameterSort != null" >,ParameterSort=#{parameterSort}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}</if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+    <!--系统参数查询条件-->
+    <sql id="sql_where_parameter_column" >
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="parameterId != null">AND ParameterId=#{parameterId}</if>
+                <if test="parameterTypeId != null">AND ParameterTypeId=#{parameterTypeId}</if>
+                <if test="parameterName != null">AND ParameterName=#{parameterName}</if>
+                <if test="parameterValue != null">AND ParameterValue=#{parameterValue}</if>
+                <if test="parameterSort != null">AND ParameterSort=#{parameterSort}</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <if test="createTime != null">AND CreateTime=#{createTime}</if>
+                <if test="modifyOperator != null">AND ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">AND DataChange_LastTime=#{dataChangeLastTime}</if>
+            </trim>
+        </where>
+    </sql>
+
+    <!--系统参数分页显示-->
+    <select id="selectParameterList" resultType="com.lnmj.system.entity.Parameter" parameterType="Long">
+        select <include refid="parameter_base_column" /> from s_parameter
+        where Status = 1
+        <if test="_parameter != null" >
+             and ParameterTypeId = #{parameterTypeId}
+        </if>
+    </select>
+    <!--查询系统参数-->
+    <select id="selectParameterByWhere" parameterType="Parameter" resultType="com.lnmj.system.entity.Parameter" >
+        select <include refid="parameter_base_column"/> from  s_parameter
+        <include refid="sql_where_parameter_column"/>
+    </select>
+    <!--新增系统参数-->
+    <insert id="insertParameter" parameterType="Parameter" keyProperty="parameterId" useGeneratedKeys="true" >
+        insert into s_parameter
+        <include refid="sql_insert_parameter_column"/>
+        <include refid="sql_insert_parameter_values"/>
+    </insert>
+    <!--修改系统参数-->
+    <update id="updateParameter" parameterType="Parameter" >
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update s_parameter <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="item.parameterTypeId != null" >,ParameterTypeId=#{item.parameterTypeId}</if>
+                <if test="item.parameterName != null" >,ParameterName=#{item.parameterName}</if>
+                <if test="item.parameterValue != null" >,ParameterValue=#{item.parameterValue}</if>
+                <if test="item.parameterSort != null" >,ParameterSort=#{item.parameterSort}</if>
+                <if test="item.modifyOperator != null">,ModifyOperator= #{item.modifyOperator}</if>
+            </trim>
+            </set>
+            where ParameterId = #{item.parameterId}
+        </foreach>
+    </update>
+
+    <!--删除系统参数-->
+    <update id="deleteParameter" parameterType="Parameter" >
+        update s_parameter
+        set  Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        where ParameterId = #{parameterId}
+    </update>
+</mapper>
+

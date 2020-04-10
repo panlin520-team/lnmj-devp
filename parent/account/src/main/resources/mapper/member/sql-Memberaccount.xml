@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MemberAccount" >
+  <resultMap id="MemberAccountMap" type="com.lnmj.account.entity.MMemberaccount" >
+    <id column="MemberAccountId" property="memberAccountId" jdbcType="BIGINT" />
+    <result column="MemberLevel" property="memberLevel" jdbcType="BIGINT" />
+    <result column="AccountTypeId" property="accountTypeId" jdbcType="BIGINT" />
+    <result column="AccountType" property="accountType" jdbcType="VARCHAR" />
+    <result column="AccountAmount" property="accountAmount" jdbcType="DECIMAL" />
+    <result column="AccountAmountScope" property="accountAmountScope" jdbcType="VARCHAR" />
+    <result column="IsUse" property="isUse" jdbcType="TINYINT" />
+    <result column="AmountMethod" property="amountMethod" jdbcType="INTEGER" />
+    <result column="OneMonthAmount" property="oneMonthAmount" jdbcType="DECIMAL" />
+    <result column="IsReset" property="isReset" jdbcType="TINYINT" />
+    <result column="IsContinue" property="isContinue" jdbcType="TINYINT" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_MemberAccount_column" >
+    MemberAccountId, MemberLevel, AccountTypeId, AccountType, AccountAmount, AccountAmountScope,
+    IsUse, AmountMethod, OneMonthAmount, IsReset, IsContinue, Remark, Status, CreateOperator, 
+    CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <!--根据等级ID修改-->
+  <update id="updatememberAccountList"  parameterType="List">
+    update m_memberaccount
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="MemberLevel = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.memberAccountId != null">
+            when id=#{item.memberAccountId} then #{item.memberLevel}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="AccountTypeId = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.accountTypeId != null">
+            when id=#{item.memberAccountId} then #{item.accountTypeId}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="AccountType = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.accountType != null">
+            when id=#{item.memberAccountId} then #{item.accountType}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="AccountAmount = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.accountAmount != null">
+            when id=#{item.memberAccountId} then #{item.accountAmount}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="AccountAmountScope = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.accountAmountScope != null">
+            when id=#{item.memberAccountId} then #{item.accountAmountScope}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="IsUse = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.isUse != null">
+            when id=#{item.memberAccountId} then #{item.isUse}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="AmountMethod = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.amountMethod != null">
+            when id=#{item.memberAccountId} then #{item.amountMethod}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="OneMonthAmount = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.oneMonthAmount != null">
+            when id=#{item.memberAccountId} then #{item.oneMonthAmount}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="IsReset = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.isReset != null">
+            when id=#{item.memberAccountId} then #{item.isReset}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="IsContinue = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.isContinue != null">
+            when id=#{item.memberAccountId} then #{item.isContinue}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="Remark = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.remark != null">
+            when id=#{item.memberAccountId} then #{item.remark}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="ModifyOperator = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.modifyOperator != null">
+            when id=#{item.memberAccountId} then #{item.modifyOperator}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="DataChange_LastTime = case" suffix="end,">
+        <foreach collection="memberAccountList" item="item">
+          <if test="item.dataChangeLastTime != null">
+            when id=#{item.memberAccountId} then #{item.dataChangeLastTime}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+  </update>
+
+  <!--根据等级ID插入-->
+  <insert id="insertmemberAccountList" parameterType="List" keyProperty="memberAccountId" useGeneratedKeys="true">
+    insert into m_memberaccount(MemberLevel, AccountTypeId, AccountType, AccountAmount,
+      AccountAmountScope,IsUse, AmountMethod, OneMonthAmount, IsReset, IsContinue, Remark, Status, CreateOperator,
+      CreateTime, ModifyOperator, DataChange_LastTime)
+    values
+    <foreach collection="memberAccountList" item="item" index="index" separator=",">
+      <trim suffix=")" prefix="(" suffixOverrides=",">
+        <!--<if test="item.memberAccountId != null" >
+          #{item.memberAccountId,jdbcType=BIGINT},
+        </if>-->
+        <if test="item.memberLevel != null" >
+          #{item.memberLevel,jdbcType=BIGINT},
+        </if>
+        <if test="item.accountTypeId != null" >
+          #{item.accountTypeId,jdbcType=BIGINT},
+        </if>
+        <if test="item.accountType != null" >
+          #{item.accountType,jdbcType=VARCHAR},
+        </if>
+        <if test="item.accountAmount != null" >
+          #{item.accountAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="item.accountAmount == null" >
+          0,
+        </if>
+        <if test="item.accountAmountScope != null" >
+          #{item.accountAmountScope,jdbcType=VARCHAR},
+        </if>
+        <if test="item.accountAmountScope == null" >
+          "",
+        </if>
+        <if test="item.isUse != null" >
+          #{item.isUse,jdbcType=TINYINT},
+        </if>
+        <if test="item.isUse == null" >
+          0,
+        </if>
+        <if test="item.amountMethod != null" >
+          #{item.amountMethod,jdbcType=INTEGER},
+        </if>
+        <if test="item.amountMethod == null" >
+          0,
+        </if>
+        <if test="item.oneMonthAmount != null" >
+          #{item.oneMonthAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="item.oneMonthAmount == null" >
+          0,
+        </if>
+        <if test="item.isReset != null" >
+          #{item.isReset,jdbcType=TINYINT},
+        </if>
+        <if test="item.isReset == null" >
+          1,
+        </if>
+        <if test="item.isContinue != null" >
+          #{item.isContinue,jdbcType=TINYINT},
+        </if>
+        <if test="item.isContinue == null" >
+          0,
+        </if>
+        <if test="item.remark != null" >
+          #{item.remark,jdbcType=VARCHAR},
+        </if>
+        <if test="item.remark == null" >
+          "",
+        </if>
+        <if test="item.status != null" >
+          #{item.status,jdbcType=INTEGER},
+        </if>
+        <if test="item.status == null" >
+          1,
+        </if>
+        <if test="item.createOperator != null" >
+          #{item.createOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="item.createOperator == null" >
+          "",
+        </if>
+        <if test="item.createTime != null" >
+          #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createTime != null" >
+          NOW(),
+        </if>
+        <if test="item.modifyOperator != null" >
+          #{item.modifyOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="item.modifyOperator == null" >
+          "",
+        </if>
+        <if test="item.dataChangeLastTime != null" >
+          #{item.dataChangeLastTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.dataChangeLastTime == null" >
+          NOW(),
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+
+  <!--根据等级ID删除-->
+  <update id="deleteMemberAccountByMemberID" parameterType="MMemberaccount" >
+    update m_memberaccount set  Status = 0,ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},DataChange_LastTime = NOW()
+    where MemberLevel = #{memberLevel,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectmemberAccountList" resultMap="MemberAccountMap" parameterType="MMemberaccount" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_MemberAccount_column" />
+    from m_memberaccount where Status=1
+  </select>
+
+  <select id="selectMemberAccountByMemberID" resultMap="MemberAccountMap" parameterType="java.lang.Long" >
+    select
+    <include refid="base_MemberAccount_column" />
+    from m_memberaccount
+    where MemberLevel = #{memberLevel,jdbcType=BIGINT} and Status = 1
+  </select>
+
+  <select id="selectMemberAccountByID" resultMap="MemberAccountMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_MemberAccount_column" />
+    from m_memberaccount
+    where MemberAccountId = #{memberAccountId,jdbcType=BIGINT} and Status = 1
+  </select>
+
+  <update id="deleteMemberAccount" parameterType="MMemberaccount">
+    update m_memberaccount set Status = 0,ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},DataChange_LastTime = NOW()
+    where MemberAccountId = #{memberAccountId,jdbcType=BIGINT}
+  </update>
+
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from m_memberaccount
+    where MemberAccountId = #{memberAccountId,jdbcType=BIGINT}
+  </delete>-->
+
+  <insert id="insertMemberAccount" parameterType="MMemberaccount" useGeneratedKeys="true" keyProperty="memberAccountId">
+    insert into m_memberaccount
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberAccountId != null" >
+        MemberAccountId,
+      </if>
+      <if test="memberLevel != null" >
+        MemberLevel,
+      </if>
+      <if test="accountTypeId != null" >
+        AccountTypeId,
+      </if>
+      <if test="accountType != null" >
+        AccountType,
+      </if>
+      <if test="accountAmount != null" >
+        AccountAmount,
+      </if>
+      <if test="accountAmountScope != null" >
+        AccountAmountScope,
+      </if>
+      <if test="isUse != null" >
+        IsUse,
+      </if>
+      <if test="amountMethod != null" >
+        AmountMethod,
+      </if>
+      <if test="oneMonthAmount != null" >
+        OneMonthAmount,
+      </if>
+      <if test="isReset != null" >
+        IsReset,
+      </if>
+      <if test="isContinue != null" >
+        IsContinue,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberAccountId != null" >
+        #{memberAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="memberLevel != null" >
+        #{memberLevel,jdbcType=BIGINT},
+      </if>
+      <if test="accountTypeId != null" >
+        #{accountTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="accountType != null" >
+        #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAmount != null" >
+        #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountAmountScope != null" >
+        #{accountAmountScope,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        #{isUse,jdbcType=TINYINT},
+      </if>
+      <if test="amountMethod != null" >
+        #{amountMethod,jdbcType=INTEGER},
+      </if>
+      <if test="oneMonthAmount != null" >
+        #{oneMonthAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="isReset != null" >
+        #{isReset,jdbcType=TINYINT},
+      </if>
+      <if test="isContinue != null" >
+        #{isContinue,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateMemberAccount" parameterType="MMemberaccount" >
+    update m_memberaccount
+    <set >
+      <if test="memberLevel != null" >
+        MemberLevel = #{memberLevel,jdbcType=BIGINT},
+      </if>
+      <if test="accountTypeId != null" >
+        AccountTypeId = #{accountTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="accountType != null" >
+        AccountType = #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAmount != null" >
+        AccountAmount = #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountAmountScope != null" >
+        AccountAmountScope = #{accountAmountScope,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        IsUse = #{isUse,jdbcType=TINYINT},
+      </if>
+      <if test="amountMethod != null" >
+        AmountMethod = #{amountMethod,jdbcType=INTEGER},
+      </if>
+      <if test="oneMonthAmount != null" >
+        OneMonthAmount = #{oneMonthAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="isReset != null" >
+        IsReset = #{isReset,jdbcType=TINYINT},
+      </if>
+      <if test="isContinue != null" >
+        IsContinue = #{isContinue,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where MemberAccountId = #{memberAccountId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

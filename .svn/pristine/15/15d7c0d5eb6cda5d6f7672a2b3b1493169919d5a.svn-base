@@ -1,0 +1,30 @@
+package com.lnmj.common.generator.capital_pool;
+
+import com.lnmj.common.generator.capital_pool.CapitalPool;
+import com.lnmj.common.generator.capital_pool.CapitalPoolExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+
+public interface CapitalPoolMapper {
+    int countByExample(CapitalPoolExample example);
+
+    int deleteByExample(CapitalPoolExample example);
+
+    int deleteByPrimaryKey(Long id);
+
+    int insert(CapitalPool record);
+
+    int insertSelective(CapitalPool record);
+
+    List<CapitalPool> selectByExample(CapitalPoolExample example);
+
+    CapitalPool selectByPrimaryKey(Long id);
+
+    int updateByExampleSelective(@Param("record") CapitalPool record, @Param("example") CapitalPoolExample example);
+
+    int updateByExample(@Param("record") CapitalPool record, @Param("example") CapitalPoolExample example);
+
+    int updateByPrimaryKeySelective(CapitalPool record);
+
+    int updateByPrimaryKey(CapitalPool record);
+}

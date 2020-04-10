@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productCategoryStatistics">
+
+
+    <!--商品销量统计分页显示-->
+    <select id="selecyByList" resultType="ProductCategoryStatisticsVO" parameterType="Map">
+        SELECT
+        ProductCategoryName,
+        ProductSales,
+        (
+        ProductOriginalPrice * ProductSales
+        ) AS saleAmount
+        FROM
+        p_product p1,
+        p_productcategory p2
+        WHERE
+        p1.ProductCategory = p2.ProductCategoryId
+        <if test="keyWord != null">
+            and productBrandName concat('%',#{keyWord}),'%'
+        </if>
+        <if test="salaStatus != null">
+           order by ProductSales #{salaStatus}
+        </if>
+        <if test="amountStatus != null">
+            order by saleAmount #{amountStatus}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+    <resultMap type="com.lnmj.account.entity.base.BaseEntity" id="baseResultMap">
+        <result property="status" column="Status" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="createOperator" column="CreateOperator" javaType="String" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CreateTime" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="modifyOperator" column="ModifyOperator" javaType="String" jdbcType="VARCHAR"/>
+        <result property="dataChangeLastTime" column="DataChange_LastTime" javaType="Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap type="com.lnmj.account.entity.MMembershipLevel" id="memberResultMap" extends="baseResultMap">
+        <!-- 用id属性来映射主键字段 -->
+        <id property="membershipLevelId" column="MembershipLevelId" javaType="Long" jdbcType="BIGINT"/>
+        <result property="membershipLevelName" column="MembershipLevelName" javaType="String" jdbcType="VARCHAR"/>
+        <result property="erpName" column="ERPName" javaType="String" jdbcType="VARCHAR"/>
+        <result property="autoUpgrade" column="AutoUpgrade" javaType="Boolean" jdbcType="TINYINT"/>
+        <result property="standardAmount" column="StandardAmount" javaType="BigDecimal" jdbcType="DECIMAL"/>
+        <result property="bestieIntroduceAmount" column="BestieIntroduceAmount" javaType="BigDecimal"
+                jdbcType="DECIMAL"/>
+        <result property="upgradeStandardAmount" column="UpgradeStandardAmount" javaType="BigDecimal"
+                jdbcType="DECIMAL"/>
+        <result property="upgradeStandardFans" column="UpgradeStandardFans" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="upgradingWays" column="UpgradingWays" javaType="String" jdbcType="VARCHAR"/>
+        <result property="membershipDiscount" column="MembershipDiscount" javaType="BigDecimal" jdbcType="DECIMAL"/>
+        <result property="priceDifferenceAllot" column="PriceDifferenceAllot" javaType="BigDecimal" jdbcType="DECIMAL"/>
+        <result property="bonusAllot" column="BonusAllot" javaType="BigDecimal" jdbcType="DECIMAL"/>
+        <result property="nursingDifferenceAllot" column="NursingDifferenceAllot" javaType="BigDecimal"
+                jdbcType="DECIMAL"/>
+        <result property="nursingBonusAllot" column="NursingBonusAllot" javaType="BigDecimal" jdbcType="DECIMAL"/>
+        <result property="firstRechargeBonus" column="FirstRechargeBonus" javaType="BigDecimal" jdbcType="DECIMAL"/>
+        <result property="scopeOfUse" column="ScopeOfUse" javaType="String" jdbcType="VARCHAR"/>
+        <result property="isDivision" column="IsDivision" javaType="Boolean" jdbcType="TINYINT"/>
+        <result property="isDefault" column="IsDefault" javaType="Boolean" jdbcType="TINYINT"/>
+    </resultMap>
+    <resultMap type="com.lnmj.account.entity.MMembershipLevelRecords" id="memberRecordsResultMap">
+        <!-- 用id属性来映射主键字段 -->
+        <id property="membershiplevelrecordsId" column="MembershiplevelrecordsId" javaType="Long" jdbcType="BIGINT"/>
+        <!-- 用result属性来映射非主键字段 -->
+        <result property="membershiplevelrecordsType" column="MembershiplevelrecordsType" javaType="Integer"
+                jdbcType="INTEGER"/>
+        <result property="memberNum" column="MemberNum" javaType="String" jdbcType="VARCHAR"/>
+        <result property="name" column="Name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="afterMembershipLevelId" column="AfterMembershipLevelId" javaType="Long" jdbcType="BIGINT"/>
+        <result property="laterMembershipLevelId" column="LaterMembershipLevelId" javaType="Long" jdbcType="BIGINT"/>
+        <result property="operateDesc" column="OperateDesc" javaType="String" jdbcType="VARCHAR"/>
+        <result property="amount" column="Amount" javaType="BigDecimal" jdbcType="DECIMAL"/>
+        <result property="totalAmount" column="TotalAmount" javaType="BigDecimal" jdbcType="DECIMAL"/>
+        <result property="status" column="Status" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="createOperator" column="CreateOperator" javaType="String" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CreateTime" javaType="Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--m_membershiplevel会员级别所有字段-->
+    <sql id="base_member_colums">
+        MembershipLevelId,
+        MembershipLevelName,
+        ERPName,
+        AutoUpgrade,
+        StandardAmount,
+        UpgradeStandardAmount,
+        UpgradeStandardFans,
+        UpgradingWays,
+        MembershipDiscount,
+        PriceDifferenceAllot,
+        BonusAllot,
+        NursingDifferenceAllot,
+        NursingBonusAllot,
+        FirstRechargeBonus,
+--         GuestAccount,
+--         SharedAccount,
+        BestieIntroduceAmount,
+        ScopeOfUse,
+        IsDivision,
+        IsDefault,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <!--插入时列-->
+    <sql id="sql_insert_member_colums">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="membershipLevelName != null">
+                MembershipLevelName,
+            </if>
+            <if test="erpName != null">
+                ERPName,
+            </if>
+            <if test="autoUpgrade != null">
+                AutoUpgrade,
+            </if>
+            <if test="standardAmount != null">
+                StandardAmount,
+            </if>
+            <if test="upgradeStandardAmount != null">
+                UpgradeStandardAmount,
+            </if>
+            <if test="upgradeStandardFans != null">
+                UpgradeStandardFans,
+            </if>
+            <if test="upgradingWays != null">
+                UpgradingWays,
+            </if>
+            <if test="membershipDiscount != null">
+                MembershipDiscount,
+            </if>
+            <if test="priceDifferenceAllot != null">
+                PriceDifferenceAllot,
+            </if>
+            <if test="bonusAllot != null">
+                BonusAllot,
+            </if>
+            <if test="nursingDifferenceAllot != null">
+                NursingDifferenceAllot,
+            </if>
+            <if test="nursingBonusAllot != null">
+                NursingBonusAllot,
+            </if>
+            <if test="firstRechargeBonus != null">
+                FirstRechargeBonus,
+            </if>
+            <!--<if test="guestAccount != null">
+                GuestAccount,
+            </if>
+            <if test="sharedAccount != null">
+                SharedAccount,
+            </if>-->
+            <if test="bestieIntroduceAmount != null">
+                BestieIntroduceAmount,
+            </if>
+            <if test="scopeOfUse != null">
+                ScopeOfUse,
+            </if>
+            <if test="isDivision != null">
+                IsDivision,
+            </if>
+            <if test="isDefault != null">
+                IsDefault,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+        </trim>
+    </sql>
+    <!--插入时值-->
+    <sql id="sql_insert_member_values">
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="membershipLevelName != null">
+                #{membershipLevelName},
+            </if>
+            <if test="erpName != null">
+                #{erpName},
+            </if>
+            <if test="autoUpgrade != null">
+                #{autoUpgrade},
+            </if>
+            <if test="standardAmount != null">
+                #{standardAmount},
+            </if>
+            <if test="upgradeStandardAmount != null">
+                #{upgradeStandardAmount},
+            </if>
+            <if test="upgradeStandardFans != null">
+                #{upgradeStandardFans},
+            </if>
+            <if test="upgradingWays != null">
+                #{upgradingWays},
+            </if>
+            <if test="membershipDiscount != null">
+                #{membershipDiscount},
+            </if>
+            <if test="priceDifferenceAllot != null">
+                #{priceDifferenceAllot},
+            </if>
+            <if test="bonusAllot != null">
+                #{bonusAllot},
+            </if>
+            <if test="nursingDifferenceAllot != null">
+                #{nursingDifferenceAllot},
+            </if>
+            <if test="nursingBonusAllot != null">
+                #{nursingBonusAllot},
+            </if>
+            <if test="firstRechargeBonus != null">
+                #{firstRechargeBonus},
+            </if>
+            <!--<if test="guestAccount != null">
+                #{guestAccount},
+            </if>
+            <if test="sharedAccount != null">
+                #{sharedAccount},
+            </if>-->
+            <if test="bestieIntroduceAmount != null">
+                #{bestieIntroduceAmount},
+            </if>
+            <if test="scopeOfUse != null">
+                #{scopeOfUse},
+            </if>
+            <if test="isDivision != null">
+                #{isDivision},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+        </trim>
+    </sql>
+    <!--where条件-->
+    <sql id="sql_where_member_condition">
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="membershipLevelId != null">AND MembershipLevelId=#{membershipLevelId}</if>
+                <if test="membershipLevelName != null">AND MembershipLevelName=#{membershipLevelName}</if>
+                <if test="erpName != null">AND ERPName=#{erpName}</if>
+                <if test="autoUpgrade !=null">AND AutoUpgrade=#{autoUpgrade}</if>
+                <if test="standardAmount != null">AND StandardAmount=#{standardAmount}</if>
+                <if test="upgradeStandardAmount != null">AND UpgradeStandardAmount=#{upgradeStandardAmount}</if>
+                <if test="upgradeStandardFans != null">AND UpgradeStandardFans=#{upgradeStandardFans}</if>
+                <if test="upgradingWays != null">AND UpgradingWays like CONCAT('%',#{upgradingWays},'%')</if>
+                <if test="membershipDiscount != null">AND MembershipDiscount=#{membershipDiscount}</if>
+                <if test="priceDifferenceAllot != null">AND PriceDifferenceAllot=#{priceDifferenceAllot}</if>
+                <if test="bonusAllot != null">AND BonusAllot=#{bonusAllot}</if>
+                <if test="nursingDifferenceAllot != null">AND NursingDifferenceAllot=#{nursingDifferenceAllot}</if>
+                <if test="nursingBonusAllot != null">AND NursingBonusAllot=#{nursingBonusAllot}</if>
+                <if test="firstRechargeBonus != null">AND FirstRechargeBonus=#{firstRechargeBonus}</if>
+                <!--<if test="guestAccount != null">AND GuestAccount=#{guestAccount}</if>
+                <if test="sharedAccount != null">AND SharedAccount=#{sharedAccount}</if>-->
+                <if test="bestieIntroduceAmount != null">AND BestieIntroduceAmount=#{bestieIntroduceAmount}</if>
+                <if test="scopeOfUse != null">AND ScopeOfUse like CONCAT('%',#{scopeOfUse},'%')</if>
+                <if test="isDivision != null">AND IsDivision=#{isDivision}</if>
+                <if test="isDefault != null">AND IsDefault=#{isDefault}</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <!--<if test="createTime != null"><![CDATA[AND CreateTime <= #{createTime}]]></if>-->
+                <if test="createTime != null">AND CreateTime =#{createTime}></if>
+                <if test="modifyOperator != null">AND ModifyOperator=#{modifyOperator}</if>
+                <!--<if test="ddataChange_LastTime != null"><![CDATA[AND DataChange_LastTime >= #{dataChangeLastTime}]]></if>-->
+                <if test="dataChangeLastTime != null">AND DataChange_LastTime =#{dataChangeLastTime}</if>
+
+            </trim>
+        </where>
+    </sql>
+    <!--set字段-->
+    <sql id="sql_set_member_colums">
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <!--<if test="membershipLevelId != null">,MembershipLevelId=#{membershipLevelId}</if>-->
+                <if test="membershipLevelName != null">,MembershipLevelName=#{membershipLevelName}</if>
+                <if test="erpName != null">,ERPName=#{erpName}</if>
+                <if test="autoUpgrade !=null">,AutoUpgrade=#{autoUpgrade}</if>
+                <if test="standardAmount != null">,StandardAmount=#{standardAmount}</if>
+                <if test="upgradeStandardAmount != null">,UpgradeStandardAmount=#{upgradeStandardAmount}</if>
+                <if test="upgradeStandardFans != null">,UpgradeStandardFans=#{upgradeStandardFans}</if>
+                <if test="upgradingWays != null">,UpgradingWays=#{upgradingWays}</if>
+                <if test="membershipDiscount != null">,MembershipDiscount=#{membershipDiscount}</if>
+                <if test="priceDifferenceAllot != null">,PriceDifferenceAllot=#{priceDifferenceAllot}</if>
+                <if test="bonusAllot != null">,BonusAllot=#{bonusAllot}</if>
+                <if test="nursingDifferenceAllot != null">,NursingDifferenceAllot=#{nursingDifferenceAllot}</if>
+                <if test="nursingBonusAllot != null">,NursingBonusAllot=#{nursingBonusAllot}</if>
+                <if test="firstRechargeBonus != null">,FirstRechargeBonus=#{firstRechargeBonus}</if>
+                <!--<if test="guestAccount != null">,GuestAccount=#{guestAccount}</if>
+                <if test="sharedAccount != null">,SharedAccount=#{sharedAccount}</if>-->
+                <if test="bestieIntroduceAmount != null">,BestieIntroduceAmount=#{bestieIntroduceAmount}</if>
+                <if test="scopeOfUse != null">,ScopeOfUse=#{scopeOfUse}</if>
+                <if test="isDivision != null">,IsDivision=#{isDivision}</if>
+                <if test="isDefault != null">,IsDefault=#{isDefault}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <!--<if test="createOperator != null">,CreateOperator=#{createOperator}</if>-->
+                <!--<if test="createTime != null">,CreateTime=#{createTime}</if>-->
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}></if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+
+    <!--m_membershiplevelrecords表基本字段-->
+    <sql id="base_member_records_colums">
+        MembershiplevelrecordsId,
+        MembershiplevelrecordsType,
+        MemberNum,
+        Name,
+        AfterMembershipLevelId,
+        LaterMembershipLevelId,
+        OperateDesc,
+        Amount,
+        TotalAmount,
+        Status,
+        CreateOperator,
+        CreateTime
+    </sql>
+    <!--会员等级更新插入时列-->
+    <sql id="sql_insert_member_records_colums">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="membershiplevelrecordsType != null">
+                MembershiplevelrecordsType,
+            </if>
+            <if test="memberNum != null">
+                MemberNum,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="afterMembershipLevelId != null">
+                AfterMembershipLevelId,
+            </if>
+            <if test="laterMembershipLevelId != null">
+                LaterMembershipLevelId,
+            </if>
+            <if test="operateDesc != null">
+                OperateDesc,
+            </if>
+            <if test="amount != null">
+                Amount,
+            </if>
+            <if test="totalAmount != null">
+                TotalAmount,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+        </trim>
+    </sql>
+    <!--会员等级更新插入时值-->
+    <sql id="sql_insert_member_records_values">
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="membershiplevelrecordsType != null">
+                #{membershiplevelrecordsType},
+            </if>
+            <if test="memberNum != null">
+                #{memberNum},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="afterMembershipLevelId != null">
+                #{afterMembershipLevelId},
+            </if>
+            <if test="laterMembershipLevelId != null">
+                #{laterMembershipLevelId},
+            </if>
+            <if test="operateDesc != null">
+                #{operateDesc},
+            </if>
+            <if test="amount != null">
+                #{amount},
+            </if>
+            <if test="totalAmount != null">
+                #{totalAmount},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+        </trim>
+    </sql>
+    <!--修改用户表的会员等级-->
+    <sql id="sql_set_account_colums">
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="membershipLevelId != null">, MembershipLevelId=#{membershipLevelId}</if>
+                <if test="membershipLevelName != null">, MembershipLevelName=#{membershipLevelName}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}</if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+
+    <!--会员升级记录查询条件-->
+    <sql id="sql_where_member_records_condition">
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="membershiplevelrecordsId != null">AND MembershiplevelrecordsId=#{membershiplevelrecordsId}
+                </if>
+                <if test="membershiplevelrecordsType != null">AND
+                    MembershiplevelrecordsType=#{membershiplevelrecordsType}
+                </if>
+                <if test="memberNum != null">AND MemberNum=#{memberNum}</if>
+                <if test="name != null">AND Name like CONCAT('%',#{name},'%')</if>
+                <if test="afterMembershipLevelId != null">AND AfterMembershipLevelId=#{afterMembershipLevelId}</if>
+                <if test="laterMembershipLevelId != null">AND LaterMembershipLevelId=#{laterMembershipLevelId}</if>
+                <if test="operateDesc != null">AND OperateDesc=#{operateDesc}</if>
+                <if test="amount != null">AND Amount=#{amount}</if>
+                <if test="totalAmount != null">AND TotalAmount=#{totalAmount}</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <if test="createTime != null">AND CreateTime =#{createTime}></if>
+            </trim>
+        </where>
+    </sql>
+
+
+    <!--查询所有会员等级，加上删除的 -->
+    <select id="selectAllMemberList" resultMap="memberResultMap">
+        select
+        <include refid="base_member_colums"/>
+        from m_membershiplevel
+    </select>
+    <!--查询所有会员等级，除去删除的 -->
+    <select id="selectAllNormalMemberList" resultMap="memberResultMap">
+        select
+        <include refid="base_member_colums"/>
+        from m_membershiplevel where Status = 1
+    </select>
+    <!--按条件查询会员等级-->
+    <select id="selectMemberShipLevelList" resultMap="memberResultMap" parameterType="MMembershipLevel">
+        select
+        <include refid="base_member_colums"/>
+        from m_membershiplevel
+        <include refid="sql_where_member_condition"/>
+    </select>
+    <!--${}和#{}的区别:
+        #{}能够很大程度上防止sql注入;
+        $一般用入传入数据库对象，比如数据库表名;
+        ${}传入数据直接显示在生成的sql中,order by时使用
+    -->
+    <!--插入会员等级-->
+    <insert id="insertMemberShipLevel" parameterType="MMembershipLevel" useGeneratedKeys="true"
+            keyProperty="MembershipLevelId">
+        insert into m_membershiplevel
+        <include refid="sql_insert_member_colums"/>
+        <include refid="sql_insert_member_values"/>
+    </insert>
+    <!--查询会员等级下是否有用户-->
+    <select id="selectUsersFromUserByMembershipLevelId" resultType="String" parameterType="Long">
+        select userName from m_member
+        where MembershipLevelId=#{membershipLevelId}
+    </select>
+    <!--删除会员等级-->
+    <update id="deleteMemberShipLevelById" parameterType="MMembershipLevel">
+        update m_membershiplevel set Status = 0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        WHERE MembershipLevelId=#{membershipLevelId}
+    </update>
+    <!--更新会员等级-->
+    <update id="updateMemberShipLevelById" parameterType="MMembershipLevel">
+        update m_membershiplevel
+        <include refid="sql_set_member_colums"/>
+        where MembershipLevelId=#{membershipLevelId}
+    </update>
+    <!--查找用户名-->
+    <select id="selectUserNameByUserId" parameterType="String" resultType="String">
+        select userName from m_member
+        where MemberNum=#{memberNum}
+    </select>
+    <!--查询会员来源-->
+    <select id="selectUserTypeByUserId" parameterType="Long" resultType="Integer">
+        select MemberAddType from m_member
+        where MemberNum=#{memberNum}
+    </select>
+    <!--插入升级记录表-->
+    <insert id="insertMembershipLevelRecords" parameterType="MMembershipLevelRecords"
+            keyProperty="MembershiplevelrecordsId" useGeneratedKeys="true">
+        insert into m_membershiplevelrecords
+        <include refid="sql_insert_member_records_colums"/>
+        <include refid="sql_insert_member_records_values"/>
+    </insert>
+    <!--查询当前会员等级-->
+    <select id="selectMemberShipLevelByUserId" parameterType="String" resultType="Long">
+        select MembershipLevelId from m_member
+        where MemberNum=#{memberNum}
+    </select>
+    <!--修改指定用户会员等级-->
+    <update id="updateWalletAccountMemberShipLevelById" parameterType="UpdateAccountMemberShipLevelVO">
+        update m_member
+        <include refid="sql_set_account_colums"/>
+        where  MemberNum=#{memberNum}
+    </update>
+    <!--查询会员升级记录-->
+    <select id="selectMemberShipLevelUpgradeList" parameterType="MMembershipLevelRecords"
+            resultMap="memberRecordsResultMap">
+        select
+        <include refid="base_member_records_colums"/>
+        from m_membershiplevelrecords
+        <include refid="sql_where_member_records_condition"/>
+    </select>
+    <!--查询用户上级数-->
+    <select id="selectParentIdsByUserId" parameterType="Long" resultType="String">
+        select count(1) from m_member where ParentId=#{memberNum}
+    </select>
+    <!--关键字查询会员等级-->
+    <select id="selectMemberShipLevelListByKeyWord" parameterType="String" resultType="MMembershipLevel">
+        select
+        <include refid="base_member_colums"/>
+        from m_membershiplevel
+        <where>
+            <if test="_parameter != null">MembershipLevelName like CONCAT('%',#{keyWord},'%')</if>
+        </where>
+    </select>
+    <!--根据会员等级Id查询会员-->
+    <select id="selectUserByMember"  resultType="MemberUser" parameterType="Long">
+        select
+        <include refid="memberUser.Base_Column_List"/>
+        from m_member
+        where 1=1 and MembershipLevelId = #{membershipLevelId}
+    </select>
+
+
+</mapper>
