@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="appointmentOrder">
+    <sql id="Base_Column_List" >
+        AppointmentId, DataChange_LastTime, OrderNumber, AppointmentType, Source,NursingTime, StoreId,
+        StoreNumber, AppointmentStatus, PushPayStatus, PushAppoinmentStatus, Remark, RecordId,Status,
+        CreateOperator, CreateTime, ModifyOperator,DataChange_LastTime
+    </sql>
+
+    <select id="selectAppointmentOrderListByDate" resultType="AppointmentOrder" parameterType="Map" >
+        select
+        <include refid="Base_Column_List" />
+        from s_appointment_order
+        where Status = 1
+        <if test="storeId != null" >
+          and StoreId = #{storeId}
+        </if>
+        <if test="nursingTime != null" >
+          and to_days(NursingTime) = to_days(#{nursingTime})
+        </if>
+    </select>
+
+    <insert id="insertAppointmentOrder" parameterType="AppointmentOrder" >
+        insert into s_appointment_order
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="appointmentId != null" >
+                AppointmentId,
+            </if>
+            <if test="orderNumber != null" >
+                OrderNumber,
+            </if>
+            <if test="appointmentType != null" >
+                AppointmentType,
+            </if>
+            <if test="source != null" >
+                Source,
+            </if>
+            <if test="nursingTime != null" >
+                NursingTime,
+            </if>
+
+            <if test="storeId != null" >
+                StoreId,
+            </if>
+            <if test="storeNumber != null" >
+                StoreNumber,
+            </if>
+            <if test="appointmentStatus != null" >
+                AppointmentStatus,
+            </if>
+            <if test="pushPayStatus != null" >
+                PushPayStatus,
+            </if>
+            <if test="pushAppoinmentStatus != null" >
+                PushAppoinmentStatus,
+            </if>
+            <if test="remark != null" >
+                Remark,
+            </if>
+            <if test="recordId != null" >
+                RecordId,
+            </if>
+            <if test="status != null" >
+                Status,
+            </if>
+            <if test="createOperator != null" >
+                CreateOperator,
+            </if>
+                CreateTime
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="appointmentId != null" >
+                #{appointmentId,jdbcType=BIGINT},
+            </if>
+            <if test="orderNumber != null" >
+                #{orderNumber,jdbcType=BIGINT},
+            </if>
+            <if test="appointmentType != null" >
+                #{appointmentType,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null" >
+                #{source,jdbcType=VARCHAR},
+            </if>
+            <if test="nursingTime != null" >
+                #{nursingTime},
+            </if>
+
+            <if test="storeId != null" >
+                #{storeId,jdbcType=BIGINT},
+            </if>
+            <if test="storeNumber != null" >
+                #{storeNumber,jdbcType=INTEGER},
+            </if>
+            <if test="appointmentStatus != null" >
+                #{appointmentStatus,jdbcType=INTEGER},
+            </if>
+            <if test="pushPayStatus != null" >
+                #{pushPayStatus,jdbcType=TINYINT},
+            </if>
+            <if test="pushAppoinmentStatus != null" >
+                #{pushAppoinmentStatus,jdbcType=TINYINT},
+            </if>
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="recordId != null" >
+                #{recordId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null" >
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            now()
+
+        </trim>
+    </insert>
+
+    <select id="selectAppointmentByNum" resultType="AppointmentOrder" parameterType="Map" >
+        select
+        <include refid="Base_Column_List" />
+        from s_appointment_order
+        where Status = 1
+        and OrderNumber = #{orderNumber}
+    </select>
+
+    <update id="updateAppointmentOrder" parameterType="Order">
+        update s_appointment_order
+        <set>
+            <if test="orderNumber != null">
+                OrderNumber = #{orderNumber},
+            </if>
+            <if test="appointmentType != null">
+                AppointmentType = #{appointmentType},
+            </if>
+            <if test="source != null">
+                Source = #{source},
+            </if>
+            <if test="nursingTime != null">
+                NursingTime = #{nursingTime},
+            </if>
+            <if test="storeId != null">
+                StoreId = #{storeId},
+            </if>
+            <if test="storeNumber != null">
+                StoreNumber = #{storeNumber},
+            </if>
+            <if test="appointmentStatus != null">
+                AppointmentStatus = #{appointmentStatus},
+            </if>
+            <if test="pushPayStatus != null">
+                PushPayStatus = #{pushPayStatus},
+            </if>
+            <if test="pushAppoinmentStatus != null">
+                PushAppoinmentStatus = #{pushAppoinmentStatus},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+            <if test="recordId != null">
+                RecordId = #{recordId},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now(),
+        </set>
+        where AppointmentId = #{appointmentId}
+    </update>
+</mapper>

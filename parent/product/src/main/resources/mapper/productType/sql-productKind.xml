@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productKind" >
+    <!--产品种类表-->
+    <sql id="product_kind_base_column">
+        ProductKindId,ProductKindName,
+        ProductKindOrder,ProductTypeDisplayId,ProductClassifyId,ImageType,ImageUrl,ImageHeight,ImageWidth,
+        IntegralratioService,IntegralratioUnion,RetailpriceVIP1,RetailpriceVIP2,RetailpriceVIP3,
+        RetailpriceVIP4,RetailpriceVIP5,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <sql id="sql_insert_product_kind_column">
+      <trim prefix="(" suffixOverrides="," suffix=")">
+          <if test="productKindName != null" >ProductKindName,</if>
+          <if test="productKindOrder != null" >ProductKindOrder,</if>
+          <if test="productTypeDisplayId != null" >ProductTypeDisplayId,</if>
+          <if test="productClassifyId != null" >ProductClassifyId,</if>
+          <if test="imageType != null" >ImageType,</if>
+          <if test="imageUrl != null" >ImageUrl,</if>
+          <if test="imageHeight != null" >ImageHeight,</if>
+          <if test="imageWidth != null" >ImageWidth,</if>
+          <if test="integralratioService != null" >IntegralratioService,</if>
+          <if test="integralratioUnion != null" >IntegralratioUnion,</if>
+          <if test="retailpriceVIP1 != null" >RetailpriceVIP1,</if>
+          <if test="retailpriceVIP2 != null" >RetailpriceVIP2,</if>
+          <if test="retailpriceVIP3 != null" >RetailpriceVIP3,</if>
+          <if test="retailpriceVIP4 != null" >RetailpriceVIP4,</if>
+          <if test="retailpriceVIP5 != null" >RetailpriceVIP5,</if>
+          <if test="createOperator != null" >CreateOperator,</if>
+          <if test="modifyOperator != null" >ModifyOperator,</if>
+      </trim>
+    </sql>
+    <sql id="sql_insert_product_kind_value">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="productKindName != null" >#{productKindName},</if>
+            <if test="productKindOrder != null" >#{productKindOrder},</if>
+            <if test="productTypeDisplayId != null" >#{productTypeDisplayId},</if>
+            <if test="productClassifyId != null" >#{productClassifyId},</if>
+            <if test="imageType != null" >#{imageType},</if>
+            <if test="imageUrl != null" >#{imageUrl},</if>
+            <if test="imageHeight != null" >#{imageHeight},</if>
+            <if test="imageWidth != null" >#{imageWidth},</if>
+            <if test="integralratioService != null" >#{integralratioService},</if>
+            <if test="integralratioUnion != null" >#{integralratioUnion},</if>
+            <if test="retailpriceVIP1 != null" >#{retailpriceVIP1},</if>
+            <if test="retailpriceVIP2 != null" >#{retailpriceVIP2},</if>
+            <if test="retailpriceVIP3 != null" >#{retailpriceVIP3},</if>
+            <if test="retailpriceVIP4 != null" >#{retailpriceVIP4},</if>
+            <if test="retailpriceVIP5 != null" >#{retailpriceVIP5},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <sql id="sql_set_product_kind_column">
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="productKindName != null" >,ProductKindName=#{productKindName}</if>
+                <if test="productKindOrder != null" >,ProductKindOrder=#{productKindOrder}</if>
+                <if test="productTypeDisplayId != null" >,ProductTypeDisplayId=#{productTypeDisplayId}</if>
+                <if test="productClassifyId != null" >,ProductClassifyId=#{productClassifyId}</if>
+                <if test="imageType != null" >,ImageType=#{imageType}</if>
+                <if test="imageUrl != null" >,ImageUrl=#{imageUrl}</if>
+                <if test="imageHeight != null" >,ImageHeight=#{imageHeight}</if>
+                <if test="imageWidth != null" >,ImageWidth=#{imageWidth}</if>
+                <if test="integralratioService != null" >,IntegralratioService=#{integralratioService}</if>
+                <if test="integralratioUnion != null" >,IntegralratioUnion=#{integralratioUnion}</if>
+                <if test="retailpriceVIP1 != null" >,RetailpriceVIP1=#{retailpriceVIP1}</if>
+                <if test="retailpriceVIP2 != null" >,RetailpriceVIP1=#{retailpriceVIP2}</if>
+                <if test="retailpriceVIP3 != null" >,RetailpriceVIP1=#{retailpriceVIP3}</if>
+                <if test="retailpriceVIP4 != null" >,RetailpriceVIP1=#{retailpriceVIP4}</if>
+                <if test="retailpriceVIP5 != null" >,RetailpriceVIP1=#{retailpriceVIP5}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}></if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+
+    <!--查询商品种类-->
+    <select id="selectProductKindList" resultType="com.lnmj.product.entity.ProductKind">
+        select <include refid="product_kind_base_column"/> from p_productkind
+        where Status = 1
+    </select>
+    <!--新增商品种类-->
+    <insert id="insertProductKind" parameterType="com.lnmj.product.entity.ProductKind" keyProperty="productKindId" useGeneratedKeys="true">
+        insert into p_productkind
+        <include refid="sql_insert_product_kind_column"/>
+        <include refid="sql_insert_product_kind_value"/>
+    </insert>
+    <!--修改商品种类-->
+    <update id="updateProductKind" parameterType="com.lnmj.product.entity.ProductKind">
+        update p_productkind
+        <include refid="sql_set_product_kind_column"/>
+        where ProductKindId=#{productKindId}
+    </update>
+    <!--删除商品种类-->
+    <delete id="deleteProductKind" parameterType="Long" >
+        delete from p_productkind where ProductKindId=#{productKindId}
+    </delete>
+    <!--商品种类关键字查询-->
+    <select id="selectProductKindListByKeyWord" parameterType="String" resultType="com.lnmj.product.entity.ProductKind">
+        select <include refid="product_kind_base_column" /> from p_productkind
+        <where>
+            <if test="_parameter != null">ProductKindName like CONCAT('%',#{keyWord},'%')</if>
+        </where>
+    </select>
+
+    <!--根据Id查询商品种类（判断商品种类是否存在）-->
+    <select id="selectProductKindByProductKindId" parameterType="Long" resultType="com.lnmj.product.entity.ProductKind">
+        select <include refid="product_kind_base_column"/> from p_productkind
+        where ProductKindId=#{productKindId} and Status = 1
+    </select>
+
+    <!--根据商品种类id查询商品功效-->
+    <select id="selectProductEffectByProductKindId" parameterType="Long" resultType="com.lnmj.product.entity.ProductEffect">
+        select <include refid="productEffect.product_effect_base_column"/>
+        from p_producteffect where ProductKindId=#{productKindId} and Status = 1
+    </select>
+    <!--根据商品种类Id查询商品品牌-->
+    <select id="selectProductBrandByProductKindId" parameterType="Long" resultType="com.lnmj.product.entity.ProductBrand">
+        select <include refid="productBrand.product_brand_base_column"/>
+        from p_productBrand where ProductKindId=#{productKindId} and Status = 1
+    </select>
+    <!--根据商品种类Id查询商品品类-->
+    <select id="selectProductCategoryByProductKindId" parameterType="Long" resultType="com.lnmj.product.entity.ProductCategory">
+        select <include refid="productCategory.product_category_base_column"/>
+        from p_productcategory where ProductKindId=#{productKindId} and Status = 1
+    </select>
+    <!--根据商品种类id删除商品功效-->
+    <delete id="deleteProductEffectByProductKindId" parameterType="Long" >
+        delete from p_producteffect where ProductKindId=#{productKindId}
+    </delete>
+    <!--根据商品种类id删除商品品牌-->
+    <delete id="deleteProductBrandByProductKindId" parameterType="Long">
+        delete from p_productBrand where ProductKindId=#{productKindId}
+    </delete>
+    <!--根据商品种类id删除商品品类-->
+    <delete id="deleteProductCategoryByProductKindId" parameterType="Long">
+        delete from p_productcategory where ProductKindId=#{productKindId}
+    </delete>
+    <!--根据商品种类Id查询商品-->
+    <select id="selectProductByProductKindId" parameterType="Long" resultType="Product">
+        select <include refid="product.Base_Column_List"/>
+        from p_product where ProductKind=#{productKindId} and Status = 1
+    </select>
+    <!--根据商品种类Id查询服务-->
+    <select id="selectServiceByProductKindId" parameterType="Long" resultType="ServiceProduct">
+        select <include refid="serviceProduct.Base_Column_List"/>
+        from p_productservice where ProductKind=#{productKindId} and Status = 1
+    </select>
+    <!--根据商品类型id查询商品种类-->
+    <select id="selectProductKindByProductClassifyId" parameterType="Long" resultType="com.lnmj.product.entity.ProductKind">
+        select <include refid="product_kind_base_column" />
+        from p_productkind where ProductClassifyId=#{productClassifyId} and Status = 1
+    </select>
+    <!---->
+</mapper>

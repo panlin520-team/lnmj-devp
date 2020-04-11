@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cashback" >
+  <sql id="Base_Column_List" >
+    CashBackId, ImageUrl, ImageHeight, ImageWidth, ProductName, OrderNumber, Name, Mobile,
+    PhotographTime, CashBackType, CashbackAmount, AuditsCount, AuditsStatus, Status,
+    CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+  <select id="selectCashBackList" resultType="CashBack" parameterType="Map" >
+    select
+    <include refid="Base_Column_List" />
+    from w_cashback
+    where Status = 1
+    <if test="keyWord != null" >
+      and ProductName like CONCAT('%',#{keyWord},'%')
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from w_cashback
+    where CashBackId = #{cashBackId}
+  </delete>
+
+
+  <insert id="insertSelective" parameterType="CashBack" >
+    insert into w_cashback
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cashBackId != null" >
+        CashBackId,
+      </if>
+      <if test="imageUrl != null" >
+        ImageUrl,
+      </if>
+      <if test="imageHeight != null" >
+        ImageHeight,
+      </if>
+      <if test="imageWidth != null" >
+        ImageWidth,
+      </if>
+      <if test="productName != null" >
+        ProductName,
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="mobile != null" >
+        Mobile,
+      </if>
+      <if test="photographTime != null" >
+        PhotographTime,
+      </if>
+      <if test="cashBackType != null" >
+        CashBackType,
+      </if>
+      <if test="cashbackAmount != null" >
+        CashbackAmount,
+      </if>
+      <if test="auditsCount != null" >
+        AuditsCount,
+      </if>
+      <if test="auditsStatus != null" >
+        AuditsStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cashBackId != null" >
+        #{cashBackId},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl},
+      </if>
+      <if test="imageHeight != null" >
+        #{imageHeight},
+      </if>
+      <if test="imageWidth != null" >
+        #{imageWidth},
+      </if>
+      <if test="productName != null" >
+        #{productName},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber},
+      </if>
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="mobile != null" >
+        #{mobile},
+      </if>
+      <if test="photographTime != null" >
+        #{photographTime},
+      </if>
+      <if test="cashBackType != null" >
+        #{cashBackType},
+      </if>
+      <if test="cashbackAmount != null" >
+        #{cashbackAmount},
+      </if>
+      <if test="auditsCount != null" >
+        #{auditsCount},
+      </if>
+      <if test="auditsStatus != null" >
+        #{auditsStatus},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="CashBack" >
+    update w_cashback
+    <set >
+      <if test="imageUrl != null" >
+        ImageUrl = #{imageUrl},
+      </if>
+      <if test="imageHeight != null" >
+        ImageHeight = #{imageHeight},
+      </if>
+      <if test="imageWidth != null" >
+        ImageWidth = #{imageWidth},
+      </if>
+      <if test="productName != null" >
+        ProductName = #{productName},
+      </if>
+      <if test="orderNumber != null" >
+        OrderNumber = #{orderNumber},
+      </if>
+      <if test="name != null" >
+        Name = #{name},
+      </if>
+      <if test="mobile != null" >
+        Mobile = #{mobile},
+      </if>
+      <if test="photographTime != null" >
+        PhotographTime = #{photographTime},
+      </if>
+      <if test="cashBackType != null" >
+        CashBackType = #{cashBackType},
+      </if>
+      <if test="cashbackAmount != null" >
+        CashbackAmount = #{cashbackAmount},
+      </if>
+      <if test="auditsCount != null" >
+        AuditsCount = #{auditsCount},
+      </if>
+      <if test="auditsStatus != null" >
+        AuditsStatus = #{auditsStatus},
+      </if>
+      <if test="status != null" >
+        Status = #{status},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime},
+      </if>
+    </set>
+    where CashBackId = #{cashBackId}
+  </update>
+</mapper>

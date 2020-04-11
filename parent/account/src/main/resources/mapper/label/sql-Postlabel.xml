@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="poslabel">
+
+    <resultMap id="BaseResultMap" type="com.lnmj.account.entity.Poslabel">
+        <id column="LabelId" property="labelId" jdbcType="BIGINT"/>
+        <result column="LabelName" property="labelName" jdbcType="VARCHAR"/>
+        <result column="LabelDescribe" property="labelDescribe" jdbcType="VARCHAR"/>
+        <result column="OrderType" property="orderType" jdbcType="INTEGER"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        LabelId,
+        LabelName,
+        LabelDescribe,
+        OrderType,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <select id="selectList" resultMap="BaseResultMap" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from u_postlabel
+        where Status = 1
+        <if test="keyWord != null">
+            LabelName = #{keyWord}
+        </if>
+    </select>
+
+    <insert id="insertPostLabel" parameterType="Poslabel">
+        insert into u_postlabel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="labelId != null">
+                LabelId,
+            </if>
+            <if test="labelName != null">
+                LabelName,
+            </if>
+            <if test="labelDescribe != null">
+                LabelDescribe,
+            </if>
+            <if test="orderType != null">
+                OrderType,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="labelId != null">
+                #{labelId},
+            </if>
+            <if test="labelName != null">
+                #{labelName},
+            </if>
+            <if test="labelDescribe != null">
+                #{labelDescribe},
+            </if>
+            <if test="orderType != null">
+                #{orderType},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="createTime != null">
+                now(),
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                now(),
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updatePostLabel" parameterType="Poslabel">
+        update u_postlabel
+        <set>
+            <if test="labelName != null">
+                LabelName = #{labelName},
+            </if>
+            <if test="labelDescribe != null">
+                LabelDescribe = #{labelDescribe},
+            </if>
+            <if test="orderType != null">
+                OrderType =  #{orderType},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = now()
+            </if>
+        </set>
+        where LabelId = #{labelId}
+    </update>
+
+    <update id="deletePostLabel" parameterType="Map">
+        update u_postlabel
+        set Status = 0,ModifyOperator = #{modifyOperator},DataChange_LastTime = now()
+        where LabelId = #{labelId}
+    </update>
+</mapper>

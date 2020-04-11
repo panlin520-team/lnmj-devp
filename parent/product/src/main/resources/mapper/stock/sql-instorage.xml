@@ -1,0 +1,1221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Instorage">
+    <resultMap id="InstorageMap" type="com.lnmj.product.entity.Instorage">
+        <id column="InStorageId" property="inStorageId" jdbcType="BIGINT"/>
+        <result column="InStorageType" property="inStorageType" jdbcType="VARCHAR"/>
+        <result column="InvoicesType" property="invoicesType" jdbcType="VARCHAR"/>
+        <result column="BusinessType" property="businessType" jdbcType="VARCHAR"/>
+        <result column="BatchNumber" property="batchNumber" jdbcType="VARCHAR"/>
+        <result column="InStorageNumber" property="inStorageNumber" jdbcType="VARCHAR"/>
+        <result column="InStorageDate" property="inStorageDate" jdbcType="TIMESTAMP"/>
+        <result column="InStorageStatus" property="inStorageStatus" jdbcType="VARCHAR"/>
+        <result column="InventoryGroup" property="inventoryGroup" jdbcType="VARCHAR"/>
+        <result column="InventoryWay" property="inventoryWay" jdbcType="VARCHAR"/>
+        <result column="ReceiveGroup" property="receiveGroup" jdbcType="VARCHAR"/>
+        <result column="ReceiveBranch" property="receiveBranch" jdbcType="VARCHAR"/>
+        <result column="StockGroup" property="stockGroup" jdbcType="VARCHAR"/>
+        <result column="StockPerson" property="stockPerson" jdbcType="VARCHAR"/>
+        <result column="NeedGroup" property="needGroup" jdbcType="VARCHAR"/>
+        <result column="PurchaseGroup" property="purchaseGroup" jdbcType="VARCHAR"/>
+        <result column="PurchaseBranch" property="purchaseBranch" jdbcType="VARCHAR"/>
+        <result column="PurchaseLevel" property="purchaseLevel" jdbcType="VARCHAR"/>
+        <result column="PurchasePerson" property="purchasePerson" jdbcType="VARCHAR"/>
+        <result column="Provider" property="provider" jdbcType="VARCHAR"/>
+        <result column="ProviderName" property="providerName" jdbcType="VARCHAR"/>
+        <result column="Branch" property="branch" jdbcType="VARCHAR"/>
+        <result column="Inspector" property="inspector" jdbcType="VARCHAR"/>
+        <result column="Supply" property="supply" jdbcType="VARCHAR"/>
+        <result column="SupplyName" property="supplyName" jdbcType="VARCHAR"/>
+        <result column="SupplyLinkPerson" property="supplyLinkPerson" jdbcType="VARCHAR"/>
+        <result column="SupplyAddress" property="supplyAddress" jdbcType="VARCHAR"/>
+        <result column="Settlement" property="settlement" jdbcType="VARCHAR"/>
+        <result column="Gathering" property="gathering" jdbcType="VARCHAR"/>
+        <result column="SettlementGroup" property="settlementGroup" jdbcType="VARCHAR"/>
+        <result column="SettlementCurrency" property="settlementCurrency" jdbcType="VARCHAR"/>
+        <result column="SettlementType" property="settlementType" jdbcType="VARCHAR"/>
+        <result column="Currency" property="currency" jdbcType="VARCHAR"/>
+        <result column="Terms" property="terms" jdbcType="VARCHAR"/>
+        <result column="ExchangeRate" property="exchangeRate" jdbcType="VARCHAR"/>
+        <result column="ShipperType" property="shipperType" jdbcType="VARCHAR"/>
+        <result column="Shipper" property="shipper" jdbcType="VARCHAR"/>
+        <result column="Auditor" property="auditor" jdbcType="VARCHAR"/>
+        <result column="AuditorTime" property="auditorTime" jdbcType="TIMESTAMP"/>
+        <result column="Invalid" property="invalid" jdbcType="VARCHAR"/>
+        <result column="InvalidTime" property="invalidTime" jdbcType="TIMESTAMP"/>
+        <result column="InvalidStatus" property="invalidStatus" jdbcType="INTEGER"/>
+        <result column="Confirm" property="confirm" jdbcType="VARCHAR"/>
+        <result column="ConfirmTime" property="confirmTime" jdbcType="TIMESTAMP"/>
+        <result column="ConfirmStatus" property="confirmStatus" jdbcType="INTEGER"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="StockId" property="stockId" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+        <result column="K3Id" property="k3Id" jdbcType="VARCHAR"/>
+        <result column="K3Code" property="k3Code" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="base_instorage_column">
+    InStorageId, InStorageType, InvoicesType, BusinessType, BatchNumber, InStorageNumber,
+    InStorageDate, InStorageStatus, InventoryGroup, InventoryWay, ReceiveGroup, ReceiveBranch,
+    StockGroup, StockPerson, NeedGroup, PurchaseGroup, PurchaseBranch, PurchaseLevel,
+    PurchasePerson, Provider, ProviderName, Branch, Inspector, Supply, SupplyName, SupplyLinkPerson,
+    SupplyAddress, Settlement, Gathering, SettlementGroup, SettlementCurrency, SettlementType,
+    Currency, Terms, ExchangeRate, ShipperType, Shipper, Auditor, AuditorTime, Invalid,
+    InvalidTime, InvalidStatus,Confirm,ConfirmTime,ConfirmStatus, StockId,Remark, Status, CreateOperator, CreateTime, ModifyOperator,
+    DataChange_LastTime,K3Id,K3Code
+  </sql>
+
+    <sql id="base_instorage_pre_audit_column">
+    InStorageId, InStorageType, InvoicesType, BusinessType, BatchNumber, InStorageNumber,
+    InStorageDate, InStorageStatus, InventoryGroup, InventoryWay, ReceiveGroup, ReceiveBranch,
+    StockGroup, StockPerson, NeedGroup, PurchaseGroup, PurchaseBranch, PurchaseLevel,
+    PurchasePerson, Provider, ProviderName, Branch, Inspector, Supply, SupplyName, SupplyLinkPerson,
+    SupplyAddress, Settlement, Gathering, SettlementGroup, SettlementCurrency, SettlementType,
+    Currency, Terms, ExchangeRate, ShipperType, Shipper, Auditor, AuditorTime, Invalid,
+    InvalidTime, InvalidStatus,Confirm,ConfirmTime,ConfirmStatus, StockId,Remark,InStorageProductJson, Status, CreateOperator, CreateTime, ModifyOperator,
+    DataChange_LastTime,K3Id,K3Code,OutStorageId,OrgK3Number,AfterAuditInStorageId,OutstorageOrgName,InstorageOrgName
+  </sql>
+
+    <sql id="base_instorage_pre_audit_column_a">
+    a.InStorageId, a.InStorageType, a.InvoicesType, a.BusinessType, a.BatchNumber, a.InStorageNumber,
+    a.InStorageDate, a.InStorageStatus, a.InventoryGroup, a.InventoryWay, a.ReceiveGroup, a.ReceiveBranch,
+    a.StockGroup, a.StockPerson,a.NeedGroup, a.PurchaseGroup, a.PurchaseBranch, a.PurchaseLevel,
+    a.PurchasePerson, a.Provider, a.ProviderName, a.Branch, a.Inspector, a.Supply, a.SupplyName, a.SupplyLinkPerson,
+    a.SupplyAddress, a.Settlement, a.Gathering, a.SettlementGroup, a.SettlementCurrency, a.SettlementType,
+    a.Currency, a.Terms, a.ExchangeRate, a.ShipperType, a.Shipper, a.Auditor, a.AuditorTime, a.Invalid,
+    a.InvalidTime, a.InvalidStatus,a.Confirm,a.ConfirmTime,a.ConfirmStatus, a.StockId,a.Remark,a.InStorageProductJson, a.Status, a.CreateOperator, a.CreateTime, a.ModifyOperator,
+    a.DataChange_LastTime,a.K3Id,a.K3Code,a.OutStorageId,a.OrgK3Number,a.AfterAuditInStorageId,a.OutstorageOrgName,a.InstorageOrgName
+  </sql>
+    <select id="selectInstorageListByStorageNumber" resultMap="InstorageMap" parameterType="map">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="base_instorage_column"/>
+        from s_instorage where Status=1
+        <if test="storageNumber != null">
+            and InStorageNumber = #{storageNumber,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectInstoragePreAuditById" resultType="InstoragePreAudit" parameterType="InstoragePreAudit">
+        select
+        <include refid="base_instorage_pre_audit_column"/>
+        from s_instorage_pre_audit where Status=1
+        <if test="inStorageId != null">
+            and InStorageId = #{inStorageId}
+        </if>
+        <if test="outStorageId != null">
+            and OutStorageId = #{outStorageId}
+        </if>
+    </select>
+
+    <select id="selectInstorageList" resultMap="InstorageMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="base_instorage_column"/>
+        from s_instorage where Status=1
+    </select>
+
+    <select id="checkInstorageBySupplierCode" resultType="Instorage" parameterType="String">
+        select
+        <include refid="base_instorage_column"/>
+        from s_instorage where Status=1 and Provider = #{supplierCode}
+    </select>
+
+    <select id="checkInstorageByDepartment" resultType="Instorage" parameterType="String">
+        select
+        <include refid="base_instorage_column"/>
+        from s_instorage where Status=1 and Branch = #{departmentK3Number}
+    </select>
+
+    <select id="selectInstorageByID" resultMap="InstorageMap" parameterType="java.lang.Long">
+        select
+        <include refid="base_instorage_column"/>
+        from s_instorage
+        where InStorageId = #{inStorageId,jdbcType=BIGINT} and Status=1
+    </select>
+
+    <select id="selectInstorageByTypeAndDate" resultType="InstoragePreAudit" parameterType="Map">
+        select
+        <include refid="base_instorage_pre_audit_column_a"/>,b.InStorageNumber as AfterAuditInStorageNumber,c.OutStorageStatus
+        from s_instorage_pre_audit a left join s_instorage b on a.AfterAuditInStorageId = b.InStorageId
+                                     left join s_outstorage_pre_audit c on a.OutStorageId = c.OutStorageId
+        where a.Status=1
+        <if test="inStorageType != null">
+            and a.InStorageType = #{inStorageType,jdbcType=VARCHAR}
+        </if>
+        <if test="stockGroup != null">
+            and a.StockGroup = #{stockGroup,jdbcType=VARCHAR}
+        </if>
+        <if test="stockId != null">
+            and a.StockId = #{stockId}
+        </if>
+        <if test="inventoryGroup != null">
+            and a.InventoryGroup = #{inventoryGroup,jdbcType=VARCHAR}
+        </if>
+        <if test="provider != null">
+            and a.Provider = #{provider,jdbcType=VARCHAR}
+        </if>
+        <if test="inStorageDate != null">
+            and TO_DAYS(a.InStorageDate) = TO_DAYS(CONCAT('',#{inStorageDate,jdbcType=TIMESTAMP},''))
+        </if>
+    </select>
+
+    <update id="deleteInstorageByID" parameterType="Instorage">
+    update s_instorage set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    where InStorageId = #{inStorageId,jdbcType=BIGINT}
+  </update>
+
+    <insert id="insertInstorage" parameterType="InstoragePreAudit" keyProperty="inStorageId" useGeneratedKeys="true">
+        insert into s_instorage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inStorageId != null">
+                InStorageId,
+            </if>
+            <if test="inStorageType != null">
+                InStorageType,
+            </if>
+            <if test="invoicesType != null">
+                InvoicesType,
+            </if>
+            <if test="businessType != null">
+                BusinessType,
+            </if>
+            <if test="batchNumber != null">
+                BatchNumber,
+            </if>
+            <if test="inStorageNumber != null">
+                InStorageNumber,
+            </if>
+            <if test="inStorageDate != null">
+                InStorageDate,
+            </if>
+            <if test="inStorageStatus != null">
+                InStorageStatus,
+            </if>
+            <if test="inventoryGroup != null">
+                InventoryGroup,
+            </if>
+            <if test="inventoryWay != null">
+                InventoryWay,
+            </if>
+            <if test="receiveGroup != null">
+                ReceiveGroup,
+            </if>
+            <if test="receiveBranch != null">
+                ReceiveBranch,
+            </if>
+            <if test="stockGroup != null">
+                StockGroup,
+            </if>
+            <if test="stockPerson != null">
+                StockPerson,
+            </if>
+            <if test="needGroup != null">
+                NeedGroup,
+            </if>
+            <if test="purchaseGroup != null">
+                PurchaseGroup,
+            </if>
+            <if test="purchaseBranch != null">
+                PurchaseBranch,
+            </if>
+            <if test="purchaseLevel != null">
+                PurchaseLevel,
+            </if>
+            <if test="purchasePerson != null">
+                PurchasePerson,
+            </if>
+            <if test="provider != null">
+                Provider,
+            </if>
+            <if test="providerName != null">
+                ProviderName,
+            </if>
+            <if test="branch != null">
+                Branch,
+            </if>
+            <if test="inspector != null">
+                Inspector,
+            </if>
+            <if test="supply != null">
+                Supply,
+            </if>
+            <if test="supplyName != null">
+                SupplyName,
+            </if>
+            <if test="supplyLinkPerson != null">
+                SupplyLinkPerson,
+            </if>
+            <if test="supplyAddress != null">
+                SupplyAddress,
+            </if>
+            <if test="settlement != null">
+                Settlement,
+            </if>
+            <if test="gathering != null">
+                Gathering,
+            </if>
+            <if test="settlementGroup != null">
+                SettlementGroup,
+            </if>
+            <if test="settlementCurrency != null">
+                SettlementCurrency,
+            </if>
+            <if test="settlementType != null">
+                SettlementType,
+            </if>
+            <if test="currency != null">
+                Currency,
+            </if>
+            <if test="terms != null">
+                Terms,
+            </if>
+            <if test="exchangeRate != null">
+                ExchangeRate,
+            </if>
+            <if test="shipperType != null">
+                ShipperType,
+            </if>
+            <if test="shipper != null">
+                Shipper,
+            </if>
+            <if test="auditor != null">
+                Auditor,
+            </if>
+            <if test="auditorTime != null">
+                AuditorTime,
+            </if>
+            <if test="invalid != null">
+                Invalid,
+            </if>
+            <if test="invalidTime != null">
+                InvalidTime,
+            </if>
+            <if test="invalidStatus != null">
+                InvalidStatus,
+            </if>
+            <if test="confirm != null">
+                Confirm,
+            </if>
+            <if test="confirmTime != null">
+                ConfirmTime,
+            </if>
+            <if test="confirmStatus != null">
+                ConfirmStatus,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="stockId != null">
+                StockId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+            <if test="k3Id != null">
+                K3Id,
+            </if>
+            <if test="k3Code != null">
+                K3Code,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inStorageId != null">
+                #{inStorageId,jdbcType=BIGINT},
+            </if>
+            <if test="inStorageType != null">
+                #{inStorageType,jdbcType=VARCHAR},
+            </if>
+            <if test="invoicesType != null">
+                #{invoicesType,jdbcType=VARCHAR},
+            </if>
+            <if test="businessType != null">
+                #{businessType,jdbcType=VARCHAR},
+            </if>
+            <if test="batchNumber != null">
+                #{batchNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageNumber != null">
+                #{inStorageNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageDate != null">
+                #{inStorageDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="inStorageStatus != null">
+                #{inStorageStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryGroup != null">
+                #{inventoryGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryWay != null">
+                #{inventoryWay,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveGroup != null">
+                #{receiveGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveBranch != null">
+                #{receiveBranch,jdbcType=VARCHAR},
+            </if>
+            <if test="stockGroup != null">
+                #{stockGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="stockPerson != null">
+                #{stockPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="needGroup != null">
+                #{needGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseGroup != null">
+                #{purchaseGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseBranch != null">
+                #{purchaseBranch,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseLevel != null">
+                #{purchaseLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="purchasePerson != null">
+                #{purchasePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="provider != null">
+                #{provider,jdbcType=VARCHAR},
+            </if>
+            <if test="providerName != null">
+                #{providerName,jdbcType=VARCHAR},
+            </if>
+            <if test="branch != null">
+                #{branch,jdbcType=VARCHAR},
+            </if>
+            <if test="inspector != null">
+                #{inspector,jdbcType=VARCHAR},
+            </if>
+            <if test="supply != null">
+                #{supply,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyName != null">
+                #{supplyName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyLinkPerson != null">
+                #{supplyLinkPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyAddress != null">
+                #{supplyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="settlement != null">
+                #{settlement,jdbcType=VARCHAR},
+            </if>
+            <if test="gathering != null">
+                #{gathering,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementGroup != null">
+                #{settlementGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementCurrency != null">
+                #{settlementCurrency,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementType != null">
+                #{settlementType,jdbcType=VARCHAR},
+            </if>
+            <if test="currency != null">
+                #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="terms != null">
+                #{terms,jdbcType=VARCHAR},
+            </if>
+            <if test="exchangeRate != null">
+                #{exchangeRate,jdbcType=VARCHAR},
+            </if>
+            <if test="shipperType != null">
+                #{shipperType,jdbcType=VARCHAR},
+            </if>
+            <if test="shipper != null">
+                #{shipper,jdbcType=VARCHAR},
+            </if>
+            <if test="auditor != null">
+                #{auditor,jdbcType=VARCHAR},
+            </if>
+            <if test="auditorTime != null">
+                #{auditorTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalid != null">
+                #{invalid,jdbcType=VARCHAR},
+            </if>
+            <if test="invalidTime != null">
+                #{invalidTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalidStatus != null">
+                #{invalidStatus,jdbcType=INTEGER},
+            </if>
+            <if test="confirm != null">
+                #{confirm,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmTime != null">
+                #{confirmTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="confirmStatus != null">
+                #{confirmStatus,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="stockId != null">
+                #{stockId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="k3Id != null">
+                #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Code != null">
+                #{k3Code,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertInstoragePreAudit" parameterType="com.lnmj.product.entity.InstoragePreAudit"
+            keyProperty="inStorageId" useGeneratedKeys="true">
+        insert into s_instorage_pre_audit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inStorageId != null">
+                InStorageId,
+            </if>
+            <if test="inStorageType != null">
+                InStorageType,
+            </if>
+            <if test="invoicesType != null">
+                InvoicesType,
+            </if>
+            <if test="businessType != null">
+                BusinessType,
+            </if>
+            <if test="batchNumber != null">
+                BatchNumber,
+            </if>
+            <if test="inStorageNumber != null">
+                InStorageNumber,
+            </if>
+            <if test="inStorageDate != null">
+                InStorageDate,
+            </if>
+            <if test="inStorageStatus != null">
+                InStorageStatus,
+            </if>
+            <if test="inventoryGroup != null">
+                InventoryGroup,
+            </if>
+            <if test="inventoryWay != null">
+                InventoryWay,
+            </if>
+            <if test="receiveGroup != null">
+                ReceiveGroup,
+            </if>
+            <if test="receiveBranch != null">
+                ReceiveBranch,
+            </if>
+            <if test="stockGroup != null">
+                StockGroup,
+            </if>
+            <if test="stockPerson != null">
+                StockPerson,
+            </if>
+            <if test="needGroup != null">
+                NeedGroup,
+            </if>
+            <if test="purchaseGroup != null">
+                PurchaseGroup,
+            </if>
+            <if test="purchaseBranch != null">
+                PurchaseBranch,
+            </if>
+            <if test="purchaseLevel != null">
+                PurchaseLevel,
+            </if>
+            <if test="purchasePerson != null">
+                PurchasePerson,
+            </if>
+            <if test="provider != null">
+                Provider,
+            </if>
+            <if test="providerName != null">
+                ProviderName,
+            </if>
+            <if test="branch != null">
+                Branch,
+            </if>
+            <if test="inspector != null">
+                Inspector,
+            </if>
+            <if test="supply != null">
+                Supply,
+            </if>
+            <if test="supplyName != null">
+                SupplyName,
+            </if>
+            <if test="supplyLinkPerson != null">
+                SupplyLinkPerson,
+            </if>
+            <if test="supplyAddress != null">
+                SupplyAddress,
+            </if>
+            <if test="settlement != null">
+                Settlement,
+            </if>
+            <if test="gathering != null">
+                Gathering,
+            </if>
+            <if test="settlementGroup != null">
+                SettlementGroup,
+            </if>
+            <if test="settlementCurrency != null">
+                SettlementCurrency,
+            </if>
+            <if test="settlementType != null">
+                SettlementType,
+            </if>
+            <if test="currency != null">
+                Currency,
+            </if>
+            <if test="terms != null">
+                Terms,
+            </if>
+            <if test="exchangeRate != null">
+                ExchangeRate,
+            </if>
+            <if test="shipperType != null">
+                ShipperType,
+            </if>
+            <if test="shipper != null">
+                Shipper,
+            </if>
+            <if test="auditor != null">
+                Auditor,
+            </if>
+            <if test="auditorTime != null">
+                AuditorTime,
+            </if>
+            <if test="invalid != null">
+                Invalid,
+            </if>
+            <if test="invalidTime != null">
+                InvalidTime,
+            </if>
+            <if test="invalidStatus != null">
+                InvalidStatus,
+            </if>
+            <if test="confirm != null">
+                Confirm,
+            </if>
+            <if test="confirmTime != null">
+                ConfirmTime,
+            </if>
+            <if test="confirmStatus != null">
+                ConfirmStatus,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="stockId != null">
+                StockId,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+            <if test="k3Id != null">
+                K3Id,
+            </if>
+            <if test="k3Code != null">
+                K3Code,
+            </if>
+            <if test="inStorageProductJson != null">
+                InStorageProductJson,
+            </if>
+            <if test="outStorageId != null">
+                OutStorageId,
+            </if>
+            <if test="orgK3Number != null">
+                OrgK3Number,
+            </if>
+            <if test="afterAuditInStorageId != null">
+                AfterAuditInStorageId,
+            </if>
+            <if test="outstorageOrgName != null">
+                OutstorageOrgName,
+            </if>
+            <if test="instorageOrgName != null">
+                InstorageOrgName,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inStorageId != null">
+                #{inStorageId,jdbcType=BIGINT},
+            </if>
+            <if test="inStorageType != null">
+                #{inStorageType,jdbcType=VARCHAR},
+            </if>
+            <if test="invoicesType != null">
+                #{invoicesType,jdbcType=VARCHAR},
+            </if>
+            <if test="businessType != null">
+                #{businessType,jdbcType=VARCHAR},
+            </if>
+            <if test="batchNumber != null">
+                #{batchNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageNumber != null">
+                #{inStorageNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageDate != null">
+                #{inStorageDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="inStorageStatus != null">
+                #{inStorageStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryGroup != null">
+                #{inventoryGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryWay != null">
+                #{inventoryWay,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveGroup != null">
+                #{receiveGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveBranch != null">
+                #{receiveBranch,jdbcType=VARCHAR},
+            </if>
+            <if test="stockGroup != null">
+                #{stockGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="stockPerson != null">
+                #{stockPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="needGroup != null">
+                #{needGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseGroup != null">
+                #{purchaseGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseBranch != null">
+                #{purchaseBranch,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseLevel != null">
+                #{purchaseLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="purchasePerson != null">
+                #{purchasePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="provider != null">
+                #{provider,jdbcType=VARCHAR},
+            </if>
+            <if test="providerName != null">
+                #{providerName,jdbcType=VARCHAR},
+            </if>
+            <if test="branch != null">
+                #{branch,jdbcType=VARCHAR},
+            </if>
+            <if test="inspector != null">
+                #{inspector,jdbcType=VARCHAR},
+            </if>
+            <if test="supply != null">
+                #{supply,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyName != null">
+                #{supplyName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyLinkPerson != null">
+                #{supplyLinkPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyAddress != null">
+                #{supplyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="settlement != null">
+                #{settlement,jdbcType=VARCHAR},
+            </if>
+            <if test="gathering != null">
+                #{gathering,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementGroup != null">
+                #{settlementGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementCurrency != null">
+                #{settlementCurrency,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementType != null">
+                #{settlementType,jdbcType=VARCHAR},
+            </if>
+            <if test="currency != null">
+                #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="terms != null">
+                #{terms,jdbcType=VARCHAR},
+            </if>
+            <if test="exchangeRate != null">
+                #{exchangeRate,jdbcType=VARCHAR},
+            </if>
+            <if test="shipperType != null">
+                #{shipperType,jdbcType=VARCHAR},
+            </if>
+            <if test="shipper != null">
+                #{shipper,jdbcType=VARCHAR},
+            </if>
+            <if test="auditor != null">
+                #{auditor,jdbcType=VARCHAR},
+            </if>
+            <if test="auditorTime != null">
+                #{auditorTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalid != null">
+                #{invalid,jdbcType=VARCHAR},
+            </if>
+            <if test="invalidTime != null">
+                #{invalidTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalidStatus != null">
+                #{invalidStatus,jdbcType=INTEGER},
+            </if>
+            <if test="confirm != null">
+                #{confirm,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmTime != null">
+                #{confirmTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="confirmStatus != null">
+                #{confirmStatus,jdbcType=INTEGER},
+            </if>
+
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="stockId != null">
+                #{stockId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="k3Id != null">
+                #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Code != null">
+                #{k3Code,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageProductJson != null">
+                #{inStorageProductJson,jdbcType=VARCHAR},
+            </if>
+            <if test="outStorageId != null">
+                #{outStorageId},
+            </if>
+            <if test="orgK3Number != null">
+                #{orgK3Number},
+            </if>
+            <if test="afterAuditInStorageId != null">
+                #{afterAuditInStorageId},
+            </if>
+            <if test="outstorageOrgName != null">
+                #{outstorageOrgName},
+            </if>
+            <if test="instorageOrgName != null">
+                #{instorageOrgName},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateInstorageByID" parameterType="com.lnmj.product.entity.Instorage">
+        update s_instorage
+        <set>
+            <if test="inStorageType != null">
+                InStorageType = #{inStorageType,jdbcType=VARCHAR},
+            </if>
+            <if test="invoicesType != null">
+                InvoicesType = #{invoicesType,jdbcType=VARCHAR},
+            </if>
+            <if test="businessType != null">
+                BusinessType = #{businessType,jdbcType=VARCHAR},
+            </if>
+            <if test="batchNumber != null">
+                BatchNumber = #{batchNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageNumber != null">
+                InStorageNumber = #{inStorageNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageDate != null">
+                InStorageDate = #{inStorageDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="inStorageStatus != null">
+                InStorageStatus = #{inStorageStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryGroup != null">
+                InventoryGroup = #{inventoryGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryWay != null">
+                InventoryWay = #{inventoryWay,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveGroup != null">
+                ReceiveGroup = #{receiveGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveBranch != null">
+                ReceiveBranch = #{receiveBranch,jdbcType=VARCHAR},
+            </if>
+            <if test="stockGroup != null">
+                StockGroup = #{stockGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="stockPerson != null">
+                StockPerson = #{stockPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="needGroup != null">
+                NeedGroup = #{needGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseGroup != null">
+                PurchaseGroup = #{purchaseGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseBranch != null">
+                PurchaseBranch = #{purchaseBranch,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseLevel != null">
+                PurchaseLevel = #{purchaseLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="purchasePerson != null">
+                PurchasePerson = #{purchasePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="provider != null">
+                Provider = #{provider,jdbcType=VARCHAR},
+            </if>
+            <if test="providerName != null">
+                ProviderName = #{providerName,jdbcType=VARCHAR},
+            </if>
+            <if test="branch != null">
+                Branch = #{branch,jdbcType=VARCHAR},
+            </if>
+            <if test="inspector != null">
+                Inspector = #{inspector,jdbcType=VARCHAR},
+            </if>
+            <if test="supply != null">
+                Supply = #{supply,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyName != null">
+                SupplyName = #{supplyName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyLinkPerson != null">
+                SupplyLinkPerson = #{supplyLinkPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyAddress != null">
+                SupplyAddress = #{supplyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="settlement != null">
+                Settlement = #{settlement,jdbcType=VARCHAR},
+            </if>
+            <if test="gathering != null">
+                Gathering = #{gathering,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementGroup != null">
+                SettlementGroup = #{settlementGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementCurrency != null">
+                SettlementCurrency = #{settlementCurrency,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementType != null">
+                SettlementType = #{settlementType,jdbcType=VARCHAR},
+            </if>
+            <if test="currency != null">
+                Currency = #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="terms != null">
+                Terms = #{terms,jdbcType=VARCHAR},
+            </if>
+            <if test="exchangeRate != null">
+                ExchangeRate = #{exchangeRate,jdbcType=VARCHAR},
+            </if>
+            <if test="shipperType != null">
+                ShipperType = #{shipperType,jdbcType=VARCHAR},
+            </if>
+            <if test="shipper != null">
+                Shipper = #{shipper,jdbcType=VARCHAR},
+            </if>
+            <if test="auditor != null">
+                Auditor = #{auditor,jdbcType=VARCHAR},
+            </if>
+            <if test="auditorTime != null">
+                AuditorTime = #{auditorTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalid != null">
+                Invalid = #{invalid,jdbcType=VARCHAR},
+            </if>
+            <if test="invalidTime != null">
+                InvalidTime = #{invalidTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalidStatus != null">
+                InvalidStatus = #{invalidStatus,jdbcType=INTEGER},
+            </if>
+            <if test="confirm != null">
+                Confirm = #{confirm,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmTime != null">
+                ConfirmTime = #{confirmTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="confirmStatus != null">
+                ConfirmStatus = #{confirmStatus,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="stockId != null">
+                StockId = #{stockId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="k3Id != null">
+                K3Id = #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Code != null">
+                K3Code = #{k3Code,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where InStorageId = #{inStorageId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateInstoragePreAuditById" parameterType="InstoragePreAudit">
+        update s_instorage_pre_audit
+        <set>
+            <if test="outStorageId != null">
+                OutStorageId = #{outStorageId,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageType != null">
+                InStorageType = #{inStorageType,jdbcType=VARCHAR},
+            </if>
+            <if test="invoicesType != null">
+                InvoicesType = #{invoicesType,jdbcType=VARCHAR},
+            </if>
+            <if test="businessType != null">
+                BusinessType = #{businessType,jdbcType=VARCHAR},
+            </if>
+            <if test="batchNumber != null">
+                BatchNumber = #{batchNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageNumber != null">
+                InStorageNumber = #{inStorageNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="inStorageDate != null">
+                InStorageDate = #{inStorageDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="inStorageStatus != null">
+                InStorageStatus = #{inStorageStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryGroup != null">
+                InventoryGroup = #{inventoryGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryWay != null">
+                InventoryWay = #{inventoryWay,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveGroup != null">
+                ReceiveGroup = #{receiveGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveBranch != null">
+                ReceiveBranch = #{receiveBranch,jdbcType=VARCHAR},
+            </if>
+            <if test="stockGroup != null">
+                StockGroup = #{stockGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="stockPerson != null">
+                StockPerson = #{stockPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="needGroup != null">
+                NeedGroup = #{needGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseGroup != null">
+                PurchaseGroup = #{purchaseGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseBranch != null">
+                PurchaseBranch = #{purchaseBranch,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseLevel != null">
+                PurchaseLevel = #{purchaseLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="purchasePerson != null">
+                PurchasePerson = #{purchasePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="provider != null">
+                Provider = #{provider,jdbcType=VARCHAR},
+            </if>
+            <if test="providerName != null">
+                ProviderName = #{providerName,jdbcType=VARCHAR},
+            </if>
+            <if test="branch != null">
+                Branch = #{branch,jdbcType=VARCHAR},
+            </if>
+            <if test="inspector != null">
+                Inspector = #{inspector,jdbcType=VARCHAR},
+            </if>
+            <if test="supply != null">
+                Supply = #{supply,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyName != null">
+                SupplyName = #{supplyName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyLinkPerson != null">
+                SupplyLinkPerson = #{supplyLinkPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyAddress != null">
+                SupplyAddress = #{supplyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="settlement != null">
+                Settlement = #{settlement,jdbcType=VARCHAR},
+            </if>
+            <if test="gathering != null">
+                Gathering = #{gathering,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementGroup != null">
+                SettlementGroup = #{settlementGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementCurrency != null">
+                SettlementCurrency = #{settlementCurrency,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementType != null">
+                SettlementType = #{settlementType,jdbcType=VARCHAR},
+            </if>
+            <if test="currency != null">
+                Currency = #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="terms != null">
+                Terms = #{terms,jdbcType=VARCHAR},
+            </if>
+            <if test="exchangeRate != null">
+                ExchangeRate = #{exchangeRate,jdbcType=VARCHAR},
+            </if>
+            <if test="shipperType != null">
+                ShipperType = #{shipperType,jdbcType=VARCHAR},
+            </if>
+            <if test="shipper != null">
+                Shipper = #{shipper,jdbcType=VARCHAR},
+            </if>
+            <if test="auditor != null">
+                Auditor = #{auditor,jdbcType=VARCHAR},
+            </if>
+            <if test="auditorTime != null">
+                AuditorTime = #{auditorTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalid != null">
+                Invalid = #{invalid,jdbcType=VARCHAR},
+            </if>
+            <if test="invalidTime != null">
+                InvalidTime = #{invalidTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="invalidStatus != null">
+                InvalidStatus = #{invalidStatus,jdbcType=INTEGER},
+            </if>
+            <if test="confirm != null">
+                Confirm = #{confirm,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmTime != null">
+                ConfirmTime = #{confirmTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="confirmStatus != null">
+                ConfirmStatus = #{confirmStatus,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="stockId != null">
+                StockId = #{stockId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="k3Id != null">
+                K3Id = #{k3Id,jdbcType=VARCHAR},
+            </if>
+            <if test="k3Code != null">
+                K3Code = #{k3Code,jdbcType=VARCHAR},
+            </if>
+            <if test="afterAuditInStorageId != null">
+                AfterAuditInStorageId = #{afterAuditInStorageId},
+            </if>
+            <if test="outstorageOrgName != null">
+                OutstorageOrgName = #{outstorageOrgName},
+            </if>
+            <if test="instorageOrgName != null">
+                InstorageOrgName = #{instorageOrgName},
+            </if>
+        </set>
+        where InStorageId = #{inStorageId,jdbcType=BIGINT}
+    </update>
+</mapper>

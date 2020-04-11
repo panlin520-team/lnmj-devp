@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="rechargeType">
+
+    <sql id="Base_Column_List">
+        AccountTypeId
+        ,
+        AccountType,
+        IsCuZhiYeJi,
+        IsQingKe,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <select id="selectWalletAccountList" resultType="RechargeType" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from w_rechargetype
+        where Status=1
+        <if test="keyWord != null">
+            and AccountType like '%${keyWord}%'
+        </if>
+    </select>
+
+    <insert id="addWalletAccount" parameterType="RechargeType">
+        insert into w_rechargetype
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="accountTypeId != null">
+                AccountTypeId,
+            </if>
+            <if test="accountType != null">
+                AccountType,
+            </if>
+            <if test="isCuZhiYeJi != null">
+                IsCuZhiYeJi,
+            </if>
+            <if test="isQingKe != null">
+                IsQingKe,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="accountTypeId != null">
+                #{accountTypeId},
+            </if>
+            <if test="accountType != null">
+                #{accountType},
+            </if>
+            <if test="isCuZhiYeJi != null">
+                #{isCuZhiYeJi},
+            </if>
+            <if test="isQingKe != null">
+                #{isQingKe},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="createTime != null">
+                #{createTimeaccountService},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateWalletAccount" parameterType="RechargeType">
+        update w_rechargetype
+        <set>
+            <if test="accountType != null">
+                AccountType = #{accountType},
+            </if>
+            <if test="isCuZhiYeJi != null">
+                IsCuZhiYeJi = #{isCuZhiYeJi},
+            </if>
+            <if test="isQingKe != null">
+                IsQingKe = #{isQingKe},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime},
+            </if>
+        </set>
+        where AccountTypeId = #{accountTypeId}
+    </update>
+
+    <delete id="deleteWalletAccount" parameterType="Long">
+        delete
+        from w_rechargetype
+        where AccountTypeId = #{accountTypeId}
+    </delete>
+
+
+    <select id="checkIsQingKe" resultType="int">
+        select count(1)
+        from w_rechargetype
+        where IsQingKe = 1
+    </select>
+
+    <select id="checkTypeName" resultType="int" parameterType="Map">
+        select count(1) from w_rechargetype
+        where AccountType = #{accountType}
+        <if test="accountTypeId != null and accountTypeId!=''">
+            and AccountTypeId != #{accountTypeId}
+        </if>
+    </select>
+</mapper>

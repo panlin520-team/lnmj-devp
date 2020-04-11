@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="makerMember" >
+  <resultMap id="MakerMemberLevelMap" type="com.lnmj.system.entity.MakerMemberLevel" >
+    <id column="MakerMemberLevelId" property="makerMemberLevelId" jdbcType="BIGINT" />
+    <result column="MakerMemberLevel" property="makerMemberLevel" jdbcType="VARCHAR" />
+    <result column="MakerType" property="makerType" jdbcType="INTEGER" />
+    <result column="LevelUpdatePrice" property="levelUpdatePrice" jdbcType="DECIMAL" />
+    <result column="SalesNumber" property="salesNumber" jdbcType="INTEGER" />
+    <result column="SalesPrice" property="salesPrice" jdbcType="DECIMAL" />
+    <result column="MakerProduct" property="makerProduct" jdbcType="BIGINT" />
+    <result column="ProductPrice" property="productPrice" jdbcType="DECIMAL" />
+    <result column="Bonus1" property="bonus1" jdbcType="DECIMAL" />
+    <result column="Bonus2" property="bonus2" jdbcType="DECIMAL" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="base_maker_member_column" >
+    MakerMemberLevelId, MakerMemberLevel, MakerType, LevelUpdatePrice, SalesNumber, SalesPrice, 
+    MakerProduct, ProductPrice,Bonus1,Bonus2, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+  <select id="selectMakerMemberList" resultMap="MakerMemberLevelMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_maker_member_column" />
+    from m_makermemberlevel where Status = 1
+      order by MakerMemberLevelId
+  </select>
+
+  <select id="selectMakerMemberByCondition" resultMap="MakerMemberLevelMap" parameterType="MakerMemberLevel" >
+    select 
+    <include refid="base_maker_member_column" />
+    from m_makermemberlevel
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="makerMemberLevelId != null">
+         AND MakerMemberLevelId = #{makerMemberLevelId,jdbcType=BIGINT}
+         </if>
+        <if test="makerMemberLevel != null">
+          AND MakerMemberLevel = #{makerMemberLevel,jdbcType=VARCHAR}
+        </if>
+        <if test="makerType != null">
+          AND MakerType = #{makerType,jdbcType=INTEGER}
+        </if>
+        <if test="levelUpdatePrice != null">
+          AND LevelUpdatePrice = #{levelUpdatePrice,jdbcType=DECIMAL}
+        </if>
+        <if test="salesPrice != null">
+          AND salesPrice = #{salesPrice,jdbcType=DECIMAL}
+        </if>
+        <if test="salesNumber != null">
+          AND SalesNumber = #{salesNumber,jdbcType=INTEGER}
+        </if>
+        <if test="makerProduct != null">
+          AND MakerProduct = #{makerProduct,jdbcType=BIGINT}
+        </if>
+        <if test="productPrice != null">
+          AND ProductPrice = #{productPrice,jdbcType=DECIMAL}
+        </if>
+        <if test="bonus1 != null">
+          AND Bonus1 = #{bonus1,jdbcType=DECIMAL}
+        </if>
+        <if test="bonus2 != null">
+          AND Bonus2 = #{bonus2,jdbcType=DECIMAL}
+        </if>
+        <if test="status != null">
+         AND Status=#{status,jdbcType=INTEGER}
+         </if>
+        <if test="status == null">
+         AND Status=1
+         </if>
+        <if test="createOperator != null">
+        AND CreateOperator=#{createOperator,jdbcType=VARCHAR}
+         </if>
+        <if test="createTime != null">
+         AND CreateTime=#{createTime,jdbcType=TIMESTAMP}
+         </if>
+        <if test="modifyOperator != null">
+         AND ModifyOperator=#{modifyOperator,jdbcType=VARCHAR}
+         </if>
+        <if test="dataChangeLastTime != null">
+         AND DataChange_LastTime=#{dataChangeLastTime,jdbcType=TIMESTAMP}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+  <insert id="insertMakerMember" parameterType="MakerMemberLevel" keyProperty="makerMemberLevelId" useGeneratedKeys="true">
+    insert into m_makermemberlevel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="makerMemberLevelId != null" >
+        MakerMemberLevelId,
+      </if>
+      <if test="makerMemberLevel != null" >
+        MakerMemberLevel,
+      </if>
+      <if test="makerType != null" >
+        MakerType,
+      </if>
+      <if test="levelUpdatePrice != null" >
+        LevelUpdatePrice,
+      </if>
+      <if test="salesNumber != null" >
+        SalesNumber,
+      </if>
+      <if test="salesPrice != null" >
+        SalesPrice,
+      </if>
+      <if test="makerProduct != null" >
+        MakerProduct,
+      </if>
+      <if test="productPrice != null" >
+        ProductPrice,
+      </if>
+      <if test="bonus1 != null" >
+        Bonus1,
+      </if>
+      <if test="bonus2 != null" >
+        Bonus2,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="makerMemberLevelId != null" >
+        #{makerMemberLevelId,jdbcType=BIGINT},
+      </if>
+      <if test="makerMemberLevel != null" >
+        #{makerMemberLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="makerType != null" >
+        #{makerType,jdbcType=INTEGER},
+      </if>
+      <if test="levelUpdatePrice != null" >
+        #{levelUpdatePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salesNumber != null" >
+        #{salesNumber,jdbcType=INTEGER},
+      </if>
+      <if test="salesPrice != null" >
+        #{salesPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="makerProduct != null" >
+        #{makerProduct,jdbcType=BIGINT},
+      </if>
+      <if test="productPrice != null" >
+        #{productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="bonus1 != null" >
+        #{bonus1,jdbcType=DECIMAL},
+      </if>
+      <if test="bonus2 != null" >
+        #{bonus2,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateMakerMember" parameterType="MakerMemberLevel" >
+    update m_makermemberlevel
+    <set >
+      <trim prefix="" prefixOverrides=",">
+        <if test="makerMemberLevel != null" >
+          MakerMemberLevel = #{makerMemberLevel,jdbcType=VARCHAR},
+        </if>
+        <if test="makerType != null" >
+          MakerType = #{makerType,jdbcType=INTEGER},
+        </if>
+        <if test="levelUpdatePrice != null" >
+          LevelUpdatePrice = #{levelUpdatePrice,jdbcType=DECIMAL},
+        </if>
+        <if test="salesNumber != null" >
+          SalesNumber = #{salesNumber,jdbcType=INTEGER},
+        </if>
+        <if test="salesPrice != null" >
+          SalesPrice = #{salesPrice,jdbcType=DECIMAL},
+        </if>
+        <if test="makerProduct != null" >
+          MakerProduct = #{makerProduct,jdbcType=BIGINT},
+        </if>
+        <if test="productPrice != null" >
+          ProductPrice = #{productPrice,jdbcType=DECIMAL},
+        </if>
+        <if test="bonus1 != null" >
+          Bonus1 = #{bonus1,jdbcType=DECIMAL},
+        </if>
+        <if test="bonus2 != null" >
+          Bonus2 = #{bonus2,jdbcType=DECIMAL},
+        </if>
+        <if test="status != null" >
+          Status = #{status,jdbcType=INTEGER},
+        </if>
+        <if test="createOperator != null" >
+          CreateOperator = #{createOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="createTime != null" >
+          CreateTime = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="modifyOperator != null" >
+          ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="dataChangeLastTime != null" >
+          DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </set>
+    where MakerMemberLevelId = #{makerMemberLevelId,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteMakerMember" parameterType="MakerMemberLevel" >
+    update m_makermemberlevel
+    set Status = 0,
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+    where MakerMemberLevelId = #{makerMemberLevelId,jdbcType=BIGINT}
+  </update>
+
+  <!--<sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>-->
+  <!--<sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>-->
+
+  <!--<delete id="deleteByExample" parameterType="com.lnmj.common.generator.MakerMember.MMakermemberlevelExample" >
+    delete from m_makermemberlevel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>-->
+  <!--<insert id="insert" parameterType="MakerMemberLevel" >
+    insert into m_makermemberlevel (MakerMemberLevelId, MakerMemberLevel, 
+      MakerType, LevelUpdatePrice, SalesNumber, 
+      SalesPrice, MakerProduct, ProductPrice, Bonus1, Bonus1,
+      Status, CreateOperator, CreateTime, 
+      ModifyOperator, DataChange_LastTime)
+    values (#{makerMemberLevelId,jdbcType=BIGINT}, #{makerMemberLevel,jdbcType=VARCHAR}, 
+      #{makerType,jdbcType=INTEGER}, #{levelUpdatePrice,jdbcType=DECIMAL}, #{salesNumber,jdbcType=INTEGER}, 
+      #{salesPrice,jdbcType=DECIMAL}, #{makerProduct,jdbcType=BIGINT}, #{productPrice,jdbcType=DECIMAL},
+      #{Bonus1,jdbcType=DECIMAL},#{Bonus2,jdbcType=DECIMAL},
+      #{status,jdbcType=INTEGER}, #{createOperator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{modifyOperator,jdbcType=VARCHAR}, #{dataChangeLastTime,jdbcType=TIMESTAMP})
+  </insert>-->
+  <!--<select id="countByExample" parameterType="com.lnmj.common.generator.MakerMember.MMakermemberlevelExample" resultType="java.lang.Integer" >
+    select count(*) from m_makermemberlevel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>-->
+  <!--<update id="updateByExampleSelective" parameterType="map" >
+    update m_makermemberlevel
+    <set >
+      <if test="record.makerMemberLevelId != null" >
+        MakerMemberLevelId = #{record.makerMemberLevelId,jdbcType=BIGINT},
+      </if>
+      <if test="record.makerMemberLevel != null" >
+        MakerMemberLevel = #{record.makerMemberLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.makerType != null" >
+        MakerType = #{record.makerType,jdbcType=INTEGER},
+      </if>
+      <if test="record.levelUpdatePrice != null" >
+        LevelUpdatePrice = #{record.levelUpdatePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.salesNumber != null" >
+        SalesNumber = #{record.salesNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.salesPrice != null" >
+        SalesPrice = #{record.salesPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.makerProduct != null" >
+        MakerProduct = #{record.makerProduct,jdbcType=BIGINT},
+      </if>
+      <if test="record.productPrice != null" >
+        ProductPrice = #{record.productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.createOperator != null" >
+        CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyOperator != null" >
+        ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataChangeLastTime != null" >
+        DataChange_LastTime = #{record.dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.lnmj.common.generator.MakerMember.MMakermemberlevel" >
+    update m_makermemberlevel
+    set MakerMemberLevel = #{makerMemberLevel,jdbcType=VARCHAR},
+      MakerType = #{makerType,jdbcType=INTEGER},
+      LevelUpdatePrice = #{levelUpdatePrice,jdbcType=DECIMAL},
+      SalesNumber = #{salesNumber,jdbcType=INTEGER},
+      SalesPrice = #{salesPrice,jdbcType=DECIMAL},
+      MakerProduct = #{makerProduct,jdbcType=BIGINT},
+      ProductPrice = #{productPrice,jdbcType=DECIMAL},
+      Status = #{status,jdbcType=INTEGER},
+      CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+    where MakerMemberLevelId = #{makerMemberLevelId,jdbcType=BIGINT}
+  </update>-->
+</mapper>

@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberUser">
+    <sql id="Base_Column_List">
+        Id,
+        HeadImgUrl,
+        MemberNum,
+        UserName,
+        Password,
+        Birthday,
+        StoreId,
+        Sex,
+        Mobile,
+        Name,
+        WxOpenId,
+        IdCard,
+        LableId,
+        LastArriveDate,
+        ArriveTimes,
+        TotalConsumption,
+        EnterChannel,
+        ParentMemberNum,
+        Remark,
+        NewOldStatus,
+        BeauticianId,
+        LastConsumeDate,
+        FirstConsumeDate,
+        IsLost,
+        MembershipLevelId,
+        MembershipLevelName,
+        MemberAddType,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+
+    <select id="selectMemberUser" resultType="MemberUser" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from m_member
+        where Status=1
+        <if test="name != null and name!=''">
+            and Name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="mobile != null and mobile!=''">
+            and Mobile = #{mobile}
+        </if>
+        <if test="newOldStatus != null and newOldStatus!=''">
+            and NewOldStatus = #{newOldStatus}
+        </if>
+        <if test="isLost != null and isLost!=''">
+            and IsLost = #{isLost}
+        </if>
+        <if test="list != null and list!=''">
+            and StoreId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectMemberUserByPhoneOrName" resultType="MemberUser" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from m_member
+        where 1=1
+        <if test="name != null and name!=''">
+            and Name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="mobile != null and mobile!=''">
+            and Mobile = #{mobile}
+        </if>
+        <if test="storeId != null and storeId!=''">
+            and StoreId = #{storeId}
+        </if>
+    </select>
+
+    <insert id="addMemberUser" parameterType="MemberUser">
+        insert into m_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="headImgUrl != null">
+                HeadImgUrl,
+            </if>
+            <if test="memberNum != null">
+                MemberNum,
+            </if>
+            <if test="userName != null">
+                UserName,
+            </if>
+            <if test="password != null">
+                Password,
+            </if>
+            <if test="birthday != null">
+                Birthday,
+            </if>
+            <if test="storeId != null">
+                StoreId,
+            </if>
+            <if test="sex != null">
+                Sex,
+            </if>
+            <if test="mobile != null">
+                Mobile,
+            </if>
+            <if test="name != null">
+                Name,
+            </if>
+            <if test="wxOpenId != null">
+                WxOpenId,
+            </if>
+            <if test="idCard != null">
+                IdCard,
+            </if>
+            <if test="lableId != null">
+                LableId,
+            </if>
+            <if test="lastArriveDate != null">
+                LastArriveDate,
+            </if>
+            <if test="arriveTimes != null">
+                ArriveTimes,
+            </if>
+            <if test="totalConsumption != null">
+                TotalConsumption,
+            </if>
+            <if test="enterChannel != null">
+                EnterChannel,
+            </if>
+            <if test="parentMemberNum != null">
+                ParentMemberNum,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="newOldStatus != null">
+                NewOldStatus,
+            </if>
+            <if test="beauticianId != null">
+                BeauticianId,
+            </if>
+            <if test="lastConsumeDate != null">
+                LastConsumeDate,
+            </if>
+            <if test="firstConsumeDate != null">
+                FirstConsumeDate,
+            </if>
+            <if test="isLost != null">
+                IsLost,
+            </if>
+            <if test="membershipLevelId != null">
+                MembershipLevelId,
+            </if>
+            <if test="membershipLevelName != null">
+                MembershipLevelName,
+            </if>
+            <if test="memberAddType != null">
+                MemberAddType,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="headImgUrl != null">
+                #{headImgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="memberNum != null">
+                #{memberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                #{birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="storeId != null">
+                #{storeId,jdbcType=BIGINT},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="wxOpenId != null">
+                #{wxOpenId,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="lableId != null">
+                #{lableId,jdbcType=VARCHAR},
+            </if>
+            <if test="lastArriveDate != null">
+                #{lastArriveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="arriveTimes != null">
+                #{arriveTimes,jdbcType=INTEGER},
+            </if>
+            <if test="totalConsumption != null">
+                #{totalConsumption,jdbcType=DECIMAL},
+            </if>
+            <if test="enterChannel != null">
+                #{enterChannel,jdbcType=INTEGER},
+            </if>
+            <if test="parentMemberNum != null">
+                #{parentMemberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="newOldStatus != null">
+                #{newOldStatus,jdbcType=INTEGER},
+            </if>
+            <if test="beauticianId != null">
+                #{beauticianId,jdbcType=BIGINT},
+            </if>
+            <if test="lastConsumeDate != null">
+                #{lastConsumeDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstConsumeDate != null">
+                #{firstConsumeDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isLost != null">
+                #{isLost,jdbcType=INTEGER},
+            </if>
+            <if test="membershipLevelId != null">
+                #{membershipLevelId,jdbcType=BIGINT},
+            </if>
+            <if test="membershipLevelName != null">
+                #{membershipLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="memberAddType != null">
+                #{memberAddType,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <insert id="batchaddStoreMember" parameterType="List">
+        insert into m_member
+                MemberNum,
+                UserName,
+                Password,
+                Birthday,
+                Sex,
+                IdCard,
+                Mobile,
+                MembershipLevelId,
+                MembershipLevelName
+        values
+        <foreach collection="list" item="member" index="index" separator=",">
+            <if test="member.id != null">
+                #{member.id,jdbcType=BIGINT},
+            </if>
+            <if test="member.headImgUrl != null">
+                #{member.headImgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="member.memberNum != null">
+                #{member.memberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="member.userName != null">
+                #{member.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="member.password != null">
+                #{member.password,jdbcType=VARCHAR},
+            </if>
+            <if test="member.birthday != null">
+                #{member.birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="member.storeId != null">
+                #{member.storeId,jdbcType=BIGINT},
+            </if>
+            <if test="member.sex != null">
+                #{member.sex,jdbcType=INTEGER},
+            </if>
+            <if test="member.mobile != null">
+                #{member.mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="member.name != null">
+                #{member.name,jdbcType=VARCHAR},
+            </if>
+            <if test="member.wxOpenId != null">
+                #{member.wxOpenId,jdbcType=VARCHAR},
+            </if>
+            <if test="member.idCard != null">
+                #{member.idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="member.lableId != null">
+                #{member.lableId,jdbcType=VARCHAR},
+            </if>
+            <if test="member.lastArriveDate != null">
+                #{member.lastArriveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="member.arriveTimes != null">
+                #{member.arriveTimes,jdbcType=INTEGER},
+            </if>
+            <if test="member.totalConsumption != null">
+                #{member.totalConsumption,jdbcType=DECIMAL},
+            </if>
+            <if test="member.enterChannel != null">
+                #{member.enterChannel,jdbcType=INTEGER},
+            </if>
+            <if test="member.parentMemberNum != null">
+                #{member.parentMemberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="member.remark != null">
+                #{member.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="member.newOldStatus != null">
+                #{member.newOldStatus,jdbcType=INTEGER},
+            </if>
+            <if test="member.beauticianId != null">
+                #{member.beauticianId,jdbcType=BIGINT},
+            </if>
+            <if test="member.lastConsumeDate != null">
+                #{member.lastConsumeDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="member.firstConsumeDate != null">
+                #{member.firstConsumeDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="member.isLost != null">
+                #{member.isLost,jdbcType=INTEGER},
+            </if>
+            <if test="member.membershipLevelId != null">
+                #{member.membershipLevelId,jdbcType=BIGINT},
+            </if>
+            <if test="member.membershipLevelName != null">
+                #{member.membershipLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="member.memberAddType != null">
+                #{member.memberAddType,jdbcType=INTEGER},
+            </if>
+            <if test="member.status != null">
+                #{member.status,jdbcType=INTEGER},
+            </if>
+            <if test="member.createOperator != null">
+                #{member.createOperator,jdbcType=VARCHAR},
+            </if>
+            now()
+        </foreach>
+    </insert>
+
+    <update id="updateMemberUserToOld" parameterType="MemberUser">
+        update m_member set
+        NewOldStatus = 2,
+        <if test="modifyOperator != null">
+            ModifyOperator = #{modifyOperator},
+        </if>
+        DataChange_LastTime = now()
+        where MemberNum
+        in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.memberNum}
+        </foreach>
+    </update>
+
+    <update id="updateMemberUserToLost" parameterType="MemberUser">
+        update m_member set
+        IsLost = 2,
+        <if test="modifyOperator != null">
+            ModifyOperator = #{modifyOperator},
+        </if>
+        DataChange_LastTime = now()
+        where MemberNum
+        in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.memberNum}
+        </foreach>
+    </update>
+
+
+    <update id="updateMemberUser" parameterType="MemberUser">
+        update m_member
+        <set>
+            <if test="memberNum != null">
+                MemberNum = #{memberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="headImgUrl != null">
+                HeadImgUrl = #{headImgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                UserName = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                Password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                Birthday = #{birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="storeId != null">
+                StoreId = #{storeId,jdbcType=BIGINT},
+            </if>
+            <if test="sex != null">
+                Sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="mobile != null">
+                Mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                Name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="wxOpenId != null">
+                WxOpenId = #{wxOpenId,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                IdCard = #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="lableId != null">
+                LableId = #{lableId,jdbcType=VARCHAR},
+            </if>
+            <if test="lastArriveDate != null">
+                LastArriveDate = #{lastArriveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="arriveTimes != null">
+                ArriveTimes = #{arriveTimes,jdbcType=INTEGER},
+            </if>
+            <if test="totalConsumption != null">
+                TotalConsumption = #{totalConsumption,jdbcType=DECIMAL},
+            </if>
+            <if test="enterChannel != null">
+                EnterChannel = #{enterChannel,jdbcType=INTEGER},
+            </if>
+            <if test="parentMemberNum != null">
+                ParentMemberNum = #{parentMemberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="newOldStatus != null">
+                NewOldStatus = #{newOldStatus,jdbcType=INTEGER},
+            </if>
+            <if test="beauticianId != null">
+                BeauticianId = #{beauticianId,jdbcType=BIGINT},
+            </if>
+            <if test="lastConsumeDate != null">
+                LastConsumeDate = #{lastConsumeDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstConsumeDate != null">
+                FirstConsumeDate = #{firstConsumeDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isLost != null">
+                IsLost = #{isLost,jdbcType=INTEGER},
+            </if>
+            <if test="membershipLevelId != null">
+                MembershipLevelId = #{membershipLevelId,jdbcType=BIGINT},
+            </if>
+            <if test="membershipLevelName != null">
+                MembershipLevelName = #{membershipLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="memberAddType != null">
+                MemberAddType = #{memberAddType,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            DataChange_LastTime = now()
+        </set>
+        where 1=1
+        <if test="id != null">
+            and Id = #{id}
+        </if>
+        <if test="memberNum != null">
+            and MemberNum = #{memberNum}
+        </if>
+    </update>
+
+    <select id="CountMemberUserByDay" resultType="int" parameterType="Date">
+        SELECT
+        count(1)
+        FROM
+        m_member
+        where Status=1
+        and TO_DAYS(CreateTime) = TO_DAYS(#{date})
+        <if test="list != null">
+            and StoreId in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectMemberUserByMemberNum" resultType="MemberUser" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from m_member
+        where 1=1
+        <if test="memberNum != null and memberNum!=''">
+            and MemberNum = #{memberNum}
+        </if>
+    </select>
+
+    <select id="selectPasswordByNum" resultType="String" parameterType="String">
+        SELECT
+        Password
+        FROM
+        m_member
+        where Status=1
+        and MemberNum = #{memberNum}
+    </select>
+
+</mapper>

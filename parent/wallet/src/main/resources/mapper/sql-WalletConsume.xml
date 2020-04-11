@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="walletConsumeRecord">
+
+    <sql id="Base_Column_List">
+        ConsumeRecordId,
+        UserId,
+        CardNumber,
+        WalletId,
+        TransactionNo,
+        MerchantOrderNumber,
+        TransactionCode,
+        TransactionTime,
+        TransactionName,
+        AccountTypeId,
+        Amount,
+        AccountBalance,
+        TransactionType,
+        TransactionStatus,
+        FailureCause,
+        CreateTime,
+        PayTime,
+        Remarks,
+        Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+    <!-- order by CreateTime desc limit 1 -->
+    <select id="selectUserWalletConsumeRecord" resultType="WalletConsumeRecord" parameterType="WalletConsumeRecord">
+        select
+        <include refid="Base_Column_List"/>
+        from w_walletconsumerecord
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="consumeRecordId != null">AND ConsumeRecordId=#{consumeRecordId}</if>
+                <if test="userId != null">AND UserId=#{userId}</if>
+                <if test="cardNumber != null">AND CardNumber=#{cardNumber}</if>
+                <if test="walletId != null">AND WalletId=#{walletId}</if>
+                <if test="accountTypeId != null">AND AccountTypeId=#{accountTypeId}</if>
+                <if test="transactionNo != null">AND TransactionNo=#{transactionNo}</if>
+                <if test="merchantOrderNumber != null">AND MerchantOrderNumber=#{merchantOrderNumber}</if>
+                <if test="transactionCode != null">AND TransactionCode=#{transactionCode}</if>
+                <if test="transactionTime != null">AND TransactionTime=#{transactionTime}</if>
+                <if test="transactionName != null">AND TransactionName=#{transactionName}</if>
+                <if test="amount != null">AND Amount=#{amount}</if>
+                <if test="accountBalance != null">AND AccountBalance=#{accountBalance}</if>
+                <if test="transactionType != null">AND TransactionType=#{transactionType}</if>
+                <if test="transactionStatus != null">AND TransactionStatus=#{transactionStatus}</if>
+                <if test="transactionStatus == null">AND TransactionStatus=1</if>
+                <if test="failureCause != null">AND FailureCause=#{failureCause}</if>
+                <if test="payTime != null">AND PayTime=#{payTime}</if>
+                <if test="remarks != null">AND Remarks=#{remarks}</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <!--<if test="createTime != null"><![CDATA[AND CreateTime <= #{createTime}]]></if>-->
+                <if test="createTime != null">AND CreateTime =#{createTime}></if>
+                <if test="modifyOperator != null">AND ModifyOperator=#{modifyOperator}</if>
+                <!--<if test="ddataChange_LastTime != null"><![CDATA[AND DataChange_LastTime >= #{dataChangeLastTime}]]></if>-->
+                <if test="dataChangeLastTime != null">AND DataChange_LastTime =#{dataChangeLastTime}</if>
+            </trim>
+        </where>
+    </select>
+
+    <select id="selectExpenseCalendarList" resultType="WalletConsumeRecord" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from w_walletconsumerecord
+        where 1=1
+        <if test=" cardNumber!= null">
+            and CardNumber =#{cardNumber}
+        </if>
+    </select>
+
+    <select id="selectExpenseCalendarById" parameterType="Long" resultType="WalletConsumeRecord">
+        select
+        <include refid="Base_Column_List"/>
+        from w_walletconsumerecord
+        where
+        UserId = #{userId}
+    </select>
+
+    <update id="deleteExpenseRecordById" parameterType="Long">
+        update w_walletconsumerecord set Status = 0,ModifyOperator = #{modifyOperator},DataChange_LastTime = now()
+        where ConsumeRecordId = #{consumeRecordId}
+    </update>
+
+
+    <select id="selectListByUserStatistics" resultType="WalletConsumeRecordVO">
+        SELECT
+            sum(u1.Amount) ,
+            u2.AccountBalance
+        FROM
+            w_walletconsumerecord u1,
+            (
+                SELECT
+                    AccountBalance,
+                    userId
+                FROM
+                    w_walletconsumerecord
+                WHERE
+                        ConsumeRecordId IN (
+                        SELECT
+                            MAX(ConsumeRecordId)
+                        FROM
+                            w_walletconsumerecord
+                    )
+            ) u2
+        WHERE
+            u1.UserId = u2.UserId
+    </select>
+
+</mapper>

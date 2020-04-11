@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="merchantsource" >
+
+  <sql id="Base_Column_List" >
+    MerchantSourceId, MerchantSourceName, Status, CreateOperator, CreateTime, ModifyOperator, 
+    DataChange_LastTime
+  </sql>
+  <select id="selectMerchantSourceList" resultType="Merchantsource">
+    select
+    <include refid="Base_Column_List" />
+    from p_merchantsource
+  </select>
+
+  <!--<insert id="insertSelective" parameterType="Merchantsource" >
+    insert into p_merchantsource
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="merchantSourceId != null" >
+        MerchantSourceId,
+      </if>
+      <if test="merchantSourceName != null" >
+        MerchantSourceName,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="merchantSourceId != null" >
+        #{merchantSourceId,jdbcType=BIGINT},
+      </if>
+      <if test="merchantSourceName != null" >
+        #{merchantSourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateByExampleSelective" parameterType="MerchantSource" >
+    update p_merchantsource
+    <set >
+      <if test="record.merchantSourceId != null" >
+        MerchantSourceId = #{record.merchantSourceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.merchantSourceName != null" >
+        MerchantSourceName = #{record.merchantSourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.createOperator != null" >
+        CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyOperator != null" >
+        ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataChangeLastTime != null" >
+        DataChange_LastTime = #{record.dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+  </update>
+-->
+
+</mapper>

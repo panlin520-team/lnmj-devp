@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="message" >
+  <resultMap id="MessageMap" type="com.lnmj.common.BaseEntity.Message" >
+    <id column="MessageId" property="messageId" jdbcType="BIGINT" />
+    <result column="MessageType" property="messageType" jdbcType="INTEGER" />
+    <result column="Mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="TemplateId" property="templateId" jdbcType="VARCHAR" />
+    <result column="Datas" property="datas" jdbcType="VARCHAR" />
+    <result column="Template" property="template" jdbcType="VARCHAR" />
+    <result column="Message" property="message" jdbcType="VARCHAR" />
+    <result column="StatusCode" property="statusCode" jdbcType="VARCHAR" />
+    <result column="TemplateSMS" property="templateSMS" jdbcType="VARCHAR" />
+    <result column="DateCreated" property="dateCreated" jdbcType="TIMESTAMP" />
+    <result column="SmsMessageSId" property="smsMessageSId" jdbcType="VARCHAR" />
+    <result column="StatusMsg" property="statusMsg" jdbcType="VARCHAR" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_message_column" >
+    MessageId, MessageType, Mobile, TemplateId,Datas,Template,
+    Message, StatusCode, TemplateSMS,DateCreated,SmsMessageSId,StatusMsg,Remark,
+    Status, CreateOperator,CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectMessageList" resultMap="MessageMap" parameterType="Message" >
+    select
+    <include refid="base_message_column" />
+    from m_message
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="messageId != null">
+          AND MessageId = #{messageId,jdbcType=BIGINT}
+        </if>
+        <if test="messageType != null" >
+          AND MessageType = #{messageType,jdbcType=INTEGER}
+        </if>
+        <if test="mobile != null" >
+          AND Mobile like CONCAT('%',#{mobile,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="templateId != null" >
+          AND TemplateId = #{templateId,jdbcType=VARCHAR}
+        </if>
+        <if test="datas != null" >
+          AND Datas = #{datas,jdbcType=VARCHAR}
+        </if>
+        <if test="template != null" >
+          AND Template = #{template,jdbcType=VARCHAR}
+        </if>
+        <if test="message != null" >
+          AND Message = #{message,jdbcType=VARCHAR}
+        </if>
+        <if test="statusCode != null" >
+          AND StatusCode = #{statusCode,jdbcType=VARCHAR}
+        </if>
+        <if test="templateSMS != null" >
+          AND TemplateSMS = #{templateSMS,jdbcType=VARCHAR}
+        </if>
+        <if test="dateCreated != null" >
+          AND TO_DAYS(DateCreated) = TO_DAYS(CONCAT('',#{dateCreated,jdbcType=TIMESTAMP},''))
+        </if>
+        <if test="smsMessageSId != null" >
+          AND SmsMessageSId = #{smsMessageSId,jdbcType=VARCHAR}
+        </if>
+        <if test="statusMsg != null" >
+          AND StatusMsg = #{statusMsg,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null" >
+          AND Remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null" >
+          AND Status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null" >
+          AND Status = 1
+        </if>
+        <if test="createOperator != null" >
+          AND CreateOperator = #{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null" >
+          AND CreateTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="modifyOperator != null" >
+          AND ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="dataChangeLastTime != null" >
+          AND DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+  <insert id="insertMessage" parameterType="Message" useGeneratedKeys="true" keyProperty="messageId" >
+    insert into m_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="messageId != null" >
+        MessageId,
+      </if>
+      <if test="messageType != null" >
+        MessageType,
+      </if>
+      <if test="mobile != null" >
+        Mobile,
+      </if>
+      <if test="templateId != null" >
+        TemplateId,
+      </if>
+      <if test="datas != null" >
+        Datas,
+      </if>
+      <if test="template != null" >
+        Template,
+      </if>
+      <if test="message != null" >
+        Message,
+      </if>
+      <if test="statusCode != null" >
+        StatusCode,
+      </if>
+      <if test="templateSMS != null" >
+        TemplateSMS,
+      </if>
+      <if test="dateCreated != null" >
+        DateCreated,
+      </if>
+      <if test="smsMessageSId != null" >
+        SmsMessageSId,
+      </if>
+      <if test="statusMsg != null" >
+        StatusMsg,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="messageId != null" >
+        #{messageId,jdbcType=BIGINT},
+      </if>
+      <if test="messageType != null" >
+        #{messageType,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null" >
+        #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="datas != null" >
+        #{datas,jdbcType=VARCHAR},
+      </if>
+      <if test="template != null" >
+        #{template,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="statusCode != null" >
+        #{statusCode,jdbcType=VARCHAR},
+      </if>
+      <if test="templateSMS != null" >
+        #{templateSMS,jdbcType=VARCHAR},
+      </if>
+      <if test="dateCreated != null" >
+        #{dateCreated,jdbcType=TIMESTAMP},
+      </if>
+      <if test="smsMessageSId != null" >
+        #{smsMessageSId,jdbcType=VARCHAR},
+      </if>
+      <if test="statusMsg != null" >
+        #{statusMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

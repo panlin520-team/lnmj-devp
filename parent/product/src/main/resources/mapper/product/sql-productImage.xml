@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productImage">
+
+    <sql id="Base_Column_List">
+        ProductImageId,
+        ImageType,
+        ImageUrl,
+        ImageHeight,
+        ImageWidth,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+
+    <insert id="insertProductImage" parameterType="com.lnmj.product.entity.ProductImage" useGeneratedKeys="true"
+            keyProperty="productImageId">
+        insert into p_productimage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productImageId != null">
+                ProductImageId,
+            </if>
+            <if test="imageType != null">
+                ImageType,
+            </if>
+            <if test="imageUrl != null">
+                ImageUrl,
+            </if>
+            <if test="imageHeight != null">
+                ImageHeight,
+            </if>
+            <if test="imageWidth != null">
+                ImageWidth,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                now(),
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                now(),
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productImageId != null">
+                #{productImageId},
+            </if>
+            <if test="imageType != null">
+                #{imageType},
+            </if>
+            <if test="imageUrl != null">
+                #{imageUrl},
+            </if>
+            <if test="imageHeight != null">
+                #{imageHeight},
+            </if>
+            <if test="imageWidth != null">
+                #{imageWidth},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectProductImageById" resultType="ProductImage" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from p_productimage
+        where
+        ProductImageId in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+        and ImageType = #{imageType}
+    </select>
+
+    <select id="selectProductActivityImageByIds" resultType="ProductActivityImage" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from p_productimage
+        where
+        ProductImageId in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+        and ImageType = #{imageType}
+    </select>
+
+</mapper>

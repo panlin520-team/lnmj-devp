@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="statistics" >
+  <resultMap id="Statistic" type="com.lnmj.data.entity.Statistic" >
+    <id column="StatisticID" property="statisticID" jdbcType="BIGINT" />
+    <result column="SalesmanID" property="salesmanID" jdbcType="BIGINT" />
+    <result column="StatisticDateStart" property="statisticDateStart" jdbcType="TIMESTAMP" />
+    <result column="StatisticDateEnd" property="statisticDateEnd" jdbcType="TIMESTAMP" />
+    <result column="LadderDetailed" property="ladderDetailed" jdbcType="VARCHAR" />
+    <result column="NumberPerformance" property="numberPerformance" jdbcType="DECIMAL" />
+    <result column="AmountPerformance" property="amountPerformance" jdbcType="DECIMAL" />
+    <result column="TakePercentage" property="takePercentage" jdbcType="DECIMAL" />
+    <result column="Score" property="score" jdbcType="DECIMAL" />
+    <result column="BaseSalary" property="baseSalary" jdbcType="DECIMAL" />
+    <result column="StoreId" property="storeId" jdbcType="BIGINT" />
+    <result column="Salary" property="salary" jdbcType="DECIMAL" />
+    <result column="SalesmanConfirm" property="salesmanConfirm" jdbcType="TINYINT" />
+    <result column="ManagementConfirm" property="managementConfirm" jdbcType="TINYINT" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    StatisticID, SalesmanID, StatisticDateStart,StatisticDateEnd, LadderDetailed,NumberPerformance, AmountPerformance,
+    TakePercentage,Score, BaseSalary,StoreId, Salary, SalesmanConfirm, ManagementConfirm,
+    Status, CreateOperator, CreateTime,ModifyOperator, DataChange_LastTime
+  </sql>
+  <select id="selectStatisticsList" resultType="Statistic">
+    select 
+    <include refid="Base_Column_List" />
+    from a_statistic
+  </select>
+
+  <select id="selectStatisticsBySalesman" resultType="Statistic" parameterType="Map" >
+    select
+    <include refid="Base_Column_List" />
+    from a_statistic
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="salesmanID != null" >
+         and SalesmanID = #{salesmanID}
+        </if>
+        <if test="start != null" >
+         and StatisticDateStart &gt;= #{start}
+        </if>
+        <if test="end != null" >
+         and StatisticDateEnd &lt;= #{end}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+
+  <insert id="addStatistics" parameterType="Statistic" keyProperty="statisticID" useGeneratedKeys="true">
+    insert into a_statistic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="statisticID != null" >
+        StatisticID,
+      </if>
+      <if test="salesmanID != null" >
+        SalesmanID,
+      </if>
+      <if test="statisticDateStart != null" >
+        StatisticDateStart,
+      </if>
+      <if test="statisticDateEnd != null" >
+        StatisticDateEnd,
+      </if>
+      <if test="ladderDetailed != null" >
+        LadderDetailed,
+      </if>
+      <if test="numberPerformance != null" >
+        NumberPerformance,
+      </if>
+      <if test="amountPerformance != null" >
+        AmountPerformance,
+      </if>
+      <if test="takePercentage != null" >
+        TakePercentage,
+      </if>
+      <if test="score != null" >
+        Score,
+      </if>
+      <if test="baseSalary != null" >
+        BaseSalary,
+      </if>
+      <if test="storeId != null" >
+        StoreId,
+      </if>
+      <if test="salary != null" >
+        Salary,
+      </if>
+      <if test="salesmanConfirm != null" >
+        SalesmanConfirm,
+      </if>
+      <if test="managementConfirm != null" >
+        ManagementConfirm,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="statisticID != null" >
+        #{statisticID,jdbcType=BIGINT},
+      </if>
+      <if test="salesmanID != null" >
+        #{salesmanID,jdbcType=BIGINT},
+      </if>
+      <if test="statisticDateStart != null" >
+        #{statisticDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statisticDateEnd != null" >
+        #{statisticDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ladderDetailed != null" >
+        #{ladderDetailed,jdbcType=VARCHAR},
+      </if>
+      <if test="numberPerformance != null" >
+        #{numberPerformance,jdbcType=DECIMAL},
+      </if>
+      <if test="amountPerformance != null" >
+        #{amountPerformance,jdbcType=DECIMAL},
+      </if>
+      <if test="takePercentage != null" >
+        #{takePercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=DECIMAL},
+      </if>
+      <if test="baseSalary != null" >
+        #{baseSalary,jdbcType=DECIMAL},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="salary != null" >
+        #{salary,jdbcType=DECIMAL},
+      </if>
+      <if test="salesmanConfirm != null" >
+        #{salesmanConfirm,jdbcType=TINYINT},
+      </if>
+      <if test="managementConfirm != null" >
+        #{managementConfirm,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateStatistics" parameterType="Statistic" >
+    update a_statistic
+    <set >
+      <if test="salesmanID != null" >
+        SalesmanID = #{salesmanID,jdbcType=BIGINT},
+      </if>
+      <if test="statisticDateStart != null" >
+        StatisticDateStart = #{statisticDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statisticDateEnd != null" >
+        StatisticDateEnd = #{statisticDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ladderDetailed != null" >
+        LadderDetailed = #{ladderDetailed,jdbcType=VARCHAR},
+      </if>
+      <if test="numberPerformance != null" >
+        NumberPerformance = #{numberPerformance,jdbcType=DECIMAL},
+      </if>
+      <if test="amountPerformance != null" >
+        AmountPerformance = #{amountPerformance,jdbcType=DECIMAL},
+      </if>
+      <if test="score != null" >
+        Score = #{score,jdbcType=DECIMAL},
+      </if>
+      <if test="baseSalary != null" >
+        BaseSalary = #{baseSalary,jdbcType=DECIMAL},
+      </if>
+      <if test="storeId != null" >
+        StoreId = #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="salary != null" >
+        Salary = #{salary,jdbcType=DECIMAL},
+      </if>
+      <if test="salesmanConfirm != null" >
+        SalesmanConfirm = #{salesmanConfirm,jdbcType=TINYINT},
+      </if>
+      <if test="managementConfirm != null" >
+        ManagementConfirm = #{managementConfirm,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where StatisticID = #{statisticID,jdbcType=BIGINT}
+  </update>
+</mapper>

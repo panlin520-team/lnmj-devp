@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="makerProduct" >
+  <!-- 创客产品详情 -->
+  <resultMap id="MakerProductDetailMap" type="com.lnmj.system.entity.MakerProductDetail" >
+    <id column="MakerProductDetailId" property="makerProductDetailId" jdbcType="BIGINT" />
+    <result column="ProductCode" property="productCode" jdbcType="VARCHAR" />
+    <result column="Product" property="product" jdbcType="VARCHAR" />
+    <result column="ProductName" property="productName" jdbcType="VARCHAR" />
+    <result column="UseLimit" property="useLimit" jdbcType="VARCHAR" />
+    <result column="UseTotalTimes" property="useTotalTimes" jdbcType="INTEGER" />
+    <result column="UseTime" property="useTime" jdbcType="INTEGER" />
+    <result column="EfficientCondition" property="efficientCondition" jdbcType="INTEGER" />
+    <result column="EfficientDate" property="efficientDate" jdbcType="TIMESTAMP" />
+    <result column="Link" property="link" jdbcType="VARCHAR" />
+    <result column="TotalSales" property="totalSales" jdbcType="DECIMAL" />
+    <result column="TotalCommission" property="totalCommission" jdbcType="DECIMAL" />
+    <result column="ForwardTitle" property="forwardTitle" jdbcType="VARCHAR" />
+    <result column="ForwardDescribe" property="forwardDescribe" jdbcType="VARCHAR" />
+    <result column="ImageType" property="imageType" jdbcType="VARCHAR" />
+    <result column="ImageUrl" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="ImageHeight" property="imageHeight" jdbcType="INTEGER" />
+    <result column="ImageWidth" property="imageWidth" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_maker_product_detail_column" >
+    MakerProductDetailId, ProductCode, Product, ProductName, UseLimit, UseTotalTimes,
+    UseTime, EfficientCondition, EfficientDate, Link, TotalSales, TotalCommission, ForwardTitle,
+    ForwardDescribe, ImageType, ImageUrl, ImageHeight, ImageWidth, Status, CreateOperator,
+    CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectMakerProductDetail" resultMap="MakerProductDetailMap" parameterType="MakerProductDetail" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_maker_product_detail_column" />
+    from m_makerproductdetail where Status = 1
+    order by MakerProductDetailId
+  </select>
+
+  <select id="selectMakerProductDetailByCondition" resultMap="MakerProductDetailMap" parameterType="MakerProductDetail" >
+    select
+    <include refid="base_maker_product_detail_column" />
+    from m_makerproductdetail
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="makerProductDetailId != null" >
+          AND  MakerProductDetailId = #{makerProductDetailId,jdbcType=BIGINT}
+        </if>
+        <if test="productCode != null" >
+          AND  ProductCode = #{productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="product != null" >
+          AND Product = #{product,jdbcType=VARCHAR}
+        </if>
+        <if test="productName != null" >
+          AND  ProductName = #{productName,jdbcType=VARCHAR}
+        </if>
+        <if test="useLimit != null" >
+          AND UseLimit = #{useLimit,jdbcType=VARCHAR}
+        </if>
+        <if test="useTotalTimes != null" >
+          AND UseTotalTimes = #{useTotalTimes,jdbcType=INTEGER}
+        </if>
+        <if test="useTime != null" >
+          AND  UseTime = #{useTime,jdbcType=INTEGER}
+        </if>
+        <if test="efficientCondition != null" >
+          AND  EfficientCondition = #{efficientCondition,jdbcType=INTEGER}
+        </if>
+        <if test="efficientDate != null" >
+          AND  EfficientDate = #{efficientDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="link != null" >
+          AND  Link = #{link,jdbcType=VARCHAR}
+        </if>
+        <if test="totalSales != null" >
+          AND  TotalSales = #{totalSales,jdbcType=DECIMAL}
+        </if>
+        <if test="totalCommission != null" >
+          AND  TotalCommission = #{totalCommission,jdbcType=DECIMAL}
+        </if>
+        <if test="forwardTitle != null" >
+          AND  ForwardTitle = #{forwardTitle,jdbcType=VARCHAR}
+        </if>
+        <if test="forwardDescribe != null" >
+          AND  ForwardDescribe = #{forwardDescribe,jdbcType=VARCHAR}
+        </if>
+        <if test="imageType != null" >
+          AND ImageType = #{imageType,jdbcType=VARCHAR}
+        </if>
+        <if test="imageUrl != null" >
+          AND ImageUrl = #{imageUrl,jdbcType=VARCHAR}
+        </if>
+        <if test="imageHeight != null" >
+          AND ImageHeight = #{imageHeight,jdbcType=INTEGER}
+        </if>
+        <if test="imageWidth != null" >
+          AND ImageWidth = #{imageWidth,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+          AND Status=#{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null">
+          AND Status=1
+        </if>
+        <if test="createOperator != null">
+          AND CreateOperator=#{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+          AND CreateTime=#{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="modifyOperator != null">
+          AND ModifyOperator=#{modifyOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="dataChangeLastTime != null">
+          AND DataChange_LastTime=#{dataChangeLastTime,jdbcType=TIMESTAMP}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+  <insert id="insertMakerProductDetail" parameterType="MakerProductDetail" keyProperty="makerProductDetailId" useGeneratedKeys="true" >
+    insert into m_makerproductdetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="makerProductDetailId != null" >
+        MakerProductDetailId,
+      </if>
+      <if test="productCode != null" >
+        ProductCode,
+      </if>
+      <if test="product != null" >
+        Product,
+      </if>
+      <if test="productName != null" >
+        ProductName,
+      </if>
+      <if test="useLimit != null" >
+        UseLimit,
+      </if>
+      <if test="useTotalTimes != null" >
+        UseTotalTimes,
+      </if>
+      <if test="useTime != null" >
+        UseTime,
+      </if>
+      <if test="efficientCondition != null" >
+        EfficientCondition,
+      </if>
+      <if test="efficientDate != null" >
+        EfficientDate,
+      </if>
+      <if test="link != null" >
+        Link,
+      </if>
+      <if test="totalSales != null" >
+        TotalSales,
+      </if>
+      <if test="totalCommission != null" >
+        TotalCommission,
+      </if>
+      <if test="forwardTitle != null" >
+        ForwardTitle,
+      </if>
+      <if test="forwardDescribe != null" >
+        ForwardDescribe,
+      </if>
+      <if test="imageType != null" >
+        ImageType,
+      </if>
+      <if test="imageUrl != null" >
+        ImageUrl,
+      </if>
+      <if test="imageHeight != null" >
+        ImageHeight,
+      </if>
+      <if test="imageWidth != null" >
+        ImageWidth,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="makerProductDetailId != null" >
+        #{makerProductDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="product != null" >
+        #{product,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="useLimit != null" >
+        #{useLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="useTotalTimes != null" >
+        #{useTotalTimes,jdbcType=INTEGER},
+      </if>
+      <if test="useTime != null" >
+        #{useTime,jdbcType=INTEGER},
+      </if>
+      <if test="efficientCondition != null" >
+        #{efficientCondition,jdbcType=INTEGER},
+      </if>
+      <if test="efficientDate != null" >
+        #{efficientDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="link != null" >
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="totalSales != null" >
+        #{totalSales,jdbcType=DECIMAL},
+      </if>
+      <if test="totalCommission != null" >
+        #{totalCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="forwardTitle != null" >
+        #{forwardTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="forwardDescribe != null" >
+        #{forwardDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="imageType != null" >
+        #{imageType,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageHeight != null" >
+        #{imageHeight,jdbcType=INTEGER},
+      </if>
+      <if test="imageWidth != null" >
+        #{imageWidth,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateMakerProductDetail" parameterType="MakerProductDetail" >
+    update m_makerproductdetail
+    <set >
+      <trim prefix="" prefixOverrides=",">
+        <if test="productCode != null" >
+          ProductCode = #{productCode,jdbcType=VARCHAR},
+        </if>
+        <if test="product != null" >
+          Product = #{product,jdbcType=VARCHAR},
+        </if>
+        <if test="productName != null" >
+          ProductName = #{productName,jdbcType=VARCHAR},
+        </if>
+        <if test="useLimit != null" >
+          UseLimit = #{useLimit,jdbcType=VARCHAR},
+        </if>
+        <if test="useTotalTimes != null" >
+          UseTotalTimes = #{useTotalTimes,jdbcType=INTEGER},
+        </if>
+        <if test="useTime != null" >
+          UseTime = #{useTime,jdbcType=INTEGER},
+        </if>
+        <if test="efficientCondition != null" >
+          EfficientCondition = #{efficientCondition,jdbcType=INTEGER},
+        </if>
+        <if test="efficientDate != null" >
+          EfficientDate = #{efficientDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="link != null" >
+          Link = #{link,jdbcType=VARCHAR},
+        </if>
+        <if test="totalSales != null" >
+          TotalSales = #{totalSales,jdbcType=DECIMAL},
+        </if>
+        <if test="totalCommission != null" >
+          TotalCommission = #{totalCommission,jdbcType=DECIMAL},
+        </if>
+        <if test="forwardTitle != null" >
+          ForwardTitle = #{forwardTitle,jdbcType=VARCHAR},
+        </if>
+        <if test="forwardDescribe != null" >
+          ForwardDescribe = #{forwardDescribe,jdbcType=VARCHAR},
+        </if>
+        <if test="imageType != null" >
+          ImageType = #{imageType,jdbcType=VARCHAR},
+        </if>
+        <if test="imageUrl != null" >
+          ImageUrl = #{imageUrl,jdbcType=VARCHAR},
+        </if>
+        <if test="imageHeight != null" >
+          ImageHeight = #{imageHeight,jdbcType=INTEGER},
+        </if>
+        <if test="imageWidth != null" >
+          ImageWidth = #{imageWidth,jdbcType=INTEGER},
+        </if>
+        <if test="status != null" >
+          Status = #{status,jdbcType=INTEGER},
+        </if>
+        <if test="createOperator != null" >
+          CreateOperator = #{createOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="createTime != null" >
+          CreateTime = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="modifyOperator != null" >
+          ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="dataChangeLastTime != null" >
+          DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </set>
+    where MakerProductDetailId = #{makerProductDetailId,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteMakerProductDetail" parameterType="MakerProductDetail" >
+    update m_makerproductdetail
+    set Status = 0,
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+    where MakerProductDetailId = #{makerProductDetailId,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteMakerProductDetailByCode" parameterType="MakerProductDetail" >
+    update m_makerproductdetail
+    set Status = 0,
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+    where ProductCode = #{productCode,jdbcType=VARCHAR}
+  </update>
+
+  <!-- 创客产品 -->
+  <resultMap id="MakerProductMap" type="com.lnmj.system.entity.MakerProduct" >
+    <id column="MakerProductId" property="makerProductId" jdbcType="BIGINT" />
+    <result column="MakerType" property="makerType" jdbcType="INTEGER" />
+    <result column="MakerProduct" property="makerProduct" jdbcType="VARCHAR" />
+    <result column="ProductCode" property="productCode" jdbcType="VARCHAR" />
+    <result column="OriginalPrice" property="originalPrice" jdbcType="DECIMAL" />
+    <result column="RetailPrice" property="retailPrice" jdbcType="DECIMAL" />
+    <result column="Discount" property="discount" jdbcType="DECIMAL" />
+    <result column="Integral" property="integral" jdbcType="VARCHAR" />
+    <result column="ImageType" property="imageType" jdbcType="VARCHAR" />
+    <result column="ImageUrl" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="ImageHeight" property="imageHeight" jdbcType="INTEGER" />
+    <result column="ImageWidth" property="imageWidth" jdbcType="INTEGER" />
+    <result column="BarredPayMethod" property="barredPayMethod" jdbcType="VARCHAR" />
+    <result column="StoreId" property="storeId" jdbcType="BIGINT" />
+    <result column="StoreName" property="storeName" jdbcType="VARCHAR" />
+    <result column="MoreContent" property="moreContent" jdbcType="VARCHAR" />
+    <result column="StartTime" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="EndTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="ProductStatus" property="productStatus" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_maker_product_column" >
+    MakerProductId, MakerType, MakerProduct, ProductCode, OriginalPrice, RetailPrice, 
+    Discount, Integral, ImageType, ImageUrl, ImageHeight, ImageWidth, BarredPayMethod, 
+    StoreId, StoreName, MoreContent, StartTime, EndTime, ProductStatus, Status, CreateOperator, 
+    CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+  <select id="selectMakerProductList" resultMap="MakerProductMap" parameterType="MakerProduct" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_maker_product_column" />
+    from m_makerproduct where Status = 1
+    order by MakerProductId
+  </select>
+
+  <select id="selectMakerProductByCondition" resultMap="MakerProductMap" parameterType="MakerProduct" >
+    select
+    <include refid="base_maker_product_column" />
+    from m_makerproduct
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="makerProductId != null" >
+          AND  MakerProductId = #{makerProductId,jdbcType=BIGINT}
+        </if>
+        <if test="makerType != null" >
+          AND  MakerType = #{makerType,jdbcType=INTEGER}
+        </if>
+        <if test="makerProduct != null" >
+          AND  MakerProduct = #{makerProduct,jdbcType=VARCHAR}
+        </if>
+        <if test="productCode != null" >
+          AND ProductCode = #{productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="originalPrice != null" >
+          AND OriginalPrice = #{originalPrice,jdbcType=DECIMAL}
+        </if>
+        <if test="retailPrice != null" >
+          AND  RetailPrice = #{retailPrice,jdbcType=DECIMAL}
+        </if>
+        <if test="discount != null" >
+          AND Discount = #{discount,jdbcType=DECIMAL}
+        </if>
+        <if test="integral != null" >
+          AND Integral = #{integral,jdbcType=VARCHAR}
+        </if>
+        <if test="imageType != null" >
+          AND ImageType = #{imageType,jdbcType=VARCHAR}
+        </if>
+        <if test="imageUrl != null" >
+          AND ImageUrl = #{imageUrl,jdbcType=VARCHAR}
+        </if>
+        <if test="imageHeight != null" >
+          AND  ImageHeight = #{imageHeight,jdbcType=INTEGER}
+        </if>
+        <if test="imageWidth != null" >
+          AND  ImageWidth = #{imageWidth,jdbcType=INTEGER}
+        </if>
+        <if test="barredPayMethod != null" >
+          AND BarredPayMethod = #{barredPayMethod,jdbcType=VARCHAR}
+        </if>
+        <if test="storeId != null" >
+          AND StoreId = #{storeId,jdbcType=BIGINT}
+        </if>
+        <if test="storeName != null" >
+          AND  StoreName = #{storeName,jdbcType=VARCHAR}
+        </if>
+        <if test="moreContent != null" >
+          AND  MoreContent = #{moreContent,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime != null" >
+          AND  StartTime = #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null" >
+          AND EndTime = #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="productStatus != null" >
+          AND ProductStatus = #{productStatus,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+          AND Status=#{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null">
+          AND Status=1
+        </if>
+        <if test="createOperator != null">
+          AND CreateOperator=#{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+          AND CreateTime=#{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="modifyOperator != null">
+          AND ModifyOperator=#{modifyOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="dataChangeLastTime != null">
+          AND DataChange_LastTime=#{dataChangeLastTime,jdbcType=TIMESTAMP}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+  <insert id="insertMakerProduct" parameterType="MakerProduct" keyProperty="makerProductId" useGeneratedKeys="true">
+    insert into m_makerproduct
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="makerProductId != null" >
+        MakerProductId,
+      </if>
+      <if test="makerType != null" >
+        MakerType,
+      </if>
+      <if test="makerProduct != null" >
+        MakerProduct,
+      </if>
+      <if test="productCode != null" >
+        ProductCode,
+      </if>
+      <if test="originalPrice != null" >
+        OriginalPrice,
+      </if>
+      <if test="retailPrice != null" >
+        RetailPrice,
+      </if>
+      <if test="discount != null" >
+        Discount,
+      </if>
+      <if test="integral != null" >
+        Integral,
+      </if>
+      <if test="imageType != null" >
+        ImageType,
+      </if>
+      <if test="imageUrl != null" >
+        ImageUrl,
+      </if>
+      <if test="imageHeight != null" >
+        ImageHeight,
+      </if>
+      <if test="imageWidth != null" >
+        ImageWidth,
+      </if>
+      <if test="barredPayMethod != null" >
+        BarredPayMethod,
+      </if>
+      <if test="storeId != null" >
+        StoreId,
+      </if>
+      <if test="storeName != null" >
+        StoreName,
+      </if>
+      <if test="moreContent != null" >
+        MoreContent,
+      </if>
+      <if test="startTime != null" >
+        StartTime,
+      </if>
+      <if test="endTime != null" >
+        EndTime,
+      </if>
+      <if test="productStatus != null" >
+        ProductStatus,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="makerProductId != null" >
+        #{makerProductId,jdbcType=BIGINT},
+      </if>
+      <if test="makerType != null" >
+        #{makerType,jdbcType=INTEGER},
+      </if>
+      <if test="makerProduct != null" >
+        #{makerProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPrice != null" >
+        #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="retailPrice != null" >
+        #{retailPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="integral != null" >
+        #{integral,jdbcType=VARCHAR},
+      </if>
+      <if test="imageType != null" >
+        #{imageType,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageHeight != null" >
+        #{imageHeight,jdbcType=INTEGER},
+      </if>
+      <if test="imageWidth != null" >
+        #{imageWidth,jdbcType=INTEGER},
+      </if>
+      <if test="barredPayMethod != null" >
+        #{barredPayMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="moreContent != null" >
+        #{moreContent,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productStatus != null" >
+        #{productStatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateMakerProduct" parameterType="MakerProduct" >
+    update m_makerproduct
+    <set >
+      <trim prefix="" prefixOverrides=",">
+        <if test="makerType != null" >
+          MakerType = #{makerType,jdbcType=INTEGER},
+        </if>
+        <if test="makerProduct != null" >
+          MakerProduct = #{makerProduct,jdbcType=VARCHAR},
+        </if>
+        <if test="productCode != null" >
+          ProductCode = #{productCode,jdbcType=VARCHAR},
+        </if>
+        <if test="originalPrice != null" >
+          OriginalPrice = #{originalPrice,jdbcType=DECIMAL},
+        </if>
+        <if test="retailPrice != null" >
+          RetailPrice = #{retailPrice,jdbcType=DECIMAL},
+        </if>
+        <if test="discount != null" >
+          Discount = #{discount,jdbcType=DECIMAL},
+        </if>
+        <if test="integral != null" >
+          Integral = #{integral,jdbcType=VARCHAR},
+        </if>
+        <if test="imageType != null" >
+          ImageType = #{imageType,jdbcType=VARCHAR},
+        </if>
+        <if test="imageUrl != null" >
+          ImageUrl = #{imageUrl,jdbcType=VARCHAR},
+        </if>
+        <if test="imageHeight != null" >
+          ImageHeight = #{imageHeight,jdbcType=INTEGER},
+        </if>
+        <if test="imageWidth != null" >
+          ImageWidth = #{imageWidth,jdbcType=INTEGER},
+        </if>
+        <if test="barredPayMethod != null" >
+          BarredPayMethod = #{barredPayMethod,jdbcType=VARCHAR},
+        </if>
+        <if test="storeId != null" >
+          StoreId = #{storeId,jdbcType=BIGINT},
+        </if>
+        <if test="storeName != null" >
+          StoreName = #{storeName,jdbcType=VARCHAR},
+        </if>
+        <if test="moreContent != null" >
+          MoreContent = #{moreContent,jdbcType=VARCHAR},
+        </if>
+        <if test="startTime != null" >
+          StartTime = #{startTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="endTime != null" >
+          EndTime = #{endTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="productStatus != null" >
+          ProductStatus = #{productStatus,jdbcType=INTEGER},
+        </if>
+        <if test="status != null" >
+          Status = #{status,jdbcType=INTEGER},
+        </if>
+        <if test="createOperator != null" >
+          CreateOperator = #{createOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="createTime != null" >
+          CreateTime = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="modifyOperator != null" >
+          ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="dataChangeLastTime != null" >
+          DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </set>
+    where MakerProductId = #{makerProductId,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteMakerProduct" parameterType="MakerProduct" >
+    update m_makerproduct
+    set Status = 0,
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+    where MakerProductId = #{makerProductId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

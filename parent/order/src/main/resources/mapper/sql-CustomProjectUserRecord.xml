@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="customProjectUserRecord" >
+
+
+  <sql id="Base_Column_List" >
+    RecordId, CustomProjectUserId, ProductCode, ProductName, LinkName, LinkMobile, UseDate, 
+    BookingTime, BookingBeauticianIds, BookingBeauticianName, PerformanceRatio, StoreId, 
+    StoreName, RecordStatus,OutStorageIdQiTa,OutStorageIdXiaoShou, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <insert id="addUseRecord" parameterType="CustomProjectUserRecord" useGeneratedKeys="true" keyProperty="recordId">
+    insert into custom_project_user_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        RecordId,
+      </if>
+      <if test="customProjectUserId != null" >
+        CustomProjectUserId,
+      </if>
+      <if test="productCode != null" >
+        ProductCode,
+      </if>
+      <if test="productName != null" >
+        ProductName,
+      </if>
+      <if test="linkName != null" >
+        LinkName,
+      </if>
+      <if test="linkMobile != null" >
+        LinkMobile,
+      </if>
+      <if test="useDate != null" >
+        UseDate,
+      </if>
+      <if test="bookingTime != null" >
+        BookingTime,
+      </if>
+      <if test="bookingBeauticianIds != null" >
+        BookingBeauticianIds,
+      </if>
+      <if test="bookingBeauticianName != null" >
+        BookingBeauticianName,
+      </if>
+      <if test="performanceRatio != null" >
+        PerformanceRatio,
+      </if>
+      <if test="storeId != null" >
+        StoreId,
+      </if>
+      <if test="storeName != null" >
+        StoreName,
+      </if>
+      <if test="recordStatus != null" >
+        RecordStatus,
+      </if>
+      <if test="outStorageIdQiTa != null" >
+        OutStorageIdQiTa,
+      </if>
+      <if test="outStorageIdXiaoShou != null" >
+        OutStorageIdXiaoShou,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="customProjectUserId != null" >
+        #{customProjectUserId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkName != null" >
+        #{linkName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkMobile != null" >
+        #{linkMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="useDate != null" >
+        #{useDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingTime != null" >
+        #{bookingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingBeauticianIds != null" >
+        #{bookingBeauticianIds,jdbcType=VARCHAR},
+      </if>
+      <if test="bookingBeauticianName != null" >
+        #{bookingBeauticianName,jdbcType=VARCHAR},
+      </if>
+      <if test="performanceRatio != null" >
+        #{performanceRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null" >
+        #{recordStatus,jdbcType=INTEGER},
+      </if>
+      <if test="outStorageIdQiTa != null" >
+        #{outStorageIdQiTa,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageIdXiaoShou != null" >
+        #{outStorageIdXiaoShou,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selectUseRecordList" resultType="CustomProjectUserRecord" parameterType="Long" >
+    select
+    <include refid="Base_Column_List" />
+    from custom_project_user_record
+    where CustomProjectUserId = #{id}
+  </select>
+
+  <update id="updateUseRecordStatus" parameterType="Map">
+    update custom_project_user_record
+    <set>
+      <if test="recordStatus != null">
+        RecordStatus = #{recordStatus},
+      </if>
+      <if test="modifyOperator != null">
+        ModifyOperator = #{modifyOperator},
+      </if>
+      DataChange_LastTime = now()
+    </set>
+    where RecordId = #{recordId}
+  </update>
+
+  <update id="updateUseRecord" parameterType="CustomProjectUserRecord">
+    update custom_project_user_record
+    <set>
+      <if test="outStorageIdQiTa != null">
+        OutStorageIdQiTa = #{outStorageIdQiTa},
+      </if>
+      <if test="outStorageIdXiaoShou != null">
+        OutStorageIdXiaoShou = #{outStorageIdXiaoShou},
+      </if>
+      <if test="modifyOperator != null">
+        ModifyOperator = #{modifyOperator},
+      </if>
+      DataChange_LastTime = now()
+    </set>
+    where RecordId = #{recordId}
+  </update>
+</mapper>

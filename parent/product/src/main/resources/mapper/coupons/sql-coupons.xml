@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="coupons">
+
+
+    <sql id="Base_Column_List">
+        CouponsId
+        ,
+        CouponsName,
+        CouponsSubheading,
+        CouponsTypeId,
+        FullAmount,
+        ReductionAmount,
+        ProvideAmount,
+        BeGetAmount,
+        Instructions,
+        UserType,
+        OneLimit,
+        EffectiveDate,
+        EffectiveDay,
+        JumpLink,
+        SoldUpDown,
+        Discount,
+        ImmediatelyDiscount,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <sql id="Base_Column_List_type">
+        CouponsTypeId
+        ,
+        CouponsTypeName,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Get_Record">
+        CouponsGetRecordId
+        ,
+        CouponsId,
+        GetType,
+        MemberNum,
+        CouponsCode,
+        CouponsName,
+        CouponsSubheading,
+        CouponsTypeId,
+        FullAmount,
+        ReductionAmount,
+        ProvideAmount,
+        Instructions,
+        UserType,
+        OneLimit,
+        EffectiveDate,
+        EffectiveDay,
+        JumpLink,
+        SoldUpDown,
+        Discount,
+        ImmediatelyDiscount,
+        IsUsed,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Use_Record">
+        CouponsUseRecordId
+        ,
+        CouponsGetRecordId,
+        CouponsTypeId,
+        OrderNumber,
+        MemberNum,
+        DiscountAmount,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <select id="getCouponsById" resultType="Coupons" parameterType="Long">
+        select
+        <include refid="Base_Column_List"/>
+        from c_coupons
+        where CouponsId = #{couponsId}
+    </select>
+
+
+    <select id="couponsList" resultType="Coupons" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from c_coupons
+        where 1=1
+        <if test="keyWordCouponsType != null and keyWordCouponsType != ''">
+            and CouponsTypeId = #{keyWordCouponsType}
+        </if>
+        <if test="keyWordCouponsName != null and keyWordCouponsName != ''">
+            and CouponsName like CONCAT('%',#{keyWordCouponsName},'%')
+        </if>
+        <if test="soldUpDown != null and soldUpDown != ''">
+            and SoldUpDown = #{soldUpDown}
+        </if>
+    </select>
+
+    <select id="couponsTypeList" resultType="CouponsType">
+        select
+        <include refid="Base_Column_List_type"/>
+        from c_coupons_type
+    </select>
+
+
+    <insert id="addCoupons" parameterType="Coupons">
+        insert into c_coupons
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponsId != null">
+                CouponsId,
+            </if>
+            <if test="couponsName != null">
+                CouponsName,
+            </if>
+            <if test="couponsSubheading != null">
+                CouponsSubheading,
+            </if>
+            <if test="couponsTypeId != null">
+                CouponsTypeId,
+            </if>
+            <if test="fullAmount != null">
+                FullAmount,
+            </if>
+            <if test="reductionAmount != null">
+                ReductionAmount,
+            </if>
+            <if test="provideAmount != null">
+                ProvideAmount,
+            </if>
+            <if test="beGetAmount != null">
+                BeGetAmount,
+            </if>
+            <if test="instructions != null">
+                Instructions,
+            </if>
+            <if test="userType != null">
+                UserType,
+            </if>
+            <if test="oneLimit != null">
+                OneLimit,
+            </if>
+            <if test="effectiveDate != null">
+                EffectiveDate,
+            </if>
+            <if test="effectiveDay != null">
+                EffectiveDay,
+            </if>
+            <if test="jumpLink != null">
+                JumpLink,
+            </if>
+            <if test="soldUpDown != null">
+                SoldUpDown,
+            </if>
+            <if test="discount != null">
+                Discount,
+            </if>
+            <if test="immediatelyDiscount != null">
+                ImmediatelyDiscount,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            DataChange_LastTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couponsId != null">
+                #{couponsId},
+            </if>
+            <if test="couponsName != null">
+                #{couponsName},
+            </if>
+            <if test="couponsSubheading != null">
+                #{couponsSubheading},
+            </if>
+            <if test="couponsTypeId != null">
+                #{couponsTypeId},
+            </if>
+            <if test="fullAmount != null">
+                #{fullAmount},
+            </if>
+            <if test="reductionAmount != null">
+                #{reductionAmount},
+            </if>
+            <if test="provideAmount != null">
+                #{provideAmount},
+            </if>
+            <if test="beGetAmount != null">
+                #{beGetAmount},
+            </if>
+            <if test="instructions != null">
+                #{instructions},
+            </if>
+            <if test="userType != null">
+                #{userType},
+            </if>
+            <if test="oneLimit != null">
+                #{oneLimit},
+            </if>
+            <if test="effectiveDate != null">
+                #{effectiveDate},
+            </if>
+            <if test="effectiveDay != null">
+                #{effectiveDay},
+            </if>
+            <if test="jumpLink != null">
+                #{jumpLink},
+            </if>
+            <if test="soldUpDown != null">
+                #{soldUpDown},
+            </if>
+            <if test="discount != null">
+                #{discount},
+            </if>
+            <if test="immediatelyDiscount != null">
+                #{immediatelyDiscount},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            now()
+        </trim>
+    </insert>
+
+    <update id="updateCoupons" parameterType="Coupons">
+        update c_coupons
+        <set>
+            <if test="couponsName != null">
+                CouponsName = #{couponsName,jdbcType=VARCHAR},
+            </if>
+            <if test="couponsSubheading != null">
+                CouponsSubheading = #{couponsSubheading,jdbcType=VARCHAR},
+            </if>
+            <if test="couponsTypeId != null">
+                CouponsTypeId = #{couponsTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="fullAmount != null">
+                FullAmount = #{fullAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="reductionAmount != null">
+                ReductionAmount = #{reductionAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="provideAmount != null">
+                ProvideAmount = #{provideAmount,jdbcType=INTEGER},
+            </if>
+            <if test="beGetAmount != null">
+                BeGetAmount = #{beGetAmount,jdbcType=INTEGER},
+            </if>
+            <if test="instructions != null">
+                Instructions = #{instructions,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                UserType = #{userType,jdbcType=INTEGER},
+            </if>
+            <if test="oneLimit != null">
+                OneLimit = #{oneLimit,jdbcType=INTEGER},
+            </if>
+            <if test="effectiveDate != null">
+                EffectiveDate = #{effectiveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="effectiveDay != null">
+                EffectiveDay = #{effectiveDay,jdbcType=INTEGER},
+            </if>
+            <if test="jumpLink != null">
+                JumpLink = #{jumpLink,jdbcType=VARCHAR},
+            </if>
+            <if test="soldUpDown != null">
+                SoldUpDown = #{soldUpDown,jdbcType=INTEGER},
+            </if>
+            <if test="discount != null">
+                Discount = #{discount,jdbcType=INTEGER},
+            </if>
+            <if test="immediatelyDiscount != null">
+                ImmediatelyDiscount = #{immediatelyDiscount,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = now(),
+            </if>
+        </set>
+        where CouponsId = #{couponsId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateEffectiveDate" parameterType="Coupons">
+        update c_coupons
+        set EffectiveDate = null
+        where CouponsId = #{couponsId,jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateEffectiveDay" parameterType="Coupons">
+        update c_coupons
+        set EffectiveDay = null
+        where CouponsId = #{couponsId,jdbcType=BIGINT}
+    </update>
+
+
+    <insert id="addCouponsGetRecord" parameterType="CouponsGetRecord">
+        insert into c_coupons_get_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponsGetRecordId != null">
+                CouponsGetRecordId,
+            </if>
+            <if test="getType != null">
+                GetType,
+            </if>
+            <if test="memberNum != null">
+                MemberNum,
+            </if>
+            <if test="couponsId != null">
+                CouponsId,
+            </if>
+            <if test="couponsCode != null">
+                CouponsCode,
+            </if>
+            <if test="couponsName != null">
+                CouponsName,
+            </if>
+            <if test="couponsSubheading != null">
+                CouponsSubheading,
+            </if>
+            <if test="couponsTypeId != null">
+                CouponsTypeId,
+            </if>
+            <if test="fullAmount != null">
+                FullAmount,
+            </if>
+            <if test="reductionAmount != null">
+                ReductionAmount,
+            </if>
+            <if test="provideAmount != null">
+                ProvideAmount,
+            </if>
+            <if test="instructions != null">
+                Instructions,
+            </if>
+            <if test="userType != null">
+                UserType,
+            </if>
+            <if test="oneLimit != null">
+                OneLimit,
+            </if>
+            <if test="effectiveDate != null">
+                EffectiveDate,
+            </if>
+            <if test="effectiveDay != null">
+                EffectiveDay,
+            </if>
+            <if test="jumpLink != null">
+                JumpLink,
+            </if>
+            <if test="soldUpDown != null">
+                SoldUpDown,
+            </if>
+            <if test="discount != null">
+                Discount,
+            </if>
+            <if test="immediatelyDiscount != null">
+                ImmediatelyDiscount,
+            </if>
+            <if test="isUsed != null">
+                IsUsed,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            DataChange_LastTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couponsGetRecordId != null">
+                #{couponsGetRecordId,jdbcType=BIGINT},
+            </if>
+            <if test="getType != null">
+                #{getType,jdbcType=INTEGER},
+            </if>
+            <if test="memberNum != null">
+                #{memberNum,jdbcType=VARCHAR},
+            </if>
+            <if test="couponsId != null">
+                #{couponsId,jdbcType=INTEGER},
+            </if>
+            <if test="couponsCode != null">
+                #{couponsCode,jdbcType=VARCHAR},
+            </if>
+            <if test="couponsName != null">
+                #{couponsName,jdbcType=VARCHAR},
+            </if>
+            <if test="couponsSubheading != null">
+                #{couponsSubheading,jdbcType=VARCHAR},
+            </if>
+            <if test="couponsTypeId != null">
+                #{couponsTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="fullAmount != null">
+                #{fullAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="reductionAmount != null">
+                #{reductionAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="provideAmount != null">
+                #{provideAmount,jdbcType=INTEGER},
+            </if>
+            <if test="instructions != null">
+                #{instructions,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                #{userType,jdbcType=INTEGER},
+            </if>
+            <if test="oneLimit != null">
+                #{oneLimit,jdbcType=INTEGER},
+            </if>
+            <if test="effectiveDate != null">
+                #{effectiveDate,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveDay != null">
+                #{effectiveDay,jdbcType=INTEGER},
+            </if>
+            <if test="jumpLink != null">
+                #{jumpLink,jdbcType=VARCHAR},
+            </if>
+            <if test="soldUpDown != null">
+                #{soldUpDown,jdbcType=INTEGER},
+            </if>
+            <if test="discount != null">
+                #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="immediatelyDiscount != null">
+                #{immediatelyDiscount,jdbcType=DOUBLE},
+            </if>
+            <if test="immediatelyDiscount != null">
+                #{immediatelyDiscount,jdbcType=DOUBLE},
+            </if>
+            <if test="isUsed != null">
+                #{isUsed,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            now(),
+            now()
+
+        </trim>
+    </insert>
+
+    <select id="checkUserCoupons" parameterType="Map" resultType="CouponsGetRecord">
+        select
+        <include refid="Base_Column_List_Get_Record"/>
+        from c_coupons_get_record
+        where MemberNum = #{memberNum}
+        and CouponsId = #{couponsId}
+    </select>
+
+
+    <select id="selectCouponsGetRecordList" parameterType="Map" resultType="CouponsGetRecord">
+        select
+        <include refid="Base_Column_List_Get_Record"/>
+        from c_coupons_get_record
+        where 1=1
+        <if test="keyWordCouponsType != null and keyWordCouponsType != ''">
+            and CouponsTypeId = #{keyWordCouponsType}
+        </if>
+        <if test="keyWordCouponsName != null and keyWordCouponsName != ''">
+            and CouponsName like CONCAT('%',#{keyWordCouponsName},'%')
+        </if>
+    </select>
+
+    <delete id="deleteCouponsGetRecord" parameterType="Long">
+        delete
+        from c_coupons_get_record
+        where CouponsGetRecordId = #{couponsGetRecordId}
+    </delete>
+
+    <select id="selectCouponsUseRecordList" resultType="CouponsUseRecord" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Use_Record"/>
+        from c_coupons_use_record
+        where 1=1
+        <if test="keyWordOrderNum != null and keyWordOrderNum != ''">
+            and OrderNumber = #{keyWordOrderNum}
+        </if>
+        <if test="keyWordUserId != null and keyWordUserId != ''">
+            and MemberNum = #{keyWordUserId}
+        </if>
+        <if test="keyWordCouponsType != null and keyWordCouponsType != ''">
+            and CouponsTypeId = #{keyWordCouponsType}
+        </if>
+    </select>
+
+    <delete id="deleteCouponsUseRecord" parameterType="Long">
+        delete
+        from c_coupons_use_record
+        where CouponsUseRecordId = #{couponsUseRecordId}
+    </delete>
+</mapper>

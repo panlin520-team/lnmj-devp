@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="complaint">
+    <resultMap id="BaseResultMap" type="Complaint">
+        <id column="Id" property="id" jdbcType="BIGINT"/>
+        <result column="UserName" property="userName" jdbcType="VARCHAR"/>
+        <result column="PhoneNumber" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="ConsumptionTime" property="consumptionTime" jdbcType="TIMESTAMP"/>
+        <result column="ConsumptionProject" property="consumptionProject" jdbcType="VARCHAR"/>
+        <result column="ConsumptionStore" property="consumptionStore" jdbcType="VARCHAR"/>
+        <result column="Responsibility" property="responsibility" jdbcType="VARCHAR"/>
+        <result column="ComplaintTitle" property="complaintTitle" jdbcType="VARCHAR"/>
+        <result column="ComplaintReason" property="complaintReason" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        Id
+        ,
+        UserName,
+        PhoneNumber,
+        ConsumptionTime,
+        ConsumptionProject,
+        ConsumptionStore,
+        Responsibility,
+        ComplaintTitle,
+        ComplaintReason,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_handle">
+        Id
+        ,
+        ComplaintHandleId,
+        UserName,
+        ConsumptionStore,
+        Responsibility,
+        ComplaintTitle,
+        ComplaintReason,
+        HandleMethod,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Track">
+        Id
+        ,
+        HandleId,
+        UserName,
+        PhoneNumber,
+        Complaintor,
+        ConsumptionStore,
+        Handle,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_record">
+        Id
+        ,
+        HandleId,
+        UserName,
+        ConsumptionStore,
+        ConsumptionProject,
+        Responsibility,
+        ComplaintTitle,
+        ComplaintTime,
+        ComplaintReason,
+        HandleMethod,
+        Result,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <!--投诉-->
+    <select id="complaintList" resultMap="BaseResultMap" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from c_complaint
+        where 1=1
+        <if test="phoneNumber != null and phoneNumber!=''">
+            and PhoneNumber = #{phoneNumber}
+        </if>
+        <if test="storeId != null and storeId!=''">
+            and ConsumptionStore = #{storeId}
+        </if>
+    </select>
+
+    <delete id="complaintDel" parameterType="Long">
+        delete
+        from c_complaint
+        where Id = #{id}
+    </delete>
+
+
+    <select id="getComplaintById" resultMap="BaseResultMap" parameterType="Long">
+        select
+        <include refid="Base_Column_List"/>
+        from c_complaint
+        where Id=#{id}
+    </select>
+
+    <!--投诉处理方案-->
+    <insert id="addComplaintHandleMethod" parameterType="Complainthandle" useGeneratedKeys="true" keyProperty="id">
+        insert into c_complainthandle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="complaintHandleId != null">
+                ComplaintHandleId,
+            </if>
+            <if test="userName != null">
+                UserName,
+            </if>
+            <if test="consumptionStore != null">
+                ConsumptionStore,
+            </if>
+            <if test="responsibility != null">
+                Responsibility,
+            </if>
+            <if test="complaintTitle != null">
+                ComplaintTitle,
+            </if>
+            <if test="complaintReason != null">
+                ComplaintReason,
+            </if>
+            <if test="handleMethod != null">
+                HandleMethod,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="complaintHandleId != null">
+                #{complaintHandleId},
+            </if>
+            <if test="userName != null">
+                #{userName},
+            </if>
+            <if test="consumptionStore != null">
+                #{consumptionStore},
+            </if>
+            <if test="responsibility != null">
+                #{responsibility},
+            </if>
+            <if test="complaintTitle != null">
+                #{complaintTitle},
+            </if>
+            <if test="complaintReason != null">
+                #{complaintReason},
+            </if>
+            <if test="handleMethod != null">
+                #{handleMethod},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            now()
+        </trim>
+    </insert>
+
+    <select id="getComplaintHandleMethodById" resultType="Complainthandle" parameterType="Map">
+        select
+        <include refid="Base_Column_List_handle"/>
+        from c_complainthandle
+        where 1=1
+        <if test="complaintHandleId != null and complaintHandleId!=''">
+            and ComplaintHandleId= #{complaintHandleId}
+        </if>
+        <if test="id != null and id!=''">
+            and Id= #{id}
+        </if>
+    </select>
+
+    <!--投诉追踪-->
+
+    <insert id="addComplaintHandleTrack" parameterType="Complainttrack">
+        insert into c_complainttrack
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="handleId != null">
+                HandleId,
+            </if>
+            <if test="userName != null">
+                UserName,
+            </if>
+            <if test="phoneNumber != null">
+                PhoneNumber,
+            </if>
+            <if test="complaintor != null">
+                Complaintor,
+            </if>
+            <if test="consumptionStore != null">
+                ConsumptionStore,
+            </if>
+            <if test="handle != null">
+                Handle,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="handleId != null">
+                #{handleId},
+            </if>
+            <if test="userName != null">
+                #{userName},
+            </if>
+            <if test="phoneNumber != null">
+                #{phoneNumber},
+            </if>
+            <if test="complaintor != null">
+                #{complaintor},
+            </if>
+            <if test="consumptionStore != null">
+                #{consumptionStore},
+            </if>
+            <if test="handle != null">
+                #{handle},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            now()
+        </trim>
+    </insert>
+
+    <select id="complaintTrackList" resultType="Complainttrack" parameterType="Long">
+        select
+        <include refid="Base_Column_List_Track"/>
+        from c_complainttrack
+        where HandleId = #{handleId}
+    </select>
+
+    <!--投诉处理记录-->
+    <insert id="addComplaintHandleRecord" parameterType="Complaintrecord">
+        insert into c_complaintrecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="handleId != null">
+                HandleId,
+            </if>
+            <if test="userName != null">
+                UserName,
+            </if>
+            <if test="consumptionStore != null">
+                ConsumptionStore,
+            </if>
+            <if test="consumptionProject != null">
+                ConsumptionProject,
+            </if>
+            <if test="responsibility != null">
+                Responsibility,
+            </if>
+            <if test="complaintTitle != null">
+                ComplaintTitle,
+            </if>
+            <if test="complaintTime != null">
+                ComplaintTime,
+            </if>
+            <if test="complaintReason != null">
+                ComplaintReason,
+            </if>
+            <if test="handleMethod != null">
+                HandleMethod,
+            </if>
+            <if test="result != null">
+                Result,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="handleId != null">
+                #{handleId},
+            </if>
+            <if test="userName != null">
+                #{userName},
+            </if>
+            <if test="consumptionStore != null">
+                #{consumptionStore},
+            </if>
+            <if test="consumptionProject != null">
+                #{consumptionProject},
+            </if>
+            <if test="responsibility != null">
+                #{responsibility},
+            </if>
+            <if test="complaintTitle != null">
+                #{complaintTitle},
+            </if>
+            <if test="complaintTime != null">
+                #{complaintTime},
+            </if>
+            <if test="complaintReason != null">
+                #{complaintReason},
+            </if>
+            <if test="handleMethod != null">
+                #{handleMethod},
+            </if>
+            <if test="result != null">
+                #{result},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChange_LastTime},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="complaintRecordList" resultType="Complaintrecord" parameterType="Map">
+        select
+        <include refid="Base_Column_List_record"/>
+        from c_complaintrecord
+        where 1=1
+        <if test="keyWordUserName != null and keyWordUserName!=''">
+            and UserName like CONCAT('%',#{keyWordUserName},'%')
+        </if>
+        <if test="keyWordStoreId != null and keyWordStoreId!=''">
+            and ConsumptionStore = #{keyWordStoreId}
+        </if>
+    </select>
+
+    <update id="updateComplaintRecordResult" parameterType="Complaintrecord" >
+        update c_complaintrecord
+        <set >
+            <if test="id != null" >
+                Id = #{id},
+            </if>
+            <if test="handleId != null" >
+                HandleId = #{handleId},
+            </if>
+            <if test="userName != null" >
+                UserName = #{userName},
+            </if>
+            <if test="consumptionStore != null" >
+                ConsumptionStore = #{consumptionStore},
+            </if>
+            <if test="consumptionProject != null" >
+                ConsumptionProject = #{consumptionProject},
+            </if>
+            <if test="responsibility != null" >
+                Responsibility = #{responsibility},
+            </if>
+            <if test="complaintTitle != null" >
+                ComplaintTitle = #{complaintTitle},
+            </if>
+            <if test="complaintTime != null" >
+                ComplaintTime = #{complaintTime},
+            </if>
+            <if test="complaintReason != null" >
+                ComplaintReason = #{complaintReason},
+            </if>
+            <if test="handleMethod != null" >
+                HandleMethod = #{handleMethod},
+            </if>
+            <if test="result != null" >
+                Result = #{result},
+            </if>
+            <if test="status != null" >
+                Status = #{status},
+            </if>
+            <if test="modifyOperator != null" >
+                ModifyOperator = #{modifyOperator},
+            </if>
+                DataChange_LastTime = now(),
+        </set>
+          where  HandleId = #{handleId}
+    </update>
+</mapper>

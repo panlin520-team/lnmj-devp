@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lnmj.common.generator.custom_project_user_refuse.CustomProjectUserRefuseMapper" >
+  <resultMap id="BaseResultMap" type="com.lnmj.common.generator.custom_project_user_refuse.CustomProjectUserRefuse" >
+    <id column="Id" property="id" jdbcType="BIGINT" />
+    <result column="CustomProjectUserId" property="customProjectUserId" jdbcType="BIGINT" />
+    <result column="RefuseTimes" property="refuseTimes" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChange_LastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, CustomProjectUserId, RefuseTimes, Status, CreateOperator, CreateTime, ModifyOperator, 
+    DataChange_LastTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lnmj.common.generator.custom_project_user_refuse.CustomProjectUserRefuseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from custom_project_user_refuse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from custom_project_user_refuse
+    where Id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from custom_project_user_refuse
+    where Id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lnmj.common.generator.custom_project_user_refuse.CustomProjectUserRefuseExample" >
+    delete from custom_project_user_refuse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lnmj.common.generator.custom_project_user_refuse.CustomProjectUserRefuse" >
+    insert into custom_project_user_refuse (Id, CustomProjectUserId, RefuseTimes, 
+      Status, CreateOperator, CreateTime, 
+      ModifyOperator, DataChange_LastTime)
+    values (#{id,jdbcType=BIGINT}, #{customProjectUserId,jdbcType=BIGINT}, #{refuseTimes,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{createOperator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyOperator,jdbcType=VARCHAR}, #{dataChange_LastTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lnmj.common.generator.custom_project_user_refuse.CustomProjectUserRefuse" >
+    insert into custom_project_user_refuse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="customProjectUserId != null" >
+        CustomProjectUserId,
+      </if>
+      <if test="refuseTimes != null" >
+        RefuseTimes,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="customProjectUserId != null" >
+        #{customProjectUserId,jdbcType=BIGINT},
+      </if>
+      <if test="refuseTimes != null" >
+        #{refuseTimes,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChange_LastTime != null" >
+        #{dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lnmj.common.generator.custom_project_user_refuse.CustomProjectUserRefuseExample" resultType="java.lang.Integer" >
+    select count(*) from custom_project_user_refuse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update custom_project_user_refuse
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.customProjectUserId != null" >
+        CustomProjectUserId = #{record.customProjectUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.refuseTimes != null" >
+        RefuseTimes = #{record.refuseTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.createOperator != null" >
+        CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyOperator != null" >
+        ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataChange_LastTime != null" >
+        DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update custom_project_user_refuse
+    set Id = #{record.id,jdbcType=BIGINT},
+      CustomProjectUserId = #{record.customProjectUserId,jdbcType=BIGINT},
+      RefuseTimes = #{record.refuseTimes,jdbcType=INTEGER},
+      Status = #{record.status,jdbcType=INTEGER},
+      CreateOperator = #{record.createOperator,jdbcType=VARCHAR},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      ModifyOperator = #{record.modifyOperator,jdbcType=VARCHAR},
+      DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lnmj.common.generator.custom_project_user_refuse.CustomProjectUserRefuse" >
+    update custom_project_user_refuse
+    <set >
+      <if test="customProjectUserId != null" >
+        CustomProjectUserId = #{customProjectUserId,jdbcType=BIGINT},
+      </if>
+      <if test="refuseTimes != null" >
+        RefuseTimes = #{refuseTimes,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChange_LastTime != null" >
+        DataChange_LastTime = #{dataChange_LastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lnmj.common.generator.custom_project_user_refuse.CustomProjectUserRefuse" >
+    update custom_project_user_refuse
+    set CustomProjectUserId = #{customProjectUserId,jdbcType=BIGINT},
+      RefuseTimes = #{refuseTimes,jdbcType=INTEGER},
+      Status = #{status,jdbcType=INTEGER},
+      CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      DataChange_LastTime = #{dataChange_LastTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

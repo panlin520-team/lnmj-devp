@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productVisitStatistics">
+
+
+    <!--商品销量统计分页显示-->
+    <select id="selectProductVisitByList" resultType="ProductBrandStatisticsVO" parameterType="String">
+        SELECT
+        ProductName,
+        UserVisitNumber,
+        VisitNumber
+        FROM
+        lnmj_datastatistics.productvisit
+        WHERE 1=1
+        <if test="keyWord != null">
+            and productBrandName concat('%',#{keyWord}),'%'
+        </if>
+        <if test="userVisitStatus != null">
+            order by userVisitNumber #{userVisitStatus}
+        </if>
+        <if test="visitStatus != null">
+            order by visitNumber #{visitStatus}
+        </if>
+    </select>
+</mapper>

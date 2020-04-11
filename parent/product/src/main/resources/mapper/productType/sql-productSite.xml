@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productSite" >
+    <!--商品产地-->
+    <!--商品产地基本字段-->
+    <sql id="product_site_base_column" >
+        ProductSiteId,ProductSiteName,ProductSiteOrder,
+        ProductTypeDisplayId,ProductClassifyId,ImageType,ImageUrl,ImageHeight,ImageWidth,
+        Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <!--插入商品产地表字段-->
+    <sql id="sql_insert_product_site_column" >
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="productSiteName != null" >ProductSiteName,</if>
+            <if test="productSiteOrder != null" >ProductSiteOrder,</if>
+            <if test="productTypeDisplayId != null" >ProductTypeDisplayId,</if>
+            <if test="productClassifyId != null" >ProductClassifyId,</if>
+            <if test="imageType != null" >ImageType,</if>
+            <if test="imageUrl != null" >ImageUrl,</if>
+            <if test="imageHeight != null" >ImageHeight,</if>
+            <if test="imageWidth != null" >ImageWidth,</if>
+            <if test="createOperator != null" >CreateOperator,</if>
+            <if test="modifyOperator != null" >ModifyOperator,</if>
+        </trim>
+    </sql>
+    <!--插入商品产地表值-->
+    <sql id="sql_insert_product_site_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="productSiteName != null" >#{productSiteName},</if>
+            <if test="productSiteOrder != null" >#{productSiteOrder},</if>
+            <if test="productTypeDisplayId != null" >#{productTypeDisplayId},</if>
+            <if test="productClassifyId != null" >#{productClassifyId},</if>
+            <if test="imageType != null" >#{imageType},</if>
+            <if test="imageUrl != null" >#{imageUrl},</if>
+            <if test="imageHeight != null" >#{imageHeight},</if>
+            <if test="imageWidth != null" >#{imageWidth},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <!--修改商品产地-->
+    <sql id="sql_set_product_site_column" >
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="productSiteName != null" >,ProductSiteName=#{productSiteName}</if>
+                <if test="productSiteOrder != null" >,ProductSiteOrder=#{productSiteOrder}</if>
+                <if test="productTypeDisplayId != null" >,ProductTypeDisplayId=#{productTypeDisplayId}</if>
+                <if test="productClassifyId != null" >,ProductClassifyId=#{productClassifyId}</if>
+                <if test="imageType != null" >,ImageType=#{imageType}</if>
+                <if test="imageUrl != null" >,ImageUrl=#{imageUrl}</if>
+                <if test="imageHeight != null" >,ImageHeight=#{imageHeight}</if>
+                <if test="imageWidth != null" >,ImageWidth=#{imageWidth}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}></if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+
+    <!--商品产地分页显示-->
+    <select id="selectProductSiteList" resultType="com.lnmj.product.entity.ProductSite">
+        select <include refid="product_site_base_column" /> from p_productsite
+        where Status = 1
+    </select>
+
+    <!--商品产地关键字查询-->
+    <select id="selectProductSiteByKeyWord" parameterType="String" resultType="com.lnmj.product.entity.ProductSite">
+        select <include refid="product_site_base_column" /> from p_productsite
+        <where>
+            <if test="_parameter != null">ProductSiteName like CONCAT('%',#{keyWord},'%')</if>
+        </where>
+    </select>
+    <!--新增商品产地-->
+    <insert id="insertProductSite" parameterType="ProductSite" keyProperty="productSiteId" useGeneratedKeys="true" >
+        insert into p_productsite
+        <include refid="sql_insert_product_site_column"/>
+        <include refid="sql_insert_product_site_values"/>
+    </insert>
+    <!--删除商品产地-->
+    <delete id="deleteProductSite" parameterType="Long" >
+        delete from p_productsite where ProductSiteId=#{productSiteId}
+    </delete>
+    <!--根据商品产地id查询商品产地-->
+    <select id="selectProductSiteByProductSiteId" parameterType="Long" resultType="com.lnmj.product.entity.ProductSite" >
+        select <include refid="product_site_base_column" />
+        from p_productsite where ProductSiteId=#{productSiteId} and Status = 1
+    </select>
+    <!--修改商品产地-->
+    <update id="updateProductSite" parameterType="com.lnmj.product.entity.ProductSite">
+        update p_productsite
+        <include refid="sql_set_product_site_column"/>
+        where ProductSiteId=#{productSiteId}
+    </update>
+    <!--根据商品产地Id查询商品（服务没有产地）-->
+    <select id="selectProductByProductSiteId" parameterType="Long" resultType="Product">
+        select <include refid="product.Base_Column_List"/>
+        from p_product where OverseasSite=#{productSiteId} and Status = 1
+    </select>
+    <!--根据商品类型id查询商品产地-->
+    <select id="selectProductSiteByProductClassifyId" parameterType="Long" resultType="com.lnmj.product.entity.ProductSite">
+        select <include refid="product_site_base_column" />
+        from p_productsite where ProductClassifyId=#{productClassifyId} and Status = 1
+    </select>
+</mapper>

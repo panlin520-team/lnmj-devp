@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="unit" >
+  <resultMap id="BaseResultMap" type="com.lnmj.product.entity.Unit">
+    <id column="UnitId" property="unitId" jdbcType="BIGINT" />
+    <result column="UnitCode" property="unitCode" jdbcType="VARCHAR" />
+    <result column="UnitName" property="unitName" jdbcType="VARCHAR" />
+    <result column="UnitGroupId" property="unitGroupId" jdbcType="BIGINT" />
+    <result column="FroundtypeId" property="froundtypeId" jdbcType="BIGINT" />
+    <result column="k3Id" property="k3Id" jdbcType="VARCHAR" />
+    <result column="k3Number" property="k3Number" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    UnitId, UnitCode, UnitName,UnitGroupId,FroundtypeId,k3Id,k3Number,Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+
+  <!--查询所有单位-->
+  <select id="selectUnitList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from unit
+    where Status = 1
+    <if test="unitId != null" >
+      and UnitId = #{unitId}
+    </if>
+    <if test="keyWord != null" >
+      and UnitName  like CONCAT('%','${keyWord}','%')
+    </if>
+  </select>
+
+
+  <select id="selectUnit" resultMap="BaseResultMap" parameterType="Map">
+    select
+    <include refid="Base_Column_List" />
+    from unit
+    where Status = 1
+    <if test="keyWord != null" >
+      and UnitName  like CONCAT('%','${keyWord}','%')
+    </if>
+
+  </select>
+
+  <insert id="addUnit" parameterType="Unit" useGeneratedKeys="true" keyProperty="unitId">
+    insert into unit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="unitId != null" >
+        UnitId,
+      </if>
+      <if test="unitCode != null" >
+        UnitCode,
+      </if>
+      <if test="unitName != null" >
+        UnitName,
+      </if>
+      <if test="unitGroupId != null" >
+        UnitGroupId,
+      </if>
+      <if test="froundtypeId != null" >
+        FroundtypeId,
+      </if>
+      <if test="k3Id != null" >
+        k3Id,
+      </if>
+      <if test="k3Number != null" >
+        k3Number,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="unitId != null" >
+        #{unitId},
+      </if>
+      <if test="unitCode != null" >
+        #{unitCode},
+      </if>
+      <if test="unitName != null" >
+        #{unitName},
+      </if>
+      <if test="unitGroupId != null" >
+        #{unitGroupId},
+      </if>
+      <if test="froundtypeId != null" >
+        #{froundtypeId},
+      </if>
+      <if test="k3Id != null" >
+        #{k3Id},
+      </if>
+      <if test="k3Number != null" >
+        #{k3Number},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="editUnit" parameterType="Unit" >
+    update unit
+    <set >
+      <if test="unitCode != null" >
+        UnitCode = #{unitCode},
+      </if>
+      <if test="unitName != null" >
+        UnitName = #{unitName},
+      </if>
+      <if test="unitGroupId != null" >
+        UnitGroupId = #{unitGroupId},
+      </if>
+      <if test="froundtypeId != null" >
+        FroundtypeId = #{froundtypeId},
+      </if>
+      <if test="k3Id != null" >
+        k3Id = #{k3Id},
+      </if>
+      <if test="k3Number != null" >
+        k3Number = #{k3Number},
+      </if>
+      <if test="status != null" >
+        Status = #{status},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime},
+      </if>
+    </set>
+    where UnitId = #{unitId}
+  </update>
+
+  <update id="deleteUnit" parameterType="Map">
+    update unit
+    set
+    Status = 0,
+    ModifyOperator = #{modifyOperator},
+    DataChange_LastTime = now()
+    where UnitId = #{unitId}
+  </update>
+
+</mapper>

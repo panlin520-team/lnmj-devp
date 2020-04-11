@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="subclass" >
+  <resultMap id="SubclassMap" type="com.lnmj.data.entity.Subclass" >
+    <id column="SubclassID" property="subclassID" jdbcType="BIGINT" />
+    <result column="SubclassName" property="subclassName" jdbcType="VARCHAR" />
+    <result column="SubclassAchievementID" property="subclassAchievementID" jdbcType="BIGINT" />
+    <result column="CommodityTypeID" property="commodityTypeID" jdbcType="BIGINT" />
+    <result column="PostCategoryIds" property="postCategoryIds" jdbcType="VARCHAR" />
+    <result column="SubclassEvaluatingID" property="subclassEvaluatingID" jdbcType="BIGINT" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_subclass_column" >
+    SubclassID, SubclassName, SubclassAchievementID, CommodityTypeID,PostCategoryIds,SubclassEvaluatingID, Status, CreateOperator,
+    CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+  <select id="selectSubclassList" resultMap="SubclassMap" parameterType="Map" >
+    select
+    <include refid="base_subclass_column" />
+    from a_subclass where Status = 1
+    <if test="commodityTypeID != null" >
+      and CommodityTypeID = #{commodityTypeID}
+    </if>
+    <if test="searchWord != null" >
+      and SubclassName like CONCAT('%','${searchWord}','%')
+    </if>
+  </select>
+
+  <select id="selectSubclassByID" resultMap="SubclassMap" parameterType="Long" >
+    select
+    <include refid="base_subclass_column" />
+    from a_subclass
+    where SubclassID = #{subclassID,jdbcType=BIGINT} and Status = 1
+  </select>
+
+
+  <select id="selectSubclassByCondition" resultMap="SubclassMap" parameterType="Subclass" >
+    select
+    <include refid="base_subclass_column" />
+    from a_subclass
+    <where>
+      <trim prefix="" prefixOverrides="AND">
+        <if test="subclassID != null">
+          AND SubclassID = #{subclassID,jdbcType=BIGINT}
+        </if>
+        <if test="subclassName != null and subclassName!=''" >
+          AND SubclassName = #{subclassName,jdbcType=VARCHAR}
+        </if>
+        <if test="subclassAchievementID != null and subclassAchievementID !=''" >
+          AND SubclassAchievementID = #{subclassAchievementID,jdbcType=BIGINT}
+        </if>
+        <if test="commodityTypeID != null and commodityTypeID != ''" >
+          AND CommodityTypeID = #{commodityTypeID,jdbcType=BIGINT}
+        </if>
+        <if test="postCategoryIds != null" >
+          AND PostCategoryIds = #{postCategoryIds,jdbcType=VARCHAR}
+        </if>
+        <if test="subclassEvaluatingID != null and subclassEvaluatingID != ''" >
+          AND SubclassEvaluatingID = #{subclassEvaluatingID,jdbcType=BIGINT}
+        </if>
+        <if test="status != null" >
+          AND Status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null" >
+          AND Status = 1
+        </if>
+        <if test="createOperator != null" >
+          AND CreateOperator = #{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null" >
+          AND CreateTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="modifyOperator != null" >
+          AND ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="dataChangeLastTime != null" >
+          AND DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+  <update id="deleteSubclassByID" parameterType="Subclass" >
+    update a_subclass set Status = 0,ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+    where SubclassID = #{subclassID,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertSubclass" parameterType="com.lnmj.data.entity.Subclass" useGeneratedKeys="true" keyProperty="subclassID" >
+    insert into a_subclass
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="subclassID != null" >
+        SubclassID,
+      </if>
+      <if test="subclassName != null" >
+        SubclassName,
+      </if>
+      <if test="subclassAchievementID != null" >
+        SubclassAchievementID,
+      </if>
+      <if test="commodityTypeID != null" >
+        CommodityTypeID,
+      </if>
+      <if test="postCategoryIds != null" >
+        PostCategoryIds,
+      </if>
+      <if test="subclassEvaluatingID != null" >
+        SubclassEvaluatingID,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="subclassID != null" >
+        #{subclassID,jdbcType=BIGINT},
+      </if>
+      <if test="subclassName != null" >
+        #{subclassName,jdbcType=VARCHAR},
+      </if>
+      <if test="subclassAchievementID != null" >
+        #{subclassAchievementID,jdbcType=BIGINT},
+      </if>
+      <if test="commodityTypeID != null" >
+        #{commodityTypeID,jdbcType=BIGINT},
+      </if>
+      <if test="postCategoryIds != null" >
+        #{postCategoryIds,jdbcType=VARCHAR},
+      </if>
+      <if test="subclassEvaluatingID != null" >
+        #{subclassEvaluatingID,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateSubclass" parameterType="com.lnmj.data.entity.Subclass" >
+    update a_subclass
+    <set >
+      <trim prefix="" prefixOverrides=",">
+        <if test="subclassName != null" >
+          SubclassName = #{subclassName,jdbcType=VARCHAR},
+        </if>
+        <if test="subclassAchievementID != null" >
+          SubclassAchievementID = #{subclassAchievementID,jdbcType=BIGINT},
+        </if>
+        <if test="commodityTypeID != null" >
+          CommodityTypeID = #{commodityTypeID,jdbcType=BIGINT},
+        </if>
+        <if test="postCategoryIds != null" >
+          PostCategoryIds = #{postCategoryIds,jdbcType=VARCHAR},
+        </if>
+        <if test="subclassEvaluatingID != null" >
+          SubclassEvaluatingID = #{subclassEvaluatingID,jdbcType=BIGINT},
+        </if>
+        <if test="status != null" >
+          Status = #{status,jdbcType=INTEGER},
+        </if>
+        <if test="createOperator != null" >
+          CreateOperator = #{createOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="createTime != null" >
+          CreateTime = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="modifyOperator != null" >
+          ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="dataChangeLastTime != null" >
+          DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </set>
+    where SubclassID = #{subclassID,jdbcType=BIGINT}
+  </update>
+
+</mapper>

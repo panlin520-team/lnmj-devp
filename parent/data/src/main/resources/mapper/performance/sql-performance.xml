@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="performance">
+    <resultMap id="PerformanceMap" type="com.lnmj.data.entity.Performance">
+        <id column="AchievementID" property="achievementID" jdbcType="BIGINT"/>
+        <result column="AchievementIndustryID" property="achievementIndustryID" jdbcType="BIGINT"/>
+        <result column="AchievementName" property="achievementName" jdbcType="VARCHAR"/>
+        <result column="AchievementType" property="achievementType" jdbcType="INTEGER"/>
+        <result column="IsStaffReview" property="isStaffReview" jdbcType="TINYINT"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="base_performance_column">
+        Id
+        ,
+        AchievementID,
+        AchievementIndustryID,
+        AchievementName,
+        AchievementType,
+        IsStaffReview,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="base_performance_column_post">
+        Id
+        ,
+        AchievementID,
+        AchievementPostName,
+        AchievementPostCategoryID,
+        AchievementMethods,
+        AchievementInterval,
+        AchievementStore,
+        AchievementStoreId,
+        IsBasicSalary,
+        IsPartTime,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="base_performance_column_post_a">
+        a
+        .
+        Id
+        ,
+        a
+        .
+        AchievementID,
+        a
+        .
+        AchievementPostName,
+        a
+        .
+        AchievementPostCategoryID,
+        a
+        .
+        AchievementMethods,
+        a
+        .
+        AchievementInterval,
+        a
+        .
+        AchievementStore,
+        a
+        .
+        AchievementStoreId,
+        a
+        .
+        IsBasicSalary,
+        a
+        .
+        IsPartTime,
+        a
+        .
+        Status,
+        a
+        .
+        CreateOperator,
+        a
+        .
+        CreateTime,
+        a
+        .
+        ModifyOperator,
+        a
+        .
+        DataChange_LastTime
+    </sql>
+
+    <select id="selectPerformanceList" resultMap="PerformanceMap" parameterType="Map">
+        select
+        <include refid="base_performance_column"/>
+        from a_performance where Status = 1
+        <if test="achievementType != null">
+            and AchievementType = #{achievementType}
+        </if>
+        <if test="achievementIndustryID != null">
+            and AchievementIndustryID = #{achievementIndustryID}
+        </if>
+        <if test="keyWordAchievementName != null">
+            and AchievementName LIKE CONCAT('%',#{keyWordAchievementName},'%')
+        </if>
+    </select>
+
+    <select id="selectPerformancePostList" resultType="PerformancePost" parameterType="Map">
+        select
+        <include refid="base_performance_column_post"/>
+        from a_performance_post where Status = 1
+        <if test="achievementID != null">
+            and AchievementID =#{achievementID}
+        </if>
+        <if test="achievementPostCategoryID != null">
+            and AchievementPostCategoryID =#{achievementPostCategoryID}
+        </if>
+        <if test="isBasicSalary != null">
+            and IsBasicSalary =#{isBasicSalary}
+        </if>
+        <if test="isPartTime != null">
+            and IsPartTime =#{isPartTime}
+        </if>
+        <if test="keyWord != null">
+            and AchievementPostName like CONCAT('%','${keyWord}','%')
+        </if>
+    </select>
+
+    <select id="selectPerformancePostListAll" resultType="PerformancePost" parameterType="Map">
+        select
+        <include refid="base_performance_column_post"/>
+        from a_performance_post where Status = 1
+    </select>
+
+    <select id="selectPerformancePostById" resultType="PerformancePost" parameterType="Long">
+        select
+        <include refid="base_performance_column_post"/>
+        from a_performance_post where Status = 1
+        and id = #{id}
+    </select>
+
+    <select id="selectPerformancePosByCondition" resultType="PerformancePost" parameterType="Map">
+        select
+        <include refid="base_performance_column_post_a"/>
+        from a_performance_post a left join a_performance b on a.AchievementID = b.AchievementID where a.Status = 1
+        <if test="achievementPostCategoryID != null">
+            and a.AchievementPostCategoryID =#{achievementPostCategoryID}
+        </if>
+        <if test="isBasicSalary != null">
+            and a.IsBasicSalary =#{isBasicSalary}
+        </if>
+        <if test="achievementStoreId != null">
+            and a.AchievementStoreId =#{achievementStoreId}
+        </if>
+        <if test="achievementType != null">
+            and b.AchievementType = #{achievementType}
+        </if>
+        <if test="industryId != null">
+            and b.AchievementIndustryID = #{industryId}
+        </if>
+    </select>
+
+    <select id="selectPerformancePosByConditionNoWhere" resultType="PerformancePost" parameterType="Map">
+        select
+        <include refid="base_performance_column_post_a"/>
+        from a_performance_post a left join a_performance b on a.AchievementID = b.AchievementID where a.Status = 1
+        <if test="achievementPostCategoryID != null">
+            and a.AchievementPostCategoryID = 0
+        </if>
+        <if test="isBasicSalary != null">
+            and a.IsBasicSalary =#{isBasicSalary}
+        </if>
+        <if test="achievementStoreId != null">
+            and a.AchievementStoreId = 0
+        </if>
+        <if test="achievementType != null">
+            and b.AchievementType = #{achievementType}
+        </if>
+        <if test="industryId != null">
+            and b.AchievementIndustryID = #{industryId}
+        </if>
+    </select>
+
+
+    <select id="selectPerformanceByID" resultMap="PerformanceMap" parameterType="java.lang.Long">
+        select
+        <include refid="base_performance_column"/>
+        from a_performance
+        where Id = #{id,jdbcType=BIGINT} and Status = 1
+    </select>
+
+
+    <select id="selectPerformanceByCondition" resultMap="PerformanceMap" parameterType="Performance">
+        select
+        <include refid="base_performance_column"/>
+        from a_performance
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="id != null">
+                    AND Id = #{id,jdbcType=BIGINT}
+                </if>
+                <if test="achievementID != null">
+                    AND AchievementID = #{achievementID,jdbcType=BIGINT}
+                </if>
+                <if test="achievementIndustryID != null">
+                    AND AchievementIndustryID = #{achievementIndustryID,jdbcType=BIGINT}
+                </if>
+                <if test="achievementName != null">
+                    AND AchievementName = #{achievementName,jdbcType=VARCHAR}
+                </if>
+                <if test="achievementType != null">
+                    AND AchievementType = #{achievementType,jdbcType=INTEGER}
+                </if>
+                <if test="isStaffReview != null">
+                    AND IsStaffReview = #{isStaffReview,jdbcType=TINYINT}
+                </if>
+                <if test="status != null">
+                    AND Status = #{status,jdbcType=INTEGER}
+                </if>
+                <if test="status == null">
+                    AND Status = 1
+                </if>
+                <if test="createOperator != null">
+                    AND CreateOperator = #{createOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="createTime != null">
+                    AND CreateTime = #{createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="modifyOperator != null">
+                    AND ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="dataChangeLastTime != null">
+                    AND DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <update id="deletePerformanceByID" parameterType="com.lnmj.data.entity.Performance">
+        update a_performance
+        set Status         = 0,
+            ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        where Id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deletePerformancePostByID" parameterType="com.lnmj.data.entity.PerformancePost">
+        update a_performance_post
+        set Status = 0
+        <if test="modifyOperator != null">
+            ,ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        </if>
+        where 1=1
+        <if test="id != null">
+            and Id = #{id,jdbcType=BIGINT}
+        </if>
+        <if test="achievementID != null">
+            and AchievementID = #{achievementID}
+        </if>
+    </update>
+
+    <insert id="insertPerformance" parameterType="com.lnmj.data.entity.Performance">
+        insert into a_performance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="achievementID != null">
+                AchievementID,
+            </if>
+            <if test="achievementIndustryID != null">
+                AchievementIndustryID,
+            </if>
+            <if test="achievementName != null">
+                AchievementName,
+            </if>
+            <if test="achievementType != null">
+                AchievementType,
+            </if>
+            <if test="isStaffReview != null">
+                IsStaffReview,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="achievementID != null">
+                #{achievementID,jdbcType=BIGINT},
+            </if>
+            <if test="achievementIndustryID != null">
+                #{achievementIndustryID,jdbcType=BIGINT},
+            </if>
+            <if test="achievementName != null">
+                #{achievementName,jdbcType=VARCHAR},
+            </if>
+            <if test="achievementType != null">
+                #{achievementType,jdbcType=INTEGER},
+            </if>
+            <if test="isStaffReview != null">
+                #{isStaffReview,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertPerformancePost" parameterType="com.lnmj.data.entity.PerformancePost" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into a_performance_post
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                Id,
+            </if>
+            <if test="achievementID != null">
+                AchievementID,
+            </if>
+            <if test="achievementPostName != null">
+                AchievementPostName,
+            </if>
+            <if test="achievementPostCategoryID != null">
+                AchievementPostCategoryID,
+            </if>
+            <if test="achievementMethods != null">
+                AchievementMethods,
+            </if>
+            <if test="achievementInterval != null">
+                AchievementInterval,
+            </if>
+            <if test="achievementStore != null">
+                AchievementStore,
+            </if>
+            <if test="achievementStoreId != null">
+                AchievementStoreId,
+            </if>
+            <if test="isBasicSalary != null">
+                IsBasicSalary,
+            </if>
+            <if test="isPartTime != null">
+                IsPartTime,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="achievementID != null">
+                #{achievementID},
+            </if>
+            <if test="achievementPostName != null">
+                #{achievementPostName},
+            </if>
+            <if test="achievementPostCategoryID != null">
+                #{achievementPostCategoryID},
+            </if>
+            <if test="achievementMethods != null">
+                #{achievementMethods},
+            </if>
+            <if test="achievementInterval != null">
+                #{achievementInterval},
+            </if>
+            <if test="achievementStore != null">
+                #{achievementStore},
+            </if>
+            <if test="achievementStoreId != null">
+                #{achievementStoreId},
+            </if>
+            <if test="isBasicSalary != null">
+                #{isBasicSalary},
+            </if>
+            <if test="isPartTime != null">
+                #{isPartTime},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updatePerformance" parameterType="com.lnmj.data.entity.Performance">
+        update a_performance
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="achievementIndustryID != null">
+                    AchievementIndustryID = #{achievementIndustryID,jdbcType=BIGINT},
+                </if>
+                <if test="achievementName != null">
+                    AchievementName = #{achievementName,jdbcType=VARCHAR},
+                </if>
+                <if test="achievementType != null">
+                    AchievementType = #{achievementType,jdbcType=INTEGER},
+                </if>
+                <if test="isStaffReview != null">
+                    IsStaffReview = #{isStaffReview,jdbcType=TINYINT},
+                </if>
+                <if test="status != null">
+                    Status = #{status,jdbcType=INTEGER},
+                </if>
+                <if test="createOperator != null">
+                    CreateOperator = #{createOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null">
+                    CreateTime = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="modifyOperator != null">
+                    ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="dataChangeLastTime != null">
+                    DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+                </if>
+            </trim>
+        </set>
+        where Id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updatePerformancePost" parameterType="com.lnmj.data.entity.PerformancePost">
+        update a_performance_post
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="achievementPostCategoryID != null">
+                    AchievementPostCategoryID = #{achievementPostCategoryID},
+                </if>
+                <if test="achievementMethods != null">
+                    AchievementMethods = #{achievementMethods},
+                </if>
+                <if test="achievementPostName != null">
+                    AchievementPostName = #{achievementPostName},
+                </if>
+                <if test="achievementInterval != null">
+                    AchievementInterval = #{achievementInterval},
+                </if>
+                <if test="achievementStore != null">
+                    AchievementStore = #{achievementStore},
+                </if>
+                <if test="achievementStoreId != null">
+                    AchievementStoreId = #{achievementStoreId},
+                </if>
+                <if test="isBasicSalary != null">
+                    IsBasicSalary = #{isBasicSalary},
+                </if>
+                <if test="isPartTime != null">
+                    IsPartTime = #{isPartTime},
+                </if>
+                <if test="status != null">
+                    Status = #{status},
+                </if>
+                <if test="createOperator != null">
+                    CreateOperator = #{createOperator},
+                </if>
+                <if test="createTime != null">
+                    CreateTime = #{createTime},
+                </if>
+                <if test="modifyOperator != null">
+                    ModifyOperator = #{modifyOperator},
+                </if>
+                <if test="dataChangeLastTime != null">
+                    DataChange_LastTime = #{dataChangeLastTime},
+                </if>
+            </trim>
+        </set>
+        where Id = #{id}
+    </update>
+</mapper>

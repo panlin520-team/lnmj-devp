@@ -1,0 +1,40 @@
+#server:
+#  port: 81
+#eureka:
+#  server:
+#    enable-self-preservation: false
+#    eviction-interval-timer-in-ms: 30
+#    peer-eureka-nodes-update-interval-ms: 60000
+#    environment: lnmj
+#  instance:
+#    ip-address: 127.0.0.1
+#    preferIpAddress: true
+#    lease-expiration-duration-in-seconds: 600
+#  client:
+#    healthcheck:
+#      enabled: true
+#    register-with-eureka: false
+#    fetch-registry: false
+#    eureka-service-url-poll-interval-seconds: 60
+#    serviceUrl:
+#      defaultZone: http://192.168.68.188:81/eureka/
+#spring:
+#  application:
+#    name: eurka-server
+#logging:
+#  config: classpath:log4j2.yml
+
+server:
+  port: 81 #端口好
+spring:
+  application:
+    name: eurka-server #应用程序名称
+eureka:
+  client:
+    register-with-eureka: false #表示是否将自己注册到Eureka Server，默认为true
+    fetch-registry: false               #表示是否从Eureka Server获取注册信息，默认为true:
+    serviceUrl:
+      #设置与Eureka Server交互的地址，查询服务和注册服务都需要依赖这个地址。默认是http://localhost:8761/eureka ；多个地址可使用 , 分隔。
+      defaultZone: http://localhost:${server.port}/eureka/
+
+

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="beauticianProject">
+
+    <sql id="Base_Column_List">
+        BeauticianProjectId,PostId,PostLevel,Projuects,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+
+    <insert id="insertProjectToBeautician" parameterType="BeauticianProject">
+        insert into s_beautician_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="postId != null">
+                PostId,
+            </if>
+            <if test="postLevel != null">
+                PostLevel,
+            </if>
+            <if test="projuects != null">
+                Projuects,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+                CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+                DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="postId != null">
+                #{postId},
+            </if>
+            <if test="postLevel != null">
+                #{postLevel},
+            </if>
+            <if test="projuects != null">
+                #{projuects},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+               now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+               now(),
+        </trim>
+    </insert>
+
+    <select id="selectProject" resultType="BeauticianProject" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from s_beautician_project
+        where 1=1
+            and  PostId = #{postId}
+            and  PostLevel = #{postLevel}
+    </select>
+
+    <select id="checkProduct" resultType="int" parameterType="Map">
+        select
+        count(1)
+        from s_beautician_project
+        where PostId = #{postId}
+            and PostLevel = #{postLevel}
+    </select>
+
+    <delete id="deleteProject"  parameterType="Map">
+        delete from s_beautician_project
+        where PostId = #{postId}
+          and PostLevel = #{postLevel}
+    </delete>
+</mapper>
+

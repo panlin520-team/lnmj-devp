@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="StockStatus" >
+  <resultMap id="StockStatusMap" type="com.lnmj.product.entity.StockStatus" >
+    <id column="StockStatusID" property="stockStatusID" jdbcType="BIGINT" />
+    <result column="Code" property="code" jdbcType="VARCHAR" />
+    <result column="Id" property="id" jdbcType="VARCHAR" />
+    <result column="Type" property="type" jdbcType="VARCHAR" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="IsUse" property="isUse" jdbcType="TINYINT" />
+    <result column="IsMarket" property="isMarket" jdbcType="TINYINT" />
+    <result column="IsReceive" property="isReceive" jdbcType="TINYINT" />
+    <result column="IsLock" property="isLock" jdbcType="TINYINT" />
+    <result column="IsMRP" property="isMRP" jdbcType="TINYINT" />
+    <result column="DataStatus" property="dataStatus" jdbcType="VARCHAR" />
+    <result column="Auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="AuditorTime" property="auditorTime" jdbcType="TIMESTAMP" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="base_stockstatus_column" >
+    StockStatusID, Code,Id, Type, Name, IsUse, IsMarket, IsReceive, IsLock, IsMRP, DataStatus,
+    Auditor, AuditorTime, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectStockStatusList" resultMap="StockStatusMap">
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_stockstatus_column" />
+    from s_stockstatus where Status = 1
+  </select>
+
+  <select id="selectStockStatusByID" resultMap="StockStatusMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_stockstatus_column" />
+    from s_stockstatus
+    where StockStatusId = #{stockStatusID,jdbcType=BIGINT}
+  </select>
+
+  <update id="deleteStockStatusByID" parameterType="StockStatus" >
+    update s_stockstatus set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    where StockStatusId = #{stockStatusID,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertStockStatus" parameterType="com.lnmj.product.entity.StockStatus" keyProperty="stockStatusID" useGeneratedKeys="true" >
+    insert into s_stockstatus
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stockStatusID != null" >
+        StockStatusID,
+      </if>
+      <if test="code != null" >
+        Code,
+      </if>
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="type != null" >
+        Type,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="isUse != null" >
+        IsUse,
+      </if>
+      <if test="isMarket != null" >
+        IsMarket,
+      </if>
+      <if test="isReceive != null" >
+        IsReceive,
+      </if>
+      <if test="isLock != null" >
+        IsLock,
+      </if>
+      <if test="isMRP != null" >
+        IsMRP,
+      </if>
+      <if test="dataStatus != null" >
+        DataStatus,
+      </if>
+      <if test="auditor != null" >
+        Auditor,
+      </if>
+      <if test="auditorTime != null" >
+        AuditorTime,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stockStatusID != null" >
+        #{stockStatusID,jdbcType=BIGINT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        #{isUse,jdbcType=TINYINT},
+      </if>
+      <if test="isMarket != null" >
+        #{isMarket,jdbcType=TINYINT},
+      </if>
+      <if test="isReceive != null" >
+        #{isReceive,jdbcType=TINYINT},
+      </if>
+      <if test="isLock != null" >
+        #{isLock,jdbcType=TINYINT},
+      </if>
+      <if test="isMRP != null" >
+        #{isMRP,jdbcType=TINYINT},
+      </if>
+      <if test="dataStatus != null" >
+        #{dataStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorTime != null" >
+        #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateStockStatusByID" parameterType="com.lnmj.product.entity.StockStatus" >
+    update s_stockstatus
+    <set >
+      <if test="code != null" >
+        Code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        Id = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        Type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        IsUse = #{isUse,jdbcType=TINYINT},
+      </if>
+      <if test="isMarket != null" >
+        IsMarket = #{isMarket,jdbcType=TINYINT},
+      </if>
+      <if test="isReceive != null" >
+        IsReceive = #{isReceive,jdbcType=TINYINT},
+      </if>
+      <if test="isLock != null" >
+        IsLock = #{isLock,jdbcType=TINYINT},
+      </if>
+      <if test="isMRP != null" >
+        IsMRP = #{isMRP,jdbcType=TINYINT},
+      </if>
+      <if test="dataStatus != null" >
+        DataStatus = #{dataStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditor != null" >
+        Auditor = #{auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorTime != null" >
+        AuditorTime = #{auditorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where StockStatusID = #{stockStatusID,jdbcType=BIGINT}
+  </update>
+</mapper>

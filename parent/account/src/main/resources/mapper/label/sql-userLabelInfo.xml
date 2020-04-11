@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="userLabelInfo">
+    <sql id="Base_Column_List">
+        UserId,
+        LabelId,
+        IsHairdressingOldUser,
+        IsCosmetologyOldUser,
+        IsLoseUser,Status, CreateOperator, CreateTime, ModifyOperator,DataChange_LastTime
+    </sql>
+    <insert id="insert" parameterType="UserLabelInfo">
+        insert into u_user_label_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                UserId,
+            </if>
+            <if test="labelId != null">
+                LabelId,
+            </if>
+            <if test="isHairdressingOldUser != null">
+                isHairdressingOldUser,
+            </if>
+            <if test="isCosmetologyOldUser != null">
+                isCosmetologyOldUser,
+            </if>
+            <if test="isLoseUser != null">
+                isLoseUser,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="labelId != null">
+                #{labelId,jdbcType=BIGINT},
+            </if>
+            <if test="isHairdressingOldUser != null">
+                isHairdressingOldUser,
+            </if>
+            <if test="isCosmetologyOldUser != null">
+                isCosmetologyOldUser,
+            </if>
+            <if test="isLoseUser != null">
+                isLoseUser,
+            </if>
+        </trim>
+    </insert>
+    <select id="selectAll" resultType="UserLabelInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from u_user_label_info
+    </select>
+
+    <select id="checkIsExit" resultType="UserLabelInfo" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from u_user_label_info
+        where 1=1
+        <if test="labelId != null">
+            and LabelId = #{labelId}
+        </if>
+        <if test="userId != null">
+            and UserId = #{userId}
+        </if>
+    </select>
+
+    <update id="update" parameterType="UserLabelInfo">
+        update u_user_label_info
+        <set>
+            <trim suffixOverrides=",">
+                <if test="isHairdressingOldUser != null">
+                    IsHairdressingOldUser = #{isHairdressingOldUser},
+                </if>
+                <if test="isCosmetologyOldUser != null">
+                    IsCosmetologyOldUser= #{isCosmetologyOldUser},
+                </if>
+                <if test="isLoseUser != null">
+                    IsLoseUser= #{isLoseUser}
+                </if>
+            </trim>
+        </set>
+        where
+        UserId = #{userId}
+        and
+        LabelId = #{labelId}
+    </update>
+
+    <delete id="delete" parameterType="Map">
+        delete
+        from u_user_label_info
+        where UserId = ${userId}
+        <if test="modifyOperator != null" >
+            ModifyOperator = #{modifyOperator}
+        </if>
+    </delete>
+</mapper>

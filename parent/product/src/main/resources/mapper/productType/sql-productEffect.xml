@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="productEffect" >
+    <!--商品功效-->
+    <!--商品功效基本字段-->
+    <sql id="product_effect_base_column" >
+        ProductEffectId,ProductEffectName,ProductKindId,
+        ProductEffectOrder,ProductTypeDisplayId,ImageType,ImageUrl,ImageHeight,ImageWidth,
+        IntegralratioService,IntegralratioUnion,RetailpriceVIP1,RetailpriceVIP2,RetailpriceVIP3,
+        RetailpriceVIP4,RetailpriceVIP5,Status,CreateOperator,CreateTime,ModifyOperator,DataChange_LastTime
+    </sql>
+    <!--插入商品功效表字段-->
+    <sql id="sql_insert_product_effect_column" >
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="productEffectName != null" >ProductEffectName,</if>
+            <if test="productKindId != null" >ProductKindId,</if>
+            <if test="productEffectOrder != null" >ProductEffectOrder,</if>
+            <if test="productTypeDisplayId != null" >ProductTypeDisplayId,</if>
+            <if test="imageType != null" >ImageType,</if>
+            <if test="imageUrl != null" >ImageUrl,</if>
+            <if test="imageHeight != null" >ImageHeight,</if>
+            <if test="imageWidth != null" >ImageWidth,</if>
+            <if test="integralratioService != null" >IntegralratioService,</if>
+            <if test="integralratioUnion != null" >IntegralratioUnion,</if>
+            <if test="retailpriceVIP1 != null" >RetailpriceVIP1,</if>
+            <if test="retailpriceVIP2 != null" >RetailpriceVIP2,</if>
+            <if test="retailpriceVIP3 != null" >RetailpriceVIP3,</if>
+            <if test="retailpriceVIP4 != null" >RetailpriceVIP4,</if>
+            <if test="retailpriceVIP5 != null" >RetailpriceVIP5,</if>
+            <if test="createOperator != null" >CreateOperator,</if>
+            <if test="modifyOperator != null" >ModifyOperator,</if>
+        </trim>
+    </sql>
+    <!--插入商品功效表值-->
+    <sql id="sql_insert_product_effect_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="productEffectName != null" >#{productEffectName},</if>
+            <if test="productKindId != null" >#{productKindId},</if>
+            <if test="productEffectOrder != null" >#{productEffectOrder},</if>
+            <if test="productTypeDisplayId != null" >#{productTypeDisplayId},</if>
+            <if test="imageType != null" >#{imageType},</if>
+            <if test="imageUrl != null" >#{imageUrl},</if>
+            <if test="imageHeight != null" >#{imageHeight},</if>
+            <if test="imageWidth != null" >#{imageWidth},</if>
+            <if test="integralratioService != null" >#{integralratioService},</if>
+            <if test="integralratioUnion != null" >#{integralratioUnion},</if>
+            <if test="retailpriceVIP1 != null" >#{retailpriceVIP1},</if>
+            <if test="retailpriceVIP2 != null" >#{retailpriceVIP2},</if>
+            <if test="retailpriceVIP3 != null" >#{retailpriceVIP3},</if>
+            <if test="retailpriceVIP4 != null" >#{retailpriceVIP4},</if>
+            <if test="retailpriceVIP5 != null" >#{retailpriceVIP5},</if>
+            <if test="createOperator != null" >#{createOperator},</if>
+            <if test="modifyOperator != null" >#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <!--修改商品功效-->
+    <sql id="sql_set_product_effect_column" >
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="productEffectName != null" >,ProductEffectName=#{productEffectName}</if>
+                <if test="productKindId != null" >,ProductKindId=#{productKindId}</if>
+                <if test="productEffectOrder != null" >,ProductEffectOrder=#{productEffectOrder}</if>
+                <if test="productTypeDisplayId != null" >,ProductTypeDisplayId=#{productTypeDisplayId}</if>
+                <if test="imageType != null" >,ImageType=#{imageType}</if>
+                <if test="imageUrl != null" >,ImageUrl=#{imageUrl}</if>
+                <if test="imageHeight != null" >,ImageHeight=#{imageHeight}</if>
+                <if test="imageWidth != null" >,ImageWidth=#{imageWidth}</if>
+                <if test="integralratioService != null" >,IntegralratioService=#{integralratioService}</if>
+                <if test="integralratioUnion != null" >,IntegralratioUnion=#{integralratioUnion}</if>
+                <if test="retailpriceVIP1 != null" >,RetailpriceVIP1=#{retailpriceVIP1}</if>
+                <if test="retailpriceVIP2 != null" >,RetailpriceVIP1=#{retailpriceVIP2}</if>
+                <if test="retailpriceVIP3 != null" >,RetailpriceVIP1=#{retailpriceVIP3}</if>
+                <if test="retailpriceVIP4 != null" >,RetailpriceVIP1=#{retailpriceVIP4}</if>
+                <if test="retailpriceVIP5 != null" >,RetailpriceVIP1=#{retailpriceVIP5}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}></if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+
+    <!--商品功效分页显示-->
+    <select id="selectProductEffectList" resultType="com.lnmj.product.entity.ProductEffect">
+        select <include refid="product_effect_base_column" /> from p_producteffect
+        where Status = 1
+    </select>
+
+    <!--商品功效关键字查询-->
+    <select id="selectProductEffectByKeyWord" parameterType="String" resultType="com.lnmj.product.entity.ProductEffect">
+        select <include refid="product_effect_base_column" /> from p_producteffect
+        <where>
+            <if test="_parameter != null">ProductEffectName like CONCAT('%',#{keyWord},'%')</if>
+        </where>
+    </select>
+    <!--新增商品功效-->
+    <insert id="insertProductEffect" parameterType="ProductEffect" keyProperty="productEffectId" useGeneratedKeys="true" >
+        insert into p_producteffect
+        <include refid="sql_insert_product_effect_column"/>
+        <include refid="sql_insert_product_effect_values"/>
+    </insert>
+    <!--删除商品功效-->
+    <delete id="deleteProductEffect" parameterType="Long" >
+        delete from p_producteffect where ProductEffectId=#{productEffectId}
+    </delete>
+    <!--根据商品功效id查询商品功效-->
+    <select id="selectProductEffectByProductEffectId" parameterType="Long" resultType="com.lnmj.product.entity.ProductEffect" >
+        select <include refid="product_effect_base_column" />
+        from p_producteffect where ProductEffectId=#{productEffectId} and Status = 1
+    </select>
+    <!--修改商品功效-->
+    <update id="updateProductEffect" parameterType="com.lnmj.product.entity.ProductEffect">
+        update p_producteffect
+        <include refid="sql_set_product_effect_column"/>
+        where ProductEffectId=#{productEffectId}
+    </update>
+    <!--根据商品功效Id查询商品-->
+    <select id="selectProductByProductEffectId" parameterType="Long" resultType="Product">
+        select <include refid="product.Base_Column_List"/>
+        from p_product where ProductEffect=#{productEffectId} and Status = 1
+    </select>
+    <!--根据商品功效id查询服务-->
+    <select id="selectServiceByProductEffectId" parameterType="Long" resultType="ServiceProduct">
+        select <include refid="serviceProduct.Base_Column_List"/>
+        from p_productservice where ProductEffect=#{productEffectId} and Status = 1
+    </select>
+</mapper>

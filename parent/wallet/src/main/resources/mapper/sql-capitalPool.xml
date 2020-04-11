@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="capitalPool">
+    <sql id="Base_Column_List">
+    id, Type, PayType, StoreId, Amount, ResidueAmount,Remarks, AdvancesReceivedAccount,Status, CreateOperator, CreateTime,
+    ModifyOperator, DataChange_LastTime
+  </sql>
+    <sql id="Base_Column_List_Transfer">
+    Id, CapitalPoolId, TransferToStoreId, TransferFromStoreId, Amount, TransferType,
+    OrderNumber,Remarks, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+    <insert id="addCapitalPool" parameterType="CapitalPool" useGeneratedKeys="true" keyProperty="id">
+        insert into capital_pool
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="type != null">
+                Type,
+            </if>
+            <if test="payType != null">
+                PayType,
+            </if>
+            <if test="storeId != null">
+                StoreId,
+            </if>
+            <if test="amount != null">
+                Amount,
+            </if>
+            <if test="residueAmount != null">
+                ResidueAmount,
+            </if>
+            <if test="remarks != null">
+                Remarks,
+            </if>
+            <if test="advancesReceivedAccount != null">
+                AdvancesReceivedAccount,
+            </if>
+            <if test="orderNumber != null">
+                OrderNumber,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="payType != null">
+                #{payType,jdbcType=INTEGER},
+            </if>
+            <if test="storeId != null">
+                #{storeId,jdbcType=BIGINT},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="residueAmount != null">
+                #{residueAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="advancesReceivedAccount != null">
+                #{advancesReceivedAccount,jdbcType=BIGINT},
+            </if>
+            <if test="orderNumber != null">
+                #{orderNumber},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChange_LastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateCapitalPool" parameterType="CapitalPool">
+        update capital_pool
+        <set>
+            <if test="type != null">
+                Type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="payType != null">
+                PayType = #{payType,jdbcType=INTEGER},
+            </if>
+            <if test="storeId != null">
+                StoreId = #{storeId,jdbcType=BIGINT},
+            </if>
+            <if test="amount != null">
+                Amount = Amount + #{amount},
+            </if>
+            <if test="residueAmountUpOrDown == 1">
+                ResidueAmount = ResidueAmount - #{residueAmount},
+            </if>
+            <if test="residueAmountUpOrDown == 2">
+                ResidueAmount = ResidueAmount + #{residueAmount},
+            </if>
+            <if test="remarks != null">
+                Remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNumber != null">
+                OrderNumber = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where 1=1
+        <if test="storeId != null">
+            and StoreId = #{storeId}
+        </if>
+        <if test="advancesReceivedAccount != null">
+            and AdvancesReceivedAccount = #{advancesReceivedAccount}
+        </if>
+        <if test="id != null">
+            and id = #{id}
+        </if>
+    </update>
+
+    <select id="selectCapitalPoolList" resultType="CapitalPool" parameterType="CapitalPool">
+        select
+        <include refid="Base_Column_List"/>
+        from capital_pool
+        where 1=1
+        <if test="storeId != null">
+            and StoreId = #{storeId}
+        </if>
+        <if test="type != null">
+            and Type = #{type}
+        </if>
+        <if test="advancesReceivedAccount != null">
+            and AdvancesReceivedAccount = #{advancesReceivedAccount}
+        </if>
+        <if test="notStoreId != null">
+            and StoreId != #{notStoreId}
+        </if>
+    </select>
+
+    <insert id="addTransfer" parameterType="Transfer">
+        insert into transfer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="capitalPoolId != null">
+                CapitalPoolId,
+            </if>
+            <if test="transferToStoreId != null">
+                TransferToStoreId,
+            </if>
+            <if test="transferFromStoreId != null">
+                TransferFromStoreId,
+            </if>
+            <if test="amount != null">
+                Amount,
+            </if>
+            <if test="transferType != null">
+                TransferType,
+            </if>
+            <if test="remarks != null">
+                Remarks,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="capitalPoolId != null">
+                #{capitalPoolId},
+            </if>
+            <if test="transferToStoreId != null">
+                #{transferToStoreId},
+            </if>
+            <if test="transferFromStoreId != null">
+                #{transferFromStoreId},
+            </if>
+            <if test="amount != null">
+                #{amount},
+            </if>
+            <if test="transferType != null">
+                #{transferType},
+            </if>
+            <if test="remarks != null">
+                #{remarks},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <select id="selectTransfer" resultType="Transfer" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Transfer"/>
+        from transfer
+        where 1=1
+        <if test="capitalPoolId != null">
+            and CapitalPoolId = #{capitalPoolId}
+        </if>
+        <if test="transferToStoreId != null">
+            and TransferToStoreId = #{transferToStoreId}
+        </if>
+        <if test="transferFromStoreId != null">
+            and TransferFromStoreId = #{transferFromStoreId}
+        </if>
+    </select>
+
+    <update id="reduceForwardSaleByCondition" parameterType="CapitalPool">
+        update capital_pool
+        <set>
+            <if test="amount != null">
+                Amount = Amount - #{amount},
+                ResidueAmount = ResidueAmount - #{amount}
+            </if>
+        </set>
+        where 1=1
+        <if test="storeId != null">
+            and StoreId = #{storeId}
+        </if>
+        <if test="type != null">
+            and Type = #{type}
+        </if>
+        <if test="advancesReceivedAccount != null">
+            and AdvancesReceivedAccount = #{advancesReceivedAccount}
+        </if>
+    </update>
+
+    <delete id="deleteCapPoolByOrderNumber" parameterType="CapitalPool">
+        delete from capital_pool where OrderNumber = #{orderNumber}
+    </delete>
+</mapper>

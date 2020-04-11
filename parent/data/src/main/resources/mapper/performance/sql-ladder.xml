@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ladder">
+    <resultMap id="LadderMap" type="com.lnmj.data.entity.Ladder">
+        <id column="LadderID" property="ladderID" jdbcType="BIGINT"/>
+        <result column="rownum" property="rownum" jdbcType="BIGINT"/>
+        <result column="LadderAchievementID" property="ladderAchievementID" jdbcType="BIGINT"/>
+        <result column="LadderName" property="ladderName" jdbcType="VARCHAR"/>
+        <result column="LadderLower" property="ladderLower" jdbcType="BIGINT"/>
+        <result column="LadderProportion" property="ladderProportion" jdbcType="DECIMAL"/>
+        <result column="LadderBonus" property="ladderBonus" jdbcType="DECIMAL"/>
+        <result column="Status" property="status" jdbcType="INTEGER"/>
+        <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR"/>
+        <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="base_ladder_column">
+            (@i:=@i+1)
+            AS
+            rownum
+            ,
+            LadderID
+            ,
+            LadderAchievementID
+            ,
+            LadderAchievementPostID
+            ,
+            LadderName
+            ,
+            LadderLower
+            ,
+            LadderProportion
+            ,
+            LadderBonus
+            ,
+            Status
+            ,
+            CreateOperator
+            ,
+            CreateTime
+            ,
+            ModifyOperator
+            ,
+            DataChange_LastTime
+    </sql>
+
+    <!--根据业绩ID插入业绩阶梯-->
+    <insert id="insertLadderList" parameterType="List" keyProperty="ladderID" useGeneratedKeys="true">
+        insert into a_ladder(LadderAchievementID, LadderName, LadderLower, LadderProportion, LadderBonus,
+        Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime)
+        values
+        <foreach collection="ladderList" item="item" index="index" separator=",">
+            <trim suffix=")" prefix="(" suffixOverrides=",">
+                <!--<if test="item.ladderID != null" >-->
+                <!--#{item.ladderID,jdbcType=BIGINT},-->
+                <!--</if>-->
+                <if test="item.ladderAchievementID != null">
+                    #{item.ladderAchievementID,jdbcType=BIGINT},
+                </if>
+                <if test="item.ladderAchievementPostID != null">
+                    #{item.ladderAchievementPostID,jdbcType=BIGINT},
+                </if>
+                <if test="item.ladderName != null">
+                    #{item.ladderName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.ladderLower != null">
+                    #{item.ladderLower,jdbcType=BIGINT},
+                </if>
+                <if test="item.ladderLower == null">
+                    0,
+                </if>
+                <if test="item.ladderProportion != null">
+                    #{item.ladderProportion,jdbcType=DECIMAL},
+                </if>
+                <if test="item.ladderProportion == null">
+                    0,
+                </if>
+                <if test="item.ladderBonus != null">
+                    #{item.ladderBonus,jdbcType=DECIMAL},
+                </if>
+                <if test="item.ladderBonus == null">
+                    0,
+                </if>
+                <if test="item.status != null">
+                    #{item.status,jdbcType=INTEGER},
+                </if>
+                <if test="item.status == null">
+                    1,
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="item.createOperator == null">
+                    "",
+                </if>
+                <if test="item.createTime != null">
+                    #{item.createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.createTime != null">
+                    NOW(),
+                </if>
+                <if test="item.modifyOperator != null">
+                    #{item.modifyOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="item.modifyOperator == null">
+                    "",
+                </if>
+                <if test="item.dataChangeLastTime != null">
+                    #{item.dataChangeLastTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.dataChangeLastTime == null">
+                    NOW(),
+                </if>
+            </trim>
+        </foreach>
+    </insert>
+
+    <!--根据业绩ID删除业绩阶梯-->
+    <update id="deleteLadderByAchievementID" parameterType="Ladder">
+        update a_ladder set Status = 0,ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        where 1=1
+        <if test="ladderAchievementID != null">
+            and LadderAchievementID = #{ladderAchievementID,jdbcType=BIGINT}
+        </if>
+        <if test="ladderAchievementPostID != null">
+            and LadderAchievementPostID = #{ladderAchievementPostID,jdbcType=BIGINT}
+        </if>
+    </update>
+
+    <!--根据业绩ID删除业绩阶梯-->
+    <delete id="deleteLadderByAchievementIDLongTime" parameterType="Ladder">
+        delete from a_ladder
+        where 1=1
+        <if test="ladderAchievementID != null">
+            and LadderAchievementID = #{ladderAchievementID,jdbcType=BIGINT}
+        </if>
+        <if test="ladderAchievementPostID != null">
+            and LadderAchievementPostID = #{ladderAchievementPostID,jdbcType=BIGINT}
+        </if>
+    </delete>
+
+    <!--根据业绩ID更新业绩阶梯-->
+    <update id="updateLadderList" parameterType="List">
+        update a_ladder
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="LadderAchievementID = case" suffix="end,">
+                <foreach collection="ladderList" item="item">
+                    <if test="item.ladderAchievementID != null">
+                        when id=#{item.ladderID} then #{item.ladderAchievementID}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="LadderAchievementPostID = case" suffix="end,">
+                <foreach collection="ladderList" item="item">
+                    <if test="item.ladderAchievementPostID != null">
+                        when id=#{item.ladderID} then #{item.ladderAchievementPostID}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="LadderName = case" suffix="end,">
+                <foreach collection="ladderList" item="item">
+                    <if test="item.ladderName != null">
+                        when id=#{item.ladderID} then #{item.ladderName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="LadderLower = case" suffix="end,">
+                <foreach collection="ladderList" item="item">
+                    <if test="item.ladderLower != null">
+                        when id=#{item.ladderID} then #{item.ladderLower}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="LadderProportion = case" suffix="end,">
+                <foreach collection="ladderList" item="item">
+                    <if test="item.ladderProportion != null">
+                        when id=#{item.ladderID} then #{item.ladderProportion}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="LadderBonus = case" suffix="end,">
+                <foreach collection="ladderList" item="item">
+                    <if test="item.ladderBonus != null">
+                        when id=#{item.ladderID} then #{item.ladderBonus}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="ModifyOperator = case" suffix="end,">
+                <foreach collection="ladderList" item="item">
+                    <if test="item.modifyOperator != null">
+                        when id=#{item.ladderID} then #{item.modifyOperator}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="DataChange_LastTime = case" suffix="end,">
+                <foreach collection="ladderList" item="item">
+                    <if test="item.dataChangeLastTime != null">
+                        when id=#{item.ladderID} then #{item.dataChangeLastTime}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+    </update>
+
+    <select id="selectLadderList" resultMap="LadderMap" parameterType="com.lnmj.data.entity.Ladder">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="base_ladder_column"/>
+        from a_ladder,(select @i:=0) as it where Status = 1
+    </select>
+
+    <select id="selectLadderByID" resultMap="LadderMap" parameterType="java.lang.Long">
+        select
+        <include refid="base_ladder_column"/>
+        from a_ladder,(select @i:=0) as it
+        where LadderID = #{ladderID,jdbcType=BIGINT} and Status = 1
+    </select>
+
+    <select id="selectLadderByCondition" resultMap="LadderMap" parameterType="Ladder">
+        select
+        <include refid="base_ladder_column"/>
+        from a_ladder,(select @i:=0) as it
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="ladderID != null">
+                    AND LadderID = #{ladderID,jdbcType=BIGINT}
+                </if>
+                <if test="ladderAchievementID != null">
+                    AND LadderAchievementID = #{ladderAchievementID,jdbcType=BIGINT}
+                </if>
+                <if test="ladderAchievementPostID != null">
+                    AND LadderAchievementPostID = #{ladderAchievementPostID}
+                </if>
+                <if test="ladderName != null">
+                    AND LadderName = #{ladderName,jdbcType=VARCHAR}
+                </if>
+                <if test="ladderLower != null">
+                    AND LadderLower = #{ladderLower,jdbcType=BIGINT}
+                </if>
+                <if test="ladderProportion != null">
+                    AND LadderProportion = #{ladderProportion,jdbcType=DECIMAL}
+                </if>
+                <if test="ladderBonus != null">
+                    AND LadderBonus = #{ladderBonus,jdbcType=DECIMAL}
+                </if>
+                <if test="status != null">
+                    AND Status = #{status,jdbcType=INTEGER}
+                </if>
+                <if test="status == null">
+                    AND Status = 1
+                </if>
+                <if test="createOperator != null">
+                    AND CreateOperator = #{createOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="createTime != null">
+                    AND CreateTime = #{createTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="modifyOperator != null">
+                    AND ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+                </if>
+                <if test="dataChangeLastTime != null">
+                    AND DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <update id="deleteLadderByID" parameterType="Ladder">
+        update a_ladder
+        set Status         = 0,
+            ModifyOperator = #{modifyOperator,jdbcType=VARCHAR}
+        where LadderID = #{ladderID,jdbcType=BIGINT}
+    </update>
+
+    <insert id="insertLadder" parameterType="com.lnmj.data.entity.Ladder" keyProperty="ladderID"
+            useGeneratedKeys="true">
+        insert into a_ladder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ladderID != null">
+                LadderID,
+            </if>
+            <if test="ladderAchievementID != null">
+                LadderAchievementID,
+            </if>
+            <if test="ladderAchievementPostID != null">
+                LadderAchievementPostID,
+            </if>
+            <if test="ladderName != null">
+                LadderName,
+            </if>
+            <if test="ladderLower != null">
+                LadderLower,
+            </if>
+            <if test="ladderProportion != null">
+                LadderProportion,
+            </if>
+            <if test="ladderBonus != null">
+                LadderBonus,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            <if test="dataChangeLastTime != null">
+                DataChange_LastTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ladderID != null">
+                #{ladderID,jdbcType=BIGINT},
+            </if>
+            <if test="ladderAchievementID != null">
+                #{ladderAchievementID,jdbcType=BIGINT},
+            </if>
+            <if test="ladderAchievementPostID != null">
+                #{ladderAchievementPostID,jdbcType=BIGINT},
+            </if>
+            <if test="ladderName != null">
+                #{ladderName,jdbcType=VARCHAR},
+            </if>
+            <if test="ladderLower != null">
+                #{ladderLower,jdbcType=BIGINT},
+            </if>
+            <if test="ladderProportion != null">
+                #{ladderProportion,jdbcType=DECIMAL},
+            </if>
+            <if test="ladderBonus != null">
+                #{ladderBonus,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyOperator != null">
+                #{modifyOperator,jdbcType=VARCHAR},
+            </if>
+            <if test="dataChangeLastTime != null">
+                #{dataChangeLastTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateLadder" parameterType="com.lnmj.data.entity.Ladder">
+        update a_ladder
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="ladderAchievementID != null">
+                    LadderAchievementID = #{ladderAchievementID,jdbcType=BIGINT},
+                </if>
+                <if test="ladderAchievementPostID != null">
+                    LadderAchievementPostID = #{ladderAchievementPostID,jdbcType=BIGINT},
+                </if>
+                <if test="ladderName != null">
+                    LadderName = #{ladderName,jdbcType=VARCHAR},
+                </if>
+                <if test="ladderLower != null">
+                    LadderLower = #{ladderLower,jdbcType=BIGINT},
+                </if>
+                <if test="ladderProportion != null">
+                    LadderProportion = #{ladderProportion,jdbcType=DECIMAL},
+                </if>
+                <if test="ladderBonus != null">
+                    LadderBonus = #{ladderBonus,jdbcType=DECIMAL},
+                </if>
+                <if test="status != null">
+                    Status = #{status,jdbcType=INTEGER},
+                </if>
+                <if test="createOperator != null">
+                    CreateOperator = #{createOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null">
+                    CreateTime = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="modifyOperator != null">
+                    ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+                </if>
+                <if test="dataChangeLastTime != null">
+                    DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+                </if>
+            </trim>
+        </set>
+        where LadderID = #{ladderID,jdbcType=BIGINT}
+    </update>
+
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bankCard" >
+  <sql id="Base_Column_List" >
+    BankCardId, CardNumber, Name, BankName, BankCode, Status, CreateOperator, CreateTime, 
+    ModifyOperator, DataChange_LastTime
+  </sql>
+  <select id="selectBankCardId" resultType="Long" parameterType="Long">
+    select
+      BankCardId
+    from w_walletbankcard
+    where CardNumber = #{cardNumber}
+  </select>
+
+</mapper>

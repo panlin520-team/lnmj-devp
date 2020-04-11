@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="appointment">
+    <!--设置的值-->
+    <sql id="option_value_base_column">
+        UserOptionId
+        ,
+        UserId,
+        CardNumber,
+        OptionId,
+        UserValue,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <sql id="sql_insert_option_value_column">
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="userId != null">UserId,</if>
+            <if test="cardNumber != null">CardNumber,</if>
+            <if test="optionId != null">OptionId,</if>
+            <if test="userValue != null">UserValue,</if>
+            <if test="status != null">Status,</if>
+            <if test="createOperator != null">CreateOperator,</if>
+            <if test="modifyOperator != null">ModifyOperator,</if>
+        </trim>
+    </sql>
+    <sql id="sql_insert_option_value_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="userId != null">#{userId},</if>
+            <if test="cardNumber != null">#{cardNumber},</if>
+            <if test="optionId != null">#{optionId},</if>
+            <if test="userValue != null">#{userValue},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createOperator != null">#{createOperator},</if>
+            <if test="modifyOperator != null">#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <sql id="sql_set_option_value_column">
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="userId != null">,UserId=#{userId}</if>
+                <if test="cardNumber != null">,CardNumber=#{cardNumber}</if>
+                <if test="optionId != null">,OptionId=#{optionId}</if>
+                <if test="userValue != null">,UserValue=#{userValue}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}</if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+
+    <!--设置-->
+    <sql id="option_base_column">
+        OptionId
+        ,
+        OptionTitle,
+        OptionSort,
+        OptionValue,
+        Remark,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <!--插入设置表字段-->
+    <sql id="sql_insert_option_column">
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="optionTitle != null">OptionTitle,</if>
+            <if test="optionSort != null">OptionSort,</if>
+            <if test="optionValue != null">OptionValue,</if>
+            <if test="remark != null">Remark,</if>
+            <if test="status != null">Status,</if>
+            <if test="createOperator != null">CreateOperator,</if>
+            <if test="modifyOperator != null">ModifyOperator,</if>
+        </trim>
+    </sql>
+    <!--插入设置表值-->
+    <sql id="sql_insert_option_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="optionTitle != null">#{optionTitle},</if>
+            <if test="optionSort != null">#{optionSort},</if>
+            <if test="optionValue != null">#{optionValue},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createOperator != null">#{createOperator},</if>
+            <if test="modifyOperator != null">#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <!--修改设置-->
+    <sql id="sql_set_option_column">
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="optionTitle != null">,OptionTitle=#{optionTitle}</if>
+                <if test="optionSort != null">,OptionSort=#{optionSort}</if>
+                <if test="optionValue != null">,OptionValue=#{optionValue}</if>
+                <if test="remark != null">,Remark=#{remark}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}</if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+
+    <!--门店预约-->
+    <!--预约基本字段-->
+    <sql id="appointment_base_column">
+        AppointmentId
+        ,
+        AppointmentType,
+        ConsumerId,
+        Consumer,
+        ConsumerPhone,
+        Product,
+        Performance,
+        Selling,
+        Source,
+        StoreId,
+        StoreName,
+        EmployeeCode,
+        NursingTime,
+        Duration,
+        StoreNumber,
+        OrderNumber,
+        PushPayStatus,
+        PushAppoinmentStatus,
+        AppointmentStatus,
+        Remark,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+    <!--插入预约表字段-->
+    <sql id="sql_insert_appointment_column">
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="appointmentId != null">AppointmentId,</if>
+            <if test="appointmentType != null">AppointmentType,</if>
+            <if test="consumerId != null">ConsumerId,</if>
+            <if test="consumer != null">Consumer,</if>
+            <if test="consumerPhone != null">ConsumerPhone,</if>
+            <if test="product != null">Product,</if>
+            <if test="performance != null">Performance,</if>
+            <if test="selling != null">Selling,</if>
+            <if test="source != null">Source,</if>
+            <if test="storeId != null">StoreId,</if>
+            <if test="storeName != null">StoreName,</if>
+            <if test="employeeCode != null">EmployeeCode,</if>
+            <if test="nursingTime != null">NursingTime,</if>
+            <if test="duration != null">Duration,</if>
+            <if test="storeNumber != null">StoreNumber,</if>
+            <if test="orderNumber != null">OrderNumber,</if>
+            <if test="appointmentStatus != null">AppointmentStatus,</if>
+            <if test="pushPayStatus != null">PushPayStatus,</if>
+            <if test="pushAppoinmentStatus != null">PushAppoinmentStatus,</if>
+            <if test="remark != null">Remark,</if>
+            <if test="status != null">Status,</if>
+            <if test="createOperator != null">CreateOperator,</if>
+            <if test="modifyOperator != null">ModifyOperator,</if>
+        </trim>
+    </sql>
+    <!--插入预约表值-->
+    <sql id="sql_insert_appointment_values">
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="appointmentId != null">#{appointmentId},</if>
+            <if test="appointmentType != null">#{appointmentType},</if>
+            <if test="consumerId != null">#{consumerId},</if>
+            <if test="consumer != null">#{consumer},</if>
+            <if test="consumerPhone != null">#{consumerPhone},</if>
+            <if test="product != null">#{product},</if>
+            <if test="performance != null">#{performance},</if>
+            <if test="selling != null">#{selling},</if>
+            <if test="source != null">#{source},</if>
+            <if test="storeId != null">#{storeId},</if>
+            <if test="storeName != null">#{storeName},</if>
+            <if test="employeeCode != null">#{employeeCode},</if>
+            <if test="nursingTime != null">#{nursingTime},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="storeNumber != null">#{storeNumber},</if>
+            <if test="orderNumber != null">#{orderNumber},</if>
+            <if test="appointmentStatus != null">#{appointmentStatus},</if>
+            <if test="pushPayStatus != null">#{pushPayStatus},</if>
+            <if test="pushAppoinmentStatus != null">#{pushAppoinmentStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createOperator != null">#{createOperator},</if>
+            <if test="modifyOperator != null">#{modifyOperator},</if>
+        </trim>
+    </sql>
+    <!--修改预约-->
+    <sql id="sql_set_appointment_column">
+        <set>
+            <trim prefix="" prefixOverrides=",">
+                <if test="appointmentType != null">,AppointmentType=#{appointmentType}</if>
+                <if test="consumerId != null">,ConsumerId=#{consumerId}</if>
+                <if test="consumer != null">,Consumer=#{consumer}</if>
+                <if test="consumerPhone != null">,ConsumerPhone=#{consumerPhone}</if>
+                <if test="product != null">,Product=#{product}</if>
+                <if test="performance != null">,Performance=#{performance}</if>
+                <if test="selling != null">,Selling=#{selling}</if>
+                <if test="source != null">,Source=#{source}</if>
+                <if test="storeId != null">,StoreId=#{storeId}</if>
+                <if test="storeName != null">,StoreName=#{storeName}</if>
+                <if test="employeeCode != null">,EmployeeCode=#{employeeCode}</if>
+                <if test="nursingTime != null">,NursingTime=#{nursingTime}</if>
+                <if test="duration != null">,Duration=#{duration}</if>
+                <if test="storeNumber != null">,StoreNumber=#{storeNumber}</if>
+                <if test="orderNumber != null">,OrderNumber=#{orderNumber}</if>
+                <if test="appointmentStatus != null">,AppointmentStatus=#{appointmentStatus}</if>
+                <if test="pushPayStatus != null">,PushPayStatus=#{pushPayStatus}</if>
+                <if test="pushAppoinmentStatus != null">,PushAppoinmentStatus=#{pushAppoinmentStatus}</if>
+                <if test="remark != null">,Remark=#{remark}</if>
+                <if test="status != null">,Status=#{status}</if>
+                <if test="modifyOperator != null">, ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">, DataChange_LastTime=#{dataChangeLastTime}</if>
+                <if test="dataChangeLastTime == null">, DataChange_LastTime=NOW()</if>
+            </trim>
+        </set>
+    </sql>
+    <!--预约查询条件-->
+    <sql id="sql_where_appointment_column">
+        <where>
+            <trim prefix="" prefixOverrides="AND">
+                <if test="appointmentId != null">AND AppointmentId=#{appointmentId}</if>
+                <if test="appointmentType != null">AND AppointmentType=#{appointmentType}</if>
+                <if test="consumerId != null">AND ConsumerId=#{consumerId}</if>
+                <if test="consumer != null">AND Consumer like CONCAT('%',#{consumer},'%')</if>
+                <if test="consumerPhone != null">AND ConsumerPhone like CONCAT('%',#{consumerPhone},'%')</if>
+                <if test="product != null">AND Product like CONCAT('%',#{product},'%')</if>
+                <if test="performance != null">AND Performance=#{performance}</if>
+                <if test="selling != null">AND Selling=#{selling}</if>
+                <if test="source != null">AND Source=#{source}</if>
+                <if test="storeId != null">AND StoreId=#{storeId}</if>
+                <if test="storeName != null">AND StoreName=#{storeName}</if>
+                <if test="employeeCode != null">AND EmployeeCode like CONCAT('%',#{employeeCode},'%')</if>
+                <if test="nursingTime != null">AND TO_DAYS(NursingTime)= TO_DAYS(CONCAT('',#{nursingTime},''))</if>
+                <if test="duration != null">AND Duration=#{duration}</if>
+                <if test="storeNumber != null">AND StoreNumber=#{storeNumber}</if>
+                <if test="orderNumber != null">AND OrderNumber=#{orderNumber}</if>
+                <if test="appointmentStatus != null">AND AppointmentStatus=#{appointmentStatus}</if>
+                <if test="pushPayStatus != null">AND PushPayStatus=#{pushPayStatus}</if>
+                <if test="pushAppoinmentStatus != null">AND PushAppoinmentStatus=#{pushAppoinmentStatus}</if>
+                <if test="remark != null">AND Remark=#{remark}</if>
+                <if test="status != null">AND Status=#{status}</if>
+                <if test="status == null">AND Status=1</if>
+                <if test="createOperator != null">AND CreateOperator=#{createOperator}</if>
+                <if test="createTime != null">AND CreateTime=#{createTime}</if>
+                <if test="modifyOperator != null">AND ModifyOperator=#{modifyOperator}</if>
+                <if test="dataChangeLastTime != null">AND DataChange_LastTime=#{dataChangeLastTime}</if>
+            </trim>
+        </where>
+    </sql>
+
+    <!--查询配置-->
+    <select id="checkOptionValue" resultType="Long">
+        select UserOptionId
+        from s_optionvalue
+        where Status = 1
+          and UserId = #{userId}
+          and OptionId = #{optionId}
+    </select>
+    <!--查询配置-->
+    <select id="selectOptionValueList" resultType="com.lnmj.store.entity.OptionValue">
+        select
+        <include refid="option_value_base_column"/>
+        from s_optionvalue
+        where Status = 1
+    </select>
+    <!--新增配置-->
+    <insert id="insertOptionValue" parameterType="OptionValue" keyProperty="userOptionId" useGeneratedKeys="true">
+        insert into s_optionvalue
+        <include refid="sql_insert_option_value_column"/>
+        <include refid="sql_insert_option_value_values"/>
+    </insert>
+    <!--修改配置-->
+    <update id="updateOptionValue" parameterType="OptionValue">
+        update s_optionvalue
+        <include refid="sql_set_option_value_column"/>
+        where UserOptionId = #{userOptionId}
+    </update>
+
+    <!--查询配置-->
+    <select id="selectOptionList" resultType="com.lnmj.store.entity.Option">
+        select
+        <include refid="option_base_column"/>
+        from s_option
+        where Status = 1
+    </select>
+    <!--新增配置-->
+    <insert id="insertOption" parameterType="Option" keyProperty="optionId" useGeneratedKeys="true">
+        insert into s_option
+        <include refid="sql_insert_option_column"/>
+        <include refid="sql_insert_option_values"/>
+    </insert>
+    <!--修改配置-->
+    <update id="updateOption" parameterType="Option">
+        update s_option
+        <include refid="sql_set_option_column"/>
+        where OptionId = #{optionId}
+    </update>
+
+
+    <!--根据预约日期，员工和状态查询预约时间-->
+    <select id="selectAppointmentTimeByDateAndEmpAndSta" parameterType="map"
+            resultType="com.lnmj.store.entity.VO.AppointmentTimeVO">
+        select AppointmentId,NursingTime,DATE_ADD(NursingTime, INTERVAL Duration MINUTE) as NursingEndTime
+        from s_appointment
+        where Status = 1
+          and AppointmentStatus = #{appointmentStatus}
+          and TO_DAYS(NursingTime) = TO_DAYS(CONCAT('', #{nursingDate}, ''))
+          and NursingTime >= #{nursingDate}
+          and EmployeeCode like CONCAT('%', #{employeeCode}, '%')
+    </select>
+    <!--检查员工预约时间是否被预约-->
+    <select id="selectAppointmentByEmployssNursingTime" parameterType="map" resultType="Appointment">
+        select
+        <include refid="appointment_base_column"/>
+        from s_appointment
+        where Status = 1 and EmployeeCode like CONCAT('%',#{employeeID},'%')
+        and DATE_ADD(NursingTime,INTERVAL Duration MINUTE) between #{parse} and #{endNursingTime}
+    </select>
+    <!--预约分页显示-->
+    <select id="selectAppointmentList" resultType="com.lnmj.store.entity.Appointment">
+        select
+        <include refid="appointment_base_column"/>
+        from s_appointment
+        where Status = 1
+    </select>
+    <!--查询预约-->
+    <select id="selectAppointmentByWhere" parameterType="Appointment" resultType="com.lnmj.store.entity.Appointment">
+        select
+        <include refid="appointment_base_column"/>
+        from s_appointment
+        <include refid="sql_where_appointment_column"/>
+    </select>
+    <!--新增预约-->
+    <insert id="insertAppointment" parameterType="Appointment" keyProperty="appointmentId" useGeneratedKeys="true">
+        insert into s_appointment
+        <include refid="sql_insert_appointment_column"/>
+        <include refid="sql_insert_appointment_values"/>
+    </insert>
+    <!--修改预约（预约门店/预约时间/美容师/预约取消/预约推送）-->
+    <update id="updateAppointment" parameterType="Appointment">
+        update s_appointment
+        <include refid="sql_set_appointment_column"/>
+        where AppointmentId = #{appointmentId}
+    </update>
+    <!--退货-->
+    <!--<update id="returnAppointment" parameterType="Appointment">
+        update s_appointment
+        set Nurs=null,NursingTime=null,StoreName=null,EmployeeCode=null,AppointmentStatus=#{appointmentStatus},
+        ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+        where AppointmentId = #{appointmentId}
+    </update>-->
+    <!--删除预约-->
+    <update id="deleteAppointment" parameterType="Appointment">
+        update s_appointment
+        set Status=0,
+            ModifyOperator=#{modifyOperator},
+            DataChange_LastTime=NOW()
+        where AppointmentId = #{appointmentId}
+    </update>
+</mapper>

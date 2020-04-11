@@ -1,0 +1,1260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="order">
+
+    <sql id="Base_Column_List_Detail">
+        OrderNumber
+        ,
+        RecordId,
+        OrderType,
+        Channel,
+        OrderLink,
+        Mobile,
+        CardNumber,
+        TotalPrice,
+        TotalDiscount,
+        PayPrice,
+        DeliveryWay,
+        OrderSource,
+        PayTypeAndAmount,
+        NurseStore,
+        ReceivingNetwork,
+        BookingUserId,
+        OrderStatus,
+        BookingTime,
+        UserStatus,
+        UserPayStatus,
+        PlatformStatus,
+        PlatformPayStatus,
+        ProxyStatus,
+        ProxyPayStatus,
+        SupplierStatus,
+        SupplierPayStatus,
+        ReceiverAddress,
+        Remark ,
+        MemoNum,
+        DeleteReason ,
+        AuditAmountStatus,
+        OutStorageIdQiTa,
+        OutStorageIdXiaoShou,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List">
+        OrderNumber
+        ,
+        OrderLink,
+        AuditAmountStatus,
+        OutStorageIdQiTa,
+        OutStorageIdXiaoShou,
+        RecordId,
+        NurseStore,
+        PayTypeAndAmount,
+        OrderType,
+        Mobile,
+        CardNumber,
+        PayPrice,
+        OrderStatus,
+        CreateTime
+    </sql>
+
+    <sql id="Base_Column_List_Product_Order">
+        OrderId
+        ,
+        OrderNumber,
+        RecordId,
+        ProductCode,
+        ProductName,
+        ProductNum,
+        OriginalPrice,
+        Discount,
+        DiscountPrice,
+        ProductSpec,
+        ProductSource,
+        DeliveryNumber,
+        DeliveryOrganization,
+        DeliveryWay,
+        BookingTime,
+        BookingBeauticianIds,
+        PerformanceRatio,
+        UserStatus,
+        UserPayStatus,
+        PlatformStatus,
+        PlatformPayStatus,
+        ProxyStatus,
+        ProxyPayStatus,
+        SupplierStatus,
+        SupplierPayStatus,
+        OrderSource,
+        PayTypeAndAmount,
+        ReceivingNetwork,
+        ProductTypeId,
+        ProductTypeName,
+        ProductBrandId,
+        ProductBrandName,
+        ProductCategoryId,
+        ProductCategoryName,
+        StoreId,
+        StoreName,
+        SupplierId,
+        SupplierName,
+        SubclassID,
+        UseLimit,
+        Status,
+        CreateOperator,
+        CreateTime,
+        ModifyOperator,
+        DataChange_LastTime
+    </sql>
+
+    <sql id="Base_Column_List_Product_Order_a">
+        a
+        .
+        OrderId
+        ,
+        a
+        .
+        RecordId,
+        a
+        .
+        OrderNumber,
+        a
+        .
+        ProductCode,
+        a
+        .
+        ProductName,
+        a
+        .
+        ProductNum,
+        a
+        .
+        OriginalPrice,
+        a
+        .
+        Discount,
+        a
+        .
+        DiscountPrice,
+        a
+        .
+        ProductSpec,
+        a
+        .
+        ProductSource,
+        a
+        .
+        DeliveryNumber,
+        a
+        .
+        DeliveryOrganization,
+        a
+        .
+        DeliveryWay,
+        a
+        .
+        BookingTime,
+        a
+        .
+        BookingBeauticianIds,
+        a
+        .
+        PerformanceRatio,
+        a
+        .
+        UserStatus,
+        a
+        .
+        UserPayStatus,
+        a
+        .
+        PlatformStatus,
+        a
+        .
+        PlatformPayStatus,
+        a
+        .
+        ProxyStatus,
+        a
+        .
+        ProxyPayStatus,
+        a
+        .
+        SupplierStatus,
+        a
+        .
+        SupplierPayStatus,
+        a
+        .
+        OrderSource,
+        a
+        .
+        PayTypeAndAmount,
+        a
+        .
+        ReceivingNetwork,
+        a
+        .
+        ProductTypeId,
+        a
+        .
+        ProductTypeName,
+        a
+        .
+        ProductBrandId,
+        a
+        .
+        ProductBrandName,
+        a
+        .
+        ProductCategoryId,
+        a
+        .
+        ProductCategoryName,
+        a
+        .
+        StoreId,
+        a
+        .
+        StoreName,
+        a
+        .
+        SupplierId,
+        a
+        .
+        SupplierName,
+        a
+        .
+        UseLimit,
+        a
+        .
+        Status,
+        a
+        .
+        CreateOperator,
+        a
+        .
+        CreateTime,
+        a
+        .
+        ModifyOperator,
+        a
+        .
+        DataChange_LastTime
+    </sql>
+
+    <insert id="insertOrder" parameterType="Order">
+        insert into o_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNumber != null">
+                OrderNumber,
+            </if>
+            <if test="orderType != null">
+                OrderType,
+            </if>
+            <if test="channel != null">
+                Channel,
+            </if>
+            <if test="orderLink != null">
+                OrderLink,
+            </if>
+            <if test="mobile != null">
+                Mobile,
+            </if>
+            <if test="cardNumber != null">
+                CardNumber,
+            </if>
+            <if test="totalPrice != null">
+                TotalPrice,
+            </if>
+            <if test="totalDiscount != null">
+                TotalDiscount,
+            </if>
+            <if test="payPrice != null">
+                PayPrice,
+            </if>
+            <if test="deliveryWay != null">
+                DeliveryWay,
+            </if>
+            <if test="orderSource != null">
+                OrderSource,
+            </if>
+            <if test="payTypeAndAmount != null">
+                PayTypeAndAmount,
+            </if>
+            <if test="nurseStore != null">
+                NurseStore,
+            </if>
+            <if test="receivingNetwork != null">
+                ReceivingNetwork,
+            </if>
+            <if test="bookingUserId != null">
+                BookingUserId,
+            </if>
+            <if test="bookingTime != null">
+                BookingTime,
+            </if>
+            <if test="orderStatus != null">
+                OrderStatus,
+            </if>
+            <if test="userStatus != null">
+                UserStatus,
+            </if>
+            <if test="userPayStatus != null">
+                UserPayStatus,
+            </if>
+            <if test="platformStatus != null">
+                PlatformStatus,
+            </if>
+            <if test="platformPayStatus != null">
+                PlatformPayStatus,
+            </if>
+            <if test="proxyStatus != null">
+                ProxyStatus,
+            </if>
+            <if test="proxyPayStatus != null">
+                ProxyPayStatus,
+            </if>
+            <if test="supplierStatus != null">
+                SupplierStatus,
+            </if>
+            <if test="supplierPayStatus != null">
+                SupplierPayStatus,
+            </if>
+            <if test="receiverAddress != null">
+                ReceiverAddress,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="memoNum != null">
+                MemoNum,
+            </if>
+            <if test="recordId != null">
+                RecordId,
+            </if>
+            <if test="auditAmountStatus != null">
+                AuditAmountStatus,
+            </if>
+            <if test="outStorageIdQiTa != null">
+                OutStorageIdQiTa,
+            </if>
+            <if test="outStorageIdXiaoShou != null">
+                OutStorageIdXiaoShou,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNumber != null">
+                #{orderNumber},
+            </if>
+            <if test="orderType != null">
+                #{orderType},
+            </if>
+            <if test="channel != null">
+                #{channel},
+            </if>
+            <if test="orderLink != null">
+                #{orderLink},
+            </if>
+            <if test="mobile != null">
+                #{mobile},
+            </if>
+            <if test="cardNumber != null">
+                #{cardNumber},
+            </if>
+            <if test="totalPrice != null">
+                #{totalPrice},
+            </if>
+            <if test="totalDiscount != null">
+                #{totalDiscount},
+            </if>
+            <if test="payPrice != null">
+                #{payPrice},
+            </if>
+            <if test="deliveryWay != null">
+                #{deliveryWay},
+            </if>
+            <if test="orderSource != null">
+                #{orderSource},
+            </if>
+            <if test="payTypeAndAmount != null">
+                #{payTypeAndAmount},
+            </if>
+            <if test="nurseStore != null">
+                #{nurseStore},
+            </if>
+            <if test="receivingNetwork != null">
+                #{receivingNetwork},
+            </if>
+            <if test="bookingUserId != null">
+                #{bookingUserId},
+            </if>
+            <if test="bookingTime != null">
+                #{bookingTime},
+            </if>
+            <if test="orderStatus != null">
+                #{orderStatus},
+            </if>
+            <if test="userStatus != null">
+                #{userStatus},
+            </if>
+            <if test="userPayStatus != null">
+                #{userPayStatus},
+            </if>
+            <if test="platformStatus != null">
+                #{platformStatus},
+            </if>
+            <if test="platformPayStatus != null">
+                #{platformPayStatus},
+            </if>
+            <if test="proxyStatus != null">
+                #{proxyStatus},
+            </if>
+            <if test="proxyPayStatus != null">
+                #{proxyPayStatus},
+            </if>
+            <if test="supplierStatus != null">
+                #{supplierStatus},
+            </if>
+            <if test="supplierPayStatus != null">
+                #{supplierPayStatus},
+            </if>
+            <if test="receiverAddress != null">
+                #{receiverAddress},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="memoNum != null">
+                #{memoNum},
+            </if>
+            <if test="recordId != null">
+                #{recordId},
+            </if>
+            <if test="auditAmountStatus != null">
+                #{auditAmountStatus},
+            </if>
+            <if test="outStorageIdQiTa != null">
+                #{outStorageIdQiTa},
+            </if>
+            <if test="outStorageIdXiaoShou != null">
+                #{outStorageIdXiaoShou},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createOperator != null">
+                #{createOperator},
+            </if>
+            now(),
+            <if test="modifyOperator != null">
+                #{modifyOperator},
+            </if>
+            now(),
+        </trim>
+    </insert>
+
+    <insert id="insertProductOrder" parameterType="Map">
+        insert into o_product_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].orderId != null">
+                OrderId,
+            </if>
+            <if test="list[0].orderNumber != null">
+                OrderNumber,
+            </if>
+            <if test="list[0].productCode != null">
+                ProductCode,
+            </if>
+            <if test="list[0].productName != null">
+                ProductName,
+            </if>
+            <if test="list[0].productNum != null">
+                ProductNum,
+            </if>
+            <if test="list[0].originalPrice != null">
+                OriginalPrice,
+            </if>
+            <if test="list[0].discount != null">
+                Discount,
+            </if>
+            <if test="list[0].discountPrice != null">
+                DiscountPrice,
+            </if>
+            <if test="list[0].productSpec != null">
+                ProductSpec,
+            </if>
+            <if test="list[0].productSource != null">
+                ProductSource,
+            </if>
+            <if test="list[0].deliveryNumber != null">
+                DeliveryNumber,
+            </if>
+            <if test="list[0].deliveryOrganization != null">
+                DeliveryOrganization,
+            </if>
+            <if test="list[0].deliveryWay != null">
+                DeliveryWay,
+            </if>
+            <if test="list[0].bookingTime != null">
+                BookingTime,
+            </if>
+            <if test="list[0].bookingBeauticianIds != null">
+                BookingBeauticianIds,
+            </if>
+            <if test="list[0].performanceRatio != null">
+                PerformanceRatio,
+            </if>
+            <if test="list[0].userStatus != null">
+                UserStatus,
+            </if>
+            <if test="list[0].userPayStatus != null">
+                UserPayStatus,
+            </if>
+            <if test="list[0].platformStatus != null">
+                PlatformStatus,
+            </if>
+            <if test="list[0].platformPayStatus != null">
+                PlatformPayStatus,
+            </if>
+            <if test="list[0].proxyStatus != null">
+                ProxyStatus,
+            </if>
+            <if test="list[0].proxyPayStatus != null">
+                ProxyPayStatus,
+            </if>
+            <if test="list[0].supplierStatus != null">
+                SupplierStatus,
+            </if>
+            <if test="list[0].supplierPayStatus != null">
+                SupplierPayStatus,
+            </if>
+            <if test="list[0].orderSource != null">
+                OrderSource,
+            </if>
+            <if test="list[0].payTypeAndAmount != null">
+                PayTypeAndAmount,
+            </if>
+            <if test="list[0].receivingNetwork != null">
+                ReceivingNetwork,
+            </if>
+            <if test="list[0].productTypeId != null">
+                ProductTypeId,
+            </if>
+            <if test="list[0].productTypeName != null">
+                ProductTypeName,
+            </if>
+            <if test="list[0].productBrandId != null">
+                ProductBrandId,
+            </if>
+            <if test="list[0].productBrandName != null">
+                ProductBrandName,
+            </if>
+            <if test="list[0].productCategoryId != null">
+                ProductCategoryId,
+            </if>
+            <if test="list[0].productCategoryName != null">
+                ProductCategoryName,
+            </if>
+            <if test="list[0].storeId != null">
+                StoreId,
+            </if>
+            <if test="list[0].storeName != null">
+                StoreName,
+            </if>
+            <if test="list[0].supplierId != null">
+                SupplierId,
+            </if>
+            <if test="list[0].supplierName != null">
+                SupplierName,
+            </if>
+            <if test="list[0].subclassID != null">
+                SubclassID,
+            </if>
+            <if test="list[0].useLimit != null">
+                UseLimit,
+            </if>
+            <if test="list[0].recordId != null">
+                RecordId,
+            </if>
+            <if test="list[0].status != null">
+                Status,
+            </if>
+            <if test="list[0].createOperator != null">
+                CreateOperator,
+            </if>
+            CreateTime,
+            <if test="list[0].modifyOperator != null">
+                ModifyOperator,
+            </if>
+            DataChange_LastTime
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.orderId != null">
+                    #{item.orderId},
+                </if>
+                <if test="item.orderNumber != null">
+                    #{item.orderNumber},
+                </if>
+                <if test="item.productCode != null">
+                    #{item.productCode},
+                </if>
+                <if test="item.productName != null">
+                    #{item.productName},
+                </if>
+                <if test="item.productNum != null">
+                    #{item.productNum},
+                </if>
+                <if test="item.originalPrice != null">
+                    #{item.originalPrice},
+                </if>
+                <if test="item.discount != null">
+                    #{item.discount},
+                </if>
+                <if test="item.discountPrice != null">
+                    #{item.discountPrice},
+                </if>
+                <if test="item.productSpec != null">
+                    #{item.productSpec},
+                </if>
+                <if test="item.productSource != null">
+                    #{item.productSource},
+                </if>
+                <if test="item.deliveryNumber != null">
+                    #{item.deliveryNumber},
+                </if>
+                <if test="item.deliveryOrganization != null">
+                    #{item.deliveryOrganization},
+                </if>
+                <if test="item.deliveryWay != null">
+                    #{item.deliveryWay},
+                </if>
+                <if test="item.bookingTime != null">
+                    #{item.bookingTime},
+                </if>
+                <if test="item.bookingBeauticianIds != null">
+                    #{item.bookingBeauticianIds},
+                </if>
+                <if test="item.performanceRatio != null">
+                    #{item.performanceRatio},
+                </if>
+                <if test="item.userStatus != null">
+                    #{item.userStatus},
+                </if>
+                <if test="item.userPayStatus != null">
+                    #{item.userPayStatus},
+                </if>
+                <if test="item.platformStatus != null">
+                    #{item.platformStatus},
+                </if>
+                <if test="item.platformPayStatus != null">
+                    #{item.platformPayStatus},
+                </if>
+                <if test="item.proxyStatus != null">
+                    #{item.proxyStatus},
+                </if>
+                <if test="item.proxyPayStatus != null">
+                    #{item.proxyPayStatus},
+                </if>
+                <if test="item.supplierStatus != null">
+                    #{item.supplierStatus},
+                </if>
+                <if test="item.supplierPayStatus != null">
+                    #{item.supplierPayStatus},
+                </if>
+                <if test="item.orderSource != null">
+                    #{item.orderSource},
+                </if>
+                <if test="item.payTypeAndAmount != null">
+                    #{item.payTypeAndAmount},
+                </if>
+                <if test="item.receivingNetwork != null">
+                    #{item.receivingNetwork},
+                </if>
+                <if test="item.productTypeId != null">
+                    #{item.productTypeId},
+                </if>
+                <if test="item.productTypeName != null">
+                    #{item.productTypeName},
+                </if>
+                <if test="item.productBrandId != null">
+                    #{item.productBrandId},
+                </if>
+                <if test="item.productBrandName != null">
+                    #{item.productBrandName},
+                </if>
+                <if test="item.productCategoryId != null">
+                    #{item.productCategoryId},
+                </if>
+                <if test="item.productCategoryName != null">
+                    #{item.productCategoryName},
+                </if>
+                <if test="item.storeId != null">
+                    #{item.storeId},
+                </if>
+                <if test="item.storeName != null">
+                    #{item.storeName},
+                </if>
+                <if test="item.supplierId != null">
+                    #{item.supplierId},
+                </if>
+                <if test="item.supplierName != null">
+                    #{item.supplierName},
+                </if>
+                <if test="item.subclassID != null">
+                    #{item.subclassID},
+                </if>
+                <if test="item.useLimit != null">
+                    #{item.useLimit},
+                </if>
+                <if test="item.recordId != null">
+                    #{item.recordId},
+                </if>
+                <if test="item.status != null">
+                    #{item.status},
+                </if>
+                <if test="item.createOperator != null">
+                    #{item.createOperator},
+                </if>
+                now(),
+                <if test="item.modifyOperator != null">
+                    #{item.modifyOperator},
+                </if>
+                now()
+            </trim>
+        </foreach>
+    </insert>
+
+    <select id="selectAppointmentByBeauticianAndDate" resultType="ProductOrder" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Product_Order"/>
+        from o_product_order
+        where Status=1
+        and ProductTypeId=2
+        <if test="beauticianId != null">AND BookingBeauticianIds like CONCAT('%',#{beauticianId},'%')</if>
+        <if test="nurseTime != null">AND TO_DAYS(BookingTime)= TO_DAYS(CONCAT('',#{nurseTime},''))</if>
+    </select>
+
+    <select id="selectMemberNumberPayTypeAndAmount" resultType="string" parameterType="Map">
+        select
+        case WHEN ISNULL(PayTypeAndAmount) THEN 0
+        else PayTypeAndAmount end AS PayTypeAndAmount
+        from o_order
+        where Status=1 and OrderStatus = 2 or OrderStatus = 3
+        <if test="cardNumber != null">
+            and CardNumber = #{cardNumber}
+        </if>
+    </select>
+
+    <select id="selectOrderListByDateAndStore" resultType="Order" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Detail"/>
+        from o_order
+        where Status = 1
+        <if test="orderDate != null">
+            and TO_DAYS(CreateTime)= TO_DAYS(CONCAT('',#{orderDate},''))
+        </if>
+        <if test="list != null">
+            AND NurseStore in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="orderStatusList != null">
+            AND OrderStatus not in
+            <foreach item="item" collection="orderStatusList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+    <select id="selectOrderListByToday" resultType="OrderVO" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Detail"/>
+        from o_order
+        where Status = 1
+        AND TO_DAYS(CreateTime) = TO_DAYS(#{date})
+        <if test="list != null and list!=''">
+            AND NurseStore in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectOrderList" resultType="OrderVO" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from o_order
+        where Status=1
+        <if test="list != null and list!=''">
+            and NurseStore in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="keyWordOrderNum != null and keyWordOrderNum!=''">
+            and OrderNumber = #{keyWordOrderNum}
+        </if>
+        <if test="keyWordMobile != null and keyWordMobile!=''">
+            and Mobile = #{keyWordMobile}
+        </if>
+        <if test="orderType != null">
+            and OrderType = #{orderType}
+        </if>
+        <if test="storeId != null">
+            and NurseStore = #{storeId}
+        </if>
+        <if test="date != null and date !=''">
+            and TO_DAYS(CreateTime)= TO_DAYS(CONCAT('',#{date},''))
+        </if>
+        <if test="orderStatus != null">
+            and OrderStatus != #{orderStatus}
+        </if>
+        <if test="cardNumber != null">
+            and CardNumber = #{cardNumber}
+        </if>
+        <if test="date != null">
+            and TO_DAYS(CreateTime)= TO_DAYS(CONCAT('',#{date},''))
+        </if>
+        <if test="orderStatusList != null">
+            and OrderStatus not in
+            <foreach item="item" collection="orderStatusList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        order by CreateTime desc
+        <if test="limit != null">
+            limit 10
+        </if>
+    </select>
+
+    <select id="selectOrderListByCondition" resultType="OrderVO" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from o_order
+        where Status=1
+        <if test="list != null and list!=''">
+            and NurseStore in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="keyWordOrderNum != null and keyWordOrderNum!=''">
+            and OrderNumber = #{keyWordOrderNum}
+        </if>
+        <if test="keyWordMobile != null and keyWordMobile!=''">
+            and Mobile = #{keyWordMobile}
+        </if>
+        <if test="orderType != null">
+            and OrderType = #{orderType}
+        </if>
+        <if test="orderStatus != null">
+            and OrderStatus = #{orderStatus}
+        </if>
+        <if test="orderChannel != null and orderChannel!=''">
+            and Channel = #{orderChannel}
+        </if>
+        <if test="cardNumber != null">
+            and CardNumber = #{cardNumber}
+        </if>
+        <if test="date != null">
+            and date_format(CreateTime,'%Y-%m-%d')=#{date}
+        </if>
+        order by CreateTime desc
+        <if test="limit != null">
+            limit 10
+        </if>
+    </select>
+
+    <select id="selectOrderByNum" resultType="Order" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Detail"/>
+        from o_order
+        where Status = 1
+        and OrderNumber in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="selectProductOrderListByNum" resultType="ProductOrder" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Product_Order"/>
+        from o_product_order
+        where Status = 1
+        <if test="list != null">
+            and OrderNumber in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+    </select>
+
+    <select id="selectProductOrderByNum" resultType="ProductOrder" parameterType="Long">
+        select
+        <include refid="Base_Column_List_Product_Order"/>
+        from o_product_order
+        where Status = 1
+        and OrderNumber = #{orderNumber}
+    </select>
+
+    <update id="cancelOrder" parameterType="Map">
+        update o_order set OrderStatus = #{orderStatus}, DataChange_LastTime = now() where OrderNumber in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="deleteOrder" parameterType="Map">
+        update o_order set Status = 0 ,
+        <if test="deleteReason != null">
+            DeleteReason = #{deleteReason},
+        </if>
+        DataChange_LastTime = now() where OrderNumber in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="deleteProductOrder" parameterType="Map">
+        update o_product_order set Status = 0 ,
+        DataChange_LastTime = now() where OrderNumber in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="deleteAppointmentOrder" parameterType="Map">
+        update s_appointment_order set Status = 0 ,
+        DataChange_LastTime = now() where OrderNumber in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+    <update id="deleteOrderByRecordId" parameterType="Map">
+        update o_order set Status = 0 ,
+        <if test="deleteReason != null">
+            DeleteReason = #{deleteReason},
+        </if>
+        DataChange_LastTime = now() where RecordId in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="deleteProductOrderByRecordId" parameterType="Map">
+        update o_product_order set Status = 0 ,
+        DataChange_LastTime = now() where RecordId in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="deleteAppointmentOrderByRecordId" parameterType="Map">
+        update s_appointment_order set Status = 0 ,
+        DataChange_LastTime = now() where RecordId in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+    <update id="updateOrder" parameterType="Order">
+        update o_order
+        <set>
+            <if test="orderType != null">
+                OrderType = #{orderType},
+            </if>
+            <if test="channel != null">
+                Channel = #{channel},
+            </if>
+            <if test="orderLink != null">
+                OrderLink = #{orderLink},
+            </if>
+            <if test="mobile != null">
+                Mobile = #{mobile},
+            </if>
+            <if test="cardNumber != null">
+                CardNumber = #{cardNumber},
+            </if>
+            <if test="totalPrice != null">
+                TotalPrice = #{totalPrice},
+            </if>
+            <if test="totalDiscount != null">
+                TotalDiscount = #{totalDiscount},
+            </if>
+            <if test="payPrice != null">
+                PayPrice = #{payPrice},
+            </if>
+            <if test="deliveryWay != null">
+                DeliveryWay = #{deliveryWay},
+            </if>
+            <if test="orderSource != null">
+                OrderSource = #{orderSource},
+            </if>
+            <if test="payTypeAndAmount != null">
+                PayTypeAndAmount = #{payTypeAndAmount},
+            </if>
+            <if test="nurseStore != null">
+                NurseStore = #{nurseStore},
+            </if>
+            <if test="receivingNetwork != null">
+                ReceivingNetwork = #{receivingNetwork},
+            </if>
+            <if test="bookingUserId != null">
+                BookingUserId = #{bookingUserId},
+            </if>
+            <if test="orderStatus != null">
+                OrderStatus = #{orderStatus},
+            </if>
+            <if test="bookingTime != null">
+                BookingTime = #{bookingTime},
+            </if>
+            <if test="userStatus != null">
+                UserStatus = #{userStatus},
+            </if>
+            <if test="userPayStatus != null">
+                UserPayStatus = #{userPayStatus},
+            </if>
+            <if test="platformStatus != null">
+                PlatformStatus = #{platformStatus},
+            </if>
+            <if test="platformPayStatus != null">
+                PlatformPayStatus = #{platformPayStatus},
+            </if>
+            <if test="proxyStatus != null">
+                ProxyStatus = #{proxyStatus},
+            </if>
+            <if test="proxyPayStatus != null">
+                ProxyPayStatus = #{proxyPayStatus},
+            </if>
+            <if test="supplierStatus != null">
+                SupplierStatus = #{supplierStatus},
+            </if>
+            <if test="supplierPayStatus != null">
+                SupplierPayStatus = #{supplierPayStatus},
+            </if>
+            <if test="receiverAddress != null">
+                ReceiverAddress = #{receiverAddress},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+            <if test="memoNum != null">
+                MemoNum = #{memoNum},
+            </if>
+            <if test="deleteReason != null">
+                DeleteReason = #{deleteReason},
+            </if>
+            <if test="recordId != null">
+                RecordId = #{recordId},
+            </if>
+            <if test="auditAmountStatus != null">
+                AuditAmountStatus = #{auditAmountStatus},
+            </if>
+            <if test="outStorageIdQiTa != null">
+                OutStorageIdQiTa = #{outStorageIdQiTa},
+            </if>
+            <if test="outStorageIdXiaoShou != null">
+                OutStorageIdXiaoShou = #{outStorageIdXiaoShou},
+            </if>
+            <if test="status != null">
+                Status = #{status},
+            </if>
+            <if test="createOperator != null">
+                CreateOperator = #{createOperator},
+            </if>
+            <if test="modifyOperator != null">
+                ModifyOperator = #{modifyOperator},
+            </if>
+            DataChange_LastTime = now(),
+        </set>
+        where OrderNumber = #{orderNumber}
+    </update>
+
+    <update id="updateOrderStatus" parameterType="Map">
+        update o_order
+        set OrderStatus = #{status}
+        where OrderNumber = #{orderNumber}
+    </update>
+
+    <update id="updateOrderMemo" parameterType="Map">
+        update o_order
+        set MemoNum = #{memoNum}
+        where OrderNumber = #{orderNumber}
+    </update>
+
+    <select id="selectOrderListByCarNumber" resultType="OrderVO" parameterType="Map">
+        select
+        <include refid="Base_Column_List"/>
+        from o_order
+        where Status = 1
+        <if test="orderType != null">
+            and OrderType = #{orderType}
+        </if>
+        <if test="cardNumber != null">
+            and CardNumber = #{cardNumber}
+        </if>
+        ORDER by CreateTime desc
+    </select>
+
+    <select id="selectCreateTimeByCarNumber" resultType="OrderVO" parameterType="String">
+        select
+        <include refid="Base_Column_List"/>
+        from o_order
+        where Status = 1
+        <if test="_parameter != null">
+            and CardNumber = #{cardNumber}
+        </if>
+        ORDER by CreateTime desc
+    </select>
+
+    <select id="selectOrderListByCarNumAndDates" resultType="Order" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Detail"/>
+        from o_order
+        where Status = 1
+        <if test="cardNumber != null">
+            and CardNumber = #{cardNumber}
+        </if>
+        and CreateTime between DATE_FORMAT(#{startDate}, '%Y-%m-%d %H:%i:%S') and DATE_FORMAT(#{endDate},'%Y-%m-%d
+        %H:%i:%S')
+        ORDER by CreateTime asc
+    </select>
+
+    <select id="selectOrderByMemberNumAndProductType" resultType="Order" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Detail"/>
+        from o_order
+        where Status = 1
+        <if test="orderDate != null">
+            and TO_DAYS(CreateTime)= TO_DAYS(CONCAT('',#{orderDate},''))
+        </if>
+        AND NurseStore in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="orderStatus != null">
+            and OrderStatus != #{orderStatus}
+        </if>
+        <if test="orderType != null">
+            and OrderType = #{orderType}
+        </if>
+        <if test="memberNum != null">
+            and CardNumber = #{memberNum}
+        </if>
+        <if test="keywordOrderNum != null and keywordOrderNum!=''">
+            and OrderNumber = #{keywordOrderNum}
+        </if>
+    </select>
+
+    <select id="selectProductOrderListByMember" resultType="ProductOrder" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Product_Order_a"/>
+        from o_product_order a,o_order b
+        where a.Status = 1
+        and b.Status = 1
+        and a.OrderNumber = b.OrderNumber
+        and b.OrderStatus != #{orderStatus}
+        and b.NurseStore = #{storeId}
+        and a.ProductTypeId = #{productTypeId}
+        <if test="orderDate != null">
+            and TO_DAYS(a.CreateTime)= TO_DAYS(CONCAT('',#{orderDate},''))
+        </if>
+        and CardNumber = #{memberNum}
+    </select>
+
+    <select id="selectConsumeTimesTopTen" resultType="Map" parameterType="Map">
+        select a.productName,count(1) as times
+        from o_product_order a,
+             o_order b
+        where a.OrderNumber = b.OrderNumber
+          and b.CardNumber = #{cardNumber}
+          and a.Status = 1
+          and a.ProductTypeId = #{productTypeId}
+          and b.NurseStore = #{storeId}
+          and b.OrderStatus != #{orderStatus}
+        group by a.ProductCode
+        order by times desc
+                 limit 10
+    </select>
+
+    <select id="selectConsumeMoneyTopTen" resultType="OrderVO" parameterType="Map">
+        select CreateTime,PayPrice
+        from o_order
+        where CardNumber = #{cardNumber}
+          and Status = 1
+          and NurseStore = #{storeId}
+          and OrderStatus != #{orderStatus}
+        order by PayPrice desc
+                 limit 10
+    </select>
+
+    <select id="selectAppointmentOrderListByDate" resultType="OrderVO" parameterType="Map">
+        select CreateTime,PayPrice
+        from o_order
+        where CardNumber = #{cardNumber}
+          and Status = 1
+          and NurseStore = #{storeId}
+          and OrderStatus != #{orderStatus}
+        order by PayPrice desc
+                 limit 10
+    </select>
+
+    <select id="selectOrderByMemoScope" resultType="Order" parameterType="Map">
+        select
+        <include refid="Base_Column_List_Detail"/>
+        from o_order
+        where Status = 1
+        and NurseStore = #{storeId}
+        and MemoNum between #{memoNumStart} and #{memoNumEnd}
+    </select>
+
+    <select id="checkOrderMemo" resultType="int" parameterType="Map">
+        select
+            count(1)
+        from o_order
+        where Status = 1
+          and MemoNum = #{memoNum}
+    </select>
+
+    <update id="batchAudit" parameterType="Map">
+        update o_order
+        set
+        AuditAmountStatus =#{auditStatus},
+        ModifyOperator = #{modifyOperator},
+        DataChange_LastTime = now()
+        where 1=1
+        <if test="list != null">
+            and OrderNumber in
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+
+</mapper>
