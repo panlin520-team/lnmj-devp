@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Incident" >
+  <resultMap id="IncidentMap" type="com.lnmj.k3cloud.pojo.Incident" >
+    <id column="IncidentId" property="incidentId" jdbcType="BIGINT" />
+    <result column="IncidentProject" property="incidentProject" jdbcType="VARCHAR" />
+    <result column="IncidentClass" property="incidentClass" jdbcType="VARCHAR" />
+    <result column="IncidentName" property="incidentName" jdbcType="VARCHAR" />
+    <result column="IncidentJSON" property="incidentJSON" jdbcType="VARCHAR" />
+    <result column="ExcuteIncidentProject" property="excuteIncidentProject" jdbcType="VARCHAR" />
+    <result column="ExcuteIncidentClass" property="excuteIncidentClass" jdbcType="VARCHAR" />
+    <result column="ExcuteIncidentName" property="excuteIncidentName" jdbcType="VARCHAR" />
+    <result column="ExcuteIncidentJSON" property="excuteIncidentJSON" jdbcType="VARCHAR" />
+    <result column="ParentId" property="parentId" jdbcType="BIGINT" />
+    <result column="IncidentDate" property="incidentDate" jdbcType="TIMESTAMP" />
+    <result column="TemplateId" property="templateId" jdbcType="BIGINT" />
+    <result column="K3Id" property="k3Id" jdbcType="BIGINT" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="CreateOperator" property="createOperator" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ModifyOperator" property="modifyOperator" jdbcType="VARCHAR" />
+    <result column="DataChange_LastTime" property="dataChangeLastTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="base_Incident_column" >
+    IncidentId, IncidentProject, IncidentClass, IncidentName,IncidentJSON, ExcuteIncidentProject,
+    ExcuteIncidentClass, ExcuteIncidentName,ExcuteIncidentJSON, ParentId, IncidentDate, TemplateId, K3Id,
+    Remark, Status, CreateOperator, CreateTime, ModifyOperator, DataChange_LastTime
+  </sql>
+
+  <select id="selectIncidentList" resultMap="IncidentMap" parameterType="String" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="base_Incident_column" />
+    from e_incident
+    where Status = 1
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectIncidentByID" resultMap="IncidentMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="base_Incident_column" />
+    from e_incident
+    where IncidentId = #{incidentId,jdbcType=BIGINT} and Status = 1
+  </select>
+
+  <update id="deleteIncidentByID" parameterType="Incident" >
+    update e_incident
+    set Status=0,ModifyOperator=#{modifyOperator},DataChange_LastTime=NOW()
+    where IncidentId = #{incidentId,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertIncident" parameterType="Incident" useGeneratedKeys="true" keyProperty="incidentId">
+    insert into e_incident
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="incidentId != null" >
+        IncidentId,
+      </if>
+      <if test="incidentProject != null" >
+        IncidentProject,
+      </if>
+      <if test="incidentClass != null" >
+        IncidentClass,
+      </if>
+      <if test="incidentName != null" >
+        IncidentName,
+      </if>
+      <if test="incidentJSON != null" >
+        IncidentJSON,
+      </if>
+      <if test="excuteIncidentProject != null" >
+        ExcuteIncidentProject,
+      </if>
+      <if test="excuteIncidentClass != null" >
+        ExcuteIncidentClass,
+      </if>
+      <if test="excuteIncidentName != null" >
+        ExcuteIncidentName,
+      </if>
+      <if test="excuteIncidentJSON != null" >
+        ExcuteIncidentJSON,
+      </if>
+      <if test="parentId != null" >
+        ParentId,
+      </if>
+      <if test="incidentDate != null" >
+        IncidentDate,
+      </if>
+      <if test="templateId != null" >
+        TemplateId,
+      </if>
+      <if test="k3Id != null" >
+        K3Id,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator,
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="incidentId != null" >
+        #{incidentId,jdbcType=BIGINT},
+      </if>
+      <if test="incidentProject != null" >
+        #{incidentProject,jdbcType=VARCHAR},
+      </if>
+      <if test="incidentClass != null" >
+        #{incidentClass,jdbcType=VARCHAR},
+      </if>
+      <if test="incidentName != null" >
+        #{incidentName,jdbcType=VARCHAR},
+      </if>
+      <if test="incidentJSON != null" >
+        #{incidentJSON,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteIncidentProject != null" >
+        #{excuteIncidentProject,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteIncidentClass != null" >
+        #{excuteIncidentClass,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteIncidentName != null" >
+        #{excuteIncidentName,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteIncidentJSON != null" >
+        #{excuteIncidentJSON,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="incidentDate != null" >
+        #{incidentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="templateId != null" >
+        #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="k3Id != null" >
+        #{k3Id,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateIncidentByID" parameterType="Incident" >
+    update e_incident
+    <set >
+      <if test="incidentProject != null" >
+        IncidentProject = #{incidentProject,jdbcType=VARCHAR},
+      </if>
+      <if test="incidentClass != null" >
+        IncidentClass = #{incidentClass,jdbcType=VARCHAR},
+      </if>
+      <if test="incidentName != null" >
+        IncidentName = #{incidentName,jdbcType=VARCHAR},
+      </if>
+      <if test="incidentJSON != null" >
+        IncidentJSON = #{incidentJSON,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteIncidentProject != null" >
+        ExcuteIncidentProject = #{excuteIncidentProject,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteIncidentClass != null" >
+        ExcuteIncidentClass = #{excuteIncidentClass,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteIncidentName != null" >
+        ExcuteIncidentName = #{excuteIncidentName,jdbcType=VARCHAR},
+      </if>
+      <if test="excuteIncidentJSON != null" >
+        ExcuteIncidentJSON = #{excuteIncidentJSON,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        ParentId = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="incidentDate != null" >
+        IncidentDate = #{incidentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="templateId != null" >
+        TemplateId = #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="k3Id != null" >
+        K3Id = #{k3Id,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createOperator != null" >
+        CreateOperator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyOperator != null" >
+        ModifyOperator = #{modifyOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="dataChangeLastTime != null" >
+        DataChange_LastTime = #{dataChangeLastTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where IncidentId = #{incidentId,jdbcType=BIGINT}
+  </update>
+
+</mapper>
