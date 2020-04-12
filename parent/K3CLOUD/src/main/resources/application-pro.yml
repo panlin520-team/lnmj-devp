@@ -33,7 +33,7 @@ spring:
       first:
       url: jdbc:mysql://47.108.29.183:3306/lnmj_k3cloud?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
       username: root
-      password: root
+      password: lnmj123456
       #    second:
       #      url: jdbc:mysql://47.108.29.183:3306/lnmj_account?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
       #      username: root

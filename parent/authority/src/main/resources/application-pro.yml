@@ -35,7 +35,7 @@ spring:
     #password: root
     url: jdbc:mysql://47.108.29.183:3306/lnmj_authority?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
     username: root
-    password: root
+    password: lnmj123456
     druid:
       # 下面为连接池的补充设置，应用到上面所有数据源中
       initialSize: 5

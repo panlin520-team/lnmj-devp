@@ -36,11 +36,11 @@ spring:
       first:
       url: jdbc:mysql://47.108.29.183:3306/lnmj_wallet?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
       username: root
-      password: root
+      password: lnmj123456
     second:
       url: jdbc:mysql://47.108.29.183:3306/lnmj_account?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
       username: root
-      password: root
+      password: lnmj123456
       # 下面为连接池的补充设置，应用到上面所有数据源中
       initialSize: 5
       minIdle: 5
