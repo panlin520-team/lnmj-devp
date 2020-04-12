@@ -40,4 +40,5 @@ public interface IBeauticianService {
     ResponseResult insertPostCategory(PostCategory postCategory);
     ResponseResult updatePostCategory(PostCategory postCategory);
     ResponseResult deletePostCategory(PostCategory postCategory);
+    ResponseResult selectGroupMember(Beautician beautician);
 }

@@ -589,7 +589,144 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public ResponseResult selectYeJiSumByDate(Statistic statistic, Long salesmanID, String startDate, String endDate) {
+    public ResponseResult selectYeJiSumByDateAllStore(Statistic statistic, Long salesmanID, String startDate, String endDate) {
+        //查看所有业绩方式
+        List<PerformancePost> performancePostList = performanceDao.selectPerformancePostList(new HashMap());
+        Map mapStaff = (Map) (storeApi.selectBeauticianByCode(salesmanID.toString()).getResult());
+        //查询时间范围内当前员工所在门店所有的业绩明细
+        Map mapLadderDetailedSelect = new HashMap();
+        mapLadderDetailedSelect.put("ladderDetailedStoreId", mapStaff.get("companyId"));
+        mapLadderDetailedSelect.put("noLadderDetailedBeauticianId", salesmanID);
+        mapLadderDetailedSelect.put("startDate", startDate);
+        mapLadderDetailedSelect.put("endDate", endDate);
+        List<LadderDetailed> ladderDetailedList = performanceDao.selectLadderDetailedList(mapLadderDetailedSelect);
+        HashMap map = new HashMap();
+        Double yejiAllSum = 0.00;
+        Integer geshuAllSum = 0;
+        List<Long> stringList = new ArrayList<>();
+        for (PerformancePost performancePost : performancePostList) {
+            Double yejiSum = 0.00;
+            Integer geshuSum = 0;
+            for (LadderDetailed ladderDetailed : ladderDetailedList) {
+                if (performancePost.getId().toString().equals(ladderDetailed.getLadderDetailedAchievementID().toString())) {
+                    yejiSum = yejiSum + ladderDetailed.getLadderDetailedAmount().doubleValue();
+                    geshuSum = geshuSum + ladderDetailed.getLadderDetailedNumber().intValue();
+                    stringList.add(ladderDetailed.getLadderDetailedID());
+                }
+            }
+            if (performancePost.getAchievementMethods() == AchievementMethodEnum.NUMBER_ROYALTY.getCode() |
+                    performancePost.getAchievementMethods() == AchievementMethodEnum.NUMBER_LADDER_ROYALTY.getCode()) {
+                if (geshuSum != 0) {
+                    map.put(performancePost.getId().toString(), geshuSum);
+                }
+            } else {
+                if (yejiSum != 0) {
+                    map.put(performancePost.getId().toString(), yejiSum);
+                }
+            }
+
+
+            yejiAllSum = yejiAllSum + yejiSum;
+            geshuAllSum = geshuAllSum + geshuSum;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        statistic.setPerformanceMapAllStore(map);
+        try {
+            statistic.setStatisticDateStart(sdf.parse(startDate));
+            statistic.setStatisticDateEnd(sdf.parse(endDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        statistic.setAmountPerformanceAllStore(new BigDecimal(yejiAllSum));
+        statistic.setNumberPerformanceAllStore(new BigDecimal(geshuAllSum));
+        statistic.setLadderDetailedAllStore(stringList.toString().replaceAll(" ", ""));
+        statistic.setSalesmanID(salesmanID);
+
+        statistic.setAmountPerformanceGroup(new BigDecimal(0));
+        statistic.setNumberPerformanceGroup(new BigDecimal(0));
+        return ResponseResult.success(statistic);
+    }
+
+    @Override
+    public ResponseResult selectYeJiSumByDateGroup(Statistic statistic, Long salesmanID, String startDate, String endDate) {
+        //查看所有业绩方式
+        List<PerformancePost> performancePostList = performanceDao.selectPerformancePostList(new HashMap());
+        Map mapStaff = (Map) (storeApi.selectBeauticianByCode(salesmanID.toString()).getResult());
+        //获取组id
+        Long groupId = Long.parseLong(mapStaff.get("groupId").toString());
+        Long beauticianId = Long.parseLong(mapStaff.get("beauticianId").toString());
+        //查看组员
+        List<Map> groupMemberListMap = (List<Map>) storeApi.selectGroupMember(groupId, beauticianId).getResult();
+        List<String> listStaffNumber = new ArrayList<>();
+        for (Map map : groupMemberListMap) {
+            listStaffNumber.add(map.get("staffNumber").toString());
+        }
+
+        //查询时间范围内当前员工所在门店当前分组业绩明细
+        Map mapLadderDetailedSelect = new HashMap();
+        mapLadderDetailedSelect.put("ladderDetailedStoreId", mapStaff.get("companyId"));
+        mapLadderDetailedSelect.put("noLadderDetailedBeauticianId", salesmanID);
+        mapLadderDetailedSelect.put("listBeauticianId", listStaffNumber);
+        mapLadderDetailedSelect.put("startDate", startDate);
+        mapLadderDetailedSelect.put("endDate", endDate);
+        List<LadderDetailed> ladderDetailedList = new ArrayList<>();
+        if (listStaffNumber.size() != 0) {
+            //如果有组员
+            ladderDetailedList = performanceDao.selectLadderDetailedList(mapLadderDetailedSelect);
+        }
+        HashMap map = new HashMap();
+        Double yejiAllSum = 0.00;
+        Integer geshuAllSum = 0;
+        List<Long> stringList = new ArrayList<>();
+        for (PerformancePost performancePost : performancePostList) {
+            Double yejiSum = 0.00;
+            Integer geshuSum = 0;
+            for (LadderDetailed ladderDetailed : ladderDetailedList) {
+                if (performancePost.getId().toString().equals(ladderDetailed.getLadderDetailedAchievementID().toString())) {
+                    yejiSum = yejiSum + ladderDetailed.getLadderDetailedAmount().doubleValue();
+                    geshuSum = geshuSum + ladderDetailed.getLadderDetailedNumber().intValue();
+                    stringList.add(ladderDetailed.getLadderDetailedID());
+                }
+            }
+            if (performancePost.getAchievementMethods() == AchievementMethodEnum.NUMBER_ROYALTY.getCode() |
+                    performancePost.getAchievementMethods() == AchievementMethodEnum.NUMBER_LADDER_ROYALTY.getCode()) {
+                if (geshuSum != 0) {
+                    map.put(performancePost.getId().toString(), geshuSum);
+                }
+            } else {
+                if (yejiSum != 0) {
+                    map.put(performancePost.getId().toString(), yejiSum);
+                }
+            }
+
+
+            yejiAllSum = yejiAllSum + yejiSum;
+            geshuAllSum = geshuAllSum + geshuSum;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        statistic.setPerformanceMapGroup(map);
+        try {
+            statistic.setStatisticDateStart(sdf.parse(startDate));
+            statistic.setStatisticDateEnd(sdf.parse(endDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        statistic.setAmountPerformanceGroup(new BigDecimal(yejiAllSum));
+        statistic.setNumberPerformanceGroup(new BigDecimal(geshuAllSum));
+        statistic.setLadderDetailedGroup(stringList.toString().replaceAll(" ", ""));
+        statistic.setSalesmanID(salesmanID);
+
+        statistic.setAmountPerformanceAllStore(new BigDecimal(0));
+        statistic.setNumberPerformanceAllStore(new BigDecimal(0));
+        return ResponseResult.success(statistic);
+    }
+
+    @Override
+    public ResponseResult selectYeJiSumByDatePerson(Statistic statistic, Long salesmanID, String startDate, String endDate) {
         //查看所有业绩方式
         List<PerformancePost> performancePostList = performanceDao.selectPerformancePostList(new HashMap());
         //查询时间范围内当前员工的业绩明细
@@ -600,10 +737,6 @@ public class StatisticService implements IStatisticService {
 
         List<LadderDetailed> ladderDetailedList = performanceDao.selectLadderDetailedList(mapLadderDetailedSelect);
 
-        /*if (ladderDetailedList.size() == 0) {
-            return ResponseResult.error(new Error(ResponseCodePerformanceEnum.PERFORMANCE_NULL.getCode(),
-                    ResponseCodePerformanceEnum.PERFORMANCE_NULL.getDesc()));
-        }*/
         HashMap map = new HashMap();
         Double yejiAllSum = 0.00;
         Integer geshuAllSum = 0;
@@ -651,7 +784,7 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public ResponseResult selectScore(Long salesmanID, HashMap<String, Object> map, Statistic statistic) {
+    public ResponseResult selectScorePerson(Long salesmanID, HashMap<String, Object> map, Statistic statistic) {
         //查看此员工的职位分类
         Map mapStaff = (Map) storeApi.selectBeauticianByCode(salesmanID.toString()).getResult();
         if (mapStaff == null) {
@@ -716,6 +849,144 @@ public class StatisticService implements IStatisticService {
             }
         }
         statistic.setScore(totalScore.setScale(0, BigDecimal.ROUND_HALF_UP));
+        return ResponseResult.success(statistic);
+    }
+
+    @Override
+    public ResponseResult selectScoreAllStore(Long salesmanID, HashMap<String, Object> map, Statistic statistic) {
+        //查看此员工的职位分类
+        Map mapStaff = (Map) storeApi.selectBeauticianByCode(salesmanID.toString()).getResult();
+        if (mapStaff == null) {
+            return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getCode(),
+                    ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getDesc()));
+        }
+        statistic.setStoreId(Long.parseLong(mapStaff.get("companyId").toString()));
+        String postCategoryId = mapStaff.get("postCategoryId").toString();
+        String partTimePostCategoryId = mapStaff.get("partTimePostCategoryId").toString();
+        List<String> stringList = new ArrayList<>();
+        stringList.add(postCategoryId);
+        stringList.add(partTimePostCategoryId);
+        //根据职位分类 查看积分规则
+        Map map1 = new HashMap();
+        map1.put("list", stringList);
+        List<Score> scoreList = scoreDao.selectScoreByPostId(map1);
+        BigDecimal totalScore = new BigDecimal(0);
+        if (scoreList.size() == 0) {
+            totalScore = new BigDecimal(0);
+        } else {
+            //总分数
+            Set<String> performanceIds = map.keySet();
+            for (String performanceId : performanceIds) {
+                PerformancePost performancePost = performanceDao.selectPerformancePostById(Long.parseLong(performanceId));
+                if (performancePost.getIsBasicSalary() == 0) {
+                    //如果不计算底薪
+                    totalScore = totalScore.add(BigDecimal.ZERO);
+                    continue;
+                }
+                for (Score score : scoreList) {
+                    if (score.getScoreMode() == 1) {
+                        //手动评分
+                        continue;
+                    }
+                    if (score.getScoreAchievementID().equals(Long.valueOf(performanceId))) {
+                        //传来的业绩id和评分标准的业绩id一致再计算评分
+                        //每条业绩对应的金额
+                        BigDecimal amount = null;
+                        if (map.get(performanceId) instanceof Double) {
+                            amount = new BigDecimal((Double) map.get(performanceId));
+                        } else if (map.get(performanceId) instanceof Integer) {
+                            amount = new BigDecimal((Integer) map.get(performanceId));
+                        }
+                        if (amount.compareTo(BigDecimal.ZERO) != 0) {
+                            //计算业绩金额评分 金额业绩/业绩基数*分数基数
+                            BigDecimal performanceScore = amount.subtract(score.getScoreProportion()).divide(score.getScoreBase(), BigDecimal.ROUND_UP).add(score.getScoreDefault());
+                            if (performanceScore.doubleValue() != 0 && performanceScore.compareTo(score.getScoreLow()) == -1) {
+                                //如果评分小于最低分取最低分
+                                performanceScore = score.getScoreLow();
+                            } else if (performanceScore.compareTo(score.getScoreHigh()) == 1) {
+                                //高于了最高分数 就取最高分
+                                performanceScore = score.getScoreHigh();
+                            } else if (amount.doubleValue() < score.getScoreProportion().doubleValue()) {
+                                //如果业绩小于业绩基数按照默认业绩
+                                performanceScore = score.getScoreDefault();
+                            }
+                            //累加每条业绩的评分
+                            totalScore = totalScore.add(performanceScore);
+                        }
+                    }
+                }
+            }
+        }
+        statistic.setScoreAllStore(totalScore.setScale(0, BigDecimal.ROUND_HALF_UP));
+        return ResponseResult.success(statistic);
+    }
+
+    @Override
+    public ResponseResult selectScoreGroup(Long salesmanID, HashMap<String, Object> map, Statistic statistic) {
+        //查看此员工的职位分类
+        Map mapStaff = (Map) storeApi.selectBeauticianByCode(salesmanID.toString()).getResult();
+        if (mapStaff == null) {
+            return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getCode(),
+                    ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getDesc()));
+        }
+        statistic.setStoreId(Long.parseLong(mapStaff.get("companyId").toString()));
+        String postCategoryId = mapStaff.get("postCategoryId").toString();
+        String partTimePostCategoryId = mapStaff.get("partTimePostCategoryId").toString();
+        List<String> stringList = new ArrayList<>();
+        stringList.add(postCategoryId);
+        stringList.add(partTimePostCategoryId);
+        //根据职位分类 查看积分规则
+        Map map1 = new HashMap();
+        map1.put("list", stringList);
+        List<Score> scoreList = scoreDao.selectScoreByPostId(map1);
+        BigDecimal totalScore = new BigDecimal(0);
+        if (scoreList.size() == 0) {
+            totalScore = new BigDecimal(0);
+        } else {
+            //总分数
+            Set<String> performanceIds = map.keySet();
+            for (String performanceId : performanceIds) {
+                PerformancePost performancePost = performanceDao.selectPerformancePostById(Long.parseLong(performanceId));
+                if (performancePost.getIsBasicSalary() == 0) {
+                    //如果不计算底薪
+                    totalScore = totalScore.add(BigDecimal.ZERO);
+                    continue;
+                }
+                for (Score score : scoreList) {
+                    if (score.getScoreMode() == 1) {
+                        //手动评分
+                        continue;
+                    }
+                    if (score.getScoreAchievementID().equals(Long.valueOf(performanceId))) {
+                        //传来的业绩id和评分标准的业绩id一致再计算评分
+                        //每条业绩对应的金额
+                        BigDecimal amount = null;
+                        if (map.get(performanceId) instanceof Double) {
+                            amount = new BigDecimal((Double) map.get(performanceId));
+                        } else if (map.get(performanceId) instanceof Integer) {
+                            amount = new BigDecimal((Integer) map.get(performanceId));
+                        }
+                        if (amount.compareTo(BigDecimal.ZERO) != 0) {
+                            //计算业绩金额评分 金额业绩/业绩基数*分数基数
+                            BigDecimal performanceScore = amount.subtract(score.getScoreProportion()).divide(score.getScoreBase(), BigDecimal.ROUND_UP).add(score.getScoreDefault());
+                            if (performanceScore.doubleValue() != 0 && performanceScore.compareTo(score.getScoreLow()) == -1) {
+                                //如果评分小于最低分取最低分
+                                performanceScore = score.getScoreLow();
+                            } else if (performanceScore.compareTo(score.getScoreHigh()) == 1) {
+                                //高于了最高分数 就取最高分
+                                performanceScore = score.getScoreHigh();
+                            } else if (amount.doubleValue() < score.getScoreProportion().doubleValue()) {
+                                //如果业绩小于业绩基数按照默认业绩
+                                performanceScore = score.getScoreDefault();
+                            }
+                            //累加每条业绩的评分
+                            totalScore = totalScore.add(performanceScore);
+                        }
+                    }
+                }
+            }
+        }
+        statistic.setScoreGroup(totalScore.setScale(0, BigDecimal.ROUND_HALF_UP));
         return ResponseResult.success(statistic);
     }
 
@@ -794,50 +1065,50 @@ public class StatisticService implements IStatisticService {
     }
 
     @Override
-    public ResponseResult responseResultTiCheng(HashMap<String, Object> map, Statistic statistic) {
+    public ResponseResult responseResultTiCheng(List<HashMap<String, Object>> mapList, Statistic statistic) {
         //查看所有的业绩阶梯
         List<Ladder> ladderList = performanceDao.selectLadderList();
-
-
         //查看每种业绩的业绩提成阶梯
         Double takePercentage = 0.00;
-        for (String yejiId : map.keySet()) {
-            List<Ladder> ladderListResult = new ArrayList<>();
-            for (Ladder ladder : ladderList) {
-                if (ladder.getLadderAchievementPostID().toString().equals(yejiId)) {
-                    ladderListResult.add(ladder);
+        for (HashMap<String, Object> stringObjectHashMap : mapList) {
+
+            for (String yejiId : stringObjectHashMap.keySet()) {
+                List<Ladder> ladderListResult = new ArrayList<>();
+                for (Ladder ladder : ladderList) {
+                    if (ladder.getLadderAchievementPostID().toString().equals(yejiId)) {
+                        ladderListResult.add(ladder);
+                    }
                 }
-            }
 
 
-            Double ladderProportion = 0.00;
-            if (ladderListResult.size() == 1) {
-                //如果只有一个规则
-                if (Double.parseDouble(map.get(yejiId).toString()) >= ladderListResult.get(0).getLadderLower().doubleValue()) {
-                    takePercentage = takePercentage + ladderListResult.get(0).getLadderProportion().doubleValue() * Double.parseDouble(map.get(yejiId).toString());
-                } else {
-                    takePercentage = takePercentage + 0;
+                Double ladderProportion = 0.00;
+                if (ladderListResult.size() == 1) {
+                    //如果只有一个规则
+                    if (Double.parseDouble(stringObjectHashMap.get(yejiId).toString()) >= ladderListResult.get(0).getLadderLower().doubleValue()) {
+                        takePercentage = takePercentage + ladderListResult.get(0).getLadderProportion().doubleValue() * Double.parseDouble(stringObjectHashMap.get(yejiId).toString());
+                    } else {
+                        takePercentage = takePercentage + 0;
+                    }
                 }
-            }
-            for (int i = 0; i < ladderListResult.size() - 1; i++) {
-                //如果有多个分数标准拿到阶梯分数标准
-                int r1 = new BigDecimal(Double.parseDouble(map.get(yejiId).toString())).compareTo(new BigDecimal(ladderListResult.get(i).getLadderLower()));
-                int r2 = new BigDecimal(Double.parseDouble(map.get(yejiId).toString())).compareTo(new BigDecimal(ladderListResult.get(i + 1).getLadderLower()));
-                if (r1 < 0) {
-                    //比最小的还小
-                    continue;
-                } else if (r1 > 0 && r2 < 0) {
-                    //中间
-                    ladderProportion = ladderListResult.get(i).getLadderProportion().doubleValue();
-                } else if (r1 > 0 && r2 > 0) {
-                    //比最大的还大
-                    ladderProportion = ladderListResult.get(i + 1).getLadderProportion().doubleValue();
+                for (int i = 0; i < ladderListResult.size() - 1; i++) {
+                    //如果有多个分数标准拿到阶梯分数标准
+                    int r1 = new BigDecimal(Double.parseDouble(stringObjectHashMap.get(yejiId).toString())).compareTo(new BigDecimal(ladderListResult.get(i).getLadderLower()));
+                    int r2 = new BigDecimal(Double.parseDouble(stringObjectHashMap.get(yejiId).toString())).compareTo(new BigDecimal(ladderListResult.get(i + 1).getLadderLower()));
+                    if (r1 < 0) {
+                        //比最小的还小
+                        continue;
+                    } else if (r1 > 0 && r2 < 0) {
+                        //中间
+                        ladderProportion = ladderListResult.get(i).getLadderProportion().doubleValue();
+                    } else if (r1 > 0 && r2 > 0) {
+                        //比最大的还大
+                        ladderProportion = ladderListResult.get(i + 1).getLadderProportion().doubleValue();
+                    }
                 }
-            }
 
-            takePercentage = takePercentage + Double.parseDouble(map.get(yejiId).toString()) * ladderProportion;
+                takePercentage = takePercentage + Double.parseDouble(stringObjectHashMap.get(yejiId).toString()) * ladderProportion;
+            }
         }
-
 
         statistic.setTakePercentage(new BigDecimal(takePercentage));
 

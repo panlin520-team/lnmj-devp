@@ -517,6 +517,9 @@
         <if test="storeId != null">
             and StoreId = #{storeId}
         </if>
+        <if test="groupId != null">
+            and GroupId = #{groupId}
+        </if>
         <if test="name != null">
             and Name like CONCAT('%',#{name},'%')
         </if>
@@ -1042,5 +1045,18 @@
       and Name = #{name}
       and StoreId = #{storeId}
   </select>
+
+    <select id="selectGroupMember" resultType="Beautician" parameterType="Beautician">
+        select
+        <include refid="Base_Column_List_detail"/>
+        from s_beautician
+        where Status=1
+        <if test="groupId != null">
+            and GroupId = #{groupId}
+        </if>
+        <if test="beauticianId != null">
+            and BeauticianId != #{beauticianId}
+        </if>
+    </select>
 </mapper>
 

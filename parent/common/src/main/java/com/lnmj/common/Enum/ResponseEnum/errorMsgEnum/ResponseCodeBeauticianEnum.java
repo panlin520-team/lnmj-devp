@@ -12,7 +12,7 @@ public enum ResponseCodeBeauticianEnum {
     POST_LEVEL_ID_NULL(3,"职位等级不能为空"),
     BEAUTICIAN_ID_NULL(3,"美容师ID不能为空"),
     BEAUTICIAN_ADD_FAIL(3,"美容师添加失败"),
-    GROUPID_NULL(3,"美容师组号不能为空"),
+    GROUPID_NULL_FENZUYEJI(3,"所选职位为分组业绩，请选择分组"),
     POSTID_NULL(3,"美容师所属职位不能空"),
     SORT_NULL(3,"美容师排序不能为空"),
     GRADEID_NULL(3,"美容师等级不能为空"),

@@ -197,5 +197,10 @@ public class BeauticianDaoImpl extends BaseDao implements IBeauticianDao {
         return super.select("beautician.checkStaffName",beautician);
     }
 
+    @Override
+    public List<Beautician> selectGroupMember(Beautician beautician) {
+        return super.selectList("beautician.selectGroupMember",beautician);
+    }
+
 
 }

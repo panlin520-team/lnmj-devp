@@ -40,5 +40,29 @@ public class Statistic extends BaseEntity {
     private Boolean managementConfirm;
     @Transient
     private HashMap<String,Object> performanceMap;
+    @Transient
+    private HashMap<String,Object> performanceMapAllStore;
+    @Transient
+    private HashMap<String,Object> performanceMapGroup;
+    @Transient
+    private Integer postAchievement;//业绩统计方式 0个人 1全店 2分组
+    @Transient
+    private BigDecimal numberPerformanceAllStore;
+    @Transient
+    private BigDecimal amountPerformanceAllStore;
+    @Transient
+    private BigDecimal numberPerformanceGroup;
+    @Transient
+    private BigDecimal amountPerformanceGroup;
+    @Transient
+    private String ladderDetailedAllStore;
+    @Transient
+    private String ladderDetailedGroup;
+    @Transient
+    private BigDecimal scoreAllStore;
+    @Transient
+    private BigDecimal scoreGroup;
+    private BigDecimal numberPerformanceAll;
+    private BigDecimal amountPerformanceAll;
 
 }

@@ -377,6 +377,17 @@ public class BeauticianService implements IBeauticianService {
 
     @Override
     public ResponseResult insertBeautician(String imgUrl, Beautician beautician, String FCreateOrgId, String FUseOrgId, String companyType, String companyId) {
+        //查看员工职位的业绩方式
+        Post postResult = beauticianDao.selectPostById(beautician.getPostId());
+        Integer postAchievement = postResult.getPostAchievement();
+        if (postAchievement==2){
+            //如果所属的职位 为分组业绩 判断是否选择分组
+            if (beautician.getGroupId()==null){
+                return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.GROUPID_NULL_FENZUYEJI.getCode(), ResponseCodeBeauticianEnum.GROUPID_NULL_FENZUYEJI.getDesc()));
+            }
+        }
+
+
         if ((beautician.getPartTimePostId() != null && beautician.getPartTimePostId() == 0) ||
                 (beautician.getPartTimePostCategoryId() != null && beautician.getPartTimePostCategoryId() == 0)) {
             beautician.setPartTimePostId(0l);
@@ -451,7 +462,7 @@ public class BeauticianService implements IBeauticianService {
             FCreateOrgId = store.getK3Number();
             FUseOrgId = store.getK3Number();
         }
-      /*  ResponseResult result = k3Api.saveEmployees(dataCentre, userName, password, beautician.getName(), FCreateOrgId, FUseOrgId, beautician.getStaffNumber().toString(), department.getK3Number(), post.getK3Number());
+        ResponseResult result = k3Api.saveEmployees(dataCentre, userName, password, beautician.getName(), FCreateOrgId, FUseOrgId, beautician.getStaffNumber().toString(), department.getK3Number(), post.getK3Number());
         if (result.isSuccess()) {
             Map resultHashMap = (HashMap<String, Object>) result.getResult();
             Map resulut = (HashMap<String, Object>) resultHashMap.get("Result");
@@ -470,7 +481,9 @@ public class BeauticianService implements IBeauticianService {
                 object.put("message", "添加美容师成功");
                 return ResponseResult.success(object);
             }
-        }*/
+        }
+
+
         return ResponseResult.success();
 /*
         return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_ADD_FAIL.getCode(), ResponseCodeBeauticianEnum.BEAUTICIAN_ADD_FAIL.getDesc()));
@@ -1035,6 +1048,12 @@ public class BeauticianService implements IBeauticianService {
     public ResponseResult deletePostCategory(PostCategory postCategory) {
         beauticianDao.deletePostCategory(postCategory);
         return ResponseResult.success();
+    }
+
+    @Override
+    public ResponseResult selectGroupMember(Beautician beautician) {
+        List<Beautician> beauticianList = beauticianDao.selectGroupMember(beautician);
+        return ResponseResult.success(beauticianList);
     }
 
     //获取数据中心、用户名和密码

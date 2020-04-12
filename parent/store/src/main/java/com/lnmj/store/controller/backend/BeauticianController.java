@@ -255,6 +255,20 @@ public class BeauticianController {
     }
 
     /**
+     *@Description 查看组员
+     *@Param [post]
+     *@Return com.lnmj.common.response.ResponseResult
+     *@Author panlin
+     *@Date 2019/7/24
+     *@Time 11:44
+     */
+    @ApiOperation(value = "查看组员",notes = "查看组员")
+    @RequestMapping(value = "/selectGroupMember",method = RequestMethod.POST)
+    public ResponseResult selectGroupMember(Beautician beautician) {
+        return beauticianService.selectGroupMember(beautician);
+    }
+
+    /**
      *@Description 查看美容师职位
      *@Param []
      *@Return com.lnmj.common.response.ResponseResult

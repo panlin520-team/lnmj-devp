@@ -98,6 +98,12 @@
                 #{item}
             </foreach>
         </if>
+        <if test="listBeauticianId != null">
+            and LadderDetailedBeauticianId in
+            <foreach item="item" collection="listBeauticianId" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         <if test="startDate != null">
             and CreateTime between DATE_FORMAT(#{startDate}, '%Y-%m-%d %H:%i:%S') and DATE_FORMAT(#{endDate},'%Y-%m-%d
             %H:%i:%S')
@@ -107,6 +113,12 @@
         </if>
         <if test="forNumber != null and forNumber != ''">
             and LadderDetailedNumber != 0
+        </if>
+        <if test="ladderDetailedStoreId != null and ladderDetailedStoreId != ''">
+            and LadderDetailedStoreId = #{ladderDetailedStoreId}
+        </if>
+        <if test="noLadderDetailedBeauticianId != null and noLadderDetailedBeauticianId != ''">
+            and LadderDetailedBeauticianId != #{noLadderDetailedBeauticianId}
         </if>
     </select>
 
