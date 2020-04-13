@@ -33,7 +33,7 @@ spring:
       #url: jdbc:mysql://192.168.0.10:3306/lnmj_product?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
       #username: root
       #password: root
-      url: jdbc:mysql://192.168.68.188:3306/lnmj_paySettlement?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
+      url: jdbc:mysql://192.168.2.141:3306/lnmj_paySettlement?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
       username: root
       password: root
       druid:
@@ -81,13 +81,13 @@ logging:
 AOP_POINTCUT_EXPRESSION: 'execution(* *..*.service..*.*(..))'
 eureka:
   instance:
-    ip-address: 192.168.68.188
+    ip-address: 192.168.2.143
     prefer-ip-address: true
   client:
     register-with-eureka: true #暂时停止注册服务
     fetch-registry: true #暂时停止注册服务
     service-url:
-      defaultZone: http://192.168.68.188:81/eureka/ #需要将服务注册到那个注册中心（地址）去
+      defaultZone: http://192.168.2.143:81/eureka/ #需要将服务注册到那个注册中心（地址）去
 server:
   port: 90  #自身服务端口
 oauth2:

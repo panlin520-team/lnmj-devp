@@ -17,7 +17,7 @@
 #    fetch-registry: false
 #    eureka-service-url-poll-interval-seconds: 60
 #    serviceUrl:
-#      defaultZone: http://192.168.68.188:81/eureka/
+#      defaultZone: http://192.168.2.143:81/eureka/
 #spring:
 #  application:
 #    name: eurka-server

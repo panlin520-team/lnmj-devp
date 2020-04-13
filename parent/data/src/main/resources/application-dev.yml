@@ -30,20 +30,20 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.68.188:3306/lnmj_datastatistics?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
+    url: jdbc:mysql://192.168.2.141:3306/lnmj_datastatistics?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
     username: root
     password: root
     druid:
 #      first:
-#      url: jdbc:mysql://192.168.68.188:3306/lnmj_product?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
+#      url: jdbc:mysql://192.168.2.141:3306/lnmj_product?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
 #      username: root
 #      password: root
 #      second:
-#        url: jdbc:mysql://192.168.68.188:3306/lnmj_wallet?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
+#        url: jdbc:mysql://192.168.2.141:3306/lnmj_wallet?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
 #        username: root
 #        password: root
 #      Third:
-#        url: jdbc:mysql://192.168.68.188:3306/lnmj_datastatistics?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
+#        url: jdbc:mysql://192.168.2.141:3306/lnmj_datastatistics?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&allowMultiQueries=true
 #        username: root
 #        password: root
       # 下面为连接池的补充设置，应用到上面所有数据源中
@@ -91,13 +91,13 @@ AOP_POINTCUT_EXPRESSION: 'execution(* *..*.service..*.*(..))'
 eureka:
   enabled: true
   instance:
-    ip-address: 192.168.68.188
+    ip-address: 192.168.2.143
     prefer-ip-address: true
   client:
     register-with-eureka: true #暂时停止注册服务
     fetch-registry: true #暂时停止注册服务
     service-url:
-      defaultZone: http://192.168.68.188:81/eureka/ #需要将服务注册到那个注册中心（地址）去
+      defaultZone: http://192.168.2.143:81/eureka/ #需要将服务注册到那个注册中心（地址）去
 server:
   port: 88  #自身服务端口
 oauth2:
