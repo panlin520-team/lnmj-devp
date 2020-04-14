@@ -761,7 +761,7 @@ public class ExperienceCardService implements IExperienceCardService {
         productApi.updateProductSales(productCode, Integer.parseInt(productType.toString()), "up");
 
         if (responseResultYeJi != null && responseResultYeJi.getResponseStatusType().getMessage().equals("Success")) {
-            return ResponseResult.success("划卡成功，业绩生成成功");
+            return ResponseResult.success("划卡成功"+responseResultYeJi.getResult());
         }
         return ResponseResult.success("划卡成功");
     }

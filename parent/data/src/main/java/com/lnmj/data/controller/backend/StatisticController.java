@@ -144,19 +144,46 @@ public class StatisticController {
         //查看时间范围内每种业绩 对于此员工 的业绩
         ResponseResult responseResultYeJiPerson = statisticService.selectYeJiSumByDatePerson(statistic, salesmanID, startDate, endDate);
         statistic = (Statistic) responseResultYeJiPerson.getResult();
+        if (statistic.getAmountPerformanceAllStore() == null) {
+            statistic.setAmountPerformanceAllStore(new BigDecimal(0));
+        }
+        if (statistic.getAmountPerformanceGroup() == null) {
+            statistic.setAmountPerformanceGroup(new BigDecimal(0));
+        }
+        if (statistic.getNumberPerformanceAllStore() == null) {
+            statistic.setNumberPerformanceAllStore(new BigDecimal(0));
+        }
+        if (statistic.getNumberPerformanceGroup() == null) {
+            statistic.setNumberPerformanceGroup(new BigDecimal(0));
+        }
+
         statistic.setAmountPerformanceAll(statistic.getAmountPerformance().add(statistic.getAmountPerformanceAllStore()).add(statistic.getAmountPerformanceGroup()));
         statistic.setNumberPerformanceAll(statistic.getNumberPerformance().add(statistic.getNumberPerformanceAllStore()).add(statistic.getNumberPerformanceGroup()));
+
         //查看此员工的所得分数-个人
         ResponseResult responseResultScorePerson = statisticService.selectScorePerson(salesmanID, ((Statistic) responseResultYeJiPerson.getResult()).getPerformanceMap(), statistic);
         statistic = (Statistic) responseResultScorePerson.getResult();
+
         //查看此员工的所得分数-全店
-        ResponseResult responseResultScoreAllStore = statisticService.selectScoreAllStore(salesmanID, ((Statistic) responseResultYeJiPerson.getResult()).getPerformanceMapAllStore(), statistic);
-        statistic = (Statistic) responseResultScoreAllStore.getResult();
+        if (((Statistic) responseResultYeJiPerson.getResult()).getPerformanceMapAllStore() != null) {
+            ResponseResult responseResultScoreAllStore = statisticService.selectScoreAllStore(salesmanID, ((Statistic) responseResultYeJiPerson.getResult()).getPerformanceMapAllStore(), statistic);
+            statistic = (Statistic) responseResultScoreAllStore.getResult();
+        }
+
         //查看此员工的所得分数-分组
-        ResponseResult responseResultScoreGroup = statisticService.selectScoreGroup(salesmanID, ((Statistic) responseResultYeJiPerson.getResult()).getPerformanceMapGroup(), statistic);
-        statistic = (Statistic) responseResultScoreGroup.getResult();
+        if (((Statistic) responseResultYeJiPerson.getResult()).getPerformanceMapAllStore() != null) {
+            ResponseResult responseResultScoreGroup = statisticService.selectScoreGroup(salesmanID, ((Statistic) responseResultYeJiPerson.getResult()).getPerformanceMapGroup(), statistic);
+            statistic = (Statistic) responseResultScoreGroup.getResult();
+        }
+
         //根据得分计算员工的底薪
         //获取总分
+        if (statistic.getScoreAllStore()==null){
+            statistic.setScoreAllStore(new BigDecimal(0));
+        }
+        if (statistic.getScoreGroup()==null){
+            statistic.setScoreGroup(new BigDecimal(0));
+        }
         BigDecimal allScore = statistic.getScore().add(statistic.getScoreAllStore()).add(statistic.getScoreGroup());
 
         ResponseResult responseResultBasicSalary = statisticService.selectBasicSalary(salesmanID, allScore, statistic);

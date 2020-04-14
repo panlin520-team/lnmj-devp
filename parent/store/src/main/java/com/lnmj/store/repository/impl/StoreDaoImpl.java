@@ -109,4 +109,9 @@ public class StoreDaoImpl extends BaseDao implements IStoreDao {
     public int checkStoreCategoryName(StoreCategory storeCategory) {
         return super.select("store.checkStoreCategoryName",storeCategory);
     }
+
+    @Override
+    public int checkStoreNumber(String code) {
+        return super.select("store.checkStoreNumber",code);
+    }
 }

@@ -3,6 +3,7 @@ package com.lnmj.data.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lnmj.data.entity.base.BaseEntity;
 import lombok.Data;
+import org.springframework.data.annotation.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -13,6 +14,8 @@ public class EvaluatingDetailed extends BaseEntity {
     private Long evaluatingDetailedID;
 
     private Long evaluatingDetailedEvaluatingID;
+    @Transient
+    private String evaluatingDetailedEvaluatingName;
 
     private BigDecimal evaluatingDetailedAmount;
 

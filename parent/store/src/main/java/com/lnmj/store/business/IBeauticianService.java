@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service("beauticianService")
 public interface IBeauticianService {
     ResponseResult selectBeauticianList(int pageNum, int pageSize,String storeId,String keyWordStaffNumber,String keyWordName,String nursingDate,Long companyType,Long companyId,Integer isSaleMan);
+    ResponseResult selectBeauticianListNoPage2(String storeId,String keyWordStaffNumber,String keyWordName,String nursingDate,Long companyType,Long companyId,Integer isSaleMan);
     ResponseResult selectBeauticianListNoPage(String companyType, String companyId, Integer isSaleMan);
     ResponseResult selectBeauticianById(Long beauticianId);
     ResponseResult selectBeauticianByCode(String staffNumber);

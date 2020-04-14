@@ -819,7 +819,7 @@ public class StatisticService implements IStatisticService {
                         //手动评分
                         continue;
                     }
-                    if (score.getScoreAchievementID().equals(Long.valueOf(performanceId))) {
+                    if (score.getScoreAchievementID().equals(Long.valueOf(performanceId))||score.getScoreAchievementID().toString().equals("0")) {
                         //传来的业绩id和评分标准的业绩id一致再计算评分
                         //每条业绩对应的金额
                         BigDecimal amount = null;

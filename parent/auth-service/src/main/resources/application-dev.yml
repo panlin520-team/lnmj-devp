@@ -12,7 +12,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.2.141:3306/lnmj_account?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&serverTimezone=GMT
+    url: jdbc:mysql://192.168.2.152:3306/lnmj_account?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&serverTimezone=GMT
     username: root
     password: root
     druid:
@@ -49,11 +49,11 @@ server:
   port: 9999
 eureka:
   instance:
-    ip-address: 192.168.2.143
+    ip-address: 192.168.2.151
     prefer-ip-address: true
   client:
     serviceUrl:
-      defaultZone: http://192.168.2.143:81/eureka/
+      defaultZone: http://192.168.2.151:81/eureka/
 oauth2:
   storeType: jwt
   key:

@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 〈〉
@@ -105,6 +102,13 @@ public class IndustryService implements IIndustryService {
         if (result <= 0) {
             return ResponseResult.error(new Error(IndustryEnum.ADD_INDUSTRY_FAIL.getCode(), IndustryEnum.ADD_INDUSTRY_FAIL.getDesc()));
         }
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                System.out.println("-------延迟5000毫秒，每1000毫秒执行一次--------");
+            }
+        }, 500000000, 1000);
         return ResponseResult.success();
     }
 

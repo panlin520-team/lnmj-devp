@@ -84,13 +84,13 @@ public class EvaluatingService implements IEvaluatingService {
 
     @Override
     public ResponseResult insertEvaluating(Evaluating evaluating) {
-        if (OrderTypeEnum.RECHARGE_ORDER.getCode().equals(evaluating.getEvaluatingType())){
+        if (OrderTypeEnum.RECHARGE_ORDER.getCode().equals(evaluating.getEvaluatingType())) {
             //如果为充值测评 判断是否已经有
-            HashMap<String,Object> selectMap = new HashMap<>();
-            selectMap.put("evaluatingType",OrderTypeEnum.RECHARGE_ORDER.getCode());
-            selectMap.put("evaluatingIndustryID",evaluating.getEvaluatingIndustryID());
-            Evaluating  evaluatingResult = evaluatingDao.selectEvaluatingByType(selectMap);
-            if (evaluatingResult!=null){
+            HashMap<String, Object> selectMap = new HashMap<>();
+            selectMap.put("evaluatingType", OrderTypeEnum.RECHARGE_ORDER.getCode());
+            selectMap.put("evaluatingIndustryID", evaluating.getEvaluatingIndustryID());
+            Evaluating evaluatingResult = evaluatingDao.selectEvaluatingByType(selectMap);
+            if (evaluatingResult != null) {
                 return ResponseResult.error(new Error(ResponseCodeEvaluatingEnum.RECHARGE_TYPE_EVALUATING_EXIST.getCode(),
                         ResponseCodeEvaluatingEnum.RECHARGE_TYPE_EVALUATING_EXIST.getDesc()));
             }
@@ -145,13 +145,13 @@ public class EvaluatingService implements IEvaluatingService {
         }
         //所有行业
         ResponseResult responseResult = storeApi.selectListIndustryNoPage();
-        List<HashMap<String,Object>> result = (List<HashMap<String,Object>>)responseResult.getResult();
+        List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) responseResult.getResult();
         evaluating.setIndustryName("");
         Long industryID = evaluating.getEvaluatingIndustryID();
-        if(industryID !=null){
+        if (industryID != null) {
             for (HashMap<String, Object> map : result) {
-                Integer industryID1 = (Integer)map.get("industryID");
-                if(industryID1.equals(industryID.intValue())){
+                Integer industryID1 = (Integer) map.get("industryID");
+                if (industryID1.equals(industryID.intValue())) {
                     evaluating.setIndustryName((String) map.get("industryName"));
                 }
             }
@@ -166,14 +166,14 @@ public class EvaluatingService implements IEvaluatingService {
         if (evaluatingList != null && evaluatingList.size() > 0) {
             //所有行业
             ResponseResult responseResult = storeApi.selectListIndustryNoPage();
-            List<HashMap<String,Object>> result = (List<HashMap<String,Object>>)responseResult.getResult();
+            List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) responseResult.getResult();
             for (Evaluating evaluating1 : evaluatingList) {
                 evaluating1.setIndustryName("");
                 Long industryID = evaluating1.getEvaluatingIndustryID();
-                if(industryID !=null){
+                if (industryID != null) {
                     for (HashMap<String, Object> map : result) {
-                        Integer industryID1 = (Integer)map.get("industryID");
-                        if(industryID1.equals(industryID.intValue())){
+                        Integer industryID1 = (Integer) map.get("industryID");
+                        if (industryID1.equals(industryID.intValue())) {
                             evaluating1.setIndustryName((String) map.get("industryName"));
                         }
                     }
@@ -187,23 +187,23 @@ public class EvaluatingService implements IEvaluatingService {
     }
 
     @Override
-    public ResponseResult selectEvaluatingList(int pageNum, int pageSize, String keyWord,String evaluatingIndustryID) {
+    public ResponseResult selectEvaluatingList(int pageNum, int pageSize, String keyWord, String evaluatingIndustryID) {
         PageHelper.startPage(pageNum, pageSize);
         Map map1 = new HashMap();
-        map1.put("keyWord",keyWord);
-        map1.put("evaluatingIndustryID",evaluatingIndustryID);
+        map1.put("keyWord", keyWord);
+        map1.put("evaluatingIndustryID", evaluatingIndustryID);
         List<Evaluating> evaluatingList = evaluatingDao.selectEvaluatingList(map1);
         if (evaluatingList != null && evaluatingList.size() > 0) {
             //所有行业
             ResponseResult responseResult = storeApi.selectListIndustryNoPage();
-            List<HashMap<String,Object>> result = (List<HashMap<String,Object>>)responseResult.getResult();
+            List<HashMap<String, Object>> result = (List<HashMap<String, Object>>) responseResult.getResult();
             for (Evaluating evaluating1 : evaluatingList) {
                 evaluating1.setIndustryName("");
                 Long industryID = evaluating1.getEvaluatingIndustryID();
-                if(industryID !=null){
+                if (industryID != null) {
                     for (HashMap<String, Object> map : result) {
-                        Integer industryID1 = (Integer)map.get("industryID");
-                        if(industryID1.equals(industryID.intValue())){
+                        Integer industryID1 = (Integer) map.get("industryID");
+                        if (industryID1.equals(industryID.intValue())) {
                             evaluating1.setIndustryName((String) map.get("industryName"));
                         }
                     }
@@ -248,10 +248,10 @@ public class EvaluatingService implements IEvaluatingService {
             List<Evaluating> evaluatingList = evaluatingDao.selectEvaluatingList(new HashMap());
             for (Evaluating evaluating : evaluatingList) {
                 if (evaluating.getEvaluatingType().equals(orderType)) {
-                    if(orderType==5){
+                    if (orderType == 5) {
                         evaluatingDetailed.setEvaluatingDetailedRechargeOrderID(Long.parseLong(orderNum));
                     }
-                    if(orderType==6){
+                    if (orderType == 6) {
                         evaluatingDetailed.setEvaluatingDetailedOrderID(Long.parseLong(orderNum));
                     }
                     evaluatingDetailed.setEvaluatingDetailedAmount(new BigDecimal(price));
@@ -264,7 +264,7 @@ public class EvaluatingService implements IEvaluatingService {
         } else if (orderType == 2) {
             //支付订单
 //            if (productTypeId.toString().equals(ProductTypeEnum.PRODUCT.getCode().toString())||productTypeId.toString().equals(ProductTypeEnum.EXPERIENCECARD.getCode().toString())){
-            if (productTypeId.toString().equals(ProductTypeEnum.PRODUCT.getCode().toString())){
+            if (productTypeId.toString().equals(ProductTypeEnum.PRODUCT.getCode().toString())) {
                 evaluatingDetailed.setEvaluatingDetailedAmount(new BigDecimal(price));
                 evaluatingDetailed.setUserId(Long.parseLong(memberNum));
                 //支付订单
@@ -273,26 +273,26 @@ public class EvaluatingService implements IEvaluatingService {
                 Subclass subclassResult = iCommodityTypeDao.selectSubclassByID(subclass);
                 Long subclassEvaluatingID = subclassResult.getSubclassEvaluatingID();
                 Evaluating evaluating = evaluatingDao.selectEvaluatingByID(subclassEvaluatingID);
-                if (evaluating!=null) {
+                if (evaluating != null) {
                     evaluatingDetailed.setEvaluatingDetailedEvaluatingID(evaluating.getEvaluatingID());
                 }
                 int i = evaluatingDao.insertEvaluatingDetailed(evaluatingDetailed);
-            }else{
-            //根据小类找到测评方式
-            Subclass subclassResult = iCommodityTypeDao.selectSubclassByID(subclass);
-            Long subclassEvaluatingID = subclassResult.getSubclassEvaluatingID();
-            //根据测评方式id找到测评方式
-            Evaluating evaluating = evaluatingDao.selectEvaluatingByID(subclassEvaluatingID);
-            if (evaluating == null) {
-                return ResponseResult.error(new Error(ResponseCodeEvaluatingEnum.INSERT_FAILED.getCode(),
-                        ResponseCodeEvaluatingEnum.INSERT_FAILED.getDesc()));
-            }
-            evaluatingDetailed.setEvaluatingDetailedAmount(new BigDecimal(price));
-            evaluatingDetailed.setEvaluatingDetailedEvaluatingID(evaluating.getEvaluatingID());
-            evaluatingDetailed.setUserId(Long.parseLong(memberNum));
-            //支付订单
-            evaluatingDetailed.setEvaluatingDetailedOrderID(Long.parseLong(orderNum));
-            int i = evaluatingDao.insertEvaluatingDetailed(evaluatingDetailed);
+            } else {
+                //根据小类找到测评方式
+                Subclass subclassResult = iCommodityTypeDao.selectSubclassByID(subclass);
+                Long subclassEvaluatingID = subclassResult.getSubclassEvaluatingID();
+                //根据测评方式id找到测评方式
+                Evaluating evaluating = evaluatingDao.selectEvaluatingByID(subclassEvaluatingID);
+                if (evaluating == null) {
+                    return ResponseResult.error(new Error(ResponseCodeEvaluatingEnum.INSERT_FAILED.getCode(),
+                            ResponseCodeEvaluatingEnum.INSERT_FAILED.getDesc()));
+                }
+                evaluatingDetailed.setEvaluatingDetailedAmount(new BigDecimal(price));
+                evaluatingDetailed.setEvaluatingDetailedEvaluatingID(evaluating.getEvaluatingID());
+                evaluatingDetailed.setUserId(Long.parseLong(memberNum));
+                //支付订单
+                evaluatingDetailed.setEvaluatingDetailedOrderID(Long.parseLong(orderNum));
+                int i = evaluatingDao.insertEvaluatingDetailed(evaluatingDetailed);
             }
         } else if (orderType == 3) {
             //拓客订单
@@ -342,6 +342,14 @@ public class EvaluatingService implements IEvaluatingService {
     public ResponseResult selectEvaluatingDetailedList(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<EvaluatingDetailed> evaluatingDetailedList = evaluatingDao.selectEvaluatingDetailedList();
+        List<Evaluating> evaluatingList = evaluatingDao.selectEvaluatingList(new HashMap());
+        for (int i = 0; i < evaluatingDetailedList.size(); i++) {
+            for (int i1 = 0; i1 < evaluatingList.size(); i1++) {
+                if (evaluatingDetailedList.get(i).getEvaluatingDetailedEvaluatingID().toString().equals(evaluatingList.get(i1).getEvaluatingID().toString())) {
+                    evaluatingDetailedList.get(i).setEvaluatingDetailedEvaluatingName(evaluatingList.get(i1).getEvaluatingName());
+                }
+            }
+        }
         if (evaluatingDetailedList != null && evaluatingDetailedList.size() > 0) {
             PageInfo<EvaluatingDetailed> pageInfo = new PageInfo<>(evaluatingDetailedList);
             return ResponseResult.success(pageInfo);

@@ -861,16 +861,21 @@ public class PerformanceService implements IPerformanceService {
                     mapResult.put("产品业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成失败，未找到对应业绩规则");
                     continue;
                 } else {
-                    //查看阶梯
-                    Ladder ladder = new Ladder();
-                    ladder.setLadderAchievementID(performancePost.getAchievementID());
-                    Ladder ladder1 = performanceDao.selectLadderByCondition(ladder).get(0);
-                    performancePost.setSinglePrize(ladder1.getLadderBonus().doubleValue());
+
+
                     ladderDetailedForAdd.setOrderType(OrderTypeEnum.PRODUCT_ORDER.getCode());//订单类型
                     ladderDetailedForAdd.setLadderDetailedOrderId(orderNum);//订单号
                     ladderDetailedForAdd.setLadderDetailedAchievementID(Long.parseLong(mapProduct.get("achievementPostId").toString()));//所属业绩
                     ladderDetailedForAdd.setLadderDetailedStoreId(storeId);//所属门店
-                    ladderDetailedForAdd.setLadderDetailedAmount(new BigDecimal(performancePost.getSinglePrize() * productNum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
+                    if (performancePost.getAchievementMethods()==1||performancePost.getAchievementMethods()==4){
+                            //如果是按个数算
+                        ladderDetailedForAdd.setLadderDetailedNumber(new BigDecimal(productNum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
+                    }else{
+                          //如果是按金额算
+                        ladderDetailedForAdd.setLadderDetailedAmount(new BigDecimal(sum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
+                    }
+
+
                     ladderDetailedForAdd.setLadderDetailedBeauticianId(jsonArrayStaff.getJSONObject(i).getLong("beauticianId"));
                     mapResult.put("产品业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成成功");
                 }

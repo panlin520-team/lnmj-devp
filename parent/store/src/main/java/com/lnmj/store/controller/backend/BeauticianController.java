@@ -83,6 +83,21 @@ public class BeauticianController {
         return beauticianService.selectBeauticianList(pageNum,pageSize,storeId,keyWordStaffNumber,keyWordName,nursingDate, companyType, companyId,isSaleMan);
     }
 
+    /**
+     *@Description 分页查看美容师列表
+     *@Param [pageNum, pageSize] 页码数量 页码大小
+     *@Return com.lnmj.common.response.ResponseResult
+     *@Author panlin
+     *@Date 2019/5/28
+     *@Time 13:39
+     */
+    @ApiOperation(value = "分页查看美容师列表",notes = "分页查看美容师列表")
+    @RequestMapping(value = "/selectBeauticianListNoPage2",method = RequestMethod.POST)
+    public ResponseResult<List<Beautician>> selectBeauticianListNoPage2(String storeId , String keyWordStaffNumber, String keyWordName, String nursingDate,Long companyType,Long companyId,Integer isSaleMan) {
+
+        return beauticianService.selectBeauticianListNoPage2(storeId,keyWordStaffNumber,keyWordName,nursingDate, companyType, companyId,isSaleMan);
+    }
+
     @ApiOperation(value = "查看美容师列表",notes = "查看美容师列表")
     @RequestMapping(value = "/selectBeauticianListNoPage",method = RequestMethod.POST)
     public ResponseResult selectBeauticianListNoPage(String companyType,String companyId,Integer isSaleMan) {

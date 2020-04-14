@@ -14,6 +14,7 @@ public enum ResponseCodeStoreEnum {
     STORECATEGORYLIST_ISNOTEXICT(3,"门店分类列表不存在"),
     ADD_STORE_FAIL(3,"门店添加失败"),
     STORE_NAME_EXIT(3,"店铺名称已经存在"),
+    STORE_CODE_EXIT(3,"店铺编号已经存在"),
     STORE_K3NUMBER_EXIT(3,"店铺k3编号已经存在"),
     STORE_UPDATE_FAIL(3,"店铺信息修改失败"),
     DELETE_STORE_FAIL(3,"店铺删除失败"),

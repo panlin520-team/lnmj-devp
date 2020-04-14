@@ -2132,7 +2132,7 @@ public class OrderService implements IOrderService {
 
         }
 
-        // 修改体验卡使用次数
+        // 修改使用次数
         iOrderDao.updateUserCustomUseTimes(map);
         //添加使用记录
         CustomProjectUserRecord customProjectUserRecord = new CustomProjectUserRecord();
@@ -2356,7 +2356,7 @@ public class OrderService implements IOrderService {
 
 
         if (responseResultYeJi != null && responseResultYeJi.getResponseStatusType().getMessage().equals("Success")) {
-            return ResponseResult.success("划卡成功，业绩生成成功");
+            return ResponseResult.success("划卡成功"+responseResultYeJi.getResult());
         }
         return ResponseResult.success("划卡成功");
     }

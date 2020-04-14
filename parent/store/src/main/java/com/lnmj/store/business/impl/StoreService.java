@@ -238,6 +238,13 @@ public class StoreService implements IStoreService {
             return ResponseResult.error(new Error(ResponseCodeStoreEnum.STORE_K3NUMBER_EXIT.getCode(), ResponseCodeStoreEnum.STORE_K3NUMBER_EXIT.getDesc()));
         }
 
+        //判断门店编号是否重复
+        int resultCode = storeDao.checkStoreNumber(store.getCode());
+        if (resultCode > 0) {
+            return ResponseResult.error(new Error(ResponseCodeStoreEnum.STORE_CODE_EXIT.getCode(), ResponseCodeStoreEnum.STORE_CODE_EXIT.getDesc()));
+        }
+
+
         //判断名字是否重复
         int resultCheckInt = storeDao.checkStoreName(store.getName());
         if (resultCheckInt > 0) {

@@ -55,8 +55,8 @@ public class BeauticianService implements IBeauticianService {
     private IStoreDao iStoreDao;
 
     @Override
-    public ResponseResult selectBeauticianList(int pageNum, int pageSize, String storeId, String keyWordStaffNumber, String keyWordName, String nursingDate, Long companyType, Long companyId,Integer isSaleMan) {
-        PageHelper.startPage(pageNum, pageSize);
+    public ResponseResult selectBeauticianList(int pageNum, int pageSize, String storeId, String keyWordStaffNumber, String keyWordName, String nursingDate, Long companyType, Long companyId, Integer isSaleMan) {
+        /*PageHelper.startPage(pageNum, pageSize);*/
         Beautician beautician = new Beautician();
         if (StringUtils.isNotBlank(keyWordStaffNumber)) {
             beautician.setStaffNumber(Long.valueOf(keyWordStaffNumber));
@@ -224,6 +224,168 @@ public class BeauticianService implements IBeauticianService {
     }
 
     @Override
+    public ResponseResult selectBeauticianListNoPage2(String storeId, String keyWordStaffNumber, String keyWordName, String nursingDate, Long companyType, Long companyId, Integer isSaleMan) {
+        /*PageHelper.startPage(pageNum, pageSize);*/
+        Beautician beautician = new Beautician();
+        if (StringUtils.isNotBlank(keyWordStaffNumber)) {
+            beautician.setStaffNumber(Long.valueOf(keyWordStaffNumber));
+        }
+        if (StringUtils.isNotBlank(keyWordName)) {
+            beautician.setName(keyWordName);
+        }
+
+        if (companyType != null && companyId != null) {
+            beautician.setCompanyType(companyType.toString());
+            beautician.setCompanyId(companyId.toString());
+        }
+
+        if (isSaleMan != null) {
+            beautician.setIsSaleMan(isSaleMan);
+        }
+        List<Beautician> beauticianList = beauticianDao.selectBeauticiantList(beautician);
+        //查询分组名称
+        Group group = new Group();
+        List<Group> groupList = beauticianDao.selectGroup(group);
+        List<Department> departmentList = departmentDao.selectDepartmentList(new HashMap());
+        List<PostCategory> postCategoryList = beauticianDao.selectPostCategoryList(new HashMap());
+        for (Beautician beauticianItem : beauticianList) {
+            for (Group groupItem : groupList) {
+                if (beauticianItem.getGroupId() == Long.parseLong(groupItem.getGroupId().toString())) {
+                    beauticianItem.setGroupName(groupItem.getName());
+                }
+            }
+            for (Department department : departmentList) {
+                if (beauticianItem.getDepartmentId() == Long.parseLong(department.getId().toString())) {
+                    beauticianItem.setDepartmentName(department.getName());
+                }
+            }
+            for (PostCategory postCategory : postCategoryList) {
+                if (beauticianItem.getPostCategoryId() == Long.parseLong(postCategory.getPostCategoryId().toString())) {
+                    beauticianItem.setPostCategoryName(postCategory.getName());
+                }
+            }
+            for (PostCategory postCategory : postCategoryList) {
+                if (beauticianItem.getPartTimePostCategoryId() == Long.parseLong(postCategory.getPostCategoryId().toString())) {
+                    beauticianItem.setParTimePostCategoryName(postCategory.getName());
+                }
+            }
+        }
+        //查询职位名称-及兼职
+        List<Post> postList = beauticianDao.selectPost(new HashMap());
+        for (Beautician itemBeautician : beauticianList) {
+            for (Post itemPost : postList) {
+                if (itemBeautician.getPostId() == itemPost.getPostId()) {
+                    itemBeautician.setPostName(itemPost.getName());
+                    itemBeautician.setPostLevel(itemPost.getPostLevel());
+                }
+                if (itemBeautician.getPartTimePostId() == itemPost.getPostId()) {
+                    itemBeautician.setParTimePostName(itemPost.getName());
+
+                }
+            }
+        }
+
+        //查询职位等级
+        List<PostLevel> postLevelList = beauticianDao.selectPostLevel(new HashMap());
+        for (Beautician itemBeautician : beauticianList) {
+            Long postLevelId = null;
+            for (Post itemPost : postList) {
+                if (itemBeautician.getPostId() == itemPost.getPostId()) {
+                    postLevelId = itemPost.getPostLevel();
+                }
+            }
+            for (PostLevel itemPostLevel : postLevelList) {
+                if (postLevelId == itemPostLevel.getPostLevelId()) {
+                    itemBeautician.setPostLevelName(itemPostLevel.getPostLevelName());
+                }
+            }
+        }
+
+
+        if (StringUtils.isNotBlank(nursingDate)) {
+            //查询员工预约列表
+            AppointmentVO appointment = new AppointmentVO();
+            appointment.setNursingDate(nursingDate);
+            ResponseResult responseResult = orderApi.selectAppointmentOrderListByDate(/*nursingDate, */Long.parseLong(storeId));
+            if (responseResult.getResponseStatusType().getError().getErrorCode() == null) {
+                //如果有预约
+                List<Map> appointmentOrderList = (List<Map>) responseResult.getResult();
+                for (Beautician itemBeautician : beauticianList) {
+                    List<Map> mapList1 = new ArrayList<>();
+                    for (Map map : appointmentOrderList) {
+                        List<Map> mapList2 = (List<Map>) map.get("productOrderList");
+                        for (Map map2 : mapList2) {
+                            String bookingBeauticianIdsStr = map2.get("bookingBeauticianIds").toString();
+                            if (bookingBeauticianIdsStr.indexOf(itemBeautician.getStaffNumber().toString()) != -1) {
+                                JSONArray jsonArr = JSON.parseArray(bookingBeauticianIdsStr);
+                                for (int i = 0; i < jsonArr.size(); i++) {
+                                    if (jsonArr.getJSONObject(i).getString("beauticianId").equals(itemBeautician.getStaffNumber().toString())
+                                            && jsonArr.getJSONObject(i).getString("nursingDate").split(" ")[0].equals(nursingDate)) {
+                                        map.put("nursingDate", jsonArr.getJSONObject(i).getString("nursingDate"));
+                                        map.put("beauticianName", jsonArr.getJSONObject(i).getString("beauticianName"));
+                                        ((Map) map.get("appointmentOrder")).put("duration", jsonArr.getJSONObject(i).getString("duration"));
+                                        map.put("beauticians", jsonArr);
+                                        map.put("nursingTime", jsonArr.getJSONObject(i).getString("nursingDate"));
+                                        mapList1.add(map);
+                                        itemBeautician.setAppointmentList(mapList1);
+                                    }
+                                }
+                                continue;
+                            }
+                        }
+                    }
+
+                }
+
+            } else {
+                //如果这天没有一个预约
+                for (Beautician itemBeautician : beauticianList) {
+                    itemBeautician.setAppointmentList(new ArrayList<>());
+                }
+            }
+        }
+
+        for (int m = 0; m < beauticianList.size(); m++) {
+            List<Map> mapList = beauticianList.get(m).getAppointmentList();
+            if (mapList != null) {
+                for (int i = 0; i < mapList.size(); i++) {
+                    List<Map> mapList1 = (List<Map>) mapList.get(i).get("beauticians");
+                    for (int j = 0; j < mapList1.size(); j++) {
+
+                        mapList1.get(j).put("appointmentStatus", ((Map) (mapList.get(i).get("appointmentOrder"))).get("appointmentStatus"));
+                        mapList1.get(j).put("orderLink", mapList.get(i).get("orderLink"));
+                        mapList1.get(j).put("appointmentOrder", mapList.get(i).get("appointmentOrder"));
+
+                        String a = "";
+                        for (Map beauticians : (List<Map>) mapList.get(i).get("beauticians")) {
+                            a = a + "," + beauticians.get("beauticianName");
+                        }
+                        mapList1.get(j).put("beauticianNames", a);
+                        mapList1.get(j).put("orderNumber", mapList.get(i).get("orderNumber"));
+                        mapList1.get(j).put("mobile", mapList.get(i).get("mobile"));
+                        mapList1.get(j).put("productOrderList", mapList.get(i).get("productOrderList"));
+                        mapList1.get(j).put("nursingDate", mapList.get(i).get("nursingDate"));
+                        mapList1.get(j).put("cardNumber", mapList.get(i).get("cardNumber"));
+                        mapList1.get(j).put("totalPrice", mapList.get(i).get("totalPrice"));
+                        mapList1.get(j).put("totalDiscount", mapList.get(i).get("totalDiscount"));
+                        mapList1.get(j).put("remark", mapList.get(i).get("remark"));
+                        for (int n = 0; n < beauticianList.size(); n++) {
+                            if (beauticianList.get(n).getStaffNumber().toString().equals(mapList1.get(j).get("beauticianId").toString())) {
+                                mapList1.get(j).put("sortIndex", n);
+                            }
+                        }
+
+                    }
+                }
+
+            }
+
+        }
+
+        return ResponseResult.success(beauticianList);
+    }
+
+    @Override
     public ResponseResult selectBeauticianListNoPage(String companyType, String companyId, Integer isSaleMan) {
         Beautician beautician = new Beautician();
         if (companyId != null) {
@@ -377,17 +539,17 @@ public class BeauticianService implements IBeauticianService {
 
     @Override
     public ResponseResult insertBeautician(String imgUrl, Beautician beautician, String FCreateOrgId, String FUseOrgId, String companyType, String companyId) {
-        //查看员工职位的业绩方式
-        Post postResult = beauticianDao.selectPostById(beautician.getPostId());
-        Integer postAchievement = postResult.getPostAchievement();
-        if (postAchievement==2){
-            //如果所属的职位 为分组业绩 判断是否选择分组
-            if (beautician.getGroupId()==null){
-                return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.GROUPID_NULL_FENZUYEJI.getCode(), ResponseCodeBeauticianEnum.GROUPID_NULL_FENZUYEJI.getDesc()));
+        if (companyType != null && companyType.equals("3")) {
+            //查看员工职位的业绩方式
+            Post postResult = beauticianDao.selectPostById(beautician.getPostId());
+            Integer postAchievement = postResult.getPostAchievement();
+            if (postAchievement == 2) {
+                //如果所属的职位 为分组业绩 判断是否选择分组
+                if (beautician.getGroupId() == null) {
+                    return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.GROUPID_NULL_FENZUYEJI.getCode(), ResponseCodeBeauticianEnum.GROUPID_NULL_FENZUYEJI.getDesc()));
+                }
             }
         }
-
-
         if ((beautician.getPartTimePostId() != null && beautician.getPartTimePostId() == 0) ||
                 (beautician.getPartTimePostCategoryId() != null && beautician.getPartTimePostCategoryId() == 0)) {
             beautician.setPartTimePostId(0l);
@@ -880,7 +1042,7 @@ public class BeauticianService implements IBeauticianService {
                     post.setK3Id(id.toString());
                     post.setK3Number(number);
                     beauticianDao.updatePost(post);
-                    return ResponseResult.success("添加成功！");
+                    return ResponseResult.success("k3保存成功！");
                 }
             }
         }

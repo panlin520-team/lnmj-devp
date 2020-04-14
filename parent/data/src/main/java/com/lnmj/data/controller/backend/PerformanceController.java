@@ -386,10 +386,6 @@ public class PerformanceController {
             return ResponseResult.error(new Error(ResponseCodeOrderEnum.ORDER_NUMBER_NULL.getCode(),
                     ResponseCodeOrderEnum.ORDER_NUMBER_NULL.getDesc()));
         }
-        if (StringUtils.isBlank(modifyOperator)) {
-            return ResponseResult.error(new Error(ResponseCodePerformanceEnum.MODIFYOPERATOR_NOT_NULL.getCode(),
-                    ResponseCodePerformanceEnum.MODIFYOPERATOR_NOT_NULL.getDesc()));
-        }
         return performanceService.deleteLadderDetailedByOrder(orderNum, modifyOperator);
     }
 

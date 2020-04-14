@@ -28,4 +28,5 @@ public interface IStoreDao {
     int addStoreMemoNum(StoreMemoNum storeMemoNum);
     List<StoreMemoNum> listStoreMemo(StoreMemoNum storeMemoNum);
     int checkStoreCategoryName(StoreCategory storeCategory);
+    int checkStoreNumber(String code);
 }

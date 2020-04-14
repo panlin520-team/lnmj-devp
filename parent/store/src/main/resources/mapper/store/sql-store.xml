@@ -986,5 +986,12 @@
       and CompanyType = #{companyType}
       and CompanyId = #{companyId}
   </select>
+
+    <select id="checkStoreNumber" parameterType="String" resultType="int">
+        select count(1)
+        from s_store
+        where Status = 1
+          and Code = #{code}
+    </select>
 </mapper>
 
