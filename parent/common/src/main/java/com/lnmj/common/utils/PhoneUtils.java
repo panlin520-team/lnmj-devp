@@ -29,6 +29,8 @@ public class PhoneUtils {
              */
             String pat4 = "^((170))\\d{8}|(1718)|(1719)\\d{7}$";
 
+            String pat5 = "^1[3|4|5|6|7|8|9]\\d{9}$";
+
             Pattern pattern1 = Pattern.compile(pat1);
             Matcher match1 = pattern1.matcher(mobile);
             boolean isMatch1 = match1.matches();
@@ -51,6 +53,13 @@ public class PhoneUtils {
             Matcher match4 = pattern4.matcher(mobile);
             boolean isMatch4 = match4.matches();
             if(isMatch4){
+                return true;
+            }
+
+            Pattern pattern5 = Pattern.compile(pat5);
+            Matcher match5 = pattern5.matcher(mobile);
+            boolean isMatch5 = match5.matches();
+            if(isMatch5){
                 return true;
             }
             return false;

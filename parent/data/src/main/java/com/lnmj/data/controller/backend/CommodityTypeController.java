@@ -163,6 +163,13 @@ public class CommodityTypeController {
         return commodityTypeService.selectCommodityTypeByCondition(pageNum,pageSize,commodityType);
     }
 
+    @ApiOperation(value = "查询商品大类通过Id",notes = "查询商品大类通过Id")
+    @RequestMapping(value = "/selectCommodityTypeById",method = RequestMethod.POST)
+    public ResponseResult selectCommodityTypeById(Long commodityTypeID) {
+        return commodityTypeService.selectCommodityTypeById(commodityTypeID);
+    }
+
+
     /**
     *@Description 新增商品大类
     *@Param [commodityType, access_token]

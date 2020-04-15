@@ -53,7 +53,10 @@ public class DepartmentService implements IDepartmentService {
             //总公司查看
             if (searchCompanyType.equals("1")) {
                 //查看总公司
-                String[] listArray = companyId.split(",");
+                String[] listArray = null;
+                if (companyId!=null){
+                    listArray = companyId.split(",");
+                }
                 map.put("list", listArray);
                 map.put("companyType", 1);
                 map.put("keyWordName", keyWordName);
@@ -89,7 +92,10 @@ public class DepartmentService implements IDepartmentService {
             //子公司查看
             if (searchCompanyType.equals("2")) {
                 //查看子公司
-                String[] listArray = companyId.split(",");
+                String[] listArray = null;
+                if (companyId!=null){
+                    listArray = companyId.split(",");
+                }
                 map.put("list", listArray);
                 map.put("companyType", 2);
                 map.put("keyWordName", keyWordName);
@@ -113,7 +119,10 @@ public class DepartmentService implements IDepartmentService {
             }
         } else if (companyType.equals("3")) {
             //分公司查看
-            String[] listArray = companyId.split(",");
+            String[] listArray = null;
+            if (companyId!=null){
+                 listArray = companyId.split(",");
+            }
             map.put("list", listArray);
             map.put("companyType", 3);
             map.put("keyWordName", keyWordName);

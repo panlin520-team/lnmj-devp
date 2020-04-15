@@ -410,4 +410,10 @@ public class CommodityTypeService implements ICommodityTypeService {
         commodityTypeDao.updateSubclass(subclass);
         return ResponseResult.success();
     }
+
+    @Override
+    public ResponseResult selectCommodityTypeById(Long commodityTypeID) {
+        CommodityType commodityType = commodityTypeDao.selectCommodityTypeByID(commodityTypeID);
+        return ResponseResult.success(commodityType);
+    }
 }

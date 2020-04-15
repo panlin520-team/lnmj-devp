@@ -77,6 +77,8 @@ public interface IBeauticianDao {
 
     int checkGroupName(Group group);
 
+    int checkGroupLeader(Group group);
+
     int checkStaffName(Beautician beautician);
 
     List<Beautician> selectGroupMember(Beautician beautician);

@@ -557,12 +557,12 @@ public class BeauticianService implements IBeauticianService {
             beautician.setPartTimePostCategoryId(0l);
         }
 
-        if (beautician.getIsPartTime() != null) {
+/*        if (beautician.getIsPartTime() != null) {
             if (beautician.getIsPartTime() == 1 && beautician.getIsBasicSalary() == 1) {
                 //如果是兼职 还计算底薪
                 return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.POST_PART_NO_BASIC_SALARY.getCode(), ResponseCodeBeauticianEnum.POST_PART_NO_BASIC_SALARY.getDesc()));
             }
-        }
+        }*/
 
         if (beautician.getPostId() == beautician.getPartTimePostId()) {
             return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.POST_PART_TIME_POST_SAME.getCode(), ResponseCodeBeauticianEnum.POST_PART_TIME_POST_SAME.getDesc()));
@@ -902,8 +902,10 @@ public class BeauticianService implements IBeauticianService {
         List<StoreVO> storeList = iStoreDao.selectStoretList(new HashMap());
         for (Group groupItem : groups) {
             for (Beautician beauticianItem : beauticianList) {
-                if (groupItem.getGroupLeaderId().equals(beauticianItem.getBeauticianId())) {
+                if (groupItem.getGroupLeaderId().toString().equals(beauticianItem.getBeauticianId().toString())) {
                     groupItem.setGroupLeaderName(beauticianItem.getName());
+                }else if (groupItem.getGroupLeaderId().toString().equals("0")){
+                    groupItem.setGroupLeaderName("未指定");
                 }
             }
 
@@ -922,6 +924,15 @@ public class BeauticianService implements IBeauticianService {
 
     @Override
     public ResponseResult addGroup(Group group) {
+        //如果选了组长判断 组长是否已经是组长
+        if (group.getGroupLeaderId()!=null){
+            int resultInt = beauticianDao.checkGroupLeader(group);
+            if (resultInt > 0) {
+                return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.GROUP_LEADER_IS_EXIST.getCode(), ResponseCodeBeauticianEnum.GROUP_LEADER_IS_EXIST.getDesc()));
+            }
+        }
+
+
         //查看门店分组名称是否存在
         int resultInt = beauticianDao.checkGroupName(group);
         if (resultInt > 0) {
@@ -1143,6 +1154,17 @@ public class BeauticianService implements IBeauticianService {
 
     @Override
     public ResponseResult updateGroup(Group group) {
+        //如果选了组长判断 组长是否已经是组长
+        if (group.getGroupLeaderId()!=null){
+            int resultInt = beauticianDao.checkGroupLeader(group);
+            if (resultInt > 0) {
+                return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.GROUP_LEADER_IS_EXIST.getCode(), ResponseCodeBeauticianEnum.GROUP_LEADER_IS_EXIST.getDesc()));
+            }
+        }
+
+        if (group.getGroupLeaderId()==null){
+            group.setGroupLeaderId(0l);
+        }
         beauticianDao.updateGroup(group);
         return ResponseResult.success();
     }

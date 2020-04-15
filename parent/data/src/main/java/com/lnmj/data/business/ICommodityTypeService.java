@@ -40,4 +40,6 @@ public interface ICommodityTypeService {
     ResponseResult insertSubclass(Subclass subclass);
 
     ResponseResult updateSubclass(Subclass subclass);
+
+    ResponseResult selectCommodityTypeById(Long commodityTypeID);
 }

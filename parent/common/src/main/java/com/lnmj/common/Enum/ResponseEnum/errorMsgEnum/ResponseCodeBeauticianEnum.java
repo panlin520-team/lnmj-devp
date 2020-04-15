@@ -43,6 +43,7 @@ public enum ResponseCodeBeauticianEnum {
     DELETE_FAIL_USING_POST(3,"此职位正在使用中，无法删除"),
     DELETE_FAIL_USING_GROUP(3,"此分组正在使用中，无法删除"),
     GROUP_NAME_IS_EXIST(3,"分组名称已经存在"),
+    GROUP_LEADER_IS_EXIST(3,"所选组长已经担任了组长"),
     POST_LEVEL_LIST_NULL(3,"职位等级列表不能为空，职位等级列表不能为空"),
     POST_PART_TIME_POST_SAME(3,"所属职位与兼职职位不能相同"),
     POST_PART_NO_BASIC_SALARY(3,"员工为兼职无法选择计算底薪"),

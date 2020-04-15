@@ -734,6 +734,9 @@
             <if test="groupLeaderId != null">
                 GroupLeaderId = #{groupLeaderId},
             </if>
+            <if test="storeId != null">
+                StoreId = #{storeId},
+            </if>
             <if test="status != null">
                 Status = #{status},
             </if>
@@ -1037,6 +1040,14 @@
       and Name = #{name}
       and StoreId = #{storeId}
   </select>
+
+    <select id="checkGroupLeader" parameterType="Group" resultType="int">
+        select count(1)
+        from s_group
+        where Status = 1
+          and GroupLeaderId = #{groupLeaderId}
+          and StoreId = #{storeId}
+    </select>
 
     <select id="checkStaffName" parameterType="Beautician" resultType="int">
     select count(1)
