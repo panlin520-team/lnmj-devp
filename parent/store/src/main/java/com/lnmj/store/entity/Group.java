@@ -15,6 +15,8 @@ public class Group extends BaseEntity {
   @Transient
   private String groupLeaderName;
 
+  @Transient
+  private String storeName;
 
 
 

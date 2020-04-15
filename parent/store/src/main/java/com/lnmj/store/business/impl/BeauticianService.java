@@ -14,6 +14,7 @@ import com.lnmj.common.utils.PhoneUtils;
 import com.lnmj.store.business.IBeauticianService;
 import com.lnmj.store.entity.*;
 import com.lnmj.store.entity.VO.AppointmentVO;
+import com.lnmj.store.entity.VO.StoreVO;
 import com.lnmj.store.repository.*;
 import com.lnmj.store.serviceProxy.K3Api_organization;
 import com.lnmj.store.serviceProxy.OrderApi;
@@ -883,6 +884,10 @@ public class BeauticianService implements IBeauticianService {
 
     @Override
     public ResponseResult selectGroup(int pageNum, int pageSize, Long storeId, String keyWord) {
+        if (storeId == 0) {
+            storeId = null;
+        }
+
         PageHelper.startPage(pageNum, pageSize);
         Group group = new Group();
         group.setStoreId(storeId);
@@ -894,10 +899,17 @@ public class BeauticianService implements IBeauticianService {
         map.put("companyId", storeId);
 
         List<Beautician> beauticianList = beauticianDao.selectBeauticianByStoreId(map);
+        List<StoreVO> storeList = iStoreDao.selectStoretList(new HashMap());
         for (Group groupItem : groups) {
             for (Beautician beauticianItem : beauticianList) {
                 if (groupItem.getGroupLeaderId().equals(beauticianItem.getBeauticianId())) {
                     groupItem.setGroupLeaderName(beauticianItem.getName());
+                }
+            }
+
+            for (StoreVO storeVO : storeList) {
+                if (groupItem.getStoreId().toString().equals(storeVO.getStoreId().toString())) {
+                    groupItem.setStoreName(storeVO.getName());
                 }
             }
         }
