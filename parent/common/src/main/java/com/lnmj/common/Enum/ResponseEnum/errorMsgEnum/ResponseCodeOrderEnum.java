@@ -42,6 +42,7 @@ public enum ResponseCodeOrderEnum {
     REFUSE_FAIL(3,"退款失败"),
     AMOUNT_CAN_NOT_BIGGER_MEMBER_AMOUNT(3,"退款金额不能大于用户剩余账户余额"),
     CUSTOM_USE_RECORD_NULL(3,"定制项目使用记录不存在"),
+    APPOINTMENT_ORDER_TIME_OCCUPY(3,"当前时间已经被占用，无法选择"),
     MEMO_EXIST(3,"水单号重复无法下单");
     private final int code;
     private final String desc;

@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lnmj.common.Enum.*;
-import com.lnmj.common.Enum.ResponseEnum.errorMsgEnum.ResponseCodeExperiencecardEnum;
-import com.lnmj.common.Enum.ResponseEnum.errorMsgEnum.ResponseCodeOrderEnum;
-import com.lnmj.common.Enum.ResponseEnum.errorMsgEnum.ResponseCodeProductEnum;
-import com.lnmj.common.Enum.ResponseEnum.errorMsgEnum.ResponseCodeStockEnum;
+import com.lnmj.common.Enum.ResponseEnum.errorMsgEnum.*;
 import com.lnmj.common.baseController.ExportController;
 import com.lnmj.common.baseController.HttpServletRequestWarpper;
 import com.lnmj.common.response.Error;
@@ -895,7 +892,7 @@ public class OrderService implements IOrderService {
             Map performanceMap = (Map) dataApi.selectPerformancePostById(ladderDetailedAchievementID).getResult();
 
             if (performanceMap != null) {
-               /* Integer achievementInterval = Integer.parseInt(performanceMap.get("achievementInterval").toString());*/
+                /* Integer achievementInterval = Integer.parseInt(performanceMap.get("achievementInterval").toString());*/
                 String LadderDetailedCreateTimeStr = map.get("createTime").toString();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date LadderDetailedCreateTime = null;
@@ -912,14 +909,14 @@ public class OrderService implements IOrderService {
                     //如果现在距离业绩创建的时间超过了有效期，那么退款不影响业绩
                     isAbatementLadderDetailed = false;//不影响
                 } else {*/
-                    //删除对应业绩
-                    if (refundAmount == (rechargeSum - refundSum)) {
-                        //如果是全额退款-直接删除对应业绩
-                        resultIntYeJi = Integer.parseInt((dataApi.deleteLadderDetailedByCondition(orderNumber).getResult().toString()));
-                    } else {
-                        //修改业绩金额
-                        resultIntYeJi = Integer.parseInt(dataApi.updateLadderDetailed(orderNumber, rechargeSum - refundAmount).getResult().toString());
-                   /* }*/
+                //删除对应业绩
+                if (refundAmount == (rechargeSum - refundSum)) {
+                    //如果是全额退款-直接删除对应业绩
+                    resultIntYeJi = Integer.parseInt((dataApi.deleteLadderDetailedByCondition(orderNumber).getResult().toString()));
+                } else {
+                    //修改业绩金额
+                    resultIntYeJi = Integer.parseInt(dataApi.updateLadderDetailed(orderNumber, rechargeSum - refundAmount).getResult().toString());
+                    /* }*/
                 }
 
             }
@@ -1013,17 +1010,15 @@ public class OrderService implements IOrderService {
                 Map map = new HashMap();
                 map.put("orderNumber", orderNumber);
                 map.put("status", OrderStatusEnum.REFUND.getCode());
-                if (isTiYanKaOrDingzhi==1){
+                if (isTiYanKaOrDingzhi == 1) {
                     //如果是项目定制 查看项目定制项目是否使用
                     int resultInt = iOrderDao.checkDingZhiProjectIsUse(orderNumber);
-                    if (resultInt>0){
+                    if (resultInt > 0) {
                         return ResponseResult.error(new Error(ResponseCodeOrderEnum.CUSTOM_USED_CAN_NOT_REFUSE.getCode(),
                                 ResponseCodeOrderEnum.CUSTOM_USED_CAN_NOT_REFUSE.getDesc()));
                     }
 
                 }
-
-
 
 
                 iOrderDao.updateOrderStatus(map);
@@ -1605,7 +1600,7 @@ public class OrderService implements IOrderService {
 
         //下单成功，计算员工业绩-并支付成功
         ResponseResult responseResultYeji = null;
-        Map<String,String> result = new HashMap();
+        Map<String, String> result = new HashMap();
         if (orderList.get(0).getOrderType() != OrderTypeEnum.CUSTOM_ORDER.getCode()) {
             for (ProductOrder productOrderItem : productOrderList) {
                 if (StringUtils.isNotBlank(productOrderItem.getBookingBeauticianIds())) {
@@ -1838,7 +1833,7 @@ public class OrderService implements IOrderService {
 
         List<String> listResult = new ArrayList<>();
         for (Map.Entry<String, String> entry : result.entrySet()) {
-            listResult.add(entry.getKey()+entry.getValue());
+            listResult.add(entry.getKey() + entry.getValue());
         }
 
         return ResponseResult.success(listResult);
@@ -2356,7 +2351,7 @@ public class OrderService implements IOrderService {
 
 
         if (responseResultYeJi != null && responseResultYeJi.getResponseStatusType().getMessage().equals("Success")) {
-            return ResponseResult.success("划卡成功"+responseResultYeJi.getResult());
+            return ResponseResult.success("划卡成功" + responseResultYeJi.getResult());
         }
         return ResponseResult.success("划卡成功");
     }
@@ -2504,6 +2499,56 @@ public class OrderService implements IOrderService {
         map.put("id", id);
         List<CustomProjectUserRefuse> customProjectUserRefuseList = iOrderDao.selectCustomProjectUserRefuseList(map);
         return ResponseResult.success(customProjectUserRefuseList);
+    }
+
+    @Override
+    public ResponseResult checkAppointmentOrder(String stffNumberList,String storeId) {
+        JSONArray jsonArrayStaff = JSONArray.parseArray(stffNumberList);
+        //查看所有的预约订单
+        Map map = new HashMap();
+        map.put("orderType", OrderTypeEnum.APPOINTMENT_ORDER.getCode());
+        map.put("storeId", storeId);
+        List<ProductOrder> productOrderList = iOrderDao.selectOrderListByTypeAndStoreId(map);
+        for (int m = 0; m < jsonArrayStaff.size(); m++) {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            for (ProductOrder productOrder : productOrderList) {
+                JSONArray jsonArray = JSONArray.parseArray(productOrder.getBookingBeauticianIds());
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    //[{"beauticianName":"美发师员工001","beauticianId":10746,"nursingDate":"2020-04-15 09:00","duration":30}]
+                    try {
+                        Date existStartTime = sdf.parse(jsonArray.getJSONObject(i).getString("nursingDate"));
+                        Date originalDate1 = jsonArray.getJSONObject(i).getDate("nursingDate");
+                        Calendar newTime1 = Calendar.getInstance();
+                        newTime1.setTime(originalDate1);
+                        newTime1.add(Calendar.MINUTE, jsonArray.getJSONObject(i).getInteger("duration"));//日期加n分
+                        Date existEndTime = newTime1.getTime();
+
+
+                        Date currentStartTime = sdf.parse(jsonArrayStaff.getJSONObject(i).getString("nursingDate"));
+                        Date originalDate2 = sdf.parse(jsonArrayStaff.getJSONObject(i).getString("nursingDate"));
+                        Calendar newTime2 = Calendar.getInstance();
+                        newTime2.setTime(originalDate2);
+                        newTime2.add(Calendar.MINUTE, Integer.parseInt(jsonArrayStaff.getJSONObject(i).getString("duration")));//日期加n分
+                        Date currentEndTime = newTime2.getTime();
+
+
+                        if (jsonArray.getJSONObject(i).getString("beauticianId").equals(jsonArrayStaff.getJSONObject(i).getString("beauticianId")) &&
+                                ((currentStartTime.getTime() >= existStartTime.getTime() && currentEndTime.getTime() <= existEndTime.getTime()) ||
+                                        (currentStartTime.getTime() <= existStartTime.getTime() && currentEndTime.getTime() >= existEndTime.getTime()) ||
+                                        currentStartTime.getTime() == existStartTime.getTime() || currentEndTime.getTime() == existEndTime.getTime() ||
+                                        (existStartTime.getTime() < currentStartTime.getTime() && currentStartTime.getTime() < existEndTime.getTime()) ||
+                                        (existStartTime.getTime() < currentEndTime.getTime() && currentEndTime.getTime() < existEndTime.getTime()))) {
+
+                            return ResponseResult.error(new Error(ResponseCodeOrderEnum.APPOINTMENT_ORDER_TIME_OCCUPY.getCode(),jsonArrayStaff.getJSONObject(i).getString("beauticianName")+":"+ ResponseCodeOrderEnum.APPOINTMENT_ORDER_TIME_OCCUPY.getDesc()));
+                        }
+                    } catch (ParseException e) {
+                    }
+                }
+
+            }
+        }
+        return ResponseResult.success();
     }
 
     //获取数据中心、用户名和密码

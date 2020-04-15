@@ -19,6 +19,7 @@ public interface IOrderDao {
     int insertOrder(Order order);
     int insertProductOrder(Map map);
     List<OrderVO> selectOrderList(Map map);
+    List<ProductOrder> selectOrderListByTypeAndStoreId(Map map);
     List<OrderVO> selectOrderListByCondition(Map map);
     List<Order> selectOrderByNum(Map map);
     List<ProductOrder> selectProductOrderListByNum(Map map);

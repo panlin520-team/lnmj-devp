@@ -9,6 +9,7 @@ public enum ResponseCodeBeauticianEnum {
 
     BEAUTICIAN_LIST_NULL(3,"员工列表不存在"),
     BEAUTICIAN_NULL(3,"员工不存在"),
+    STAFFNUNBER_NULL(3,"员工编号不存在"),
     POST_LEVEL_ID_NULL(3,"职位等级不能为空"),
     BEAUTICIAN_ID_NULL(3,"美容师ID不能为空"),
     BEAUTICIAN_ADD_FAIL(3,"美容师添加失败"),

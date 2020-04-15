@@ -317,8 +317,10 @@ public class PerformanceService implements IPerformanceService {
             //是否为个人业绩
             if (performancePostItem.getAchievementStore() == 1) {
                 performancePostItem.setAchievementStoreName("全店业绩");
-            } else {
+            } else if (performancePostItem.getAchievementStore() == 0) {
                 performancePostItem.setAchievementStoreName("个人业绩");
+            } else if (performancePostItem.getAchievementStore() == 2) {
+                performancePostItem.setAchievementStoreName("分组业绩");
             }
         }
 
@@ -867,11 +869,11 @@ public class PerformanceService implements IPerformanceService {
                     ladderDetailedForAdd.setLadderDetailedOrderId(orderNum);//订单号
                     ladderDetailedForAdd.setLadderDetailedAchievementID(Long.parseLong(mapProduct.get("achievementPostId").toString()));//所属业绩
                     ladderDetailedForAdd.setLadderDetailedStoreId(storeId);//所属门店
-                    if (performancePost.getAchievementMethods()==1||performancePost.getAchievementMethods()==4){
-                            //如果是按个数算
+                    if (performancePost.getAchievementMethods() == 1 || performancePost.getAchievementMethods() == 4) {
+                        //如果是按个数算
                         ladderDetailedForAdd.setLadderDetailedNumber(new BigDecimal(productNum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
-                    }else{
-                          //如果是按金额算
+                    } else {
+                        //如果是按金额算
                         ladderDetailedForAdd.setLadderDetailedAmount(new BigDecimal(sum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
                     }
 
@@ -1043,7 +1045,6 @@ public class PerformanceService implements IPerformanceService {
                     ladderDetailedForAdd.setLadderDetailedBeauticianId(jsonArrayStaff.getJSONObject(i).getLong("beauticianId"));
                     performanceDao.insertLadderDetailed(ladderDetailedForAdd);
                 }
-
 
 
                 if (!partTimePostId.equals("0")) {

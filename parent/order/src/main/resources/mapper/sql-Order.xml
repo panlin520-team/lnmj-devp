@@ -783,6 +783,7 @@
                 #{item}
             </foreach>
         </if>
+
     </select>
 
 
@@ -844,6 +845,19 @@
         order by CreateTime desc
         <if test="limit != null">
             limit 10
+        </if>
+    </select>
+
+    <select id="selectOrderListByTypeAndStoreId" resultType="ProductOrder" parameterType="Map">
+        select
+        b.OrderNumber,b.BookingBeauticianIds
+        from o_order a left join o_product_order b on a.OrderNumber = b.OrderNumber
+        where a.Status=1
+        <if test="orderType != null">
+            and a.OrderType = #{orderType}
+        </if>
+        <if test="storeId != null">
+            and a.NurseStore = #{storeId}
         </if>
     </select>
 

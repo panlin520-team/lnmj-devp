@@ -288,4 +288,11 @@ public class orderController {
     public ResponseResult auditOrderAmount(String orderList,Integer auditStatus) {
         return iOrderService.auditOrderAmount(orderList,auditStatus);
     }
+    @ApiOperation(value = "查看指定员工，指定时间预约是否存在", notes = "查看指定员工，指定时间预约是否存在")
+    @RequestMapping(value = "/checkAppointmentOrder", method = RequestMethod.POST)
+    public ResponseResult checkAppointmentOrder(String stffNumberList,String storeId) {
+        return iOrderService.checkAppointmentOrder(stffNumberList, storeId);
+    }
+
+
 }

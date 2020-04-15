@@ -40,6 +40,11 @@ public class OrderDaoImpl extends BaseDao implements IOrderDao {
     }
 
     @Override
+    public List<ProductOrder> selectOrderListByTypeAndStoreId(Map map) {
+        return super.selectList("order.selectOrderListByTypeAndStoreId",map);
+    }
+
+    @Override
     public List<OrderVO> selectOrderListByCondition(Map map) {
         return super.selectList("order.selectOrderListByCondition",map);
     }
