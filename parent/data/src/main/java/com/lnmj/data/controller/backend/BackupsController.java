@@ -147,20 +147,20 @@ public class BackupsController {
         String password = userNameAndPassword.get("password");
         String Arr = array.toString();
 
-//        ResponseResult batchsaveSupplier = k3CLOUDApi.batchsaveSupplier(dataCentre, userName, password, Arr);
-//        //拿到返回的id和number
-//        LinkedHashMap result = (LinkedHashMap) batchsaveSupplier.getResult();
-//        LinkedHashMap result1 = (LinkedHashMap) result.get("Result");
-//        LinkedHashMap responseStatus = (LinkedHashMap) result1.get("ResponseStatus");
-//        List successEntitys = (List) responseStatus.get("SuccessEntitys");
-//        for (int i = 0; i < backSupplierVOS.size(); i++) {
-//            LinkedHashMap obj = (LinkedHashMap) successEntitys.get(i);
-//            Object number = obj.get("Number");
-//            Object Id = obj.get("Id");
-//            BackSupplierVO backSupplierVO = (BackSupplierVO) backSupplierVOS.get(i);
-//            backSupplierVO.setK3Id(Id.toString());
-//            backSupplierVO.setK3Number(number.toString());
-//        }
+        ResponseResult batchsaveSupplier = k3CLOUDApi.batchsaveSupplier(dataCentre, userName, password, Arr);
+        //拿到返回的id和number
+        LinkedHashMap result = (LinkedHashMap) batchsaveSupplier.getResult();
+        LinkedHashMap result1 = (LinkedHashMap) result.get("Result");
+        LinkedHashMap responseStatus = (LinkedHashMap) result1.get("ResponseStatus");
+        List successEntitys = (List) responseStatus.get("SuccessEntitys");
+        for (int i = 0; i < backSupplierVOS.size(); i++) {
+            LinkedHashMap obj = (LinkedHashMap) successEntitys.get(i);
+            Object number = obj.get("Number");
+            Object Id = obj.get("Id");
+            BackSupplierVO backSupplierVO = (BackSupplierVO) backSupplierVOS.get(i);
+            backSupplierVO.setK3Id(Id.toString());
+            backSupplierVO.setK3Number(number.toString());
+        }
 //        List supplier = this.getExcelInfo(file, "supplier");
         //拿到读取数据，做数据批量处理，具体根据具体需求，进行判断
         //TODO:导入的数据也需要导入到k3
