@@ -180,7 +180,7 @@ public class BackupsController {
     public synchronized ResponseResult<String> backupsMember(@RequestParam(value = "file") MultipartFile file) throws Exception {
         File backupfile = ReadExcel2003_2007.multipartFileToFile(file);
         //转换成csv的数据
-        List<String[]> list = ReadExcel2003_2007.getRecords(backupfile, 12);
+        List<String[]> list = ReadExcel2003_2007.getRecords(backupfile, 13);
         Map map = handleMember(list);
         List<BackMemberVO> backMemberVOS = (List) map.get("backMemberVOS");
         List<BackWalletVO> backWalletVOS = (List) map.get("backWalletVOS");
@@ -194,6 +194,9 @@ public class BackupsController {
         backupsService.saveMemberWallet(map2);
         //查询出所有账户类型
         List<AmountTyp> amountTypList = backupsService.selectAmountType();
+
+        //查询出所有门店
+        List<StoreVO> storesList = backupsService.selectStores();
 
         //账户余额
         List walletAmountList;
@@ -527,7 +530,7 @@ public class BackupsController {
                     backProductVO.setCommodityTypeID(Long.parseLong(obj[j]));
                 } else if (j == 3) {
                     backProductVO.setSubClassID(Long.parseLong(obj[j]));
-                }else if (j == 4) {
+                } else if (j == 4) {
                     backProductVO.setAchievementId(Long.parseLong(obj[j]));
                 } else if (j == 5) {
                     backProductVO.setBarredBuying(obj[j]);
@@ -693,6 +696,8 @@ public class BackupsController {
     public Map handleMember(List<String[]> list) {
         List<BackMemberVO> backMemberVOS = new ArrayList<>();
         List<BackWalletVO> backWalletVOS = new ArrayList<>();
+        //查询出所有门店
+        List<StoreVO> returnstoresList = backupsService.selectStores();
         for (int i = 1; i < list.size(); i++) {
             BackMemberVO backMemberVO = new BackMemberVO();
             BackWalletVO backWalletVO = new BackWalletVO();
@@ -700,14 +705,14 @@ public class BackupsController {
             //循环每个对象
             for (int j = 0; j < obj.length; j++) {
                 if (j == 0) {
-                    backMemberVO.setMemberNum(obj[j]);
+                    backMemberVO.setUserName(obj[j]);
                     backWalletVO.setCardNumber(obj[j]);
                 } else if (j == 1) {
-                    backMemberVO.setUserName(obj[j]);
-                }else if (j == 2) {
                     backMemberVO.setName(obj[j]);
-                }else if (j == 3) {
+                } else if (j == 2) {
                     backMemberVO.setMobile(obj[j]);
+                } else if (j == 3) {
+                    backMemberVO.setMemberNum(obj[j]);
                 } else if (j == 4) {
                     backMemberVO.setMembershipLevelId(obj[j]);
                 } else if (j == 5) {
@@ -717,12 +722,18 @@ public class BackupsController {
                 } else if (j == 7) {
                     backMemberVO.setHeadImgUrl(obj[j]);
                 } else if (j == 8) {
-                    backWalletVO.setRechargeBalance(obj[j]);
+                    for (StoreVO storeVO : returnstoresList) {
+                        if (storeVO.getName().equals(obj[j])) {
+                            backMemberVO.setStoreId(storeVO.getStoreId());
+                        }
+                    }
                 } else if (j == 9) {
-                    backWalletVO.setRebateBalance(obj[j]);
+                    backWalletVO.setRechargeBalance(obj[j]);
                 } else if (j == 10) {
-                    backWalletVO.setGiveBalance(obj[j]);
+                    backWalletVO.setRebateBalance(obj[j]);
                 } else if (j == 11) {
+                    backWalletVO.setGiveBalance(obj[j]);
+                } else if (j == 12) {
                     backWalletVO.setTokerBalance(obj[j]);
                 }
             }

@@ -1,6 +1,7 @@
 package com.lnmj.data.repository;
 
 import com.lnmj.data.entity.VO.AmountTyp;
+import com.lnmj.data.entity.VO.StoreVO;
 import com.lnmj.data.entity.VO.WalletAmount;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface BackupsDao {
     void updateAmount(List list);
 
     List<AmountTyp> selectAmountType();
+
+    List<StoreVO> selectStores();
 }

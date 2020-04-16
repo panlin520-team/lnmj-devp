@@ -15,12 +15,13 @@ import java.util.Date;
 @Data
 public class BackMemberVO {
     //会员账号
-    private String memberNum;
     private String userName;
     private String name;
     private String mobile;
+    private String memberNum;
     private String membershipLevelId;
     private String membershipLevelName;
     private String wxOpenId;
     private String headImgUrl;
+    private Long storeId;
 }

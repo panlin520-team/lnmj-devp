@@ -1,6 +1,7 @@
 package com.lnmj.data.business;
 
 import com.lnmj.data.entity.VO.AmountTyp;
+import com.lnmj.data.entity.VO.StoreVO;
 import com.lnmj.data.entity.VO.WalletAmount;
 import org.springframework.stereotype.Service;
 
@@ -29,4 +30,6 @@ public interface BackupsService {
      void updateAmount(List list);
 
     List<AmountTyp> selectAmountType();
+
+    List<StoreVO> selectStores();
 }

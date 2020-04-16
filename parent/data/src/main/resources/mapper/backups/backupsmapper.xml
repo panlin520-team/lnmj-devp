@@ -143,28 +143,30 @@
     <insert id="saveMember" parameterType="Map">
         insert into lnmj_account.m_member
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            HeadImgUrl,
             MemberNum,
             UserName,
-            Name,
+            StoreId,
             Mobile,
+            Name,
+            WxOpenId,
             MembershipLevelId,
             MembershipLevelName,
-            WxOpenId,
-            HeadImgUrl,
             CreateTime,
             DataChange_LastTime
         </trim>
         values
         <foreach collection="list" item="member" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{member.headImgUrl},
                 #{member.memberNum},
                 #{member.userName},
-                #{member.name},
+                #{member.storeId},
                 #{member.mobile},
+                #{member.name},
+                #{member.wxOpenId},
                 #{member.membershipLevelId},
                 #{member.membershipLevelName},
-                #{member.wxOpenId},
-                #{member.headImgUrl},
                 now(),
                 now()
             </trim>
@@ -213,6 +215,14 @@
         select
             AccountTypeId,AccountType
         from lnmj_wallet.w_rechargetype
+        where Status = 1
+    </select>
+
+
+    <select id="selectStores" resultType="StoreVO">
+        select
+            StoreId,Name
+        from lnmj_store.s_store
         where Status = 1
     </select>
 

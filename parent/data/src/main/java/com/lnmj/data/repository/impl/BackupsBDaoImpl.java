@@ -2,6 +2,7 @@ package com.lnmj.data.repository.impl;
 
 import com.lnmj.common.baseDao.impl.BaseDao;
 import com.lnmj.data.entity.VO.AmountTyp;
+import com.lnmj.data.entity.VO.StoreVO;
 import com.lnmj.data.entity.VO.WalletAmount;
 import com.lnmj.data.repository.BackupsDao;
 import org.springframework.stereotype.Repository;
@@ -47,5 +48,10 @@ public class BackupsBDaoImpl extends BaseDao implements BackupsDao {
     @Override
     public List<AmountTyp> selectAmountType() {
         return super.selectList("backups.selectAmountType");
+    }
+
+    @Override
+    public List<StoreVO> selectStores() {
+        return super.selectList("backups.selectStores");
     }
 }
