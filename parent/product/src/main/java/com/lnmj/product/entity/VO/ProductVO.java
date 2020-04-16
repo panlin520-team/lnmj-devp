@@ -163,6 +163,7 @@ public class ProductVO extends BaseEntity {
     private Integer activityStockDiscount;
     private Long industryId;
     private Long achievementPostId;
+    private Long achievementId;
     //    净含量
     private String netContent;
     private Integer productSales;

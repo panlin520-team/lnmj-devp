@@ -242,6 +242,8 @@ public class ProductService implements IProductService {
             List<Map> commodityTypeMapList = (List<Map>) dataApi.selectCommodityTypeListNoPage().getResult();
             List<Map> subclassMapList = (List<Map>) dataApi.selectSubclassListNoPage().getResult();
             List<Map> performancePostMapList = (List<Map>) dataApi.selectPerformancePostListAll().getResult();
+            List<Map> performanceMapList = (List<Map>) dataApi.selectPerformanceListNoPage().getResult();
+
             for (Product product : result) {
                 for (ProductKind productKind : productKindList) {
                     if (product.getProductKind()!=null&&product.getProductKind().toString().equals(productKind.getProductKindId().toString())) {
@@ -295,7 +297,14 @@ public class ProductService implements IProductService {
                             product.setProductPerformancePostName(map1.get("achievementPostName").toString());
                         }
                     }
+                }
 
+                if (performanceMapList != null && product.getAchievementId() != null) {
+                    for (Map map1 : performanceMapList) {
+                        if (product.getAchievementId().toString().equals(map1.get("achievementID").toString())) {
+                            product.setAchievementName(map1.get("achievementName").toString());
+                        }
+                    }
                 }
             }
 
@@ -553,6 +562,7 @@ public class ProductService implements IProductService {
             List<Map> commodityTypeMapList = (List<Map>) dataApi.selectCommodityTypeListNoPage().getResult();
             List<Map> subclassMapList = (List<Map>) dataApi.selectSubclassListNoPage().getResult();
             List<Map> performancePostMapList = (List<Map>) dataApi.selectPerformancePostListAll().getResult();
+            List<Map> performanceMapList = (List<Map>) dataApi.selectPerformanceListNoPage().getResult();
             for (Product product : result) {
                 for (ProductKind productKind : productKindList) {
                     if (product.getProductKind()!=null&&product.getProductKind().toString().equals(productKind.getProductKindId().toString())) {
@@ -606,7 +616,14 @@ public class ProductService implements IProductService {
                             product.setProductPerformancePostName(map1.get("achievementPostName").toString());
                         }
                     }
+                }
 
+                if (performanceMapList != null && product.getAchievementId() != null) {
+                    for (Map map1 : performanceMapList) {
+                        if (product.getAchievementId().toString().equals(map1.get("achievementID").toString())) {
+                            product.setAchievementName(map1.get("achievementName").toString());
+                        }
+                    }
                 }
             }
 

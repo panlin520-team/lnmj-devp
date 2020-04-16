@@ -858,29 +858,46 @@ public class PerformanceService implements IPerformanceService {
                 if (mapProduct != null && mapProduct.get("achievementPostId") != null) {
                     performancePost = performanceDao.selectPerformancePostById(Long.parseLong(mapProduct.get("achievementPostId").toString()));
                 }
-                if (performancePost == null || performancePost.getAchievementStore() != isQuandian) {
+                if (performancePost == null/* || performancePost.getAchievementStore() != isQuandian*/) {
                     //判断是否有业绩规则
-                    mapResult.put("产品业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成失败，未找到对应业绩规则");
-                    continue;
-                } else {
-
-
-                    ladderDetailedForAdd.setOrderType(OrderTypeEnum.PRODUCT_ORDER.getCode());//订单类型
-                    ladderDetailedForAdd.setLadderDetailedOrderId(orderNum);//订单号
-                    ladderDetailedForAdd.setLadderDetailedAchievementID(Long.parseLong(mapProduct.get("achievementPostId").toString()));//所属业绩
-                    ladderDetailedForAdd.setLadderDetailedStoreId(storeId);//所属门店
-                    if (performancePost.getAchievementMethods() == 1 || performancePost.getAchievementMethods() == 4) {
-                        //如果是按个数算
-                        ladderDetailedForAdd.setLadderDetailedNumber(new BigDecimal(productNum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
-                    } else {
-                        //如果是按金额算
-                        ladderDetailedForAdd.setLadderDetailedAmount(new BigDecimal(sum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
+                    //如果没有找到具体的业绩规则 获取此员工的职位  根据职位及商品的业绩分类 去找具体的业绩规则
+                    String postCategoryIdResult = beautician.get("postCategoryId").toString();
+                    String achievementId = mapProduct.get("achievementId").toString();
+                    String industryIdResult = mapProduct.get("industryId").toString();
+                    Map map = new HashMap();
+                    map.put("achievementPostCategoryID", postCategoryIdResult);
+                    map.put("industryId", industryIdResult);
+                    map.put("achievementId", achievementId);
+                    performancePost = performanceDao.selectPerformancePosByCondition(map);
+                    if (performancePost == null) {
+                        map.clear();
+                        map.put("achievementPostCategoryID", 0);
+                        map.put("industryId", industryIdResult);
+                        map.put("achievementId", achievementId);
+                        performancePost = performanceDao.selectPerformancePosByCondition(map);
+                    }
+                    if (performancePost == null) {
+                        mapResult.put("产品或医美业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成失败，未找到对应业绩规则");
+                        continue;
                     }
 
-
-                    ladderDetailedForAdd.setLadderDetailedBeauticianId(jsonArrayStaff.getJSONObject(i).getLong("beauticianId"));
-                    mapResult.put("产品业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成成功");
                 }
+                ladderDetailedForAdd.setOrderType(OrderTypeEnum.PRODUCT_ORDER.getCode());//订单类型
+                ladderDetailedForAdd.setLadderDetailedOrderId(orderNum);//订单号
+                ladderDetailedForAdd.setLadderDetailedAchievementID(Long.parseLong(mapProduct.get("achievementPostId").toString()));//所属业绩
+                ladderDetailedForAdd.setLadderDetailedStoreId(storeId);//所属门店
+                if (performancePost.getAchievementMethods() == 1 || performancePost.getAchievementMethods() == 4) {
+                    //如果是按个数算
+                    ladderDetailedForAdd.setLadderDetailedNumber(new BigDecimal(productNum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
+                } else {
+                    //如果是按金额算
+                    ladderDetailedForAdd.setLadderDetailedAmount(new BigDecimal(sum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
+                }
+
+
+                ladderDetailedForAdd.setLadderDetailedBeauticianId(jsonArrayStaff.getJSONObject(i).getLong("beauticianId"));
+                mapResult.put("产品或医美业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成成功");
+
 
                 performanceDao.insertLadderDetailed(ladderDetailedForAdd);
             } else if (productType == ProductTypeEnum.EXPERIENCECARD.getCode()) {//如果是体验卡

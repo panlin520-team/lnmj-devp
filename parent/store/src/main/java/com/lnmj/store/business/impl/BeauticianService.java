@@ -365,7 +365,7 @@ public class BeauticianService implements IBeauticianService {
                         mapList1.get(j).put("orderNumber", mapList.get(i).get("orderNumber"));
                         mapList1.get(j).put("mobile", mapList.get(i).get("mobile"));
                         mapList1.get(j).put("productOrderList", mapList.get(i).get("productOrderList"));
-                        mapList1.get(j).put("nursingDate", mapList.get(i).get("nursingDate"));
+                       /* mapList1.get(j).put("nursingDate", mapList.get(i).get("nursingDate"));*/
                         mapList1.get(j).put("cardNumber", mapList.get(i).get("cardNumber"));
                         mapList1.get(j).put("totalPrice", mapList.get(i).get("totalPrice"));
                         mapList1.get(j).put("totalDiscount", mapList.get(i).get("totalDiscount"));

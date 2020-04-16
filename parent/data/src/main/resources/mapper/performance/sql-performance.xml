@@ -164,6 +164,9 @@
         <if test="industryId != null">
             and b.AchievementIndustryID = #{industryId}
         </if>
+        <if test="achievementId != null">
+            and b.AchievementID = #{achievementId}
+        </if>
     </select>
 
     <select id="selectPerformancePosByConditionNoWhere" resultType="PerformancePost" parameterType="Map">

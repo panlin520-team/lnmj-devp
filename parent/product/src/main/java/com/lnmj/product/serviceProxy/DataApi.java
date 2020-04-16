@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface DataApi {
     @RequestMapping(value = "/commodityType/selectCommodityTypeListNoPage", method = RequestMethod.POST)
     ResponseResult selectCommodityTypeListNoPage();
-    @RequestMapping(value = "/commodityType/selectSubclassListNoPage",method = RequestMethod.POST)
-     ResponseResult selectSubclassListNoPage();
+
+    @RequestMapping(value = "/commodityType/selectSubclassListNoPage", method = RequestMethod.POST)
+    ResponseResult selectSubclassListNoPage();
 
     @RequestMapping(value = "/performance/selectPerformancePostListAll", method = RequestMethod.POST)
-     ResponseResult selectPerformancePostListAll();
+    ResponseResult selectPerformancePostListAll();
 
+    @RequestMapping(value = "/performance/selectPerformanceListNoPage", method = RequestMethod.POST)
+    ResponseResult selectPerformanceListNoPage();
 
 
 }

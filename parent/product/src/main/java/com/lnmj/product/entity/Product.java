@@ -168,6 +168,7 @@ public class Product extends BaseEntity {
     //活动进货折扣
     private Integer activityStockDiscount;
     private Long industryId;
+    private Long achievementId;
     @Transient
     private String industryName;
     private Long achievementPostId;
@@ -224,7 +225,8 @@ public class Product extends BaseEntity {
     private String productSubclassName;
     @Transient
     private String productPerformancePostName;
-
+    @Transient
+    private String achievementName;
 
 
 

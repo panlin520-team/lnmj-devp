@@ -75,6 +75,7 @@
         ActivityStockDiscount,
         IndustryId,
         AchievementPostId,
+        AchievementId,
         NetContent,
         ProductSales,
         ProductIntroduce,
@@ -313,6 +314,9 @@
         a
         .
         AchievementPostId,
+        a
+        .
+        AchievementId,
         a
         .
         NetContent,
@@ -736,6 +740,9 @@
             <if test="industryId != null">
                 IndustryId,
             </if>
+            <if test="achievementId != null">
+                AchievementId,
+            </if>
             <if test="achievementPostId != null">
                 AchievementPostId,
             </if>
@@ -1008,6 +1015,9 @@
             </if>
             <if test="industryId != null">
                 #{industryId},
+            </if>
+            <if test="achievementId != null">
+                #{achievementId},
             </if>
             <if test="achievementPostId != null">
                 #{achievementPostId},
@@ -1285,6 +1295,9 @@
             </if>
             <if test="industryId != null">
                 IndustryId = #{industryId},
+            </if>
+            <if test="achievementId != null">
+                AchievementId = #{achievementId},
             </if>
             <if test="achievementPostId != null">
                 AchievementPostId = #{achievementPostId},
