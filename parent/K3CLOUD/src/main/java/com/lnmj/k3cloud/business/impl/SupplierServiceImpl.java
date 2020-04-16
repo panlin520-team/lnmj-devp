@@ -337,6 +337,7 @@ public class SupplierServiceImpl implements ISupplierService {
                     list.add(supplierBatchAdd);
                 }
                 supplierBatchAddJsonsRootBean.setModel(list);
+                supplierBatchAddJsonsRootBean.setIsautosubmitandaudit(true);
                 String a = JSON.toJSONString(supplierBatchAddJsonsRootBean);
                 JSONObject jsonObject = InvokeHelper.BatchSave("BD_Supplier", a);
                 Boolean jsonObjectSaveIsSuccess = (Boolean)((Map)((Map)jsonObject.get("Result")).get("ResponseStatus")).get("IsSuccess");

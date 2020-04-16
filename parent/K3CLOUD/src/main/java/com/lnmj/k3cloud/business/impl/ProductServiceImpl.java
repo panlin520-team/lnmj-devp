@@ -274,6 +274,7 @@ public class ProductServiceImpl implements IProductService {
                     list.add(batchAdd);
                 }
                 productBatchAddJsonsRootBean.setModel(list);
+                productBatchAddJsonsRootBean.setIsautosubmitandaudit(true);
                 String a = JSON.toJSONString(productBatchAddJsonsRootBean);
                 JSONObject jsonObject = InvokeHelper.BatchSave("BD_MATERIAL", a);
                 Boolean jsonObjectSaveIsSuccess = (Boolean) ((Map) ((Map) jsonObject.get("Result")).get("ResponseStatus")).get("IsSuccess");
