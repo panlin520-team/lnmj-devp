@@ -16,6 +16,7 @@ public class BackProductVO {
     private Long CommodityTypeID;
     //所属小类
     private Long subClassID;
+    private Long achievementId;
     //禁止购买
     private String barredBuying;
     //禁止支付方式

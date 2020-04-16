@@ -9,6 +9,7 @@ import com.lnmj.data.business.BackupsService;
 import com.lnmj.data.entity.VO.*;
 import com.lnmj.data.serviceProxy.K3CLOUDApi;
 import com.lnmj.data.serviceProxy.StoreApi;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.*;
@@ -48,7 +49,7 @@ public class BackupsController {
     public synchronized ResponseResult upload(MultipartFile file) throws Exception {
         File backupfile = ReadExcel2003_2007.multipartFileToFile(file);
         //转换成csv的数据
-        List<String[]> list = ReadExcel2003_2007.getRecords(backupfile, 25);
+        List<String[]> list = ReadExcel2003_2007.getRecords(backupfile, 26);
         Map map = handleProduct(list);
         List k3arrayList = (List) map.get("k3arrayList");
         List backProductVOS = (List) map.get("productlist");
@@ -146,20 +147,20 @@ public class BackupsController {
         String password = userNameAndPassword.get("password");
         String Arr = array.toString();
 
-        ResponseResult batchsaveSupplier = k3CLOUDApi.batchsaveSupplier(dataCentre, userName, password, Arr);
-        //拿到返回的id和number
-        LinkedHashMap result = (LinkedHashMap) batchsaveSupplier.getResult();
-        LinkedHashMap result1 = (LinkedHashMap) result.get("Result");
-        LinkedHashMap responseStatus = (LinkedHashMap) result1.get("ResponseStatus");
-        List successEntitys = (List) responseStatus.get("SuccessEntitys");
-        for (int i = 0; i < backSupplierVOS.size(); i++) {
-            LinkedHashMap obj = (LinkedHashMap) successEntitys.get(i);
-            Object number = obj.get("Number");
-            Object Id = obj.get("Id");
-            BackSupplierVO backSupplierVO = (BackSupplierVO) backSupplierVOS.get(i);
-            backSupplierVO.setK3Id(Id.toString());
-            backSupplierVO.setK3Number(number.toString());
-        }
+//        ResponseResult batchsaveSupplier = k3CLOUDApi.batchsaveSupplier(dataCentre, userName, password, Arr);
+//        //拿到返回的id和number
+//        LinkedHashMap result = (LinkedHashMap) batchsaveSupplier.getResult();
+//        LinkedHashMap result1 = (LinkedHashMap) result.get("Result");
+//        LinkedHashMap responseStatus = (LinkedHashMap) result1.get("ResponseStatus");
+//        List successEntitys = (List) responseStatus.get("SuccessEntitys");
+//        for (int i = 0; i < backSupplierVOS.size(); i++) {
+//            LinkedHashMap obj = (LinkedHashMap) successEntitys.get(i);
+//            Object number = obj.get("Number");
+//            Object Id = obj.get("Id");
+//            BackSupplierVO backSupplierVO = (BackSupplierVO) backSupplierVOS.get(i);
+//            backSupplierVO.setK3Id(Id.toString());
+//            backSupplierVO.setK3Number(number.toString());
+//        }
 //        List supplier = this.getExcelInfo(file, "supplier");
         //拿到读取数据，做数据批量处理，具体根据具体需求，进行判断
         //TODO:导入的数据也需要导入到k3
@@ -179,10 +180,10 @@ public class BackupsController {
     public synchronized ResponseResult<String> backupsMember(@RequestParam(value = "file") MultipartFile file) throws Exception {
         File backupfile = ReadExcel2003_2007.multipartFileToFile(file);
         //转换成csv的数据
-        List<String[]> list = ReadExcel2003_2007.getRecords(backupfile, 10);
+        List<String[]> list = ReadExcel2003_2007.getRecords(backupfile, 12);
         Map map = handleMember(list);
-        List backMemberVOS = (List) map.get("backMemberVOS");
-        List backWalletVOS = (List) map.get("backWalletVOS");
+        List<BackMemberVO> backMemberVOS = (List) map.get("backMemberVOS");
+        List<BackWalletVO> backWalletVOS = (List) map.get("backWalletVOS");
 
         Map map1 = new HashMap();
         map1.put("list", backMemberVOS);
@@ -191,6 +192,44 @@ public class BackupsController {
         Map map2 = new HashMap();
         map2.put("list", backWalletVOS);
         backupsService.saveMemberWallet(map2);
+        //查询出所有账户类型
+        List<AmountTyp> amountTypList = backupsService.selectAmountType();
+
+        //账户余额
+        List walletAmountList;
+        //更新用户账户类型余额
+        for (BackWalletVO backWalletVO : backWalletVOS) {
+            walletAmountList = new ArrayList<>();
+            if (backWalletVO.getRechargeBalance() != "0" && backWalletVO.getRechargeBalance() != null) {
+                WalletAmount walletAmount = new WalletAmount();
+                walletAmount.setWalletId(backWalletVO.getWalletId());
+                walletAmount.setAccountTypeId(amountTypList.get(0).getAccountTypeId());
+                walletAmount.setAmount(new BigDecimal(backWalletVO.getRechargeBalance()));
+                walletAmountList.add(walletAmount);
+            }
+            if (backWalletVO.getRebateBalance() != "0" && backWalletVO.getRebateBalance() != null) {
+                WalletAmount walletAmount = new WalletAmount();
+                walletAmount.setWalletId(backWalletVO.getWalletId());
+                walletAmount.setAccountTypeId(amountTypList.get(2).getAccountTypeId());
+                walletAmount.setAmount(new BigDecimal(backWalletVO.getRebateBalance()));
+                walletAmountList.add(walletAmount);
+            }
+            if (backWalletVO.getGiveBalance() != "0" && backWalletVO.getGiveBalance() != null) {
+                WalletAmount walletAmount = new WalletAmount();
+                walletAmount.setWalletId(backWalletVO.getWalletId());
+                walletAmount.setAccountTypeId(amountTypList.get(1).getAccountTypeId());
+                walletAmount.setAmount(new BigDecimal(backWalletVO.getGiveBalance()));
+                walletAmountList.add(walletAmount);
+            }
+            if (backWalletVO.getTokerBalance() != "0" && backWalletVO.getTokerBalance() != null) {
+                WalletAmount walletAmount = new WalletAmount();
+                walletAmount.setWalletId(backWalletVO.getWalletId());
+                walletAmount.setAccountTypeId(amountTypList.get(3).getAccountTypeId());
+                walletAmount.setAmount(new BigDecimal(backWalletVO.getTokerBalance()));
+                walletAmountList.add(walletAmount);
+            }
+            backupsService.updateAmount(walletAmountList);
+        }
         return ResponseResult.success();
     }
 
@@ -488,47 +527,49 @@ public class BackupsController {
                     backProductVO.setCommodityTypeID(Long.parseLong(obj[j]));
                 } else if (j == 3) {
                     backProductVO.setSubClassID(Long.parseLong(obj[j]));
-                } else if (j == 4) {
-                    backProductVO.setBarredBuying(obj[j]);
+                }else if (j == 4) {
+                    backProductVO.setAchievementId(Long.parseLong(obj[j]));
                 } else if (j == 5) {
-                    backProductVO.setBarredPayMethod(obj[j]);
+                    backProductVO.setBarredBuying(obj[j]);
                 } else if (j == 6) {
-                    backProductVO.setProvinceId(Long.parseLong(obj[j]));
+                    backProductVO.setBarredPayMethod(obj[j]);
                 } else if (j == 7) {
-                    backProductVO.setCityId(Long.parseLong(obj[j]));
+                    backProductVO.setProvinceId(Long.parseLong(obj[j]));
                 } else if (j == 8) {
-                    backProductVO.setCountyId(Long.parseLong(obj[j]));
+                    backProductVO.setCityId(Long.parseLong(obj[j]));
                 } else if (j == 9) {
-                    backProductVO.setProductKind(Long.parseLong(obj[j]));
+                    backProductVO.setCountyId(Long.parseLong(obj[j]));
                 } else if (j == 10) {
-                    backProductVO.setProductEffect(Long.parseLong(obj[j]));
+                    backProductVO.setProductKind(Long.parseLong(obj[j]));
                 } else if (j == 11) {
-                    backProductVO.setProductBrand(Long.parseLong(obj[j]));
+                    backProductVO.setProductEffect(Long.parseLong(obj[j]));
                 } else if (j == 12) {
-                    backProductVO.setProductCategory(Long.parseLong(obj[j]));
+                    backProductVO.setProductBrand(Long.parseLong(obj[j]));
                 } else if (j == 13) {
-                    backProductVO.setProductSpecification(obj[j]);
+                    backProductVO.setProductCategory(Long.parseLong(obj[j]));
                 } else if (j == 14) {
-                    backProductVO.setProductOriginalPrice(new BigDecimal(obj[j]));
+                    backProductVO.setProductSpecification(obj[j]);
                 } else if (j == 15) {
-                    backProductVO.setRetailPrice(new BigDecimal(obj[j]));
+                    backProductVO.setProductOriginalPrice(new BigDecimal(obj[j]));
                 } else if (j == 16) {
-                    backProductVO.setActivityRetailPrice(new BigDecimal(obj[j]));
+                    backProductVO.setRetailPrice(new BigDecimal(obj[j]));
                 } else if (j == 17) {
-                    backProductVO.setIsDiscount(Integer.valueOf(obj[j]));
+                    backProductVO.setActivityRetailPrice(new BigDecimal(obj[j]));
                 } else if (j == 18) {
-                    backProductVO.setNetContent(obj[j]);
+                    backProductVO.setIsDiscount(Integer.valueOf(obj[j]));
                 } else if (j == 19) {
-                    backProductVO.setProductSales(Integer.valueOf(obj[j]));
+                    backProductVO.setNetContent(obj[j]);
                 } else if (j == 20) {
-                    backProductVO.setUnitId(Integer.valueOf(obj[j]));
+                    backProductVO.setProductSales(Integer.valueOf(obj[j]));
                 } else if (j == 21) {
-                    backProductVO.setInstoragePrice(new BigDecimal(obj[j]));
+                    backProductVO.setUnitId(Integer.valueOf(obj[j]));
                 } else if (j == 22) {
-                    backProductVO.setOutstoragePrice(new BigDecimal(obj[j]));
+                    backProductVO.setInstoragePrice(new BigDecimal(obj[j]));
                 } else if (j == 23) {
-                    backProductVO.setOutstorageProfit(new BigDecimal(obj[j]));
+                    backProductVO.setOutstoragePrice(new BigDecimal(obj[j]));
                 } else if (j == 24) {
+                    backProductVO.setOutstorageProfit(new BigDecimal(obj[j]));
+                } else if (j == 25) {
                     backProductVO.setMoreContent(obj[j]);
                 }
             }
@@ -663,26 +704,26 @@ public class BackupsController {
                     backWalletVO.setCardNumber(obj[j]);
                 } else if (j == 1) {
                     backMemberVO.setUserName(obj[j]);
-                } else if (j == 2) {
-                    backMemberVO.setPassword(obj[j]);
-                } else if (j == 3) {
-                    backMemberVO.setBirthday(obj[j]);
-                } else if (j == 4) {
+                }else if (j == 2) {
                     backMemberVO.setName(obj[j]);
-                } else if (j == 5) {
-                    if (obj[j].toString().equals("男")) {
-                        backMemberVO.setSex(1);
-                    } else {
-                        backMemberVO.setSex(0);
-                    }
-                } else if (j == 6) {
-                    backMemberVO.setIdCard(obj[j]);
-                } else if (j == 7) {
+                }else if (j == 3) {
                     backMemberVO.setMobile(obj[j]);
-                }else if (j == 8) {
+                } else if (j == 4) {
                     backMemberVO.setMembershipLevelId(obj[j]);
-                }else if (j == 9) {
+                } else if (j == 5) {
                     backMemberVO.setMembershipLevelName(obj[j]);
+                } else if (j == 6) {
+                    backMemberVO.setWxOpenId(obj[j]);
+                } else if (j == 7) {
+                    backMemberVO.setHeadImgUrl(obj[j]);
+                } else if (j == 8) {
+                    backWalletVO.setRechargeBalance(obj[j]);
+                } else if (j == 9) {
+                    backWalletVO.setRebateBalance(obj[j]);
+                } else if (j == 10) {
+                    backWalletVO.setGiveBalance(obj[j]);
+                } else if (j == 11) {
+                    backWalletVO.setTokerBalance(obj[j]);
                 }
             }
             backMemberVOS.add(backMemberVO);

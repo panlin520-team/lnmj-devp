@@ -1,8 +1,9 @@
 package com.lnmj.data.repository.impl;
 
 import com.lnmj.common.baseDao.impl.BaseDao;
+import com.lnmj.data.entity.VO.AmountTyp;
+import com.lnmj.data.entity.VO.WalletAmount;
 import com.lnmj.data.repository.BackupsDao;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,5 +37,15 @@ public class BackupsBDaoImpl extends BaseDao implements BackupsDao {
     @Override
     public void saveMemberWallet(Map map2) {
         super.insert("backups.saveMemberWallet", map2);
+    }
+
+    @Override
+    public void updateAmount(List list) {
+       super.insert("backups.updateAmount",list);
+    }
+
+    @Override
+    public List<AmountTyp> selectAmountType() {
+        return super.selectList("backups.selectAmountType");
     }
 }

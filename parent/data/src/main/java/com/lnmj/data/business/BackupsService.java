@@ -1,5 +1,7 @@
 package com.lnmj.data.business;
 
+import com.lnmj.data.entity.VO.AmountTyp;
+import com.lnmj.data.entity.VO.WalletAmount;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,4 +23,10 @@ public interface BackupsService {
     void saveMember(Map map);
 
     void saveMemberWallet(Map map2);
+
+    List<WalletAmount> selectWalletAmount(Long walletId);
+
+     void updateAmount(List list);
+
+    List<AmountTyp> selectAmountType();
 }

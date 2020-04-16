@@ -14,14 +14,13 @@ import java.util.Date;
 
 @Data
 public class BackMemberVO {
+    //会员账号
     private String memberNum;
     private String userName;
-    private String password;
-    private String birthday;
     private String name;
-    private Integer sex;
-    private String idCard;
     private String mobile;
     private String membershipLevelId;
     private String membershipLevelName;
+    private String wxOpenId;
+    private String headImgUrl;
 }

@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="backups">
 
-
     <insert id="insert" parameterType="List">
         insert into lnmj_product.p_product
         (
@@ -12,6 +11,7 @@
         ProductSubordinate,
         CommodityTypeID,
         SubClassID,
+        AchievementId,
         BarredBuying,
         BarredPayMethod,
         ProvinceId,
@@ -42,6 +42,7 @@
             #{item.productSubordinate},
             #{item.commodityTypeID},
             #{item.subClassID},
+            #{item.achievementId},
             #{item.barredBuying},
             #{item.barredPayMethod},
             #{item.provinceId},
@@ -144,14 +145,12 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             MemberNum,
             UserName,
-            Password,
-            Birthday,
             Name,
-            Sex,
-            IdCard,
             Mobile,
             MembershipLevelId,
             MembershipLevelName,
+            WxOpenId,
+            HeadImgUrl,
             CreateTime,
             DataChange_LastTime
         </trim>
@@ -160,14 +159,12 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{member.memberNum},
                 #{member.userName},
-                #{member.password},
-                #{member.birthday},
                 #{member.name},
-                #{member.sex},
-                #{member.idCard},
                 #{member.mobile},
                 #{member.membershipLevelId},
                 #{member.membershipLevelName},
+                #{member.wxOpenId},
+                #{member.headImgUrl},
                 now(),
                 now()
             </trim>
@@ -175,7 +172,7 @@
     </insert>
 
 
-    <insert id="saveMemberWallet" parameterType="Map">
+    <insert id="saveMemberWallet" parameterType="Map" useGeneratedKeys="true" keyProperty="walletId" keyColumn="WalletId">
         insert into lnmj_wallet.w_wallet
         <trim prefix="(" suffix=")" suffixOverrides=",">
             CardNumber,
@@ -191,4 +188,32 @@
             </trim>
         </foreach>
     </insert>
+
+
+    <insert id="updateAmount" parameterType="List">
+        insert into lnmj_wallet.w_wallet_amount
+        (WalletId,
+        AccountTypeId,
+        Amount,
+        CreateTime,
+        DataChange_LastTime)
+        values
+        <foreach collection="list" item="wallet" index="index" separator=",">
+            (
+             #{wallet.walletId},
+            #{wallet.accountTypeId},
+            #{wallet.amount},
+            now(),
+            now()
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectAmountType" resultType="AmountTyp">
+        select
+            AccountTypeId,AccountType
+        from lnmj_wallet.w_rechargetype
+        where Status = 1
+    </select>
+
 </mapper>

@@ -2,6 +2,8 @@ package com.lnmj.data.business.impl;
 
 
 import com.lnmj.data.business.BackupsService;
+import com.lnmj.data.entity.VO.AmountTyp;
+import com.lnmj.data.entity.VO.WalletAmount;
 import com.lnmj.data.repository.BackupsDao;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +41,20 @@ public class BackupsServicelmpl implements BackupsService {
     @Override
     public void saveMemberWallet(Map map2) {
         backupsDao.saveMemberWallet(map2);
+    }
+
+    @Override
+    public List<WalletAmount> selectWalletAmount(Long walletId) {
+        return null;
+    }
+
+    @Override
+    public void updateAmount(List list) {
+        backupsDao.updateAmount(list);
+    }
+
+    @Override
+    public List<AmountTyp> selectAmountType() {
+        return backupsDao.selectAmountType();
     }
 }
