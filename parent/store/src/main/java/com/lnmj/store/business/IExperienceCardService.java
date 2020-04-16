@@ -24,7 +24,7 @@ public interface IExperienceCardService {
 
     ResponseResult updateExpCardById(Experiencecard experiencecard);
 
-    ResponseResult addExpCard(Long subordBuyLimitId, Double account, String cardName, String createOperator, JSONArray productJsonArray, Long achievementPostId, String logoImage, String moreContent, Integer stockNum, Integer salesVolume, String purchaseDeadline);
+    ResponseResult addExpCard(Long subordBuyLimitId, Double account, String cardName, String createOperator, JSONArray productJsonArray, Long achievementPostId,Long achievementId, String logoImage, String moreContent, Integer stockNum, Integer salesVolume, String purchaseDeadline);
 
     ResponseResult addExpCardOrder(String memoNum,Double account, String cardName, String cardNum, String createOperator, String linkPhone, String purchaserName, Integer storeId, String memberNum,String beauticians,String payTypeAndAmount);
 
@@ -54,7 +54,7 @@ public interface IExperienceCardService {
 
     ResponseResult experiencecardProductUserRefuse(Long id,Integer refuseTimes);
 
-    ResponseResult selectExperiencecardProductUserRefuseList(Long id);
+    ResponseResult selectExperiencecardProductUserRefuseList(int pageNum,int pageSize,Long id);
 
     ResponseResult addUserExpUseTimes(Long id);
 

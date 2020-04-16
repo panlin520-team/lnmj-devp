@@ -65,11 +65,39 @@ public class ExperienceCardService implements IExperienceCardService {
 
     @Override
     public ResponseResult selectExperienceCardList(int pageNum, int pageSize, String keyWordCardName, String keyWordCarNum, String storeId) {
+        //查看所有业绩分类
+        List<Map> mapListPerformanceList = (List<Map>)dataApi.selectPerformanceListNoPage().getResult();
+        //查看所有业绩
+        List<Map> mapListPerformancePostList = (List<Map>)dataApi.selectPerformancePostListAll().getResult();
+
         PageHelper.startPage(pageNum, pageSize);
         Map map = new HashMap();
         map.put("keyWordCardName", keyWordCardName);
         map.put("keyWordCarNum", keyWordCarNum);
         List<Experiencecard> experiencecards = iExperienceCardDao.selectExperienceCardList(map);
+        for (Experiencecard experiencecard : experiencecards) {
+            if (mapListPerformanceList!=null){
+                for (Map map1 : mapListPerformanceList) {
+                    if (experiencecard.getAchievementId().toString().equals(map1.get("achievementID").toString())){
+                        experiencecard.setAchievementName(map1.get("achievementName").toString());
+                    };
+                }
+
+            }
+
+            if (mapListPerformancePostList!=null){
+                for (Map map1 : mapListPerformancePostList) {
+                    if (experiencecard.getAchievementPostId().toString().equals(map1.get("id").toString())){
+                        experiencecard.setAchievementPostName(map1.get("achievementPostName").toString());
+                    };
+                }
+            }
+        }
+
+
+
+
+
         List<Experiencecard> experiencecardList = new ArrayList<>();
         if (storeId != null) {
             for (int i = 0; i < experiencecards.size(); i++) {
@@ -156,7 +184,7 @@ public class ExperienceCardService implements IExperienceCardService {
     }
 
     @Override
-    public ResponseResult addExpCard(Long subordBuyLimitId, Double account, String cardName, String createOperator, JSONArray productJsonArray, Long achievementPostId, String logoImage, String moreContent, Integer stockNum, Integer salesVolume, String purchaseDeadline) {
+    public ResponseResult addExpCard(Long subordBuyLimitId, Double account, String cardName, String createOperator, JSONArray productJsonArray, Long achievementPostId,Long achievementId, String logoImage, String moreContent, Integer stockNum, Integer salesVolume, String purchaseDeadline) {
         //添加体验卡
         String CarNumStr = NumberUtils.getRandomOrderNo();
         Experiencecard experiencecard = new Experiencecard();
@@ -168,6 +196,7 @@ public class ExperienceCardService implements IExperienceCardService {
         experiencecard.setCardNum(CarNumStr);
         experiencecard.setCreateOperator(createOperator);
         experiencecard.setLogoImage(logoImage);
+        experiencecard.setAchievementId(achievementId);
         experiencecard.setSalesVolume(salesVolume);
         experiencecard.setStockNum(stockNum);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");//注意月份是MM
@@ -789,11 +818,16 @@ public class ExperienceCardService implements IExperienceCardService {
     }
 
     @Override
-    public ResponseResult selectExperiencecardProductUserRefuseList(Long id) {
+    public ResponseResult selectExperiencecardProductUserRefuseList(int pageNum,int pageSize,Long id) {
+        PageHelper.startPage(pageNum, pageSize);
         Map map = new HashMap();
         map.put("id", id);
         List<ExperiencecardProductUserRefuse> experiencecardProductUserRefuseList = iExperienceCardDao.selectExperiencecardProductUserRefuseList(map);
-        return ResponseResult.success(experiencecardProductUserRefuseList);
+        if (experiencecardProductUserRefuseList.size() > 0) {
+            PageInfo pageInfo = new PageInfo(experiencecardProductUserRefuseList);
+            return ResponseResult.success(pageInfo);
+        }
+        return ResponseResult.error(new Error(ResponseCodeExperiencecardEnum.LIST_REFUND_TIMES_ERROR.getCode(), ResponseCodeExperiencecardEnum.LIST_REFUND_TIMES_ERROR.getDesc()));
     }
 
     @Override

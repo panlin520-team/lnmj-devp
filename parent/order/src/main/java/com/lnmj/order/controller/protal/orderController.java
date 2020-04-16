@@ -199,8 +199,9 @@ public class orderController {
 
     @ApiOperation(value = "定制订单退货次数详情", notes = "定制订单退货次数详情")
     @RequestMapping(value = "/selectCustomProjectUserRefuseList", method = RequestMethod.POST)
-    public ResponseResult selectCustomProjectUserRefuseList(Long id) {
-        return iOrderService.selectCustomProjectUserRefuseList(id);
+    public ResponseResult selectCustomProjectUserRefuseList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, Long id) {
+        return iOrderService.selectCustomProjectUserRefuseList(pageNum,pageSize,id);
     }
 
     @ApiOperation(value = "查看现金收入明细", notes = "储值订单退款并扣除业绩")

@@ -27,6 +27,8 @@ public class Experiencecard extends BaseEntity {
 
     private Long achievementPostId;
 
+    private Long achievementId;
+
     private List<ExperiencecardProductUser> experiencecardProductUserList;
 
     private String logoImage;
@@ -38,8 +40,12 @@ public class Experiencecard extends BaseEntity {
     private Integer salesVolume;
 
 
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date  purchaseDeadline;
+    private Date purchaseDeadline;
 
+    @Transient
+    private String achievementPostName;
+    @Transient
+    private String achievementName;
 }

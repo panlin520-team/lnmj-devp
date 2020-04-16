@@ -2494,11 +2494,16 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public ResponseResult selectCustomProjectUserRefuseList(Long id) {
+    public ResponseResult selectCustomProjectUserRefuseList(int pageNum, int pageSize,Long id) {
+        PageHelper.startPage(pageNum, pageSize);
         Map map = new HashMap();
         map.put("id", id);
         List<CustomProjectUserRefuse> customProjectUserRefuseList = iOrderDao.selectCustomProjectUserRefuseList(map);
-        return ResponseResult.success(customProjectUserRefuseList);
+        if (customProjectUserRefuseList != null && customProjectUserRefuseList.size() > 0) {
+            PageInfo pageInfo = new PageInfo(customProjectUserRefuseList);
+            return ResponseResult.success(pageInfo);
+        }
+        return ResponseResult.error(new Error(ResponseCodeOrderEnum.CUSTOM_REFUSE_RECORD_NULL.getCode(), ResponseCodeOrderEnum.CUSTOM_REFUSE_RECORD_NULL.getDesc()));
     }
 
     @Override

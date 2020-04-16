@@ -45,5 +45,10 @@ public interface DataApi {
 
     @RequestMapping(value = "/performance/selectPerformanceListNoPage", method = RequestMethod.POST)
     ResponseResult selectPerformanceListNoPage();
+
+
+
+    @RequestMapping(value = "/performance/selectPerformancePostListAll", method = RequestMethod.POST)
+     ResponseResult selectPerformancePostListAll();
 }
 

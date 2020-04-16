@@ -118,7 +118,7 @@ public interface IOrderService {
 
     ResponseResult customProjectUserRefuse(Long id,Integer refuseTimes);
 
-    ResponseResult selectCustomProjectUserRefuseList(Long id);
+    ResponseResult selectCustomProjectUserRefuseList(int pageNum, int pageSize, Long id);
 
     ResponseResult checkAppointmentOrder(String stffNumberList,String storeId);
 }

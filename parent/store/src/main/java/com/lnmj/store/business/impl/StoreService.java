@@ -854,7 +854,7 @@ public class StoreService implements IStoreService {
         if (mapList.size() == 0) {
             return ResponseResult.error(new Error(ResponseCodeStoreEnum.MEMO_SCOPE_ORDER_NOT_EXIST.getCode(), ResponseCodeStoreEnum.MEMO_SCOPE_ORDER_NOT_EXIST.getDesc()));
         }
-        int[] memoNumArray = new int[mapList.size()];
+        int[] memoNumArray = new int[mapList.size()+experiencecardOrderList.size()];
         for (int i = 0; i < mapList.size(); i++) {
             memoNumArray[i] = Integer.parseInt(mapList.get(i).get("memoNum").toString());
         }

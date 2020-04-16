@@ -24,6 +24,7 @@ public enum ResponseCodeExperiencecardEnum {
     NOW_LIMIT_USE_DATE_ERROR(3,"划卡时间不在有效时间范围内"),
     EXPERIENCECARD_STOCK_NUM_NULL(3,"体验卡库存不足"),
     REFUSE_TIMES_BIGGER_REFUND_TIMES(3,"退货次数超过剩余次数，无法退货"),
+    LIST_REFUND_TIMES_ERROR(3,"没有找到退款记录"),
     PURCHASEDEADLINE_BEYOND(3,"购买时间超出了截至时间，无法购买");
     private final int code;
     private final String desc;

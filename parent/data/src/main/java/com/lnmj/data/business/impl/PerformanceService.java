@@ -560,7 +560,7 @@ public class PerformanceService implements IPerformanceService {
         for (Map beauticianItem : AllStorebeauticianList) {
             double payAmount = 0.00;
             for (LadderDetailed ladderDetailedItem : ladderDetailedListTodayPay) {
-                if (ladderDetailedItem.getLadderDetailedBeauticianId() == Long.parseLong(beauticianItem.get("beauticianId").toString())) {
+                if (ladderDetailedItem.getLadderDetailedBeauticianId() == Long.parseLong(beauticianItem.get("staffNumber").toString())) {
                     payAmount = payAmount + ladderDetailedItem.getLadderDetailedAmount().doubleValue();
                 }
             }
@@ -570,7 +570,7 @@ public class PerformanceService implements IPerformanceService {
         for (Map beauticianItem : AllStorebeauticianList) {
             double payAmount = 0.00;
             for (LadderDetailed ladderDetailedItem : ladderDetailedListTodayPay) {
-                if (ladderDetailedItem.getLadderDetailedBeauticianId() == Long.parseLong(beauticianItem.get("beauticianId").toString())) {
+                if (ladderDetailedItem.getLadderDetailedBeauticianId() == Long.parseLong(beauticianItem.get("staffNumber").toString())) {
                     payAmount = payAmount + ladderDetailedItem.getLadderDetailedAmount().doubleValue();
                 }
             }
@@ -646,7 +646,7 @@ public class PerformanceService implements IPerformanceService {
         for (Map beauticianItem : AllStorebeauticianList) {
             double number = 0.00;
             for (LadderDetailed ladderDetailedItem : ladderDetailedListTodayPay) {
-                if (ladderDetailedItem.getLadderDetailedBeauticianId() == Long.parseLong(beauticianItem.get("beauticianId").toString())) {
+                if (ladderDetailedItem.getLadderDetailedBeauticianId() == Long.parseLong(beauticianItem.get("staffNumber").toString())) {
                     number = number + ladderDetailedItem.getLadderDetailedNumber().doubleValue();
                 }
             }
@@ -855,10 +855,44 @@ public class PerformanceService implements IPerformanceService {
                 Map mapProduct = (Map) productApi.selectProductByCode(productCode).getResult();
                 //根据业绩postid找到业绩
                 PerformancePost performancePost = null;
-                if (mapProduct != null && mapProduct.get("achievementPostId") != null) {
-                    performancePost = performanceDao.selectPerformancePostById(Long.parseLong(mapProduct.get("achievementPostId").toString()));
-                }
-                if (performancePost == null/* || performancePost.getAchievementStore() != isQuandian*/) {
+                String achievementPostId = null;
+                if (!mapProduct.get("achievementPostId").toString().equals("0")) {
+                    //如果购买的体验卡指定的业绩，直接找指定业绩
+                    Map map1 = new HashMap();
+                    map1.put("id", Long.parseLong(mapProduct.get("achievementPostId").toString()));
+                    map1.put("achievementPostCategoryID", beautician.get("postCategoryId").toString());
+                    performancePost = performanceDao.selectPerformancePosByCondition(map1);
+                    if (performancePost != null) {
+                        achievementPostId = performancePost.getId().toString();
+                    }else{
+                        //判断是否有业绩规则
+                        //如果没有找到具体的业绩规则 获取此员工的职位  根据职位及商品的业绩分类 去找具体的业绩规则
+                        String postCategoryIdResult = beautician.get("postCategoryId").toString();
+                        String achievementId = mapProduct.get("achievementId").toString();
+                        String industryIdResult = mapProduct.get("industryId").toString();
+                        Map map = new HashMap();
+                        map.put("achievementPostCategoryID", postCategoryIdResult);
+                        map.put("industryId", industryIdResult);
+                        map.put("achievementId", achievementId);
+                        map.put("isBasicSalary", beautician.get("isBasicSalary"));
+
+                        performancePost = performanceDao.selectPerformancePosByCondition(map);
+                        achievementPostId = performancePost.getId().toString();
+                        if (performancePost == null) {
+                            map.clear();
+                            map.put("achievementPostCategoryID", 0);
+                            map.put("industryId", industryIdResult);
+                            map.put("achievementId", achievementId);
+                            map.put("isBasicSalary", beautician.get("isBasicSalary"));
+                            performancePost = performanceDao.selectPerformancePosByCondition(map);
+                            achievementPostId = performancePost.getId().toString();
+                        }
+                        if (performancePost == null) {
+                            mapResult.put("产品或医美业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成失败，未找到对应业绩规则");
+                            continue;
+                        }
+                    }
+                } else {
                     //判断是否有业绩规则
                     //如果没有找到具体的业绩规则 获取此员工的职位  根据职位及商品的业绩分类 去找具体的业绩规则
                     String postCategoryIdResult = beautician.get("postCategoryId").toString();
@@ -868,23 +902,28 @@ public class PerformanceService implements IPerformanceService {
                     map.put("achievementPostCategoryID", postCategoryIdResult);
                     map.put("industryId", industryIdResult);
                     map.put("achievementId", achievementId);
+                    map.put("isBasicSalary", beautician.get("isBasicSalary"));
+
                     performancePost = performanceDao.selectPerformancePosByCondition(map);
+                    achievementPostId = performancePost.getId().toString();
                     if (performancePost == null) {
                         map.clear();
                         map.put("achievementPostCategoryID", 0);
                         map.put("industryId", industryIdResult);
                         map.put("achievementId", achievementId);
+                        map.put("isBasicSalary", beautician.get("isBasicSalary"));
                         performancePost = performanceDao.selectPerformancePosByCondition(map);
+                        achievementPostId = performancePost.getId().toString();
                     }
                     if (performancePost == null) {
                         mapResult.put("产品或医美业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成失败，未找到对应业绩规则");
                         continue;
                     }
-
                 }
+                //查看阶梯
                 ladderDetailedForAdd.setOrderType(OrderTypeEnum.PRODUCT_ORDER.getCode());//订单类型
                 ladderDetailedForAdd.setLadderDetailedOrderId(orderNum);//订单号
-                ladderDetailedForAdd.setLadderDetailedAchievementID(Long.parseLong(mapProduct.get("achievementPostId").toString()));//所属业绩
+                ladderDetailedForAdd.setLadderDetailedAchievementID(Long.parseLong(achievementPostId));//所属业绩
                 ladderDetailedForAdd.setLadderDetailedStoreId(storeId);//所属门店
                 if (performancePost.getAchievementMethods() == 1 || performancePost.getAchievementMethods() == 4) {
                     //如果是按个数算
@@ -893,12 +932,8 @@ public class PerformanceService implements IPerformanceService {
                     //如果是按金额算
                     ladderDetailedForAdd.setLadderDetailedAmount(new BigDecimal(sum * jsonArrayStaff.getJSONObject(i).getDouble("ratio") / 100));//业绩金额
                 }
-
-
                 ladderDetailedForAdd.setLadderDetailedBeauticianId(jsonArrayStaff.getJSONObject(i).getLong("beauticianId"));
                 mapResult.put("产品或医美业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成成功");
-
-
                 performanceDao.insertLadderDetailed(ladderDetailedForAdd);
             } else if (productType == ProductTypeEnum.EXPERIENCECARD.getCode()) {//如果是体验卡
                 String postId = beautician.get("postId").toString();//职位
@@ -907,25 +942,93 @@ public class PerformanceService implements IPerformanceService {
 
                 Map mapProductList = (Map) storeApi.selectExperienceCardByCardId(Long.parseLong(productCode)).getResult();
                 //根据业绩postid找到业绩
-                PerformancePost performancePost = performanceDao.selectPerformancePostById(Long.parseLong(mapProductList.get("achievementPostId").toString()));
-                if (performancePost == null || performancePost.getAchievementStore() != isQuandian) {
-                    //判断是否有业绩规则
-                    mapResult.put("体验卡业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成失败，未找到对应业绩规则");
-                    continue;
+                PerformancePost performancePost = null;
+                String achievementPostId = null;
+                if (!mapProductList.get("achievementPostId").toString().equals("0")) {
+                    //如果购买的体验卡指定的业绩，直接找指定业绩
+                    Map map1 = new HashMap();
+                    map1.put("id", Long.parseLong(mapProductList.get("achievementPostId").toString()));
+                    map1.put("achievementPostCategoryID", beautician.get("postCategoryId").toString());
+                    performancePost = performanceDao.selectPerformancePosByCondition(map1);
+                    if (performancePost != null) {
+                        achievementPostId = performancePost.getId().toString();
+                    } else {
+                        //如果购买的体验卡指定了业绩，但是不是当前职位的 ，就去根据职位分类 和 行业 和 业绩分类 和是否为计算底薪 查找业绩
+                        String postCategoryIdResult = beautician.get("postCategoryId").toString();
+                        String achievementId = mapProductList.get("achievementId").toString();
+                        Map map = new HashMap();
+                        map.put("achievementPostCategoryID", postCategoryIdResult);
+                        map.put("industryId", industryId);
+                        map.put("achievementId", achievementId);
+                        map.put("isBasicSalary", beautician.get("isBasicSalary"));
+
+                        performancePost = performanceDao.selectPerformancePosByCondition(map);
+                        achievementPostId = performancePost.getId().toString();
+                        if (performancePost == null) {
+                            //如果还是没找到  就去根据所有职位 和 行业 和 业绩分类 和是否为计算底薪 查找业绩
+                            map.clear();
+                            map.put("achievementPostCategoryID", 0);
+                            map.put("industryId", industryId);
+                            map.put("achievementId", achievementId);
+                            map.put("isBasicSalary", beautician.get("isBasicSalary"));
+                            performancePost = performanceDao.selectPerformancePosByCondition(map);
+                            achievementPostId = performancePost.getId().toString();
+                        }
+                        if (performancePost == null) {
+                            mapResult.put("体验卡业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成失败，未找到对应业绩规则");
+                            continue;
+                        }
+                    }
+
                 } else {
-                    mapResult.put("体验卡业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成成功");
+                    //如果购买的体验卡没有指定业绩，就去根据职位分类 和 行业 和 业绩分类 和是否为计算底薪 查找业绩
+                    String postCategoryIdResult = beautician.get("postCategoryId").toString();
+                    String achievementId = mapProductList.get("achievementId").toString();
+                    Map map = new HashMap();
+                    map.put("achievementPostCategoryID", postCategoryIdResult);
+                    map.put("industryId", industryId);
+                    map.put("achievementId", achievementId);
+                    map.put("isBasicSalary", beautician.get("isBasicSalary"));
+
+                    performancePost = performanceDao.selectPerformancePosByCondition(map);
+                    achievementPostId = performancePost.getId().toString();
+                    if (performancePost == null) {
+                        //如果还是没找到  就去根据所有职位 和 行业 和 业绩分类 和是否为计算底薪 查找业绩
+                        map.clear();
+                        map.put("achievementPostCategoryID", 0);
+                        map.put("industryId", industryId);
+                        map.put("achievementId", achievementId);
+                        map.put("isBasicSalary", beautician.get("isBasicSalary"));
+                        performancePost = performanceDao.selectPerformancePosByCondition(map);
+                        achievementPostId = performancePost.getId().toString();
+                    }
+                    if (performancePost == null) {
+                        mapResult.put("体验卡业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成失败，未找到对应业绩规则");
+                        continue;
+                    }
                 }
+
+
                 //查看阶梯
                 Ladder ladder = new Ladder();
                 ladder.setLadderAchievementPostID(performancePost.getId());
                 Ladder ladder1 = performanceDao.selectLadderByCondition(ladder).get(0);
                 performancePost.setSinglePrize(ladder1.getLadderBonus().doubleValue());
-                ladderDetailedForAdd.setOrderType(OrderTypeEnum.PRODUCT_ORDER.getCode());//商品订单业绩
+                ladderDetailedForAdd.setOrderType(OrderTypeEnum.EXPCARD_ORDER.getCode());//商品订单业绩
                 ladderDetailedForAdd.setLadderDetailedOrderId(orderNum);//订单号
-                ladderDetailedForAdd.setLadderDetailedAchievementID(Long.parseLong(mapProductList.get("achievementPostId").toString()));//所属业绩
+                ladderDetailedForAdd.setLadderDetailedAchievementID(Long.parseLong(achievementPostId));//所属业绩
                 ladderDetailedForAdd.setLadderDetailedStoreId(storeId);//所属门店
-                ladderDetailedForAdd.setLadderDetailedAmount(new BigDecimal(performancePost.getSinglePrize() * productNum));//业绩金额
+
+                if (performancePost.getAchievementMethods() == 1 || performancePost.getAchievementMethods() == 4) {
+                    //如果是按个数算
+                    ladderDetailedForAdd.setLadderDetailedNumber(new BigDecimal(productNum));//业绩金额
+                } else {
+                    //如果是按金额算
+                    ladderDetailedForAdd.setLadderDetailedAmount(new BigDecimal(sum));//业绩金额
+                }
+
                 ladderDetailedForAdd.setLadderDetailedBeauticianId(jsonArrayStaff.getJSONObject(i).getLong("beauticianId"));
+                mapResult.put("体验卡业绩：" + jsonArrayStaff.getJSONObject(i).getString("beauticianName"), "业绩生成成功");
                 performanceDao.insertLadderDetailed(ladderDetailedForAdd);
             } else if (productType == ProductTypeEnum.SERVICE.getCode() || productType == ProductTypeEnum.COSMETIC.getCode()) {//如果子订单是服务类产品
                 //根据职位查看业绩id

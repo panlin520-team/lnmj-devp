@@ -21,6 +21,7 @@
         LogoImage,
         SubordBuyLimitId,
         AchievementPostId,
+        AchievementId,
         MoreContent,
         PurchaseDeadline,
         StockNum,
@@ -87,6 +88,9 @@
             <if test="achievementPostId != null">
                 AchievementPostId = #{achievementPostId},
             </if>
+            <if test="achievementId != null">
+                AchievementId = #{achievementId},
+            </if>
             <if test="logoImage != null">
                 LogoImage = #{logoImage},
             </if>
@@ -142,6 +146,9 @@
             <if test="subordBuyLimitId != null">
                 SubordBuyLimitId,
             </if>
+            <if test="achievementId != null">
+                AchievementId,
+            </if>
             <if test="achievementPostId != null">
                 AchievementPostId,
             </if>
@@ -186,6 +193,9 @@
             </if>
             <if test="subordBuyLimitId != null">
                 #{subordBuyLimitId},
+            </if>
+            <if test="achievementId != null">
+                #{achievementId},
             </if>
             <if test="achievementPostId != null">
                 #{achievementPostId},

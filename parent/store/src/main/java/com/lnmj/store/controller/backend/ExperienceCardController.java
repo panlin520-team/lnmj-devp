@@ -158,9 +158,9 @@ public class ExperienceCardController {
     */
     @ApiOperation(value = "添加体验卡",notes = "添加体验卡")
     @RequestMapping(value = "/addExpCard",method = RequestMethod.POST)
-    public ResponseResult addExpCard(Long subordBuyLimitId, Double account, String cardName , String createOperator, String productArray, Long achievementPostId, String logoImage, String moreContent, Integer stockNum, Integer salesVolume, String purchaseDeadline) {
+    public ResponseResult addExpCard(Long subordBuyLimitId, Double account, String cardName , String createOperator, String productArray, Long achievementPostId,Long achievementId, String logoImage, String moreContent, Integer stockNum, Integer salesVolume, String purchaseDeadline) {
         JSONArray productJsonArray = JSONArray.parseArray(productArray);
-        return  iExperienceCardService.addExpCard(subordBuyLimitId,account,cardName,createOperator,productJsonArray,achievementPostId,logoImage,moreContent,stockNum,salesVolume,purchaseDeadline);
+        return  iExperienceCardService.addExpCard(subordBuyLimitId,account,cardName,createOperator,productJsonArray,achievementPostId,achievementId,logoImage,moreContent,stockNum,salesVolume,purchaseDeadline);
 
     }
 
@@ -259,8 +259,9 @@ public class ExperienceCardController {
 
     @ApiOperation(value = "查看退货使用次数明细",notes = "查看退货使用次数明细")
     @RequestMapping(value = "/selectExperiencecardProductUserRefuseList",method = RequestMethod.POST)
-    public ResponseResult selectExperiencecardProductUserRefuseList(Long id) {
-        return  iExperienceCardService.selectExperiencecardProductUserRefuseList(id);
+    public ResponseResult selectExperiencecardProductUserRefuseList(@RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                                                                    @RequestParam(value = "pageSize",defaultValue = "10")int pageSize,Long id) {
+        return  iExperienceCardService.selectExperiencecardProductUserRefuseList(pageNum,pageSize,id);
     }
 
 
