@@ -235,20 +235,20 @@ public class CommodityTypeService implements ICommodityTypeService {
 
     @Override
     public ResponseResult selectSubclassByCondition(int pageNum, int pageSize, Subclass subclass, Long industryID, Long storeId) {
-        PageHelper.startPage(pageNum, pageSize);
+
         if (industryID != null) {
             //根据行业找项目大类
             CommodityType commodityType = new CommodityType();
             commodityType.setCommodityTypeIndustryID(industryID);
             List<CommodityType> commodityTypeList = commodityTypeDao.selectCommodityTypeByCondition(commodityType);
-            Long commodityTypeID = null;
-            for (CommodityType commodityTypeItem : commodityTypeList) {
-                if (commodityTypeItem.getCommodityTypeName().equals("项目")) {
-                    commodityTypeID = commodityTypeItem.getCommodityTypeID();
-                }
+            List<String> commodityList = new ArrayList<>();
+            for (CommodityType type : commodityTypeList) {
+                commodityList.add(type.getCommodityTypeID().toString());
             }
-            subclass.setCommodityTypeID(commodityTypeID);
+
+            subclass.setCommodityTypeList(commodityList);
         }
+        PageHelper.startPage(pageNum, pageSize);
         List<Subclass> subclassList = commodityTypeDao.selectSubclassByCondition(subclass);
         //查询所有的职位
         List<Map> postMap = (List<Map>) storeApi.selectPostNoPage().getResult();

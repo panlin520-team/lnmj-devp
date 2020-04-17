@@ -785,208 +785,217 @@ public class StatisticService implements IStatisticService {
 
     @Override
     public ResponseResult selectScorePerson(Long salesmanID, HashMap<String, Object> map, Statistic statistic) {
-        //查看此员工的职位分类
-        Map mapStaff = (Map) storeApi.selectBeauticianByCode(salesmanID.toString()).getResult();
-        if (mapStaff == null) {
-            return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getCode(),
-                    ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getDesc()));
-        }
-        statistic.setStoreId(Long.parseLong(mapStaff.get("companyId").toString()));
-        String postCategoryId = mapStaff.get("postCategoryId").toString();
-        String partTimePostCategoryId = mapStaff.get("partTimePostCategoryId").toString();
-        List<String> stringList = new ArrayList<>();
-        stringList.add(postCategoryId);
-        stringList.add(partTimePostCategoryId);
-        //根据职位分类 查看积分规则
-        Map map1 = new HashMap();
-        map1.put("list", stringList);
-        List<Score> scoreList = scoreDao.selectScoreByPostId(map1);
-        BigDecimal totalScore = new BigDecimal(0);
-        if (scoreList.size() == 0) {
-            totalScore = new BigDecimal(0);
-        } else {
-            //总分数
-            Set<String> performanceIds = map.keySet();
-            for (String performanceId : performanceIds) {
-                PerformancePost performancePost = performanceDao.selectPerformancePostById(Long.parseLong(performanceId));
-                if (performancePost.getIsBasicSalary() == 0) {
-                    //如果不计算底薪
-                    totalScore = totalScore.add(BigDecimal.ZERO);
-                    continue;
-                }
-                for (Score score : scoreList) {
-                    if (score.getScoreMode() == 1) {
-                        //手动评分
+        if (map != null) {
+
+            //查看此员工的职位分类
+            Map mapStaff = (Map) storeApi.selectBeauticianByCode(salesmanID.toString()).getResult();
+            if (mapStaff == null) {
+                return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getCode(),
+                        ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getDesc()));
+            }
+            statistic.setStoreId(Long.parseLong(mapStaff.get("companyId").toString()));
+            String postCategoryId = mapStaff.get("postCategoryId").toString();
+            String partTimePostCategoryId = mapStaff.get("partTimePostCategoryId").toString();
+            List<String> stringList = new ArrayList<>();
+            stringList.add(postCategoryId);
+            stringList.add(partTimePostCategoryId);
+            //根据职位分类 查看积分规则
+            Map map1 = new HashMap();
+            map1.put("list", stringList);
+            List<Score> scoreList = scoreDao.selectScoreByPostId(map1);
+            BigDecimal totalScore = new BigDecimal(0);
+            if (scoreList.size() == 0) {
+                totalScore = new BigDecimal(0);
+            } else {
+                //总分数
+                Set<String> performanceIds = map.keySet();
+                for (String performanceId : performanceIds) {
+                    PerformancePost performancePost = performanceDao.selectPerformancePostById(Long.parseLong(performanceId));
+                    if (performancePost.getIsBasicSalary() == 0) {
+                        //如果不计算底薪
+                        totalScore = totalScore.add(BigDecimal.ZERO);
                         continue;
                     }
-                    if (score.getScoreAchievementID().equals(Long.valueOf(performanceId))||score.getScoreAchievementID().toString().equals("0")) {
-                        //传来的业绩id和评分标准的业绩id一致再计算评分
-                        //每条业绩对应的金额
-                        BigDecimal amount = null;
-                        if (map.get(performanceId) instanceof Double) {
-                            amount = new BigDecimal((Double) map.get(performanceId));
-                        } else if (map.get(performanceId) instanceof Integer) {
-                            amount = new BigDecimal((Integer) map.get(performanceId));
+                    for (Score score : scoreList) {
+                        if (score.getScoreMode() == 1) {
+                            //手动评分
+                            continue;
                         }
-                        if (amount.compareTo(BigDecimal.ZERO) != 0) {
-                            //计算业绩金额评分 金额业绩/业绩基数*分数基数
-                            BigDecimal performanceScore = amount.subtract(score.getScoreProportion()).divide(score.getScoreBase(), BigDecimal.ROUND_UP).add(score.getScoreDefault());
-                            if (performanceScore.doubleValue() != 0 && performanceScore.compareTo(score.getScoreLow()) == -1) {
-                                //如果评分小于最低分取最低分
-                                performanceScore = score.getScoreLow();
-                            } else if (performanceScore.compareTo(score.getScoreHigh()) == 1) {
-                                //高于了最高分数 就取最高分
-                                performanceScore = score.getScoreHigh();
-                            } else if (amount.doubleValue() < score.getScoreProportion().doubleValue()) {
-                                //如果业绩小于业绩基数按照默认业绩
-                                performanceScore = score.getScoreDefault();
+                        if (score.getScoreAchievementID().equals(Long.valueOf(performanceId)) || score.getScoreAchievementID().toString().equals("0")) {
+                            //传来的业绩id和评分标准的业绩id一致再计算评分
+                            //每条业绩对应的金额
+                            BigDecimal amount = null;
+                            if (map.get(performanceId) instanceof Double) {
+                                amount = new BigDecimal((Double) map.get(performanceId));
+                            } else if (map.get(performanceId) instanceof Integer) {
+                                amount = new BigDecimal((Integer) map.get(performanceId));
                             }
-                            //累加每条业绩的评分
-                            totalScore = totalScore.add(performanceScore);
+                            if (amount.compareTo(BigDecimal.ZERO) != 0) {
+                                //计算业绩金额评分 金额业绩/业绩基数*分数基数
+                                BigDecimal performanceScore = amount.subtract(score.getScoreProportion()).divide(score.getScoreBase(), BigDecimal.ROUND_UP).add(score.getScoreDefault());
+                                if (performanceScore.doubleValue() != 0 && performanceScore.compareTo(score.getScoreLow()) == -1) {
+                                    //如果评分小于最低分取最低分
+                                    performanceScore = score.getScoreLow();
+                                } else if (performanceScore.compareTo(score.getScoreHigh()) == 1) {
+                                    //高于了最高分数 就取最高分
+                                    performanceScore = score.getScoreHigh();
+                                } else if (amount.doubleValue() < score.getScoreProportion().doubleValue()) {
+                                    //如果业绩小于业绩基数按照默认业绩
+                                    performanceScore = score.getScoreDefault();
+                                }
+                                //累加每条业绩的评分
+                                totalScore = totalScore.add(performanceScore);
+                            }
                         }
                     }
                 }
             }
+            statistic.setScore(totalScore.setScale(0, BigDecimal.ROUND_HALF_UP));
+
         }
-        statistic.setScore(totalScore.setScale(0, BigDecimal.ROUND_HALF_UP));
         return ResponseResult.success(statistic);
     }
 
     @Override
     public ResponseResult selectScoreAllStore(Long salesmanID, HashMap<String, Object> map, Statistic statistic) {
-        //查看此员工的职位分类
-        Map mapStaff = (Map) storeApi.selectBeauticianByCode(salesmanID.toString()).getResult();
-        if (mapStaff == null) {
-            return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getCode(),
-                    ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getDesc()));
-        }
-        statistic.setStoreId(Long.parseLong(mapStaff.get("companyId").toString()));
-        String postCategoryId = mapStaff.get("postCategoryId").toString();
-        String partTimePostCategoryId = mapStaff.get("partTimePostCategoryId").toString();
-        List<String> stringList = new ArrayList<>();
-        stringList.add(postCategoryId);
-        stringList.add(partTimePostCategoryId);
-        //根据职位分类 查看积分规则
-        Map map1 = new HashMap();
-        map1.put("list", stringList);
-        List<Score> scoreList = scoreDao.selectScoreByPostId(map1);
-        BigDecimal totalScore = new BigDecimal(0);
-        if (scoreList.size() == 0) {
-            totalScore = new BigDecimal(0);
-        } else {
-            //总分数
-            Set<String> performanceIds = map.keySet();
-            for (String performanceId : performanceIds) {
-                PerformancePost performancePost = performanceDao.selectPerformancePostById(Long.parseLong(performanceId));
-                if (performancePost.getIsBasicSalary() == 0) {
-                    //如果不计算底薪
-                    totalScore = totalScore.add(BigDecimal.ZERO);
-                    continue;
-                }
-                for (Score score : scoreList) {
-                    if (score.getScoreMode() == 1) {
-                        //手动评分
+        if (map != null) {
+            //查看此员工的职位分类
+            Map mapStaff = (Map) storeApi.selectBeauticianByCode(salesmanID.toString()).getResult();
+            if (mapStaff == null) {
+                return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getCode(),
+                        ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getDesc()));
+            }
+            statistic.setStoreId(Long.parseLong(mapStaff.get("companyId").toString()));
+            String postCategoryId = mapStaff.get("postCategoryId").toString();
+            String partTimePostCategoryId = mapStaff.get("partTimePostCategoryId").toString();
+            List<String> stringList = new ArrayList<>();
+            stringList.add(postCategoryId);
+            stringList.add(partTimePostCategoryId);
+            //根据职位分类 查看积分规则
+            Map map1 = new HashMap();
+            map1.put("list", stringList);
+            List<Score> scoreList = scoreDao.selectScoreByPostId(map1);
+            BigDecimal totalScore = new BigDecimal(0);
+            if (scoreList.size() == 0) {
+                totalScore = new BigDecimal(0);
+            } else {
+                //总分数
+                Set<String> performanceIds = map.keySet();
+                for (String performanceId : performanceIds) {
+                    PerformancePost performancePost = performanceDao.selectPerformancePostById(Long.parseLong(performanceId));
+                    if (performancePost.getIsBasicSalary() == 0) {
+                        //如果不计算底薪
+                        totalScore = totalScore.add(BigDecimal.ZERO);
                         continue;
                     }
-                    if (score.getScoreAchievementID().equals(Long.valueOf(performanceId))) {
-                        //传来的业绩id和评分标准的业绩id一致再计算评分
-                        //每条业绩对应的金额
-                        BigDecimal amount = null;
-                        if (map.get(performanceId) instanceof Double) {
-                            amount = new BigDecimal((Double) map.get(performanceId));
-                        } else if (map.get(performanceId) instanceof Integer) {
-                            amount = new BigDecimal((Integer) map.get(performanceId));
+                    for (Score score : scoreList) {
+                        if (score.getScoreMode() == 1) {
+                            //手动评分
+                            continue;
                         }
-                        if (amount.compareTo(BigDecimal.ZERO) != 0) {
-                            //计算业绩金额评分 金额业绩/业绩基数*分数基数
-                            BigDecimal performanceScore = amount.subtract(score.getScoreProportion()).divide(score.getScoreBase(), BigDecimal.ROUND_UP).add(score.getScoreDefault());
-                            if (performanceScore.doubleValue() != 0 && performanceScore.compareTo(score.getScoreLow()) == -1) {
-                                //如果评分小于最低分取最低分
-                                performanceScore = score.getScoreLow();
-                            } else if (performanceScore.compareTo(score.getScoreHigh()) == 1) {
-                                //高于了最高分数 就取最高分
-                                performanceScore = score.getScoreHigh();
-                            } else if (amount.doubleValue() < score.getScoreProportion().doubleValue()) {
-                                //如果业绩小于业绩基数按照默认业绩
-                                performanceScore = score.getScoreDefault();
+                        if (score.getScoreAchievementID().equals(Long.valueOf(performanceId))) {
+                            //传来的业绩id和评分标准的业绩id一致再计算评分
+                            //每条业绩对应的金额
+                            BigDecimal amount = null;
+                            if (map.get(performanceId) instanceof Double) {
+                                amount = new BigDecimal((Double) map.get(performanceId));
+                            } else if (map.get(performanceId) instanceof Integer) {
+                                amount = new BigDecimal((Integer) map.get(performanceId));
                             }
-                            //累加每条业绩的评分
-                            totalScore = totalScore.add(performanceScore);
+                            if (amount.compareTo(BigDecimal.ZERO) != 0) {
+                                //计算业绩金额评分 金额业绩/业绩基数*分数基数
+                                BigDecimal performanceScore = amount.subtract(score.getScoreProportion()).divide(score.getScoreBase(), BigDecimal.ROUND_UP).add(score.getScoreDefault());
+                                if (performanceScore.doubleValue() != 0 && performanceScore.compareTo(score.getScoreLow()) == -1) {
+                                    //如果评分小于最低分取最低分
+                                    performanceScore = score.getScoreLow();
+                                } else if (performanceScore.compareTo(score.getScoreHigh()) == 1) {
+                                    //高于了最高分数 就取最高分
+                                    performanceScore = score.getScoreHigh();
+                                } else if (amount.doubleValue() < score.getScoreProportion().doubleValue()) {
+                                    //如果业绩小于业绩基数按照默认业绩
+                                    performanceScore = score.getScoreDefault();
+                                }
+                                //累加每条业绩的评分
+                                totalScore = totalScore.add(performanceScore);
+                            }
                         }
                     }
                 }
             }
+            statistic.setScoreAllStore(totalScore.setScale(0, BigDecimal.ROUND_HALF_UP));
         }
-        statistic.setScoreAllStore(totalScore.setScale(0, BigDecimal.ROUND_HALF_UP));
+
         return ResponseResult.success(statistic);
     }
 
     @Override
     public ResponseResult selectScoreGroup(Long salesmanID, HashMap<String, Object> map, Statistic statistic) {
-        //查看此员工的职位分类
-        Map mapStaff = (Map) storeApi.selectBeauticianByCode(salesmanID.toString()).getResult();
-        if (mapStaff == null) {
-            return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getCode(),
-                    ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getDesc()));
-        }
-        statistic.setStoreId(Long.parseLong(mapStaff.get("companyId").toString()));
-        String postCategoryId = mapStaff.get("postCategoryId").toString();
-        String partTimePostCategoryId = mapStaff.get("partTimePostCategoryId").toString();
-        List<String> stringList = new ArrayList<>();
-        stringList.add(postCategoryId);
-        stringList.add(partTimePostCategoryId);
-        //根据职位分类 查看积分规则
-        Map map1 = new HashMap();
-        map1.put("list", stringList);
-        List<Score> scoreList = scoreDao.selectScoreByPostId(map1);
-        BigDecimal totalScore = new BigDecimal(0);
-        if (scoreList.size() == 0) {
-            totalScore = new BigDecimal(0);
-        } else {
-            //总分数
-            Set<String> performanceIds = map.keySet();
-            for (String performanceId : performanceIds) {
-                PerformancePost performancePost = performanceDao.selectPerformancePostById(Long.parseLong(performanceId));
-                if (performancePost.getIsBasicSalary() == 0) {
-                    //如果不计算底薪
-                    totalScore = totalScore.add(BigDecimal.ZERO);
-                    continue;
-                }
-                for (Score score : scoreList) {
-                    if (score.getScoreMode() == 1) {
-                        //手动评分
+        if (map != null) {
+            //查看此员工的职位分类
+            Map mapStaff = (Map) storeApi.selectBeauticianByCode(salesmanID.toString()).getResult();
+            if (mapStaff == null) {
+                return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getCode(),
+                        ResponseCodeBeauticianEnum.BEAUTICIAN_NULL.getDesc()));
+            }
+            statistic.setStoreId(Long.parseLong(mapStaff.get("companyId").toString()));
+            String postCategoryId = mapStaff.get("postCategoryId").toString();
+            String partTimePostCategoryId = mapStaff.get("partTimePostCategoryId").toString();
+            List<String> stringList = new ArrayList<>();
+            stringList.add(postCategoryId);
+            stringList.add(partTimePostCategoryId);
+            //根据职位分类 查看积分规则
+            Map map1 = new HashMap();
+            map1.put("list", stringList);
+            List<Score> scoreList = scoreDao.selectScoreByPostId(map1);
+            BigDecimal totalScore = new BigDecimal(0);
+            if (scoreList.size() == 0) {
+                totalScore = new BigDecimal(0);
+            } else {
+                //总分数
+                Set<String> performanceIds = map.keySet();
+                for (String performanceId : performanceIds) {
+                    PerformancePost performancePost = performanceDao.selectPerformancePostById(Long.parseLong(performanceId));
+                    if (performancePost.getIsBasicSalary() == 0) {
+                        //如果不计算底薪
+                        totalScore = totalScore.add(BigDecimal.ZERO);
                         continue;
                     }
-                    if (score.getScoreAchievementID().equals(Long.valueOf(performanceId))) {
-                        //传来的业绩id和评分标准的业绩id一致再计算评分
-                        //每条业绩对应的金额
-                        BigDecimal amount = null;
-                        if (map.get(performanceId) instanceof Double) {
-                            amount = new BigDecimal((Double) map.get(performanceId));
-                        } else if (map.get(performanceId) instanceof Integer) {
-                            amount = new BigDecimal((Integer) map.get(performanceId));
+                    for (Score score : scoreList) {
+                        if (score.getScoreMode() == 1) {
+                            //手动评分
+                            continue;
                         }
-                        if (amount.compareTo(BigDecimal.ZERO) != 0) {
-                            //计算业绩金额评分 金额业绩/业绩基数*分数基数
-                            BigDecimal performanceScore = amount.subtract(score.getScoreProportion()).divide(score.getScoreBase(), BigDecimal.ROUND_UP).add(score.getScoreDefault());
-                            if (performanceScore.doubleValue() != 0 && performanceScore.compareTo(score.getScoreLow()) == -1) {
-                                //如果评分小于最低分取最低分
-                                performanceScore = score.getScoreLow();
-                            } else if (performanceScore.compareTo(score.getScoreHigh()) == 1) {
-                                //高于了最高分数 就取最高分
-                                performanceScore = score.getScoreHigh();
-                            } else if (amount.doubleValue() < score.getScoreProportion().doubleValue()) {
-                                //如果业绩小于业绩基数按照默认业绩
-                                performanceScore = score.getScoreDefault();
+                        if (score.getScoreAchievementID().equals(Long.valueOf(performanceId))) {
+                            //传来的业绩id和评分标准的业绩id一致再计算评分
+                            //每条业绩对应的金额
+                            BigDecimal amount = null;
+                            if (map.get(performanceId) instanceof Double) {
+                                amount = new BigDecimal((Double) map.get(performanceId));
+                            } else if (map.get(performanceId) instanceof Integer) {
+                                amount = new BigDecimal((Integer) map.get(performanceId));
                             }
-                            //累加每条业绩的评分
-                            totalScore = totalScore.add(performanceScore);
+                            if (amount.compareTo(BigDecimal.ZERO) != 0) {
+                                //计算业绩金额评分 金额业绩/业绩基数*分数基数
+                                BigDecimal performanceScore = amount.subtract(score.getScoreProportion()).divide(score.getScoreBase(), BigDecimal.ROUND_UP).add(score.getScoreDefault());
+                                if (performanceScore.doubleValue() != 0 && performanceScore.compareTo(score.getScoreLow()) == -1) {
+                                    //如果评分小于最低分取最低分
+                                    performanceScore = score.getScoreLow();
+                                } else if (performanceScore.compareTo(score.getScoreHigh()) == 1) {
+                                    //高于了最高分数 就取最高分
+                                    performanceScore = score.getScoreHigh();
+                                } else if (amount.doubleValue() < score.getScoreProportion().doubleValue()) {
+                                    //如果业绩小于业绩基数按照默认业绩
+                                    performanceScore = score.getScoreDefault();
+                                }
+                                //累加每条业绩的评分
+                                totalScore = totalScore.add(performanceScore);
+                            }
                         }
                     }
                 }
             }
+            statistic.setScoreGroup(totalScore.setScale(0, BigDecimal.ROUND_HALF_UP));
         }
-        statistic.setScoreGroup(totalScore.setScale(0, BigDecimal.ROUND_HALF_UP));
         return ResponseResult.success(statistic);
     }
 

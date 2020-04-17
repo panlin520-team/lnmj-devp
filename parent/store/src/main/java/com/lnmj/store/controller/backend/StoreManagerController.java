@@ -167,6 +167,13 @@ public class StoreManagerController {
         return storeService.updateStoreByCodeOrId(store);
     }
 
+    @ApiOperation(value = "修改门店经纬度",notes = "修改门店经纬度")
+    @RequestMapping(value = "/updateStoreLatById",method = RequestMethod.POST)
+    public ResponseResult updateStoreLatById(Store store) {
+        return storeService.updateStoreLatById(store);
+    }
+
+
     /**
     *@Description 删除门店
     *@Param [storeId] 门店ID

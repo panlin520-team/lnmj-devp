@@ -35,5 +35,7 @@ public class Subclass extends BaseEntity {
     private String commodityTypeName;
     @Transient
     private String industryName;
+    @Transient
+    private List<String> commodityTypeList;
 }
 

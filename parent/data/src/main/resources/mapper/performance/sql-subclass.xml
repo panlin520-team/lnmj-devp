@@ -62,6 +62,14 @@
         <if test="subclassEvaluatingID != null and subclassEvaluatingID != ''" >
           AND SubclassEvaluatingID = #{subclassEvaluatingID,jdbcType=BIGINT}
         </if>
+
+        <if test="commodityTypeList != null">
+          and CommodityTypeID in
+          <foreach item="item" collection="commodityTypeList" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+
         <if test="status != null" >
           AND Status = #{status,jdbcType=INTEGER}
         </if>

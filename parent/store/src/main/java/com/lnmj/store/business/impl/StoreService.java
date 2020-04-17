@@ -670,6 +670,15 @@ public class StoreService implements IStoreService {
     }
 
     @Override
+    public ResponseResult updateStoreLatById(Store store) {
+        if (store.getStoreId()==null){
+            return ResponseResult.error(new Error(ResponseCodeStoreEnum.STOREID_ISNOTNULL.getCode(), ResponseCodeStoreEnum.STOREID_ISNOTNULL.getDesc()));
+        }
+        int resultInt = storeDao.updateStoreByCodeOrId(store);
+        return ResponseResult.success();
+    }
+
+    @Override
     public ResponseResult deleteStore(Long storeId, String modifyOperator) {
         if (storeId == null) {
             return ResponseResult.error(new Error(ResponseCodeStoreEnum.STOREID_ISNOTNULL.getCode(), ResponseCodeStoreEnum.STOREID_ISNOTNULL.getDesc()));

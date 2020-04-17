@@ -19,6 +19,7 @@ public interface IStoreService {
     ResponseResult insertHeSuanFanWei(Store store);
     ResponseResult insertZhangBu(String companyId, String companyType);
     ResponseResult updateStoreByCodeOrId(Store store);
+    ResponseResult updateStoreLatById(Store store);
     ResponseResult deleteStore(Long storeId,String modifyOperator);
     ResponseResult storeEnableOrDisEnable(Long storeId);
     ResponseResult storeCategoryList(int pageNum,int pageSize,String keyWordStoreCategoryName);

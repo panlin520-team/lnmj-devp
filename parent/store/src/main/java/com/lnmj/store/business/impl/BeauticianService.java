@@ -601,10 +601,8 @@ public class BeauticianService implements IBeauticianService {
             beautician.setPostCategoryId(beauticianDao.selectPostById(beautician.getPostId()).getPostCategoryId());
         }
         beautician.setHeadUrl(imgUrl);
-        int resultInt = beauticianDao.insertBeautician(beautician);
-        if (resultInt <= 0) {
-            return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_ADD_FAIL.getCode(), ResponseCodeBeauticianEnum.BEAUTICIAN_ADD_FAIL.getDesc()));
-        }
+
+
         HashMap<String, String> userNameAndPassword = getUserNameAndPassword(null);
         String dataCentre = userNameAndPassword.get("dataCentre");
         String userName = userNameAndPassword.get("userName");
@@ -632,6 +630,7 @@ public class BeauticianService implements IBeauticianService {
             Map resultStatus = (HashMap<String, Object>) resulut.get("ResponseStatus");
             Boolean isSuccess = (Boolean) resultStatus.get("IsSuccess");
             if (isSuccess) {
+                int resultInt = beauticianDao.insertBeautician(beautician);
                 //获取保存成功后的number和id
                 String id = String.valueOf(resulut.get("Id"));
                 String number = String.valueOf(resulut.get("Number"));
@@ -641,8 +640,14 @@ public class BeauticianService implements IBeauticianService {
                 beautician1.setK3Number(number);
                 beauticianDao.updateBeautician(beautician1);
                 JSONObject object = new JSONObject();
-                object.put("message", "添加美容师成功");
+                object.put("message", "添加美容师成功，k3保存成功");
+
+                if (resultInt <= 0) {
+                    return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_ADD_FAIL.getCode(), ResponseCodeBeauticianEnum.BEAUTICIAN_ADD_FAIL.getDesc()));
+                }
                 return ResponseResult.success(object);
+            }else{
+                return ResponseResult.error(new Error(ResponseCodeBeauticianEnum.BEAUTICIAN_ADD_FAIL.getCode(), ResponseCodeBeauticianEnum.BEAUTICIAN_ADD_FAIL.getDesc()+"k3保存失败"));
             }
         }
 
