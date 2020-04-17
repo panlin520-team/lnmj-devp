@@ -235,7 +235,6 @@ public class CommodityTypeService implements ICommodityTypeService {
 
     @Override
     public ResponseResult selectSubclassByCondition(int pageNum, int pageSize, Subclass subclass, Long industryID, Long storeId) {
-
         if (industryID != null) {
             //根据行业找项目大类
             CommodityType commodityType = new CommodityType();
@@ -245,7 +244,9 @@ public class CommodityTypeService implements ICommodityTypeService {
             for (CommodityType type : commodityTypeList) {
                 commodityList.add(type.getCommodityTypeID().toString());
             }
-
+            if (commodityList.size()==0){
+                commodityList = null;
+            }
             subclass.setCommodityTypeList(commodityList);
         }
         PageHelper.startPage(pageNum, pageSize);
@@ -356,7 +357,7 @@ public class CommodityTypeService implements ICommodityTypeService {
 
     @Override
     public ResponseResult selectSubclassByConditionNoPage(Subclass subclass, Long industryID) {
-        if (industryID != null) {
+        /*if (industryID != null) {
             //根据行业找项目大类
             CommodityType commodityType = new CommodityType();
             commodityType.setCommodityTypeIndustryID(industryID);
@@ -369,7 +370,7 @@ public class CommodityTypeService implements ICommodityTypeService {
                 ;
             }
             subclass.setCommodityTypeID(commodityTypeID);
-        }
+        }*/
         List<Subclass> subclassList = commodityTypeDao.selectSubclassByCondition(subclass);
         if (subclassList != null && subclassList.size() > 0) {
             return ResponseResult.success(subclassList);
